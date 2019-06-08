@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "dblapi.js": "^2.3.0",
+    "discord.js": "^11.5.1"
+  },
+  "scripts":{
+    "push": "git add . && git commit && git push origin development"
+  },
+  "name": "valbot",
+  "version": "1.0.0",
+  "description": "A bot for valarium server!",
+  "main": "index.js",
+  "repository": "git@github.com:KL13NT/valbot.git",
+  "author": "KL13NT <Nabil.tharwat@outlook.com>",
+  "license": "MIT"
+}
