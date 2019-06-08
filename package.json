@@ -4,7 +4,8 @@
     "discord.js": "^11.5.1"
   },
   "scripts": {
-    "push": "git add . && git commit && git push origin development"
+    "push": "git add . && git commit && git push origin development",
+    "start": "node index.js"
   },
   "name": "valbot",
   "version": "1.0.0",
