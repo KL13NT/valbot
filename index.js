@@ -5,11 +5,15 @@
 const express = require('express').app
 
 const app = express()
+const port = process.env.PORT || 3000;
 
-app.listen('*', (req,res)=>{
-  res.send('Hello!')
+app.listen(port, ()=>{
+  console.log('Listening!')
 })
 
+app.get('*', (req,res)=>{
+  res.send('Hello!')
+})
 // dbl.on('error', e =>{
 //   console.log(`Oops! ${e}`)
 // })
