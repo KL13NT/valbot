@@ -1,7 +1,11 @@
 {
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "dblapi.js": "^2.3.0",
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0",
+    "jsdoc": "^3.6.2"
   },
   "scripts": {
     "push": "git add . && git commit && git push origin development",
@@ -15,6 +19,9 @@
   "author": "KL13NT <Nabil.tharwat@outlook.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "express": "^4.17.1",
+    "mongodb": "^3.2.7",
+    "winston": "^3.2.1"
   }
 }
