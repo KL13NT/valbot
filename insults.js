@@ -1,0 +1,1 @@
+module.exports = /fukc you|fck you|fk you|fk u|fuck u|fuck you|ksomak|kosomak|kosmk|a7a|55555|yabnlmetnaka|yabn elmtnaka|ybnlmtnaka|كسم|متناك|شرموط|خول|قحبة|احا|خخ+|عرص|عرث|علق|عويلق|علوق|شراميط/gi
