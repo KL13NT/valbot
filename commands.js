@@ -2,23 +2,62 @@
 const { RichEmbed } = require('discord.js')
 
 let commands =  {
-  misc: {
-    ping: (message)=>{
-      message.channel.send('Ping!')
+  org: {
+    mute: async (commandMessage, args, __ENV)=>{
+      try{
+        let mutedMember = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
+        let slicedReason = args.slice(5).join(' ') || 'Violation of the rules'
+        let date = new Date().toString()
+        
+        mutedMember.addRole('586839490102951936', args[4])
+        console.log(mutedMember.roles.some(role => role.id === '586839490102951936'))
+        !mutedMember.roles.some(role => role.id === '586839490102951936') ? mutedMember.addRole('586839490102951936'): commandMessage.reply('This user is already muted')
+
+        commands.helpers.sendEmbedNotification(
+          __ENV, undefined, 
+          {
+            author: commandMessage.author, 
+            description: `${mutedMember} has been muted at ${date} by ${commandMessage.member}`, 
+            title:`INFO, ${mutedMember}`, 
+            color: 0xfade78,
+            footer: date
+          }, [
+            {name: 'Member', value: `${mutedMember}`}, 
+            {name: 'Moderator', value: `${commandMessage.member}`}, 
+            {name: 'Reason', value: slicedReason}, 
+            {name: 'Status', value: `This user is now muted and will be automatically unmuted in 15 minutes`}
+          ], 
+          undefined, 
+          [__ENV.__MODERATION_NOTICES_CHANNEL()])
+        
+        setTimeout(()=>{commands.org.unmute(commandMessage, args, __ENV)}, 900000) //15 minutes 900000 ms
+      }
+      catch(err){console.log(err)}
     },
-    mentionRole: (message)=>{
-      message.channel.send(`<@&${message.mentions.roles.first().id}>`)
-    },
-    mentionUser: (message)=>{
-      message.channel.send(`<@${message.mentions.users.first().id}>`)
-    }
-  },
-  notifications:{
-    DMUser: (member, notification)=>{
-      member.createDM()
-        .then(DMChannel=>{
-          DMChannel.send(notification)
-        })
+    unmute: async (commandMessage, args, __ENV)=>{
+      try{
+        let mutedMember = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
+        let date = new Date().toString()
+        console.log(mutedMember.roles.some(role => role.id === '586839490102951936'))
+        mutedMember.roles.some(role => role.id === '586839490102951936')? mutedMember.removeRole('586839490102951936'): commandMessage.reply('This user is not muted')
+        
+        commands.helpers.sendEmbedNotification(
+          __ENV, undefined, 
+          {
+            author: commandMessage.author, 
+            description: `${mutedMember} has been unmuted at ${date} by ${commandMessage.member}`, 
+            title:`INFO, ${mutedMember}`, 
+            color: 0xfade78,
+            footer: date
+          }, [
+            {name: 'Member', value: `${mutedMember}`}, 
+            {name: 'Moderator', value: `${commandMessage.member}`}, 
+            {name: 'Status', value: `This user is now unmuted. Happy talking!`}
+          ], 
+          undefined, 
+          [__ENV.__MODERATION_NOTICES_CHANNEL()])
+      }
+      catch(err){console.log(err)}
     }
   },
   mod: {
@@ -26,27 +65,82 @@ let commands =  {
       '571716246660448318', //President
       '571705643073929226', //Leaders
     ],
-    clear: (message)=>{
-      message.channel.bulkDelete(10)
-        .then(messages => console.log(`Bulk deleted ${messages.size} messages`))
-        .catch(console.error)
+    clear: async (commandMessage, args, __ENV)=>{
+      try{
+        let deletedMessages = await commandMessage.channel.bulkDelete(args[3]? parseInt(args[3]): 5)
+        deletedMessages = deletedMessages.map(message=>({author: {name: message.author.username, id: message.author.id}, content: message.content}))
+        await __ENV.__DATABASE_OBJECT.collection('DELETED_MESSAGES').insertMany(deletedMessages)
+      }
+      catch(err){
+        console.log(err)
+      }
     },
     warn: async (commandMessage, args, __ENV)=>{
       try{
-        let warnedUser = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
-        let userWarnings = (await __ENV.__DATABASE_OBJECT.collection('warnings').findOneAndUpdate({USER_ID: warnedUser.id}, {
+        let warnedMember = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
+        let slicedReason = args.slice(5).join(' ')
+
+        let userWarnings = (await __ENV.__DATABASE_OBJECT.collection('warnings').findOneAndUpdate({USER_ID: warnedMember.id}, {
           '$push': { 
             RECORDED_WARNINGS: {
-              WARNING_REASON: args[4],
+              WARNING_REASON_NAME: args[4],
+              WARNING_REASON_DESCRIPTION: slicedReason,
+              WARNING_DATE: new Date().toString()
             }   
           }
         }, {upsert: true, returnOriginal: false})).value
+
+        let date = new Date().toString()
         
-        await commands.helpers.sendEmbedNotification(__ENV, warnedUser, {author: 'VALARIUM', description: `You've been warned in Valarium. You now have ${userWarnings.RECORDED_WARNINGS.length} warnings.`, title:`WARNING, ${warnedUser}`, color: 0xfade78}, [], [], [__ENV.__MODERATION_NOTICES_CHANNEL()])
+        commands.helpers.sendEmbedNotification(
+          __ENV, warnedMember, 
+          {
+            author: commandMessage.author, 
+            description: `${warnedMember} has been warned at ${date} by ${commandMessage.member}`, 
+            title:`WARNING, ${warnedMember}`, 
+            color: 0xfade78,
+            footer: date
+          }, [
+            {name: 'Member', value: `${warnedMember}`}, 
+            {name: 'Moderator', value: `${commandMessage.member}`}, 
+            {name: 'Reason', value: slicedReason}, 
+            {name: 'Status', value: `This user now has ${userWarnings.RECORDED_WARNINGS.length} warnings`}
+          ], 
+          [], 
+          [__ENV.__MODERATION_NOTICES_CHANNEL()])
 
         if(userWarnings.RECORDED_WARNINGS.length === 3){
           commands.mod.ban(commandMessage, args, __ENV, 'Warned 3 times')
         }
+      }
+      catch(err){console.log(err)}
+    },
+    warnings: async (commandMessage, args, __ENV)=>{
+      try{
+        let warnedMember = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
+        let userWarnings = await commands.helpers.getWarnings(warnedMember, __ENV)
+        let fields = []
+
+        console.log(userWarnings)
+        if(userWarnings && userWarnings.RECORDED_WARNINGS){
+          fields = userWarnings.RECORDED_WARNINGS.map(( warning => ({name: warning.WARNING_REASON_NAME, value:
+            warning.WARNING_REASON_DESCRIPTION})))
+        }
+        
+        commands.helpers.sendEmbedNotification(
+          __ENV, undefined,
+          {
+            author: commandMessage.author,  
+            title:`WARNING LOG, ${warnedMember}`, 
+            color: 0xfade78
+          }, [
+            ...fields,
+            {name: 'Member', value: `${warnedMember}`}, 
+            {name: 'Moderator', value: `${commandMessage.member}`}, 
+            {name: 'Status', value: `This user has ${userWarnings.RECORDED_WARNINGS.length} warnings`}
+          ], 
+          undefined, 
+          [commandMessage.channel])
       }
       catch(err){console.log(err)}
     },
@@ -65,7 +159,7 @@ let commands =  {
 
           inputCollector.on('collect', async reaction=>{
             expectedReaction.name = reaction.emoji.name
-            botMessage.edit(`What's the expected role for that reaction? Update your message to reflect that!`)
+            botMessage.edit('What\'s the expected role for that reaction? Update your message to reflect that!')
 
             __ENV.__VALARIUM_CLIENT.on('messageUpdate', (oldMessage, newMessage)=>{
               if(oldMessage.content === originalCommand){
@@ -116,11 +210,24 @@ let commands =  {
     ban: async function(commandMessage, args, __ENV, reason){
       try{
         let bannedMember = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
-        let warnings = await __ENV.__DATABASE_OBJECT.collection('warning').find({USER_ID: args[3].toString().replace(/<|>|@/ig, '')}).warnings
+        let userWarnings = commands.mod.warnings(commandMessage, args, __ENV)
+        let date = new Date().toString()
+
         bannedMember.ban({days: 3, reason})
-        commands.helpers.sendEmbedNotification(__ENV, bannedMember, { 
-          author: 'VALARIUM', description: `You've been banned eternally from Valarium after ${warnings.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78
-        }, [{name: 'Mod: ', value: commandMessage.author}])
+        
+        commands.helpers.sendEmbedNotification(__ENV, bannedMember, 
+          {
+            author: commandMessage.author, 
+            description: `${bannedMember} has been warned at ${date} by ${commandMessage.member}`, 
+            title:`BAN, ${bannedMember}`, 
+            color: 0xfade78,
+            footer: date
+          }, [
+            {name: 'Member', value: `${bannedMember}`}, 
+            {name: 'Moderator', value: `${commandMessage.member}`}, 
+            {name: 'Reason', value: reason}, 
+            {name: 'Status', value: userWarnings.RECORDED_WARNINGS.length === 3? 'This user is now banned': `This user now has ${userWarnings.RECORDED_WARNINGS.length} warnings`}
+          ], )
       }
       catch(err){ console.log(err) }
     },
@@ -131,39 +238,44 @@ let commands =  {
         await __ENV.__VALARIUM_GUILD().unban(bannedMember, reason)
 
         commands.helpers.sendEmbedNotification(__ENV, bannedMember, { 
-          author: 'VALARIUM', description: `You've been unbanned from Valarium. Enjoy your stay :tada::hugging:!`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78
+          author: 'VALARIUM', description: 'You\'ve been unbanned from Valarium. Enjoy your stay :tada::hugging:!', title:'NOTIFICATION FROM VALARIUM', color: 0xfade78
         }, [{name: 'Mod: ', value: commandMessage.author}])
       }
       catch(err){console.log(err)}
     },
   },
   helpers:{
-    sendEmbedNotification: async function(__ENV, member, embedOptions, fields, attachments, channels){
-      //default options author: 'VALARIUM', description: `You've been banned eternally from Valarium after ${warnings.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78}
+    sendEmbedNotification: async function(__ENV, member = undefined, embedOptions, fields, attachments = undefined, channels = undefined){
       try{
-        let DMChannel = await member.createDM()
         let embed = new RichEmbed(embedOptions)
         if(fields.length > 0){
-          fields.forEach(field=>{
-            embed.addField(field.name, field.value)
-          })
+          fields.forEach(field => field.name==='Moderator' || field.name==='Member'? embed.addField(field.name, field.value, true): embed.addField(field.name, field.value))
         }
-        if(attachments.length > 0){
+        if(attachments){
           attachments.forEach(attachment=>{
             embed.attachFile(attachment.path)
           })
         }
         embed.setThumbnail('https://lh4.googleusercontent.com/Yic_fQ7O-bo2q1ELjzBTQaR3ljVG-coyKsj87E55QzuxrH4b0K1F2ZchjFVrQ_QBA93fc1xWczkD7LGPMTsO')
-        if(channels.length > 0){
+        if(channels){
           channels.forEach(channel=>{
             channel.send(embed)
           })
         }
-        await DMChannel.send(embed)
-        __ENV.__MODERATION_NOTICES_CHANNEL().send(`${member}, ${embedOptions.description}`)
+        if(member){
+          let DMChannel = await member.createDM()
+          DMChannel.send(embed)
+        }
       }
       catch(err){console.log(err)}
     },
+    getWarnings: async (warnedMember, __ENV)=>{
+      try{
+        let warnings = await __ENV.__DATABASE_OBJECT.collection('warnings').findOne({USER_ID: warnedMember.id})
+        return warnings
+      }
+      catch(err){console.log(err)}
+    }
   }
 }
 

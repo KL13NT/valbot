@@ -107,12 +107,11 @@ const __ENV = {
 
 __ENV.__VALARIUM_CLIENT.once('ready', async () => {
   console.log('Ready!')
-  
-  __ENV.__DATABASE_OBJECT = await require('./dbconnect').getDB()
-  __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).toArray()
-  __ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
-  __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).toArray()
 
+  __ENV.__DATABASE_OBJECT = await require('./dbconnect').getDB()
+  __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).project({_id:0}).toArray()
+  __ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
+  
   await __ENV.__DATABASE_OBJECT.collection('warnings').deleteMany()
 })
 
@@ -209,40 +208,41 @@ __ENV.__VALARIUM_CLIENT.on('guildMemberAdd', member=>{
   if(channel) channel.send(`Everyone, greet ${member}! Welcome to Valarium, your new home! :sweat_smile::raised_hands::fireworks:  ${Contributors} ${Organisers}`).catch(console.error)
 })
 
-function isAllowedToUseCommand(commandMessage, args, __ENV, type){ //type=mod
-  let roles
+async function isAllowedToUseCommand(commandMessage, args, __ENV, type){ //type=mod
+  let userRoles = (await __ENV.__VALARIUM_GUILD().fetchMember(commandMessage.author.id)).roles.map(role => role.name)
   
-  if(type==='mod') roles = __ENV.__AVAILABLE_ROLES.filter(role=>role.name==='Leaders' || role.name==='President')
-  else if(type === 'org') roles = __ENV.__AVAILABLE_ROLES.filter(role=>role.name==='Organisers')
-  else roles = __ENV.__AVAILABLE_ROLES.filter(role=> role.name === 'Verified')
-
-  let currentFound = roles.some(role=>roles.includes(role))
-  return currentFound
+  if( type === 'DANGEROUS' ) return commandMessage.member.hasPermission('Administrator', false, true, true)
+  else if( type === 'mod' ) return userRoles.some( role => role === 'Leaders' || role ==='President' )
+  else if( type === 'org' ) return userRoles.some( role => role === 'Leaders' || role ==='President' || role === 'Organisers' )
+  else return userRoles.some( role => role === 'Leaders' || role === 'President' || role === 'Organisers' )
 }
 
-__ENV.__VALARIUM_CLIENT.on('message', message => {
+__ENV.__VALARIUM_CLIENT.on('message', async message => {
   try{
     let args = message.content.split(' ')
-    isAllowedToUseCommand(message, args, __ENV, 'mod')
     if(args[0] === prefix){
-      if (commands.hasOwnProperty(args[1])) {
-        if(commands[args[1]].hasOwnProperty(args[2])){ //allowed commands channel ---- (args.length === 4? commands.hasOwnProperty(args[3]):true)
-          commands[args[1]][args[2]].call(this, message, args, __ENV)
+      __ENV.__DATABASE_OBJECT.collection('RECORDED_COMMANDS').insertOne({command: message.content, author: message.member.displayName})
+      if(await isAllowedToUseCommand(message, args, __ENV, args[1])){
+        if (commands.hasOwnProperty(args[1])) {
+          if(commands[args[1]].hasOwnProperty(args[2])){ //allowed commands channel ---- (args.length === 4? commands.hasOwnProperty(args[3]):true)
+            commands[args[1]][args[2]].call(this, message, args, __ENV)
+          }
+          else throw new Error(`I couldn't recognise that`)
         }
-        else throw new Error(`I couldn't recognise that.`)
+        else throw new Error(`I couldn't recognise that`)
       }
-      else throw new Error(`I couldn't recognise that.`)
+      else throw new Error(`You don't have permission to use that command`)
     }
-    //TODO: Integrate warnings with database to ban users based on number of warnings
     else if(insults.test(message.content)){ //insults handling
-      commands.mod.warn.call(this, message, args, __ENV)
+      
+      commands.mod.warn.call(this, message, `val! mod warn ${message.member.id} Swearing This user has used a swear word/insulted someone`.split(' '), __ENV)
       setTimeout(()=>{
         message.delete()
           .catch(console.error)
       }, 1000)
     }
   }
-  catch(err){message.channel.send(err.message)}
+  catch(err){message.reply(err.message)}
 })
 </code></pre>
   </article>
