@@ -19,53 +19,65 @@ __ENV.__VALARIUM_CLIENT.once('ready', async () => {
   __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).toArray()
   __ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
 
-  __ENV.__WATCHED_MESSAGES.forEach(WATCHED_DATABASE_MESSAGE => {
-    __ENV.__VALARIUM_GUILD().channels.find(ch =>{
-      return ch.id === WATCHED_DATABASE_MESSAGE.CHANNEL_ID
-    })
-      .fetchMessage(WATCHED_DATABASE_MESSAGE.MESSAGE_ID)
-      .then(WATCHED_DISCORD_MESSAGE=>{
-        WATCHED_DATABASE_MESSAGE.WATCHED_REACTIONS.forEach(WATCHED_REACTION=>{
-          const userReactionsCollector = WATCHED_DISCORD_MESSAGE.createReactionCollector(reaction => reaction.emoji.name === WATCHED_REACTION.REACTION_NAME)
-          userReactionsCollector.on('collect', reaction=>{
-            reaction.fetchUsers()
-              .then(users=>{
-                users.forEach(user=>{
-                  __ENV.__VALARIUM_GUILD().fetchMember(user.id)
-                    .then(member=>{
-                      member.addRole(WATCHED_REACTION.REACTION_ROLE_ID)
-                      commands.notifications.DMUser(member, `You've been granted role [${WATCHED_REACTION.REACTION_ROLE_NAME}]`)
-                    })
-                })
-              })
-          })
-          // userReactionsCollector.on('messageReactionRemove')
+  __ENV.__VALARIUM_GUILD().fetchMember('238009405176676352')
+    .then(member=>{
+      member.createDM()
+        .then(dm=>{
+          let embed = new Discord.RichEmbed({author: 'VALARIUM', description: 'test description for me', title:' Hello!', color: 'GOLD', footer:{text: 'Thanks!'} })
+          embed.setColor('GOLD')
+          dm.send(embed)
         })
-      })
-  })
+        .catch(err=>console.log(err))
+    })
+    .catch(err=>console.log(err))
+    
   __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).toArray()
 })
 
-// function checkWatchedMessage(message){
-//   return __ENV.__WATCHED_MESSAGES.find(watched => watched.MESSAGE_ID === message.id)
-// }
-
-
+function checkWatchedMessage(message){
+  return __ENV.__WATCHED_MESSAGES.find(watched => watched.MESSAGE_ID === message.id)
+}
 
 // client.on('messageReactionAdd', (reaction, user) => {
 //   console.log('a reaction has been added');
 // });
 
-// __ENV.__VALARIUM_CLIENT.on('raw', packet => {
-//   // We don't want this to run on unrelated packets
-//   if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) return
+__ENV.__VALARIUM_CLIENT.on('raw', packet => {
+  try{
+    // We don't want this to run on unrelated packets
+    if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) return
 
-//   if (channel.messages.has(packet.d.message_id)) return
+    const channel = __ENV.__VALARIUM_CLIENT.channels.get(packet.d.channel_id)
 
-//   channel.fetchMessage(packet.d.message_id).then(message => {
-    
-//   }
-// })
+    if (channel.messages.has(packet.d.message_id)) return
+
+    channel.fetchMessage(packet.d.message_id).then(message => {
+      let watchedMessage = checkWatchedMessage(message)
+
+      if(watchedMessage != null && watchedMessage != undefined){
+        __ENV.__VALARIUM_GUILD().fetchMember(packet.d.user_id)
+          .then(member=>{
+            let reaction = watchedMessage.WATCHED_REACTIONS.find(reaction => reaction.REACTION_NAME === packet.d.emoji.name)
+            console.log(reaction)
+            if(reaction != null && reaction != undefined){
+              member.addRole(reaction.REACTION_ROLE_ID)
+              member.createDM()
+                .then(DMChannel=>{
+                  DMChannel.send(`You've been granted role ${reaction.REACTION_ROLE_NAME}`)
+                })
+            }
+            else return
+          })
+          .catch(rejection=>{
+            console.log(rejection)
+          })
+      }
+    })
+  }
+  catch(err){
+    console.log(err)
+  }
+})
 
 __ENV.__VALARIUM_CLIENT.login(token)
 

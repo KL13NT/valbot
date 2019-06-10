@@ -9,7 +9,8 @@
   },
   "scripts": {
     "push": "git add . && git commit && git push origin development",
-    "start": "node index.js"
+    "start": "node index.js",
+    "commit": "git add . && git commit -m"
   },
   "name": "valbot",
   "version": "1.0.0",
