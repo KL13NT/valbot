@@ -34,25 +34,19 @@ let commands =  {
     warn: async (commandMessage, args, __ENV)=>{
       try{
         let warnedUser = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
-        let userWarnings = __ENV.__DATABASE_OBJECT.collection('warnings').findOneAndUpdate({USER_ID: warnedUser.id}, {
-          '$addToSet': { 
+        let userWarnings = (await __ENV.__DATABASE_OBJECT.collection('warnings').findOneAndUpdate({USER_ID: warnedUser.id}, {
+          '$push': { 
             RECORDED_WARNINGS: {
               WARNING_REASON: args[4],
             }   
           }
-        }, {upsert: true, returnNewDocument: true})
+        }, {upsert: true, returnOriginal: false})).value
         
-        let notificationMessage = await commandMessage.channel.send(`${args[3]}, you have been warned for ${args[4]}. You now have ${userWarnings.RECORDED_WARNINGS.length} warnings.`)
-
-        await commands.helpers.sendEmbedNotification(__ENV, warnedUser, {author: 'VALARIUM', description: `You've been warned in Valarium. You now have ${userWarnings.RECORDED_WARNINGS.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78})
+        await commands.helpers.sendEmbedNotification(__ENV, warnedUser, {author: 'VALARIUM', description: `You've been warned in Valarium. You now have ${userWarnings.RECORDED_WARNINGS.length} warnings.`, title:`WARNING, ${warnedUser}`, color: 0xfade78}, [], [], [__ENV.__MODERATION_NOTICES_CHANNEL()])
 
         if(userWarnings.RECORDED_WARNINGS.length === 3){
           commands.mod.ban(commandMessage, args, __ENV, 'Warned 3 times')
         }
-        setTimeout(()=>{
-          notificationMessage.delete()
-        }, 2000)
-        
       }
       catch(err){console.log(err)}
     },
@@ -75,13 +69,11 @@ let commands =  {
 
             __ENV.__VALARIUM_CLIENT.on('messageUpdate', (oldMessage, newMessage)=>{
               if(oldMessage.content === originalCommand){
-                console.log(__ENV.__AVAILABLE_ROLES, newMessage.content)
                 if(__ENV.__AVAILABLE_ROLES.find(role => role.name === newMessage.content)){
                   reactionMessage.react(reaction.emoji.name)
                   botMessage.edit('Successful. Awaiting reactions.')
                   expectedReaction.role = newMessage.content
                   const userReactionsCollector = reactionMessage.createReactionCollector(reaction=>reaction.emoji.name === expectedReaction.name)
-                  console.log(reactionMessage.channel.id)
                   __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').updateOne({
                     CHANNEL_ID: reactionMessage.channel.id,
                     MESSAGE_ID: reactionMessage.id
@@ -134,7 +126,6 @@ let commands =  {
     },
     unban: async function(commandMessage, args, __ENV, reason){
       try{
-        console.log(args[3].toString().replace(/<|>|@/ig, ''))
         let bannedMember = await __ENV.__VALARIUM_CLIENT.fetchUser(args[3].toString().replace(/<|>|@/ig, ''), {cache: true})
 
         await __ENV.__VALARIUM_GUILD().unban(bannedMember, reason)
@@ -147,23 +138,29 @@ let commands =  {
     },
   },
   helpers:{
-    sendEmbedNotification: async function(__ENV, member, embedOptions, fields, attachments){
+    sendEmbedNotification: async function(__ENV, member, embedOptions, fields, attachments, channels){
       //default options author: 'VALARIUM', description: `You've been banned eternally from Valarium after ${warnings.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78}
       try{
         let DMChannel = await member.createDM()
         let embed = new RichEmbed(embedOptions)
-        if(fields){
+        if(fields.length > 0){
           fields.forEach(field=>{
             embed.addField(field.name, field.value)
           })
         }
-        if(attachments){
+        if(attachments.length > 0){
           attachments.forEach(attachment=>{
             embed.attachFile(attachment.path)
           })
         }
         embed.setThumbnail('https://lh4.googleusercontent.com/Yic_fQ7O-bo2q1ELjzBTQaR3ljVG-coyKsj87E55QzuxrH4b0K1F2ZchjFVrQ_QBA93fc1xWczkD7LGPMTsO')
+        if(channels.length > 0){
+          channels.forEach(channel=>{
+            channel.send(embed)
+          })
+        }
         await DMChannel.send(embed)
+        __ENV.__MODERATION_NOTICES_CHANNEL().send(`${member}, ${embedOptions.description}`)
       }
       catch(err){console.log(err)}
     },

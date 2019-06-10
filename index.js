@@ -9,18 +9,19 @@ const __ENV = {
   __AVAILABLE_ROLES: {},
   __WATCHED_MESSAGES: {},
   __VALARIUM_CLIENT: require('./client').__VALARIUM_CLIENT,
-  __VALARIUM_GUILD: function(){return this.__VALARIUM_CLIENT.guilds.find(guild=>guild.name === 'VALARIUM')}
+  __VALARIUM_GUILD: function(){return this.__VALARIUM_CLIENT.guilds.find(guild=>guild.name === 'VALARIUM')},
+  __MODERATION_NOTICES_CHANNEL: function(){return this.__VALARIUM_GUILD().channels.find(channel=> channel.id === '587571479173005312')}
 }
-
 
 __ENV.__VALARIUM_CLIENT.once('ready', async () => {
   console.log('Ready!')
+  
   __ENV.__DATABASE_OBJECT = await require('./dbconnect').getDB()
   __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).toArray()
   __ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
-
-  
   __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).toArray()
+
+  await __ENV.__DATABASE_OBJECT.collection('warnings').deleteMany()
 })
 
 /**
@@ -51,7 +52,6 @@ __ENV.__VALARIUM_CLIENT.on('raw', packet => {
         __ENV.__VALARIUM_GUILD().fetchMember(packet.d.user_id)
           .then(member=>{
             let reaction = watchedMessage.WATCHED_REACTIONS.find(reaction => reaction.REACTION_NAME === packet.d.emoji.name)
-            console.log(reaction)
             if(reaction != null && reaction != undefined){
               member.addRole(reaction.REACTION_ROLE_ID)
               member.createDM()
@@ -117,14 +117,21 @@ __ENV.__VALARIUM_CLIENT.on('guildMemberAdd', member=>{
   if(channel) channel.send(`Everyone, greet ${member}! Welcome to Valarium, your new home! :sweat_smile::raised_hands::fireworks:  ${Contributors} ${Organisers}`).catch(console.error)
 })
 
+function isAllowedToUseCommand(commandMessage, args, __ENV, type){ //type=mod
+  let roles
+  
+  if(type==='mod') roles = __ENV.__AVAILABLE_ROLES.filter(role=>role.name==='Leaders' || role.name==='President')
+  else if(type === 'org') roles = __ENV.__AVAILABLE_ROLES.filter(role=>role.name==='Organisers')
+  else roles = __ENV.__AVAILABLE_ROLES.filter(role=> role.name === 'Verified')
 
-// __ENV.__VALARIUM_CLIENT.on('raw', event => {
-// 	console.log('\nRaw event data:\n', event);
-// });
-//COMMANDS/MESSAGES HANLDING
+  let currentFound = roles.some(role=>roles.includes(role))
+  return currentFound
+}
+
 __ENV.__VALARIUM_CLIENT.on('message', message => {
   try{
     let args = message.content.split(' ')
+    isAllowedToUseCommand(message, args, __ENV, 'mod')
     if(args[0] === prefix){
       if (commands.hasOwnProperty(args[1])) {
         if(commands[args[1]].hasOwnProperty(args[2])){ //allowed commands channel ---- (args.length === 4? commands.hasOwnProperty(args[3]):true)
