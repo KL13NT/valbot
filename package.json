@@ -10,7 +10,8 @@
   "scripts": {
     "push": "git add . && git commit && git push origin development",
     "start": "node index.js",
-    "commit": "git add . && git commit -m"
+    "commit": "git add . && git commit -m",
+    "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json"
   },
   "name": "valbot",
   "version": "1.0.0",

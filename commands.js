@@ -1,4 +1,5 @@
 //commands! 
+const { RichEmbed } = require('discord.js')
 
 let commands =  {
   misc: {
@@ -30,18 +31,34 @@ let commands =  {
         .then(messages => console.log(`Bulk deleted ${messages.size} messages`))
         .catch(console.error)
     },
-    warnLanguage: (message)=>{
-      message.channel.send(`Watch your language, <@${message.author.id}>! This is a warning! اخلاقك يشيخنا!`)
-        .then(sent => {
-          setTimeout(()=>{
-            sent.delete().catch(console.error)
-          }, 2000)
-        })
+    warn: async (commandMessage, args, __ENV)=>{
+      try{
+        let warnedUser = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
+        let userWarnings = __ENV.__DATABASE_OBJECT.collection('warnings').findOneAndUpdate({USER_ID: warnedUser.id}, {
+          '$addToSet': { 
+            RECORDED_WARNINGS: {
+              WARNING_REASON: args[4],
+            }   
+          }
+        }, {upsert: true, returnNewDocument: true})
+        
+        let notificationMessage = await commandMessage.channel.send(`${args[3]}, you have been warned for ${args[4]}. You now have ${userWarnings.RECORDED_WARNINGS.length} warnings.`)
+
+        await commands.helpers.sendEmbedNotification(__ENV, warnedUser, {author: 'VALARIUM', description: `You've been warned in Valarium. You now have ${userWarnings.RECORDED_WARNINGS.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78})
+
+        if(userWarnings.RECORDED_WARNINGS.length === 3){
+          commands.mod.ban(commandMessage, args, __ENV, 'Warned 3 times')
+        }
+        setTimeout(()=>{
+          notificationMessage.delete()
+        }, 2000)
+        
+      }
+      catch(err){console.log(err)}
     },
     reactionRoles: (commandMessage, args, __ENV)=>{
       try{
         commandMessage.guild.channels.find(ch => `<#${ch.id}>` === args[3]).fetchMessage(args[4]).then(reactionMessage=>{
-          
           let index = 0 
           let expectedReaction = {}
           let botMessage
@@ -97,23 +114,60 @@ let commands =  {
                 }
               }
             })
-            // reaction.fetchUsers()
-            //   .then(users=>{
-            //     users.forEach(user=>{
-            //       message.guild.fetchMember(user.id).then(member=>{
-            //         member.addRole(__AVAILABLE_ROLES.find(role => role.name==='I Can Read!').id)
-            //       })
-            //     })
-            //   })
           })
-      
         })
       }
       catch(err){
         console.error(err)
       }
-    }
+    },
+    ban: async function(commandMessage, args, __ENV, reason){
+      try{
+        let bannedMember = await __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''))
+        let warnings = await __ENV.__DATABASE_OBJECT.collection('warning').find({USER_ID: args[3].toString().replace(/<|>|@/ig, '')}).warnings
+        bannedMember.ban({days: 3, reason})
+        commands.helpers.sendEmbedNotification(__ENV, bannedMember, { 
+          author: 'VALARIUM', description: `You've been banned eternally from Valarium after ${warnings.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78
+        }, [{name: 'Mod: ', value: commandMessage.author}])
+      }
+      catch(err){ console.log(err) }
+    },
+    unban: async function(commandMessage, args, __ENV, reason){
+      try{
+        console.log(args[3].toString().replace(/<|>|@/ig, ''))
+        let bannedMember = await __ENV.__VALARIUM_CLIENT.fetchUser(args[3].toString().replace(/<|>|@/ig, ''), {cache: true})
+
+        await __ENV.__VALARIUM_GUILD().unban(bannedMember, reason)
+
+        commands.helpers.sendEmbedNotification(__ENV, bannedMember, { 
+          author: 'VALARIUM', description: `You've been unbanned from Valarium. Enjoy your stay :tada::hugging:!`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78
+        }, [{name: 'Mod: ', value: commandMessage.author}])
+      }
+      catch(err){console.log(err)}
+    },
   },
+  helpers:{
+    sendEmbedNotification: async function(__ENV, member, embedOptions, fields, attachments){
+      //default options author: 'VALARIUM', description: `You've been banned eternally from Valarium after ${warnings.length} warnings.`, title:'NOTIFICATION FROM VALARIUM', color: 0xfade78}
+      try{
+        let DMChannel = await member.createDM()
+        let embed = new RichEmbed(embedOptions)
+        if(fields){
+          fields.forEach(field=>{
+            embed.addField(field.name, field.value)
+          })
+        }
+        if(attachments){
+          attachments.forEach(attachment=>{
+            embed.attachFile(attachment.path)
+          })
+        }
+        embed.setThumbnail('https://lh4.googleusercontent.com/Yic_fQ7O-bo2q1ELjzBTQaR3ljVG-coyKsj87E55QzuxrH4b0K1F2ZchjFVrQ_QBA93fc1xWczkD7LGPMTsO')
+        await DMChannel.send(embed)
+      }
+      catch(err){console.log(err)}
+    },
+  }
 }
 
 module.exports = commands
