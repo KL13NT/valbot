@@ -11,7 +11,7 @@
   "scripts": {
     "push": "git add . && git commit && git push origin development",
     "start:dev": "node watcher",
-    "start:prod": "node index",
+    "start": "node index",
     "db": "mongod --dbpath=data",
     "commit": "git add . && git commit -m",
     "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json"
