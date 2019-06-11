@@ -1,8 +1,13 @@
+//INDEX
 const Discord = require('discord.js')
 const {prefix, token} = require('./config.json')
 
 const insults = require('./insults')
-const commands = require('./commands')
+const BOT_COMMANDS = require('./commands')
+
+//Contains all environment constants without the need for `process.env`.
+
+//The values are empty by default to wait till the connection to the database and server has been established to avoid runtime errors
 
 const __ENV = {
   __DATABASE_OBJECT: {},
@@ -14,13 +19,16 @@ const __ENV = {
 }
 
 __ENV.__VALARIUM_CLIENT.once('ready', async () => {
-  console.log('Ready!')
+  try{
+    console.log('Ready!')
 
-  __ENV.__DATABASE_OBJECT = await require('./dbconnect').getDB()
-  __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).project({_id:0}).toArray()
-  __ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
+    __ENV.__DATABASE_OBJECT = await require('./dbconnect').getDB()
+    __ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).project({_id:0}).toArray()
+    __ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
   
   await __ENV.__DATABASE_OBJECT.collection('warnings').deleteMany()
+  }
+  catch(err){console.log(`Couldn't execute __ENV.__VALARIUM_CLIENT.once(..) ${err}`)}
 })
 
 /**
@@ -29,6 +37,7 @@ __ENV.__VALARIUM_CLIENT.once('ready', async () => {
  * @name checkWatchedMessage
  * @param {Message} message The message object to check
  * @return {Document} The watched message fetched from DB
+ * @since 1.0.0
  */
 function checkWatchedMessage(message){
   return __ENV.__WATCHED_MESSAGES.find(watched => watched.MESSAGE_ID === message.id)
@@ -124,16 +133,23 @@ async function isAllowedToUseCommand(commandMessage, args, __ENV, type){ //type=
   else if( type === 'org' ) return userRoles.some( role => role === 'Leaders' || role ==='President' || role === 'Organisers' )
   else return userRoles.some( role => role === 'Leaders' || role === 'President' || role === 'Organisers' )
 }
-
-__ENV.__VALARIUM_CLIENT.on('message', async message => {
+/**
+ * Checks whether a message is being watched for reactions
+ * @function
+ * @async
+ * @param {Message} message The message object to check
+ * @return {Document} The watched message fetched from DB
+ * @since 1.0.0 
+ */
+async function handleMessage(message){
   try{
     let args = message.content.split(' ')
     if(args[0] === prefix){
       __ENV.__DATABASE_OBJECT.collection('RECORDED_COMMANDS').insertOne({command: message.content, author: message.member.displayName})
       if(await isAllowedToUseCommand(message, args, __ENV, args[1])){
-        if (commands.hasOwnProperty(args[1])) {
-          if(commands[args[1]].hasOwnProperty(args[2])){ //allowed commands channel ---- (args.length === 4? commands.hasOwnProperty(args[3]):true)
-            commands[args[1]][args[2]].call(this, message, args, __ENV)
+        if (BOT_COMMANDS.hasOwnProperty(args[1])) {
+          if(BOT_COMMANDS[args[1]].hasOwnProperty(args[2])){ //allowed commands channel ---- (args.length === 4? commands.hasOwnProperty(args[3]):true)
+            BOT_COMMANDS[args[1]][args[2]].call(this, message, args, __ENV)
           }
           else throw new Error(`I couldn't recognise that`)
         }
@@ -143,12 +159,14 @@ __ENV.__VALARIUM_CLIENT.on('message', async message => {
     }
     else if(insults.test(message.content)){ //insults handling
       
-      commands.mod.warn.call(this, message, `val! mod warn ${message.member.id} Swearing This user has used a swear word/insulted someone`.split(' '), __ENV)
+      BOT_COMMANDS.mod.warn.call(this, message, `val! mod warn ${message.member.id} Swearing This user has used a swear word/insulted someone`.split(' '), __ENV)
       setTimeout(()=>{
         message.delete()
           .catch(console.error)
       }, 1000)
     }
   }
-  catch(err){message.reply(err.message)}
-})
+  catch(err){console.log('ERROR IN MESSAGE HANDLING: handleMessage', err.message)}
+}
+
+__ENV.__VALARIUM_CLIENT.on('message', handleMessage)

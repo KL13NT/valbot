@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>commands.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="..\docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>commands.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>AVAILABLE COMMANDS</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> { RichEmbed } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'discord.js'</span>)
+
+<span class="hljs-keyword">let</span> BOT_COMMANDS =  {
+  <span class="hljs-attr">org</span>: {
+    <span class="hljs-attr">mute</span>: <span class="hljs-keyword">async</span> (commandMessage, args, __ENV)=&gt;{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> mutedMember = <span class="hljs-keyword">await</span> __ENV.__VALARIUM_GUILD().fetchMember(args[<span class="hljs-number">3</span>].toString().replace(<span class="hljs-regexp">/&lt;|&gt;|@/ig</span>, <span class="hljs-string">''</span>))
+        <span class="hljs-keyword">let</span> slicedReason = args.slice(<span class="hljs-number">5</span>).join(<span class="hljs-string">' '</span>) || <span class="hljs-string">'Violation of the rules'</span>
+        <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().toString()
+        
+        mutedMember.addRole(<span class="hljs-string">'586839490102951936'</span>, args[<span class="hljs-number">4</span>])
+        <span class="hljs-built_in">console</span>.log(mutedMember.roles.some(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.id === <span class="hljs-string">'586839490102951936'</span>))
+        !mutedMember.roles.some(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.id === <span class="hljs-string">'586839490102951936'</span>) ? mutedMember.addRole(<span class="hljs-string">'586839490102951936'</span>): commandMessage.reply(<span class="hljs-string">'this user is already muted'</span>)
+
+        BOT_COMMANDS.helpers.sendEmbedNotification(
+          __ENV, <span class="hljs-literal">undefined</span>, 
+          {
+            <span class="hljs-attr">author</span>: commandMessage.author, 
+            <span class="hljs-attr">description</span>: <span class="hljs-string">`<span class="hljs-subst">${mutedMember}</span> has been muted at <span class="hljs-subst">${date}</span> by <span class="hljs-subst">${commandMessage.member}</span>`</span>, 
+            <span class="hljs-attr">title</span>:<span class="hljs-string">`INFO, <span class="hljs-subst">${mutedMember}</span>`</span>, 
+            <span class="hljs-attr">color</span>: <span class="hljs-number">0xfade78</span>,
+            <span class="hljs-attr">footer</span>: date
+          }, [
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Member'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${mutedMember}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Moderator'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${commandMessage.member}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Reason'</span>, <span class="hljs-attr">value</span>: slicedReason}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Status'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`This user is now muted and will be automatically unmuted in 15 minutes`</span>}
+          ], 
+          <span class="hljs-literal">undefined</span>, 
+          [__ENV.__MODERATION_NOTICES_CHANNEL()])
+        
+        setTimeout(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{BOT_COMMANDS.org.unmute(commandMessage, args, __ENV)}, <span class="hljs-number">900000</span>) <span class="hljs-comment">//15 minutes 900000 ms</span>
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    },
+    <span class="hljs-attr">unmute</span>: <span class="hljs-keyword">async</span> (commandMessage, args, __ENV)=&gt;{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> mutedMember = <span class="hljs-keyword">await</span> __ENV.__VALARIUM_GUILD().fetchMember(args[<span class="hljs-number">3</span>].toString().replace(<span class="hljs-regexp">/&lt;|&gt;|@/ig</span>, <span class="hljs-string">''</span>))
+        <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().toString()
+        <span class="hljs-built_in">console</span>.log(mutedMember.roles.some(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.id === <span class="hljs-string">'586839490102951936'</span>))
+        mutedMember.roles.some(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.id === <span class="hljs-string">'586839490102951936'</span>)? mutedMember.removeRole(<span class="hljs-string">'586839490102951936'</span>): commandMessage.reply(<span class="hljs-string">'this user is not muted'</span>)
+        
+        BOT_COMMANDS.helpers.sendEmbedNotification(
+          __ENV, <span class="hljs-literal">undefined</span>, 
+          {
+            <span class="hljs-attr">author</span>: commandMessage.author, 
+            <span class="hljs-attr">description</span>: <span class="hljs-string">`<span class="hljs-subst">${mutedMember}</span> has been unmuted at <span class="hljs-subst">${date}</span> by <span class="hljs-subst">${commandMessage.member}</span>`</span>, 
+            <span class="hljs-attr">title</span>:<span class="hljs-string">`INFO, <span class="hljs-subst">${mutedMember}</span>`</span>, 
+            <span class="hljs-attr">color</span>: <span class="hljs-number">0xfade78</span>,
+            <span class="hljs-attr">footer</span>: date
+          }, [
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Member'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${mutedMember}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Moderator'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${commandMessage.member}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Status'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`This user is now unmuted. Happy talking!`</span>}
+          ], 
+          <span class="hljs-literal">undefined</span>, 
+          [__ENV.__MODERATION_NOTICES_CHANNEL()])
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    }
+  },
+  <span class="hljs-attr">mod</span>: {
+    <span class="hljs-attr">allowedRoles</span>: [
+      <span class="hljs-string">'571716246660448318'</span>, <span class="hljs-comment">//President</span>
+      <span class="hljs-string">'571705643073929226'</span>, <span class="hljs-comment">//Leaders</span>
+    ],
+    <span class="hljs-attr">clear</span>: <span class="hljs-keyword">async</span> (commandMessage, args, __ENV)=&gt;{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> deletedMessages = <span class="hljs-keyword">await</span> commandMessage.channel.bulkDelete(args[<span class="hljs-number">3</span>]? <span class="hljs-built_in">parseInt</span>(args[<span class="hljs-number">3</span>]): <span class="hljs-number">5</span>)
+        deletedMessages = deletedMessages.map(<span class="hljs-function"><span class="hljs-params">message</span>=&gt;</span>({<span class="hljs-attr">author</span>: {<span class="hljs-attr">name</span>: message.author.username, <span class="hljs-attr">id</span>: message.author.id}, <span class="hljs-attr">content</span>: message.content}))
+        <span class="hljs-keyword">await</span> __ENV.__DATABASE_OBJECT.collection(<span class="hljs-string">'DELETED_MESSAGES'</span>).insertMany(deletedMessages)
+      }
+      <span class="hljs-keyword">catch</span>(err){
+        <span class="hljs-built_in">console</span>.log(err)
+      }
+    },
+    <span class="hljs-attr">warn</span>: <span class="hljs-keyword">async</span> (commandMessage, args, __ENV)=&gt;{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> warnedMember = <span class="hljs-keyword">await</span> __ENV.__VALARIUM_GUILD().fetchMember(args[<span class="hljs-number">3</span>].toString().replace(<span class="hljs-regexp">/&lt;|&gt;|@/ig</span>, <span class="hljs-string">''</span>))
+        <span class="hljs-keyword">let</span> slicedReason = args.slice(<span class="hljs-number">5</span>).join(<span class="hljs-string">' '</span>)
+
+        <span class="hljs-keyword">let</span> userWarnings = (<span class="hljs-keyword">await</span> __ENV.__DATABASE_OBJECT.collection(<span class="hljs-string">'GUILD_WARNINGS'</span>).findOneAndUpdate({<span class="hljs-attr">USER_ID</span>: warnedMember.id}, {
+          <span class="hljs-string">'$push'</span>: { 
+            <span class="hljs-attr">RECORDED_WARNINGS</span>: {
+              <span class="hljs-attr">WARNING_REASON_NAME</span>: args[<span class="hljs-number">4</span>],
+              <span class="hljs-attr">WARNING_REASON_DESCRIPTION</span>: slicedReason,
+              <span class="hljs-attr">WARNING_DATE</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().toString()
+            }   
+          }
+        }, {<span class="hljs-attr">upsert</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">returnOriginal</span>: <span class="hljs-literal">false</span>})).value
+
+        <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().toString()
+        
+        BOT_COMMANDS.helpers.sendEmbedNotification(
+          __ENV, warnedMember, 
+          {
+            <span class="hljs-attr">author</span>: commandMessage.author, 
+            <span class="hljs-attr">description</span>: <span class="hljs-string">`<span class="hljs-subst">${warnedMember}</span> has been warned at <span class="hljs-subst">${date}</span> by <span class="hljs-subst">${commandMessage.member}</span>`</span>, 
+            <span class="hljs-attr">title</span>:<span class="hljs-string">`WARNING, <span class="hljs-subst">${warnedMember}</span>`</span>, 
+            <span class="hljs-attr">color</span>: <span class="hljs-number">0xfade78</span>,
+            <span class="hljs-attr">footer</span>: date
+          }, [
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Member'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${warnedMember}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Moderator'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${commandMessage.member}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Reason'</span>, <span class="hljs-attr">value</span>: slicedReason}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Status'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`This user now has <span class="hljs-subst">${userWarnings.RECORDED_WARNINGS.length}</span> warnings`</span>}
+          ], 
+          [], 
+          [__ENV.__MODERATION_NOTICES_CHANNEL()])
+
+        <span class="hljs-keyword">if</span>(userWarnings.RECORDED_WARNINGS.length === <span class="hljs-number">3</span>){
+          BOT_COMMANDS.mod.ban(commandMessage, args, __ENV, <span class="hljs-string">'Warned 3 times'</span>)
+        }
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    },
+    <span class="hljs-attr">warnings</span>: <span class="hljs-keyword">async</span> (commandMessage, args, __ENV)=&gt;{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> warnedMember = <span class="hljs-keyword">await</span> __ENV.__VALARIUM_GUILD().fetchMember(args[<span class="hljs-number">3</span>].toString().replace(<span class="hljs-regexp">/&lt;|&gt;|@/ig</span>, <span class="hljs-string">''</span>))
+        <span class="hljs-keyword">let</span> userWarnings = <span class="hljs-keyword">await</span> BOT_COMMANDS.helpers.getWarnings(warnedMember, __ENV)
+        <span class="hljs-keyword">let</span> fields = []
+
+        <span class="hljs-keyword">if</span>(userWarnings &amp;&amp; userWarnings.RECORDED_WARNINGS){
+          fields = userWarnings.RECORDED_WARNINGS.map(( <span class="hljs-function"><span class="hljs-params">warning</span> =&gt;</span> ({<span class="hljs-attr">name</span>: warning.WARNING_REASON_NAME, <span class="hljs-attr">value</span>:
+            warning.WARNING_REASON_DESCRIPTION})))
+        }
+        
+        BOT_COMMANDS.helpers.sendEmbedNotification(
+          __ENV, <span class="hljs-literal">undefined</span>,
+          {
+            <span class="hljs-attr">author</span>: commandMessage.author,  
+            <span class="hljs-attr">title</span>:<span class="hljs-string">`WARNING LOG, <span class="hljs-subst">${warnedMember}</span>`</span>, 
+            <span class="hljs-attr">color</span>: <span class="hljs-number">0xfade78</span>
+          }, [
+            ...fields,
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Member'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${warnedMember}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Moderator'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${commandMessage.member}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Status'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`This user has <span class="hljs-subst">${userWarnings.RECORDED_WARNINGS.length}</span> warnings`</span>}
+          ], 
+          <span class="hljs-literal">undefined</span>, 
+          [commandMessage.channel], (embed)=&gt;{commandMessage.reply(embed)})
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    },
+    <span class="hljs-attr">reactionRoles</span>: <span class="hljs-function">(<span class="hljs-params">commandMessage, args, __ENV</span>)=&gt;</span>{
+      <span class="hljs-keyword">try</span>{
+        commandMessage.guild.channels.find(<span class="hljs-function"><span class="hljs-params">ch</span> =&gt;</span> <span class="hljs-string">`&lt;#<span class="hljs-subst">${ch.id}</span>&gt;`</span> === args[<span class="hljs-number">3</span>]).fetchMessage(args[<span class="hljs-number">4</span>]).then(<span class="hljs-function"><span class="hljs-params">reactionMessage</span>=&gt;</span>{
+          <span class="hljs-keyword">let</span> index = <span class="hljs-number">0</span> 
+          <span class="hljs-keyword">let</span> expectedReaction = {}
+          <span class="hljs-keyword">let</span> botMessage
+          <span class="hljs-keyword">let</span> originalCommand = commandMessage.content.toString()
+
+          <span class="hljs-keyword">const</span> inputCollector = commandMessage.createReactionCollector(<span class="hljs-function"><span class="hljs-params">reaction</span> =&gt;</span> reaction)
+          commandMessage.reply(<span class="hljs-string">'please react to the previous message with the reaction you want!'</span>)
+            .then(<span class="hljs-function"><span class="hljs-params">sent</span>=&gt;</span>botMessage=sent)
+            .catch(<span class="hljs-built_in">console</span>.error)
+
+          inputCollector.on(<span class="hljs-string">'collect'</span>, <span class="hljs-keyword">async</span> reaction=&gt;{
+            expectedReaction.name = reaction.emoji.name
+            botMessage.edit(<span class="hljs-string">'What\'s the expected role for that reaction? Update your message to reflect that!'</span>)
+
+            __ENV.__VALARIUM_CLIENT.on(<span class="hljs-string">'messageUpdate'</span>, (oldMessage, newMessage)=&gt;{
+              <span class="hljs-keyword">if</span>(oldMessage.content === originalCommand){
+                <span class="hljs-keyword">if</span>(__ENV.__AVAILABLE_ROLES.find(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.name === newMessage.content)){
+                  reactionMessage.react(reaction.emoji.name)
+                  botMessage.edit(<span class="hljs-string">'Successful. Awaiting reactions.'</span>)
+                  expectedReaction.role = newMessage.content
+                  <span class="hljs-keyword">const</span> userReactionsCollector = reactionMessage.createReactionCollector(<span class="hljs-function"><span class="hljs-params">reaction</span>=&gt;</span>reaction.emoji.name === expectedReaction.name)
+                  __ENV.__DATABASE_OBJECT.collection(<span class="hljs-string">'WATCHED_MESSAGES'</span>).updateOne({
+                    <span class="hljs-attr">CHANNEL_ID</span>: reactionMessage.channel.id,
+                    <span class="hljs-attr">MESSAGE_ID</span>: reactionMessage.id
+                  },{
+                    <span class="hljs-string">'$addToSet'</span>: { 
+                      <span class="hljs-attr">WATCHED_REACTIONS</span>: {
+                        <span class="hljs-attr">REACTION_NAME</span>: reaction.emoji.name,
+                        <span class="hljs-attr">REACTION_ROLE_ID</span>: __ENV.__AVAILABLE_ROLES.find(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.name === newMessage.content).id,
+                        <span class="hljs-attr">REACTION_ROLE_NAME</span>: newMessage.content
+                      } 
+                    }
+                  }, {<span class="hljs-attr">upsert</span>: <span class="hljs-literal">true</span>})
+                  userReactionsCollector.on(<span class="hljs-string">'collect'</span>, reaction=&gt;{
+                    reaction.fetchUsers()
+                      .then(<span class="hljs-function"><span class="hljs-params">users</span>=&gt;</span>{
+                        users.forEach(<span class="hljs-function"><span class="hljs-params">user</span>=&gt;</span>{
+                          reactionMessage.guild.fetchMember(user.id)
+                            .then(<span class="hljs-function"><span class="hljs-params">member</span>=&gt;</span>{
+                              <span class="hljs-keyword">let</span> currentRole = __ENV.__AVAILABLE_ROLES.find(<span class="hljs-function"><span class="hljs-params">role</span> =&gt;</span> role.name === newMessage.content)
+                              member.addRole(currentRole.id)
+                              BOT_COMMANDS.notifications.DMUser(member, <span class="hljs-string">`You've been granted role [<span class="hljs-subst">${currentRole.name}</span>]`</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>TODO: LOAD AND COLLECT MESSAGES UPON FETCH FROM DATABASE</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            })
+                        })
+                      })
+                  })
+                }
+                <span class="hljs-keyword">else</span>{
+                  commandMessage.reply(<span class="hljs-string">'that role was not found'</span>)
+                }
+              }
+            })
+          })
+        })
+      }
+      <span class="hljs-keyword">catch</span>(err){
+        <span class="hljs-built_in">console</span>.error(err)
+      }
+    },
+    <span class="hljs-attr">ban</span>: <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">commandMessage, args, __ENV, reason</span>)</span>{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> bannedMember = <span class="hljs-keyword">await</span> __ENV.__VALARIUM_GUILD().fetchMember(args[<span class="hljs-number">3</span>].toString().replace(<span class="hljs-regexp">/&lt;|&gt;|@/ig</span>, <span class="hljs-string">''</span>))
+        <span class="hljs-keyword">let</span> userWarnings = BOT_COMMANDS.mod.warnings(commandMessage, args, __ENV)
+        <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().toString()
+
+        bannedMember.ban({<span class="hljs-attr">days</span>: <span class="hljs-number">3</span>, reason})
+        
+        BOT_COMMANDS.helpers.sendEmbedNotification(__ENV, bannedMember, 
+          {
+            <span class="hljs-attr">author</span>: commandMessage.author, 
+            <span class="hljs-attr">description</span>: <span class="hljs-string">`<span class="hljs-subst">${bannedMember}</span> has been warned at <span class="hljs-subst">${date}</span> by <span class="hljs-subst">${commandMessage.member}</span>`</span>, 
+            <span class="hljs-attr">title</span>:<span class="hljs-string">`BAN, <span class="hljs-subst">${bannedMember}</span>`</span>, 
+            <span class="hljs-attr">color</span>: <span class="hljs-number">0xfade78</span>,
+            <span class="hljs-attr">footer</span>: date
+          }, [
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Member'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${bannedMember}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Moderator'</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">`<span class="hljs-subst">${commandMessage.member}</span>`</span>}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Reason'</span>, <span class="hljs-attr">value</span>: reason}, 
+            {<span class="hljs-attr">name</span>: <span class="hljs-string">'Status'</span>, <span class="hljs-attr">value</span>: userWarnings.RECORDED_WARNINGS.length === <span class="hljs-number">3</span>? <span class="hljs-string">'This user is now banned'</span>: <span class="hljs-string">`This user now has <span class="hljs-subst">${userWarnings.RECORDED_WARNINGS.length}</span> warnings`</span>}
+          ], )
+      }
+      <span class="hljs-keyword">catch</span>(err){ <span class="hljs-built_in">console</span>.log(err) }
+    },
+    <span class="hljs-attr">unban</span>: <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">commandMessage, args, __ENV, reason</span>)</span>{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> bannedMember = <span class="hljs-keyword">await</span> __ENV.__VALARIUM_CLIENT.fetchUser(args[<span class="hljs-number">3</span>].toString().replace(<span class="hljs-regexp">/&lt;|&gt;|@/ig</span>, <span class="hljs-string">''</span>), {<span class="hljs-attr">cache</span>: <span class="hljs-literal">true</span>})
+
+        <span class="hljs-keyword">await</span> __ENV.__VALARIUM_GUILD().unban(bannedMember, reason)
+
+        BOT_COMMANDS.helpers.sendEmbedNotification(__ENV, bannedMember, { 
+          <span class="hljs-attr">author</span>: <span class="hljs-string">'VALARIUM'</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">'You\'ve been unbanned from Valarium. Enjoy your stay :tada::hugging:!'</span>, <span class="hljs-attr">title</span>:<span class="hljs-string">'NOTIFICATION FROM VALARIUM'</span>, <span class="hljs-attr">color</span>: <span class="hljs-number">0xfade78</span>
+        }, [{<span class="hljs-attr">name</span>: <span class="hljs-string">'Mod: '</span>, <span class="hljs-attr">value</span>: commandMessage.author}])
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    },
+  },
+  <span class="hljs-attr">helpers</span>:{
+    <span class="hljs-attr">sendEmbedNotification</span>: <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">__ENV, member = undefined, embedOptions, fields, attachments = undefined, channels = undefined, callback</span>)</span>{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> embed = <span class="hljs-keyword">new</span> RichEmbed(embedOptions)
+        <span class="hljs-keyword">if</span>(fields.length &gt; <span class="hljs-number">0</span>){
+          fields.forEach(<span class="hljs-function"><span class="hljs-params">field</span> =&gt;</span> field.name===<span class="hljs-string">'Moderator'</span> || field.name===<span class="hljs-string">'Member'</span>? embed.addField(field.name, field.value, <span class="hljs-literal">true</span>): embed.addField(field.name, field.value))
+        }
+        <span class="hljs-keyword">if</span>(attachments){
+          attachments.forEach(<span class="hljs-function"><span class="hljs-params">attachment</span>=&gt;</span>{
+            embed.attachFile(attachment.path)
+          })
+        }
+        embed.setThumbnail(<span class="hljs-string">'https://lh4.googleusercontent.com/Yic_fQ7O-bo2q1ELjzBTQaR3ljVG-coyKsj87E55QzuxrH4b0K1F2ZchjFVrQ_QBA93fc1xWczkD7LGPMTsO'</span>)
+        <span class="hljs-keyword">if</span>(channels){
+          channels.forEach(<span class="hljs-function"><span class="hljs-params">channel</span>=&gt;</span>{
+            channel.send(embed)
+          })
+        }
+        <span class="hljs-keyword">if</span>(member){
+          <span class="hljs-keyword">let</span> DMChannel = <span class="hljs-keyword">await</span> member.createDM()
+          DMChannel.send(embed)
+        }
+        <span class="hljs-keyword">if</span>(callback){
+          callback(embed)
+        }
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    },
+    <span class="hljs-attr">getWarnings</span>: <span class="hljs-keyword">async</span> (warnedMember, __ENV)=&gt;{
+      <span class="hljs-keyword">try</span>{
+        <span class="hljs-keyword">let</span> warnings = <span class="hljs-keyword">await</span> __ENV.__DATABASE_OBJECT.collection(<span class="hljs-string">'GUILD_WARNINGS'</span>).findOne({<span class="hljs-attr">USER_ID</span>: warnedMember.id})
+        <span class="hljs-keyword">return</span> warnings
+      }
+      <span class="hljs-keyword">catch</span>(err){<span class="hljs-built_in">console</span>.log(err)}
+    }
+  }
+}
+
+<span class="hljs-built_in">module</span>.exports = BOT_COMMANDS</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

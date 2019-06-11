@@ -5,12 +5,12 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 async function ls() {
-  const { stdout, stderr } = await exec('yarn jsdoc index.js')
-  stderr? console.log('JSDOC EXECUTION ERROR\n', stderr): console.log(stdout)
+  const { stdout, stderr } = await exec('documentation build **.js -f html -o documentation')
+  stderr? console.log('JSDOC EXECUTION ERROR\n'): console.log(stdout)
 }
 
 let server = cp.fork('index.js')
-console.log('Server started')
+console.log('Watcher started')
 ls()
 
 fs.watchFile('index.js', function (event, filename) {
@@ -21,10 +21,15 @@ fs.watchFile('index.js', function (event, filename) {
   
 })
 
+fs.watchFile('commands.js', function (event, filename) {
+  ls()
+  console.log('Re-documenting')
+})
+
 process.on('SIGINT', function () {
   server.kill()
   fs.unwatchFile('index.js')
-  console.log('Server terminated')
-  console.log('Watcher terminated')
+  fs.unwatchFile('commands.js')
+  console.log('Watchers terminated')
   process.exit()
 })
