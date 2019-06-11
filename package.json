@@ -26,5 +26,8 @@
     "express": "^4.17.1",
     "mongodb": "^3.2.7",
     "discord.js": "^11.5.1"
+  },
+  "engines":{
+    "node": "10.15.0"
   }
 }
