@@ -3,13 +3,16 @@
     "babel-eslint": "^10.0.1",
     "dblapi.js": "^2.3.0",
     "discord.js": "^11.5.1",
+    "docco": "^0.8.0",
     "eslint": "^5.16.0",
     "jest": "^24.8.0",
     "jsdoc": "^3.6.2"
   },
   "scripts": {
     "push": "git add . && git commit && git push origin development",
-    "start": "node index.js",
+    "start:dev": "node watcher",
+    "start:prod": "node index",
+    "db": "mongod --dbpath=data",
     "commit": "git add . && git commit -m",
     "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json"
   },
