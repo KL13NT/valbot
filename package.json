@@ -8,11 +8,13 @@
     "jsdoc": "^3.6.2"
   },
   "scripts": {
-    "push": "git add . && git commit && git push origin development",
+    "push:dev": "git checkout development && yarn commit && git push origin development",
+    "push:cidev": "git checkout cidevelopment && yarn commit && git push origin cidevelopment",
     "start:dev": "node watcher",
+    "start:cidev": "node index",
     "start": "node index",
     "db": "mongod --dbpath=data",
-    "commit": "git add . && git commit -m",
+    "commit": "git add . && git commit",
     "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json"
   },
   "name": "valbot",
