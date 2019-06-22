@@ -5,7 +5,7 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 async function ls() {
-  const { stdout, stderr } = await exec('documentation build **.js -f html -o documentation')
+  const { stdout, stderr } = await exec('jsdoc . -d documentation -R DOCUMENTATION.md --configure .jsdoc.json')
   stderr? console.log('JSDOC EXECUTION ERROR\n'): console.log(stdout)
 }
 
@@ -13,18 +13,16 @@ let server = cp.fork('index.js')
 console.log('Watcher started')
 ls()
 
-fs.watchFile('index.js', function (event, filename) {
+function restart(){
   ls()
+  console.log('Re-documenting')
   server.kill()
   console.log('Server restarting')
   server = cp.fork('index.js')
-  
-})
+}
 
-fs.watchFile('commands.js', function (event, filename) {
-  ls()
-  console.log('Re-documenting')
-})
+fs.watchFile('index.js', restart)
+fs.watchFile('commands.js', restart)
 
 process.on('SIGINT', function () {
   server.kill()

@@ -1,0 +1,2 @@
+# VALARIUM BOT [DOCUMENTATION] [WIP]
+This bot was created and is maintained by me. I'm the only person responsible for it. The code is openly available but please at least mention my name when you use it somewhere.

@@ -5,7 +5,8 @@
     "docco": "^0.8.0",
     "eslint": "^5.16.0",
     "jest": "^24.8.0",
-    "jsdoc": "^3.6.2"
+    "jsdoc": "^3.6.2",
+    "tui-jsdoc-template": "^1.2.2"
   },
   "scripts": {
     "push:dev": "git checkout development && yarn commit && git push origin development",
@@ -25,11 +26,11 @@
   "author": "KL13NT <Nabil.tharwat@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "discord.js": "^11.5.1",
     "express": "^4.17.1",
-    "mongodb": "^3.2.7",
-    "discord.js": "^11.5.1"
+    "mongodb": "^3.2.7"
   },
-  "engines":{
+  "engines": {
     "node": "10.15.0"
   }
 }
