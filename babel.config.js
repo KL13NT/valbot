@@ -2,10 +2,19 @@ module.exports = function (api) {
   api.cache(true)
   
   const presets = [
-    '@babel/preset-env',
-    '@babel/preset-react'
+    '@babel/preset-env'
   ]
-  const plugins = ['@babel/plugin-proposal-class-properties']
+  const plugins = [
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-syntax-dynamic-import',
+    [
+      '@babel/plugin-proposal-pipeline-operator',
+      {
+        proposal: 'smart'
+      }
+    ],
+    '@babel/plugin-proposal-optional-catch-binding'
+  ]
   
   return {
     presets,

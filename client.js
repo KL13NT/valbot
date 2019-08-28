@@ -1,8 +1,16 @@
 const Discord = require('discord.js')
-const {prefix, token} = require('./config.json')
+const { prefix, token } = require('./config.json')
 
-let __VALARIUM_CLIENT = new Discord.Client()
+const __VALARIUM_CLIENT = new Discord.Client();
 
+(async () => {
+  try{
+    await __VALARIUM_CLIENT.login(token)
+  }
+  catch(err){
+    console.log('Error when loggin in using token. client.js:11', err)
+  } 
+})()
 
 module.exports = { __VALARIUM_CLIENT }
 

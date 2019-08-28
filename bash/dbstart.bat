@@ -1,0 +1,1 @@
+d: && cd "D:\Workspace\Active\valbot" && mongod --dbpath=data

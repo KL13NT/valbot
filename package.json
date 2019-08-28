@@ -1,22 +1,41 @@
 {
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-optional-catch-binding": "^7.2.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.5.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.3.4",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^11.0.0-beta.0",
+    "babel-loader": "^8.0.5",
+    "compression-webpack-plugin": "^3.0.0",
     "dblapi.js": "^2.3.0",
     "docco": "^0.8.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-import": "^2.16.0",
     "jest": "^24.8.0",
     "jsdoc": "^3.6.2",
-    "tui-jsdoc-template": "^1.2.2"
+    "tui-jsdoc-template": "^1.2.2",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   },
   "scripts": {
     "push:dev": "git checkout development && yarn commit && git push origin development",
-    "push:cidev": "git checkout cidevelopment && yarn commit && git push origin cidevelopment",
-    "start:dev": "node watcher",
-    "start:cidev": "node index",
-    "start": "node index",
+    "push:ci": "git checkout cidevelopment && yarn commit && git push origin cidevelopment",
     "db": "mongod --dbpath=data",
     "commit": "git add . && git commit",
-    "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json"
+    "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json",
+    "start:dev": "webpack --watch --mode development --color --port 8080 --config webpack.config.js",
+    "build:prod": "webpack --mode production --config webpack.config.js",
+    "lint": "eslint --ext .jsx --ext .js ./src --config .eslintrc.js",
+    "test": "jest --colors --expand --logHeapUsage --config jest.config.js"
   },
   "name": "valbot",
   "version": "1.0.0",
@@ -26,9 +45,11 @@
   "author": "KL13NT <Nabil.tharwat@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
     "discord.js": "^11.5.1",
     "express": "^4.17.1",
-    "mongodb": "^3.2.7"
+    "mongodb": "^3.2.7",
+    "regenerator-runtime": "^0.13.3"
   },
   "engines": {
     "node": "10.15.0"
