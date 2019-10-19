@@ -1148,7 +1148,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _commands__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./commands */ "./commands.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./utils.js");
-/* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./logger */ "./logger.js");
 function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -1182,12 +1181,11 @@ var _require = __webpack_require__(/*! ./config.json */ "./config.json"),
     token = _require.token;
 
 
-
 global.__ENV = {
   __VALARIUM_CLIENT: __webpack_require__(/*! ./client */ "./client.js").__VALARIUM_CLIENT,
   __DATABASE_OBJECT: {},
-  __AVAILABLE_ROLES: {},
-  __WATCHED_MESSAGES: {},
+  __AVAILABLE_ROLES: [],
+  __WATCHED_MESSAGES: [],
   __DISCORD_EXPLANATION: {},
   __WARNING_EXCEPTIONS: ['238009405176676352'],
   __VALARIUM_GUILD: function __VALARIUM_GUILD() {
@@ -1239,8 +1237,13 @@ regeneratorRuntime.mark(function _callee() {
 
         case 3:
           Object(_utils__WEBPACK_IMPORTED_MODULE_2__["updateMemberCount"])();
+          fs.writeFile('roles.json', JSON.stringify(__ENV.__AVAILABLE_ROLES.map(function (role) {
+            return role.name;
+          })), function (err) {
+            return console.log(err);
+          });
 
-        case 4:
+        case 5:
         case "end":
           return _context.stop();
       }
@@ -1523,63 +1526,6 @@ __ENV.__VALARIUM_CLIENT.on('message', handleMessage);
 /***/ (function(module, exports) {
 
 module.exports = /5+w+l+|f+u+k+c+ +y+o+u+|f+c+k+ +y+o+u+|f+k+ +y+o+u+|f+k+ +u+|f+u+c+k+ +u+|f+u+c+k+ +y+o+u+|k+s+o+m+a+k+|k+o+s+o+m+a+k+|k+o+s+m+k+|a+7+a+|y+a+b+n+l+m+e+t+n+a+k+a+|y+a+b+n+ +e+l+m+t+n+a+k+a+|y+b+n+l+m+t+n+a+k+a+|ك+س+م+|م+ت+ن+ا+ك+|ش+ر+م+و+ط+|خ+و+ل+|ق+ح+ب+ة+|ا+ح+ا+|أ+ح+ا+|أ+ح+ب+ه+|أ+ح+ب+ة+|ش+ر+م+و+ط+|خخ+|ع+ر+ص+|ع+ر+ث+|ع+ل+ق+|ع+و+ي+ل+ق|ع+ل+و+ق+|ش+ر+ا+م+ي+ط+|kwsmk|ق+ح+ب+ه+|ق+ح+ا+ب+ي+|ك+س+|ط+ي+ز+|ط+ي+ظ+|ط+ي+ز+ك+|ت+ي+ز+ق+|ت+ي+ز+|س+ي+س+ي+/gi;
-
-/***/ }),
-
-/***/ "./logger.js":
-/*!*******************!*\
-  !*** ./logger.js ***!
-  \*******************/
-/*! exports provided: createLogFile */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createLogFile", function() { return createLogFile; });
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var fs = __webpack_require__(/*! fs */ "fs");
-
-var path = __webpack_require__(/*! path */ "path");
-
-var createLogFile =
-/*#__PURE__*/
-function () {
-  var _ref = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(logData) {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return fs.writeFile(path.resolve(__dirname, "./logs/".concat(new Date())), logData);
-
-          case 3:
-            _context.next = 8;
-            break;
-
-          case 5:
-            _context.prev = 5;
-            _context.t0 = _context["catch"](0);
-            console.log(_context.t0);
-
-          case 8:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, null, [[0, 5]]);
-  }));
-
-  return function createLogFile(_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
-/* WEBPACK VAR INJECTION */}.call(this, "/"))
 
 /***/ }),
 
@@ -11970,7 +11916,7 @@ function () {
           case 13:
             _context5.prev = 13;
             _context5.t0 = _context5["catch"](0);
-            console.log('Error in onStartup', console.trace);
+            console.log('Error in onStartup', _context5.t0);
 
           case 16:
           case "end":

@@ -66,7 +66,7 @@ export const onStartup = async function (){
     global.__ENV.__DATABASE_OBJECT.collection('GUILD_WARNINGS').deleteMany({})
   }
   catch(err){
-    console.log('Error in onStartup', console.trace)
+    console.log('Error in onStartup', err)
   }
 }
 

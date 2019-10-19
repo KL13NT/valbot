@@ -12,14 +12,13 @@ const { prefix, token } = require('./config.json')
 
 
 import { updateMemberCount, onStartup, checkWatchedMessage, craftWelcomeMessage, isAllowedToUseCommand } from './utils'
-import { createLogFile } from './logger'
 
 
 global.__ENV = {
   __VALARIUM_CLIENT: require('./client').__VALARIUM_CLIENT,
   __DATABASE_OBJECT: {},
-  __AVAILABLE_ROLES: {},
-  __WATCHED_MESSAGES: {},
+  __AVAILABLE_ROLES: [],
+  __WATCHED_MESSAGES: [],
   __DISCORD_EXPLANATION: {},
   __WARNING_EXCEPTIONS: ['238009405176676352'],
   __VALARIUM_GUILD: function (){ return this.__VALARIUM_CLIENT.guilds.find(guild => guild.name === 'VALARIUM') },
@@ -50,6 +49,7 @@ __ENV.__VALARIUM_CLIENT.once('ready', async () => {
 
   await onStartup()
   updateMemberCount()
+  fs.writeFile('roles.json', JSON.stringify(__ENV.__AVAILABLE_ROLES.map(role => role.name)), (err) => console.log(err))
 })
 
 
