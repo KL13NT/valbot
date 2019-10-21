@@ -41,16 +41,17 @@ module.exports = function (env, argv){
           test: /\.js$/i,
           exclude: path.resolve(__dirname, 'node_modules'),
           use: [
-            'babel-loader'
-          // {
-          //   loader: 'eslint-loader',
-          //   options: {
-          //     fix: true,
-          //     cache: true,
-          //     failOnWarning: false,
-          //     failOnError: false
-          //   } 
-          // }
+            'babel-loader',
+            {
+              loader: 'eslint-loader',
+              options: {
+                fix: true,
+                cache: true,
+                failOnWarning: false,
+                failOnError: true,
+                globals: ['__ENV']
+              } 
+            }
           ]
         }
       ]

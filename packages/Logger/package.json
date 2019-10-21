@@ -1,0 +1,9 @@
+{
+  "name": "valarium-bot-logger",
+  "version": "1.0.0",
+  "description": "A logger for valarium-bot that handles all logging to separate files",
+  "main": "index.js",
+  "author": "KL13NT",
+  "license": "MIT",
+  "private": true
+}

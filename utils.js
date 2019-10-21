@@ -141,7 +141,9 @@ export const isAllowedToUseCommand = function (callee, commandName){
 }
 
 
-
+export const channelExists = channelId => __ENV.__VALARIUM_GUILD().channels.find(channel => channel.id === channelId)
+export const roleExists = roleId => __ENV.__VALARIUM_GUILD().roles.find(role => role.id === roleId)
+export const messageExists = async (messageId, channel) => channel.fetchMessage(messageId)
 
 
 export const formatMentionReason = rest => {

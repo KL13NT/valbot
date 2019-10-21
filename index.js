@@ -1,4 +1,23 @@
 /* eslint-disable no-prototype-builtins */
+const path = require('path')
+const fs = require('fs')
+const ValClient = require('./src/ValClient')
+/**
+ * NEW INDEX FILE
+ * console.log(readFileSync('bigtitle.txt', 'utf8').toString())
+ * //REQUIRE VALCLIENT HERE
+ * const client = new Switchblade(CLIENT_OPTIONS)
+ * client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
+ * 
+ */
+
+
+console.log(fs.readFileSync(path.resolve('./active/valbot/bigtitle.txt'), 'utf8').toString())
+//REQUIRE VALCLIENT HERE
+const client = new Switchblade(CLIENT_OPTIONS)
+client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
+
+
 
 import 'regenerator-runtime/runtime'
 import commands from './commands'
@@ -7,7 +26,7 @@ const fs = require('fs')
 const path = require('path')
 const util = require('util')
 const Discord = require('discord.js')
-const insults = require('./insults')
+const insults = require('./src/commands/insults')
 const { prefix, token } = require('./config.json')
 
 
@@ -15,7 +34,7 @@ import { updateMemberCount, onStartup, checkWatchedMessage, craftWelcomeMessage,
 
 
 global.__ENV = {
-  __VALARIUM_CLIENT: require('./client').__VALARIUM_CLIENT,
+  __VALARIUM_CLIENT: require('./src/ValClient').__VALARIUM_CLIENT,
   __DATABASE_OBJECT: {},
   __AVAILABLE_ROLES: [],
   __WATCHED_MESSAGES: [],

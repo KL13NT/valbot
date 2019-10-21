@@ -96,73 +96,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ "./client.js":
-/*!*******************!*\
-  !*** ./client.js ***!
-  \*******************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var Discord = __webpack_require__(/*! discord.js */ "discord.js");
-
-var _require = __webpack_require__(/*! ./config.json */ "./config.json"),
-    prefix = _require.prefix,
-    token = _require.token;
-
-var __VALARIUM_CLIENT = new Discord.Client();
-
-_asyncToGenerator(
-/*#__PURE__*/
-regeneratorRuntime.mark(function _callee() {
-  return regeneratorRuntime.wrap(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.prev = 0;
-          _context.next = 3;
-          return __VALARIUM_CLIENT.login(token);
-
-        case 3:
-          _context.next = 8;
-          break;
-
-        case 5:
-          _context.prev = 5;
-          _context.t0 = _context["catch"](0);
-          console.log('Error when loggin in using token. client.js:11', _context.t0);
-
-        case 8:
-        case "end":
-          return _context.stop();
-      }
-    }
-  }, _callee, null, [[0, 5]]);
-}))();
-
-module.exports = {
-  __VALARIUM_CLIENT: __VALARIUM_CLIENT
-  /**
-   * MESSAGE {
-   *  CHANNEL_ID,
-   *  ID,
-   *  WATCHED_REACTIONS [
-   *    REACTION{
-   *      REACTION_NAME,
-   *      REACTION_ROLE_ID
-   *      REACTION_ROLE_NAME  
-   *    }
-   *  ]
-   * }
-   */
-
-};
-
-/***/ }),
-
 /***/ "./commands.js":
 /*!*********************!*\
   !*** ./commands.js ***!
@@ -185,289 +118,37 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var _require = __webpack_require__(/*! discord.js */ "discord.js"),
-    RichEmbed = _require.RichEmbed;
 
 
-
-var sendEmbedNotification =
+var unmute =
 /*#__PURE__*/
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(member, embedOptions, fields, attachments, channels, callback) {
-    var embed, DMChannel;
+  regeneratorRuntime.mark(function _callee(message, rest) {
+    var _formatMentionReason, _formatMentionReason2, memberId, mutedMember, date;
+
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            embed = new RichEmbed(embedOptions);
-            embed.setThumbnail('https://lh4.googleusercontent.com/Yic_fQ7O-bo2q1ELjzBTQaR3ljVG-coyKsj87E55QzuxrH4b0K1F2ZchjFVrQ_QBA93fc1xWczkD7LGPMTsO');
-
-            if (fields.length > 0) {
-              fields.forEach(function (field) {
-                return field.name === 'Moderator' || field.name === 'Member' ? embed.addField(field.name, field.value, true) : embed.addField(field.name, field.value);
-              });
-            }
-
-            if (attachments) {
-              attachments.forEach(function (attachment) {
-                embed.attachFile(attachment.path);
-              });
-            }
-
-            if (channels) {
-              channels.forEach(function (channel) {
-                channel.send(embed);
-              });
-            }
-
-            if (!member) {
-              _context.next = 12;
-              break;
-            }
-
-            _context.next = 9;
-            return member.createDM();
-
-          case 9:
-            DMChannel = _context.sent;
-            _context.next = 12;
-            return DMChannel.send(embed);
-
-          case 12:
-            if (callback) {
-              callback(embed);
-            }
-
-            _context.next = 18;
-            break;
-
-          case 15:
-            _context.prev = 15;
-            _context.t0 = _context["catch"](0);
-            console.log(_context.t0);
-
-          case 18:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, null, [[0, 15]]);
-  }));
-
-  return function sendEmbedNotification(_x, _x2, _x3, _x4, _x5, _x6) {
-    return _ref.apply(this, arguments);
-  };
-}();
-/**
- * 
- * @param {DiscordGuildMessage} message The original message object
- * @param {Array} rest Array resulting from splitting the message and removing [val!, commandName]
- */
-
-
-var warn =
-/*#__PURE__*/
-function () {
-  var _ref2 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2(message, rest) {
-    var _rest, memberMention, reason, memberId, date, callee, warnedMember, userWarnings;
-
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            if (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["enforceCommandArguments"])(message, 2, rest)) {
-              _context2.next = 2;
-              break;
-            }
-
-            return _context2.abrupt("return");
-
-          case 2:
-            _rest = _slicedToArray(rest, 2), memberMention = _rest[0], reason = _rest[1];
-            memberId = memberMention.toString().replace(/<|>|@/ig, '');
-            date = new Date().toString();
-            callee = message.member;
-            _context2.prev = 6;
-            _context2.next = 9;
-            return __ENV.__VALARIUM_GUILD().fetchMember(memberId);
-
-          case 9:
-            warnedMember = _context2.sent;
-            _context2.next = 12;
-            return __ENV.__DATABASE_OBJECT.collection('GUILD_WARNINGS').findOneAndUpdate({
-              USER_ID: warnedMember.id
-            }, {
-              $push: {
-                RECORDED_WARNINGS: {
-                  WARNING_REASON: reason,
-                  WARNING_DATE: new Date().toString()
-                }
-              }
-            }, {
-              upsert: true,
-              returnOriginal: false
-            });
-
-          case 12:
-            userWarnings = _context2.sent.value;
-            sendEmbedNotification(warnedMember, {
-              description: "".concat(warnedMember, " has been warned at ").concat(date, " by ").concat(callee),
-              title: "WARNING, ".concat(warnedMember),
-              color: 0xfade78,
-              footer: date
-            }, [{
-              name: 'Member',
-              value: "".concat(warnedMember)
-            }, {
-              name: 'Moderator',
-              value: "".concat(callee)
-            }, {
-              name: 'Reason',
-              value: reason
-            }, {
-              name: 'Status',
-              value: "This user now has ".concat(userWarnings.RECORDED_WARNINGS.length, " warnings")
-            }], [], [__ENV.__MODERATION_NOTICES_CHANNEL()]);
-
-            if (userWarnings.RECORDED_WARNINGS.length === 3) {
-              // ban(message, args, __ENV, 'Warned 3 times')
-              console.log('USER SHOULD BE BANNED');
-            }
-
-            _context2.next = 20;
-            break;
-
-          case 17:
-            _context2.prev = 17;
-            _context2.t0 = _context2["catch"](6);
-            console.log(_context2.t0);
-
-          case 20:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2, null, [[6, 17]]);
-  }));
-
-  return function warn(_x7, _x8) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-
-var mute =
-/*#__PURE__*/
-function () {
-  var _ref3 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3(message, rest) {
-    var _formatMentionReason, _formatMentionReason2, memberMention, reason, memberId, date, mutedMember, slicedReason;
-
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.prev = 0;
-
-            if (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["enforceCommandArguments"])(message, 2, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["formatMentionReason"])(rest))) {
-              _context3.next = 3;
-              break;
-            }
-
-            return _context3.abrupt("return");
-
-          case 3:
-            _formatMentionReason = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["formatMentionReason"])(rest), _formatMentionReason2 = _slicedToArray(_formatMentionReason, 2), memberMention = _formatMentionReason2[0], reason = _formatMentionReason2[1];
-            memberId = memberMention.toString().replace(/<|>|@/ig, '');
-            date = new Date().toString();
-            _context3.next = 8;
-            return __ENV.__VALARIUM_GUILD().fetchMember(memberId);
-
-          case 8:
-            mutedMember = _context3.sent;
-            slicedReason = reason || 'Violation of the rules';
-            mutedMember.addRole('586839490102951936');
-            !mutedMember.roles.some(function (role) {
-              return role.id === '586839490102951936';
-            }) ? mutedMember.addRole('586839490102951936') : message.reply('this user is already muted');
-            sendEmbedNotification(undefined, {
-              author: message.author,
-              description: "".concat(mutedMember, " has been muted at ").concat(date, " by ").concat(message.member),
-              title: "INFO, ".concat(mutedMember),
-              color: 0xfade78,
-              footer: date
-            }, [{
-              name: 'Member',
-              value: "".concat(mutedMember)
-            }, {
-              name: 'Moderator',
-              value: "".concat(message.member)
-            }, {
-              name: 'Reason',
-              value: slicedReason
-            }, {
-              name: 'Status',
-              value: 'This user is now muted and will be automatically unmuted in 15 minutes'
-            }], undefined, [__ENV.__MODERATION_NOTICES_CHANNEL()]);
-            setTimeout(function () {
-              unmute(message, args, __ENV);
-            }, 900000); //15 minutes 900000 ms
-
-            _context3.next = 19;
-            break;
-
-          case 16:
-            _context3.prev = 16;
-            _context3.t0 = _context3["catch"](0);
-            console.log(_context3.t0);
-
-          case 19:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3, null, [[0, 16]]);
-  }));
-
-  return function mute(_x9, _x10) {
-    return _ref3.apply(this, arguments);
-  };
-}();
-
-var unmute =
-/*#__PURE__*/
-function () {
-  var _ref4 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee4(message, rest) {
-    var _formatMentionReason3, _formatMentionReason4, memberId, mutedMember, date;
-
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.prev = 0;
             console.log('calling unmute!', message.content, rest);
 
             if (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["enforceCommandArguments"])(message, 1, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["formatMentionReason"])(rest))) {
-              _context4.next = 4;
+              _context.next = 4;
               break;
             }
 
-            return _context4.abrupt("return");
+            return _context.abrupt("return");
 
           case 4:
-            _formatMentionReason3 = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["formatMentionReason"])(rest), _formatMentionReason4 = _slicedToArray(_formatMentionReason3, 1), memberId = _formatMentionReason4[0];
-            _context4.next = 7;
+            _formatMentionReason = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["formatMentionReason"])(rest), _formatMentionReason2 = _slicedToArray(_formatMentionReason, 1), memberId = _formatMentionReason2[0];
+            _context.next = 7;
             return __ENV.__VALARIUM_GUILD().fetchMember(memberId);
 
           case 7:
-            mutedMember = _context4.sent;
+            mutedMember = _context.sent;
             date = new Date().toString();
             mutedMember.roles.some(function (role) {
               return role.id === '586839490102951936';
@@ -488,66 +169,66 @@ function () {
               name: 'Status',
               value: 'This user is now unmuted. Happy talking!'
             }], undefined, [__ENV.__MODERATION_NOTICES_CHANNEL()]);
-            _context4.next = 16;
+            _context.next = 16;
             break;
 
           case 13:
-            _context4.prev = 13;
-            _context4.t0 = _context4["catch"](0);
-            console.log(_context4.t0);
+            _context.prev = 13;
+            _context.t0 = _context["catch"](0);
+            console.log(_context.t0);
 
           case 16:
           case "end":
-            return _context4.stop();
+            return _context.stop();
         }
       }
-    }, _callee4, null, [[0, 13]]);
+    }, _callee, null, [[0, 13]]);
   }));
 
-  return function unmute(_x11, _x12) {
-    return _ref4.apply(this, arguments);
+  return function unmute(_x, _x2) {
+    return _ref.apply(this, arguments);
   };
 }();
 
 var dmAllMembers =
 /*#__PURE__*/
 function () {
-  var _ref5 = _asyncToGenerator(
+  var _ref2 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee6(message, rest) {
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+  regeneratorRuntime.mark(function _callee3(message, rest) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             try {
               __ENV.__VALARIUM_GUILD().members.forEach(
               /*#__PURE__*/
               function () {
-                var _ref6 = _asyncToGenerator(
+                var _ref3 = _asyncToGenerator(
                 /*#__PURE__*/
-                regeneratorRuntime.mark(function _callee5(member) {
+                regeneratorRuntime.mark(function _callee2(member) {
                   var memberDM;
-                  return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                  return regeneratorRuntime.wrap(function _callee2$(_context2) {
                     while (1) {
-                      switch (_context5.prev = _context5.next) {
+                      switch (_context2.prev = _context2.next) {
                         case 0:
-                          _context5.next = 2;
+                          _context2.next = 2;
                           return member.createDM();
 
                         case 2:
-                          memberDM = _context5.sent;
+                          memberDM = _context2.sent;
                           memberDM.send(rest);
 
                         case 4:
                         case "end":
-                          return _context5.stop();
+                          return _context2.stop();
                       }
                     }
-                  }, _callee5);
+                  }, _callee2);
                 }));
 
-                return function (_x15) {
-                  return _ref6.apply(this, arguments);
+                return function (_x5) {
+                  return _ref3.apply(this, arguments);
                 };
               }());
             } catch (err) {
@@ -556,53 +237,53 @@ function () {
 
           case 1:
           case "end":
-            return _context6.stop();
+            return _context3.stop();
         }
       }
-    }, _callee6);
+    }, _callee3);
   }));
 
-  return function dmAllMembers(_x13, _x14) {
-    return _ref5.apply(this, arguments);
+  return function dmAllMembers(_x3, _x4) {
+    return _ref2.apply(this, arguments);
   };
 }();
 
 var clear =
 /*#__PURE__*/
 function () {
-  var _ref7 = _asyncToGenerator(
+  var _ref4 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee7(message, rest) {
+  regeneratorRuntime.mark(function _callee4(message, rest) {
     var count, deletedMessages;
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context7.prev = _context7.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
-            _context7.prev = 0;
+            _context4.prev = 0;
             count = parseInt(rest[0]);
 
             if (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["enforceCommandArguments"])(message, 1, rest)) {
-              _context7.next = 4;
+              _context4.next = 4;
               break;
             }
 
-            return _context7.abrupt("return");
+            return _context4.abrupt("return");
 
           case 4:
             if (!(count === 0)) {
-              _context7.next = 7;
+              _context4.next = 7;
               break;
             }
 
             message.reply('Supplying 0 as count is a dangerous move. Please supply `n` where `n > 0`');
-            return _context7.abrupt("return");
+            return _context4.abrupt("return");
 
           case 7:
-            _context7.next = 9;
+            _context4.next = 9;
             return message.channel.bulkDelete(count);
 
           case 9:
-            deletedMessages = _context7.sent;
+            deletedMessages = _context4.sent;
             deletedMessages = deletedMessages.map(function (message) {
               return {
                 author: {
@@ -616,24 +297,24 @@ function () {
             __ENV.__DATABASE_OBJECT.collection('DELETED_MESSAGES').insertMany(deletedMessages);
 
             message.reply("deleted ".concat(count, " messages."));
-            _context7.next = 18;
+            _context4.next = 18;
             break;
 
           case 15:
-            _context7.prev = 15;
-            _context7.t0 = _context7["catch"](0);
-            console.log(_context7.t0);
+            _context4.prev = 15;
+            _context4.t0 = _context4["catch"](0);
+            console.log(_context4.t0);
 
           case 18:
           case "end":
-            return _context7.stop();
+            return _context4.stop();
         }
       }
-    }, _callee7, null, [[0, 15]]);
+    }, _callee4, null, [[0, 15]]);
   }));
 
-  return function clear(_x16, _x17) {
-    return _ref7.apply(this, arguments);
+  return function clear(_x6, _x7) {
+    return _ref4.apply(this, arguments);
   };
 }(); //TODO: SEE NO REASON TO USE THIS FUNCTION AT ALL
 // const warnings = async (message, args, __ENV) => {
@@ -664,44 +345,7 @@ function () {
 //   }
 //   catch(err){ console.log(err) }
 // }
-
-
-var channelExists = function channelExists(channelId) {
-  return __ENV.__VALARIUM_GUILD().channels.find(function (channel) {
-    return channel.id === channelId;
-  });
-};
-
-var roleExists = function roleExists(roleId) {
-  return __ENV.__VALARIUM_GUILD().roles.find(function (role) {
-    return role.id === roleId;
-  });
-};
-
-var messageExists =
-/*#__PURE__*/
-function () {
-  var _ref8 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee8(messageId, channel) {
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
-      while (1) {
-        switch (_context8.prev = _context8.next) {
-          case 0:
-            return _context8.abrupt("return", channel.fetchMessage(messageId));
-
-          case 1:
-          case "end":
-            return _context8.stop();
-        }
-      }
-    }, _callee8);
-  }));
-
-  return function messageExists(_x18, _x19) {
-    return _ref8.apply(this, arguments);
-  };
-}(); // const isReactionRoleCommandValid = ([channelId, messageId, roleId, emoji]) => {
+// const isReactionRoleCommandValid = ([channelId, messageId, roleId, emoji]) => {
 //   try{
 //     channelExists(channelId) |> 
 //   }
@@ -711,165 +355,23 @@ function () {
 // }
 
 
-var reactionRoles =
-/*#__PURE__*/
-function () {
-  var _ref9 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee11(message, rest) {
-    var _rest2, channelId, messageId, roleId, emoji, channel, _message, role, userReactionsCollector;
-
-    return regeneratorRuntime.wrap(function _callee11$(_context11) {
-      while (1) {
-        switch (_context11.prev = _context11.next) {
-          case 0:
-            _context11.prev = 0;
-
-            if (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["enforceCommandArguments"])(_message, 4, rest)) {
-              _context11.next = 3;
-              break;
-            }
-
-            return _context11.abrupt("return");
-
-          case 3:
-            _rest2 = _slicedToArray(rest, 4), channelId = _rest2[0], messageId = _rest2[1], roleId = _rest2[2], emoji = _rest2[3];
-            channel = channelExists(channelId);
-            _context11.next = 7;
-            return messageExists(messageId, channel);
-
-          case 7:
-            _message = _context11.sent;
-            console.log('Initiating reactionRoles');
-
-            if (channel) {
-              if (_message) {
-                if (roleExists(roleId)) {
-                  console.log('everything is valid');
-                  role = roleExists(roleId);
-                  userReactionsCollector = _message.createReactionCollector(function (reaction) {
-                    return reaction._emoji.name === emoji;
-                  });
-                  userReactionsCollector.on('collect',
-                  /*#__PURE__*/
-                  function () {
-                    var _ref10 = _asyncToGenerator(
-                    /*#__PURE__*/
-                    regeneratorRuntime.mark(function _callee10(reaction) {
-                      var users;
-                      return regeneratorRuntime.wrap(function _callee10$(_context10) {
-                        while (1) {
-                          switch (_context10.prev = _context10.next) {
-                            case 0:
-                              console.log(reaction._emoji.name === emoji);
-                              console.log(reaction);
-                              _context10.next = 4;
-                              return reaction.fetchUsers();
-
-                            case 4:
-                              users = _context10.sent;
-                              users.forEach(
-                              /*#__PURE__*/
-                              function () {
-                                var _ref11 = _asyncToGenerator(
-                                /*#__PURE__*/
-                                regeneratorRuntime.mark(function _callee9(user) {
-                                  var member;
-                                  return regeneratorRuntime.wrap(function _callee9$(_context9) {
-                                    while (1) {
-                                      switch (_context9.prev = _context9.next) {
-                                        case 0:
-                                          _context9.next = 2;
-                                          return _message.guild.fetchMember(user.id);
-
-                                        case 2:
-                                          member = _context9.sent;
-                                          member.addRole(__ENV.__AVAILABLE_ROLES.find(function (role) {
-                                            return role.name === role.id;
-                                          }));
-
-                                        case 4:
-                                        case "end":
-                                          return _context9.stop();
-                                      }
-                                    }
-                                  }, _callee9);
-                                }));
-
-                                return function (_x23) {
-                                  return _ref11.apply(this, arguments);
-                                };
-                              }());
-
-                            case 6:
-                            case "end":
-                              return _context10.stop();
-                          }
-                        }
-                      }, _callee10);
-                    }));
-
-                    return function (_x22) {
-                      return _ref10.apply(this, arguments);
-                    };
-                  }());
-
-                  __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').updateOne({
-                    CHANNEL_ID: channelId,
-                    MESSAGE_ID: messageId
-                  }, {
-                    $addToSet: {
-                      WATCHED_REACTIONS: {
-                        REACTION_NAME: emoji,
-                        REACTION_ROLE_ID: role.id,
-                        REACTION_ROLE_NAME: role.name
-                      }
-                    }
-                  }, {
-                    upsert: true
-                  });
-                }
-              }
-            }
-
-            _context11.next = 15;
-            break;
-
-          case 12:
-            _context11.prev = 12;
-            _context11.t0 = _context11["catch"](0);
-            console.error(_context11.t0);
-
-          case 15:
-          case "end":
-            return _context11.stop();
-        }
-      }
-    }, _callee11, null, [[0, 12]]);
-  }));
-
-  return function reactionRoles(_x20, _x21) {
-    return _ref9.apply(this, arguments);
-  };
-}();
-
 var ban =
 /*#__PURE__*/
 function () {
-  var _ref12 = _asyncToGenerator(
+  var _ref5 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee12(message, args, __ENV, reason) {
+  regeneratorRuntime.mark(function _callee5(message, args, __ENV, reason) {
     var bannedMember, userWarnings, date;
-    return regeneratorRuntime.wrap(function _callee12$(_context12) {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
-            _context12.prev = 0;
-            _context12.next = 3;
+            _context5.prev = 0;
+            _context5.next = 3;
             return __ENV.__VALARIUM_GUILD().fetchMember(args[3].toString().replace(/<|>|@/ig, ''));
 
           case 3:
-            bannedMember = _context12.sent;
+            bannedMember = _context5.sent;
             userWarnings = warnings(message, args, __ENV);
             date = new Date().toString();
             bannedMember.ban({
@@ -895,47 +397,47 @@ function () {
               name: 'Status',
               value: userWarnings.RECORDED_WARNINGS.length === 3 ? 'This user is now banned' : "This user now has ".concat(userWarnings.RECORDED_WARNINGS.length, " warnings")
             }]);
-            _context12.next = 13;
+            _context5.next = 13;
             break;
 
           case 10:
-            _context12.prev = 10;
-            _context12.t0 = _context12["catch"](0);
-            console.log(_context12.t0);
+            _context5.prev = 10;
+            _context5.t0 = _context5["catch"](0);
+            console.log(_context5.t0);
 
           case 13:
           case "end":
-            return _context12.stop();
+            return _context5.stop();
         }
       }
-    }, _callee12, null, [[0, 10]]);
+    }, _callee5, null, [[0, 10]]);
   }));
 
-  return function ban(_x24, _x25, _x26, _x27) {
-    return _ref12.apply(this, arguments);
+  return function ban(_x8, _x9, _x10, _x11) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
 var unban =
 /*#__PURE__*/
 function () {
-  var _ref13 = _asyncToGenerator(
+  var _ref6 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee13(message, args, __ENV, reason) {
+  regeneratorRuntime.mark(function _callee6(message, args, __ENV, reason) {
     var bannedMember;
-    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
-            _context13.prev = 0;
-            _context13.next = 3;
+            _context6.prev = 0;
+            _context6.next = 3;
             return __ENV.__VALARIUM_CLIENT.fetchUser(args[3].toString().replace(/<|>|@/ig, ''), {
               cache: true
             });
 
           case 3:
-            bannedMember = _context13.sent;
-            _context13.next = 6;
+            bannedMember = _context6.sent;
+            _context6.next = 6;
             return __ENV.__VALARIUM_GUILD().unban(bannedMember, reason);
 
           case 6:
@@ -948,50 +450,50 @@ function () {
               name: 'Mod: ',
               value: message.author
             }]);
-            _context13.next = 12;
+            _context6.next = 12;
             break;
 
           case 9:
-            _context13.prev = 9;
-            _context13.t0 = _context13["catch"](0);
-            console.log(_context13.t0);
+            _context6.prev = 9;
+            _context6.t0 = _context6["catch"](0);
+            console.log(_context6.t0);
 
           case 12:
           case "end":
-            return _context13.stop();
+            return _context6.stop();
         }
       }
-    }, _callee13, null, [[0, 9]]);
+    }, _callee6, null, [[0, 9]]);
   }));
 
-  return function unban(_x28, _x29, _x30, _x31) {
-    return _ref13.apply(this, arguments);
+  return function unban(_x12, _x13, _x14, _x15) {
+    return _ref6.apply(this, arguments);
   };
 }();
 
 var reply =
 /*#__PURE__*/
 function () {
-  var _ref14 = _asyncToGenerator(
+  var _ref7 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee14(messageToReply, replyMessage) {
-    return regeneratorRuntime.wrap(function _callee14$(_context14) {
+  regeneratorRuntime.mark(function _callee7(messageToReply, replyMessage) {
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context14.next = 2;
+            _context7.next = 2;
             return messageToReply.reply(replyMessage);
 
           case 2:
           case "end":
-            return _context14.stop();
+            return _context7.stop();
         }
       }
-    }, _callee14);
+    }, _callee7);
   }));
 
-  return function reply(_x32, _x33) {
-    return _ref14.apply(this, arguments);
+  return function reply(_x16, _x17) {
+    return _ref7.apply(this, arguments);
   };
 }();
 
@@ -1174,7 +676,7 @@ var util = __webpack_require__(/*! util */ "util");
 
 var Discord = __webpack_require__(/*! discord.js */ "discord.js");
 
-var insults = __webpack_require__(/*! ./insults */ "./insults.js");
+var insults = __webpack_require__(/*! ./src/commands/insults */ "./src/commands/insults.js");
 
 var _require = __webpack_require__(/*! ./config.json */ "./config.json"),
     prefix = _require.prefix,
@@ -1182,7 +684,7 @@ var _require = __webpack_require__(/*! ./config.json */ "./config.json"),
 
 
 global.__ENV = {
-  __VALARIUM_CLIENT: __webpack_require__(/*! ./client */ "./client.js").__VALARIUM_CLIENT,
+  __VALARIUM_CLIENT: __webpack_require__(/*! ./src/client */ "./src/client.js").__VALARIUM_CLIENT,
   __DATABASE_OBJECT: {},
   __AVAILABLE_ROLES: [],
   __WATCHED_MESSAGES: [],
@@ -1515,17 +1017,6 @@ function _handleMessage() {
 }
 
 __ENV.__VALARIUM_CLIENT.on('message', handleMessage);
-
-/***/ }),
-
-/***/ "./insults.js":
-/*!********************!*\
-  !*** ./insults.js ***!
-  \********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = /5+w+l+|f+u+k+c+ +y+o+u+|f+c+k+ +y+o+u+|f+k+ +y+o+u+|f+k+ +u+|f+u+c+k+ +u+|f+u+c+k+ +y+o+u+|k+s+o+m+a+k+|k+o+s+o+m+a+k+|k+o+s+m+k+|a+7+a+|y+a+b+n+l+m+e+t+n+a+k+a+|y+a+b+n+ +e+l+m+t+n+a+k+a+|y+b+n+l+m+t+n+a+k+a+|ك+س+م+|م+ت+ن+ا+ك+|ش+ر+م+و+ط+|خ+و+ل+|ق+ح+ب+ة+|ا+ح+ا+|أ+ح+ا+|أ+ح+ب+ه+|أ+ح+ب+ة+|ش+ر+م+و+ط+|خخ+|ع+ر+ص+|ع+ر+ث+|ع+ل+ق+|ع+و+ي+ل+ق|ع+ل+و+ق+|ش+ر+ا+م+ي+ط+|kwsmk|ق+ح+ب+ه+|ق+ح+ا+ب+ي+|ك+س+|ط+ي+ز+|ط+ي+ظ+|ط+ي+ز+ك+|ت+ي+ز+ق+|ت+ي+ز+|س+ي+س+ي+/gi;
 
 /***/ }),
 
@@ -11690,11 +11181,89 @@ try {
 
 /***/ }),
 
+/***/ "./src/client.js":
+/*!***********************!*\
+  !*** ./src/client.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var Discord = __webpack_require__(/*! discord.js */ "discord.js");
+
+var _require = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module './config.json'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
+    prefix = _require.prefix,
+    token = _require.token;
+
+var __VALARIUM_CLIENT = new Discord.Client();
+
+_asyncToGenerator(
+/*#__PURE__*/
+regeneratorRuntime.mark(function _callee() {
+  return regeneratorRuntime.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.prev = 0;
+          _context.next = 3;
+          return __VALARIUM_CLIENT.login(token);
+
+        case 3:
+          _context.next = 8;
+          break;
+
+        case 5:
+          _context.prev = 5;
+          _context.t0 = _context["catch"](0);
+          console.log('Error when loggin in using token. client.js:11', _context.t0);
+
+        case 8:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _callee, null, [[0, 5]]);
+}))();
+
+module.exports = {
+  __VALARIUM_CLIENT: __VALARIUM_CLIENT
+  /**
+   * MESSAGE {
+   *  CHANNEL_ID,
+   *  ID,
+   *  WATCHED_REACTIONS [
+   *    REACTION{
+   *      REACTION_NAME,
+   *      REACTION_ROLE_ID
+   *      REACTION_ROLE_NAME  
+   *    }
+   *  ]
+   * }
+   */
+
+};
+
+/***/ }),
+
+/***/ "./src/commands/insults.js":
+/*!*********************************!*\
+  !*** ./src/commands/insults.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = /5+w+l+|f+u+k+c+ +y+o+u+|f+c+k+ +y+o+u+|f+k+ +y+o+u+|f+k+ +u+|f+u+c+k+ +u+|f+u+c+k+ +y+o+u+|k+s+o+m+a+k+|k+o+s+o+m+a+k+|k+o+s+m+k+|a+7+a+|y+a+b+n+l+m+e+t+n+a+k+a+|y+a+b+n+ +e+l+m+t+n+a+k+a+|y+b+n+l+m+t+n+a+k+a+|ك+س+م+|م+ت+ن+ا+ك+|ش+ر+م+و+ط+|خ+و+ل+|ق+ح+ب+ة+|ا+ح+ا+|أ+ح+ا+|أ+ح+ب+ه+|أ+ح+ب+ة+|ش+ر+م+و+ط+|خخ+|ع+ر+ص+|ع+ر+ث+|ع+ل+ق+|ع+و+ي+ل+ق|ع+ل+و+ق+|ش+ر+ا+م+ي+ط+|kwsmk|ق+ح+ب+ه+|ق+ح+ا+ب+ي+|ك+س+|ط+ي+ز+|ط+ي+ظ+|ط+ي+ز+ك+|ت+ي+ز+ق+|ت+ي+ز+|س+ي+س+ي+/gi;
+
+/***/ }),
+
 /***/ "./utils.js":
 /*!******************!*\
   !*** ./utils.js ***!
   \******************/
-/*! exports provided: craftWelcomeMessage, updateMemberCount, enforceCommandArguments, onCommandArgsNotCorrect, getWarningsFromDatabase, onStartup, checkWatchedMessage, isAllowedToUseCommand, formatMentionReason */
+/*! exports provided: craftWelcomeMessage, updateMemberCount, enforceCommandArguments, onCommandArgsNotCorrect, getWarningsFromDatabase, onStartup, checkWatchedMessage, isAllowedToUseCommand, channelExists, roleExists, messageExists, formatMentionReason */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11707,6 +11276,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onStartup", function() { return onStartup; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkWatchedMessage", function() { return checkWatchedMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isAllowedToUseCommand", function() { return isAllowedToUseCommand; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "channelExists", function() { return channelExists; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "roleExists", function() { return roleExists; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "messageExists", function() { return messageExists; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatMentionReason", function() { return formatMentionReason; });
 function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
 
@@ -11998,6 +11570,40 @@ var isAllowedToUseCommand = function isAllowedToUseCommand(callee, commandName) 
     console.log('Something went wrong in isAllowedToUseCommand', err);
   }
 };
+var channelExists = function channelExists(channelId) {
+  return __ENV.__VALARIUM_GUILD().channels.find(function (channel) {
+    return channel.id === channelId;
+  });
+};
+var roleExists = function roleExists(roleId) {
+  return __ENV.__VALARIUM_GUILD().roles.find(function (role) {
+    return role.id === roleId;
+  });
+};
+var messageExists =
+/*#__PURE__*/
+function () {
+  var _ref6 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee6(messageId, channel) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            return _context6.abrupt("return", channel.fetchMessage(messageId));
+
+          case 1:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  }));
+
+  return function messageExists(_x9, _x10) {
+    return _ref6.apply(this, arguments);
+  };
+}();
 var formatMentionReason = function formatMentionReason(rest) {
   var _rest = _toArray(rest),
       mention = _rest[0],
