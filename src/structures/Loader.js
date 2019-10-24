@@ -3,7 +3,7 @@ export default class Loader {
     this.client = client
   }
 
-  initialise () {
+  init () {
     try {
       this.load()
       return true
@@ -12,4 +12,6 @@ export default class Loader {
       //Log err
     }
   }
+
+  load (){}
 }

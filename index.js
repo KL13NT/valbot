@@ -33,9 +33,6 @@ async function start () {
   try {
     console.log('Starting client!', process.env.AUTH_TOKEn)
     await client.login(process.env.AUTH_TOKEN)
-    client.once('ready', () => {
-      console.log(fs.readFileSync(path.resolve('bigtitle.txt'), 'utf8').toString())
-    })
     client.on('message', message => {
       // If the message is "ping"
       if (message.content === 'ping') {
@@ -55,7 +52,9 @@ start()
 // client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
 
 
-
+client.once('ready', async () => {
+  console.log(fs.readFileSync(path.resolve('bigtitle.txt'), 'utf8').toString())
+})
 // import 'regenerator-runtime/runtime'
 // import commands from './commands'
 
@@ -94,18 +93,6 @@ start()
 //   catch(err){
 //     console.log('Something went wrong when reading discordExplanation.md')
 //   }
-// })
-
-
-
-// //Load needed data on server start
-// __ENV.__VALARIUM_CLIENT.once('ready', async () => {
-//   console.log('Ready! Calling on Startup')
-//   // createLogFile('Reloaded the server')
-
-//   await onStartup()
-//   updateMemberCount()
-//   fs.writeFile('roles.json', JSON.stringify(__ENV.__AVAILABLE_ROLES.map(role => role.name)), (err) => console.log(err))
 // })
 
 
