@@ -9,7 +9,7 @@ const { MongoClient } = require('mongodb')
 
 module.exports = class Database extends MongoClient{
   constructor (host = process.env.DB_HOST, name = process.env.DB_NAME) {
-    super(host)
+    super(host, { useNewUrlParser: true })
 
     this.host = host
     this.name = name

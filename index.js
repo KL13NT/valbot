@@ -21,7 +21,7 @@ const dbclient = new Database()
 
 
 async function start () {
-  console.log('Starting client!', process.env.AUTH_TOKEN)
+  console.log('Starting client!')
   await client.init(process.env.AUTH_TOKEN)
 
   console.log('Starting Database')
