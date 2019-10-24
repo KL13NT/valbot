@@ -11,10 +11,12 @@
  */
 export default class CommandStructure{
 
-  constructor(client, options = {}) {
+  constructor(client, context, options = {}) {
     const { name, flags, category, aliases, cooldownTime } = options
     
     this.client = client
+    this.context = context
+    
     this.name = name
     this.cooldownTime = cooldownTime || 0
     this.category = category || 'general'
@@ -23,7 +25,26 @@ export default class CommandStructure{
   }
   
   async prerun(context) {
-    if()
+    //TODO: this.checkContext();
+    //TODO: this.isolate();
+  }
+
+  async isolate() {
+    try {
+      this.run()
+    }
+    catch (err) {
+      //TODO: Log error 
+      //TODO: respond to user message with error embed/message
+    }
+  }
+
+  async run() {
+    // return true;
+  }
+
+  formatCommandMessage() {
+    // To be delcared in each command
   }
 
   handleRequirements(context, requirements) {

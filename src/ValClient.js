@@ -1,15 +1,15 @@
-const Discord = require('discord.js')
-const Loaders = require('./loaders')
+const { Client } = require('discord.js')
+// const Loaders = require('./loaders')
 
 //TODO: use object instead of array for commands
-export default class ValClient extends Discord.Client {
+export class ValClient extends Client {
   constructor (options = {}) {
     super(options)
-    this.initialiseLoaders()
+    // this.initialiseLoaders()
     //TODO: add initialise loaders
   }
 
-  async login (token = process.env.DISCORD_TOKEN) {
+  async login (token = process.env.AUTH_TOKEN) {
     try {
       await super.login(token)
     }
@@ -35,18 +35,18 @@ export default class ValClient extends Discord.Client {
     return command._run(context, args).catch(this.logError)
   }
 
-  async initializeLoaders() {
-    //Load loaders from file
-    for (const name in Loaders) {
-      const loader = new Loaders[name](this)
-      let success = false
-      try {
-        success = await loader.load()
-      } catch (e) {
-        this.logError(e)
-      } finally {
-        if (!success && loader.critical) process.exit(1)
-      }
-    }
-  }
+  // async initializeLoaders () {
+  //   //Load loaders from file
+  //   for (const name in Loaders) {
+  //     const loader = new Loaders[name](this)
+  //     let success = false
+  //     try {
+  //       success = await loader.load()
+  //     } catch (e) {
+  //       this.logError(e)
+  //     } finally {
+  //       if (!success && loader.critical) process.exit(1)
+  //     }
+  //   }
+  // }
 }

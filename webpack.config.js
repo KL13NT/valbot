@@ -17,6 +17,7 @@ module.exports = function (env, argv){
   return {
     devtool: 'sourcemap',
     target: 'node',
+    mode: 'development',
 
 
   
@@ -48,7 +49,7 @@ module.exports = function (env, argv){
                 fix: true,
                 cache: true,
                 failOnWarning: false,
-                failOnError: true,
+                failOnError: false,
                 globals: ['__ENV']
               } 
             }
