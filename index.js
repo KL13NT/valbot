@@ -2,9 +2,10 @@
 const path = require('path')
 const fs = require('fs')
 const ValClient = require('./src/ValClient')
-const client = new ValClient()
+const Database = require('./src/database/Database')
 
-require('dotenv').config({ path: path.resolve('./env/dev', '.env') })
+const client = new ValClient()
+const dbclient = new Database()
 
 // function initGlobals (){
 //   global.__ENV = {
@@ -20,14 +21,12 @@ require('dotenv').config({ path: path.resolve('./env/dev', '.env') })
 
 
 async function start () {
-  try {
-    console.log('Starting client!', process.env.AUTH_TOKEN)
-    await client.init(process.env.AUTH_TOKEN)
+  console.log('Starting client!', process.env.AUTH_TOKEN)
+  await client.init(process.env.AUTH_TOKEN)
 
-  }
-  catch(err){
-    console.log('ERROR OCCURED', err)
-  }
+  console.log('Starting Database')
+  await dbclient.init()
+
 }
 
 start()

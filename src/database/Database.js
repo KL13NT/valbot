@@ -1,32 +1,49 @@
 const { MongoClient } = require('mongodb')
 
-module.exports = class Databse{
-  constructor (DB_HOST = process.env.DB_HOST, DB_NAME = process.env.DB_NAME) {
-    this.HOST = DB_HOST
-    this.NAME = DB_NAME
-    this.client = new MongoClient(`${ this.HOST }`, { useNewUrlParser: true })
+
+/**
+ * @constructor
+ * @param { String } DB_HOST
+ * @param { String } DB_NAME
+ */
+
+module.exports = class Database extends MongoClient{
+  constructor (host = process.env.DB_HOST, name = process.env.DB_NAME) {
+    super(host)
+
+    this.host = host
+    this.name = name
     
+    this.isReady = false
+
     this.init()
   }
 
   async init () {
     try {
-      const success = this.initDB()
-      if (!success) throw Error('Couldn\'t initalise DB')
+      this.isReady = await this.initDB()
+      
+      if (!this.isReady) throw Error('Couldn\'t initalise DB')
       else console.log('Initialised DB!')
     }
     catch (err) {
-      console.log(err, 'Retrying')
-      this.init()
+      console.log(err)
     }
   }
 
   async initDB () {
-    await this.client.connect()
-    this._db = this.client.db(this.NAME)
-    
-    return true
+    try {
+      await this.connect()
+      this._db = this.db(this.NAME)
+      
+      if (typeof this._db !== 'undefined') return true
+      
+      return false
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 
-  //TODO: Add databse setters and getters
+  //TODO: Add databse setters and getters 
 }

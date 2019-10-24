@@ -3,11 +3,19 @@ const fs = require('fs')
 const path = require('path')
 const Loaders = require('./loaders')
 
+
+/**
+ * @param { ClientOptions	} options DiscordClientOptions
+ * @param { String } prefix The prefix used for all commands
+ */
+
 module.exports = class ValClient extends Client {
-  constructor (options = {}) {
+  constructor (options = {}, prefix) {
     super(options)
     this.isLoggedin = false
+    this.prefix = 'val!'
     this.IMPORTANT_CHANNELS = {}
+    this.COMMANDS = {}
     //TODO: add initialise loaders
   }
 

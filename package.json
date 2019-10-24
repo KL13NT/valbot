@@ -11,8 +11,8 @@
     "webpack": "webpack --watch --mode development --color --config webpack.config.js",
     "start": "run-p start:server",
     "develop": "run-p webpack develop:server",
-    "develop:server": "nodemon ./releases/index.prod.js",
-    "start:server": "nodemon -r dotenv/config ./releases/index.prod.js dotenv_config_path=/env/prod",
+    "develop:server": "nodemon -r dotenv/config ./releases/index.prod.js",
+    "start:server": "nodemon -r dotenv/config ./releases/index.prod.js",
     "lint": "eslint --ext .jsx --ext .js ./src --config .eslintrc.js",
     "test": "jest --colors --expand --logHeapUsage --config jest.config.js"
   },

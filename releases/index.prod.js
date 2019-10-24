@@ -110,11 +110,10 @@ const fs = __webpack_require__(/*! fs */ "fs");
 
 const ValClient = __webpack_require__(/*! ./src/ValClient */ "./src/ValClient.js");
 
-const client = new ValClient();
+const Database = __webpack_require__(/*! ./src/database/Database */ "./src/database/Database.js");
 
-__webpack_require__(/*! dotenv */ "dotenv").config({
-  path: path.resolve('./env/dev', '.env')
-}); // function initGlobals (){
+const client = new ValClient();
+const dbclient = new Database(); // function initGlobals (){
 //   global.__ENV = {
 //     __DATABASE_OBJECT: {},
 //     __AVAILABLE_ROLES: {},
@@ -126,14 +125,11 @@ __webpack_require__(/*! dotenv */ "dotenv").config({
 //   }
 // }
 
-
 async function start() {
-  try {
-    console.log('Starting client!', process.env.AUTH_TOKEN);
-    await client.init(process.env.AUTH_TOKEN);
-  } catch (err) {
-    console.log('ERROR OCCURED', err);
-  }
+  console.log('Starting client!', process.env.AUTH_TOKEN);
+  await client.init(process.env.AUTH_TOKEN);
+  console.log('Starting Database');
+  await dbclient.init();
 }
 
 start(); // import 'regenerator-runtime/runtime'
@@ -10439,12 +10435,19 @@ const fs = __webpack_require__(/*! fs */ "fs");
 const path = __webpack_require__(/*! path */ "path");
 
 const Loaders = __webpack_require__(/*! ./loaders */ "./src/loaders/index.js");
+/**
+ * @param { ClientOptions	} options DiscordClientOptions
+ * @param { String } prefix The prefix used for all commands
+ */
+
 
 module.exports = class ValClient extends Client {
-  constructor(options = {}) {
+  constructor(options = {}, prefix) {
     super(options);
     this.isLoggedin = false;
-    this.IMPORTANT_CHANNELS = {}; //TODO: add initialise loaders
+    this.prefix = 'val!';
+    this.IMPORTANT_CHANNELS = {};
+    this.COMMANDS = {}; //TODO: add initialise loaders
   }
 
   async init(token) {
@@ -10498,6 +10501,57 @@ module.exports = class ValClient extends Client {
       }
     }
   }
+
+};
+
+/***/ }),
+
+/***/ "./src/database/Database.js":
+/*!**********************************!*\
+  !*** ./src/database/Database.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {
+  MongoClient
+} = __webpack_require__(/*! mongodb */ "mongodb");
+/**
+ * @constructor
+ * @param { String } DB_HOST
+ * @param { String } DB_NAME
+ */
+
+
+module.exports = class Database extends MongoClient {
+  constructor(host = process.env.DB_HOST, name = process.env.DB_NAME) {
+    super(host);
+    this.host = host;
+    this.name = name;
+    this.isReady = false;
+    this.init();
+  }
+
+  async init() {
+    try {
+      this.isReady = await this.initDB();
+      if (!this.isReady) throw Error('Couldn\'t initalise DB');else console.log('Initialised DB!');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async initDB() {
+    try {
+      await this.connect();
+      this._db = this.db(this.NAME);
+      if (typeof this._db !== 'undefined') return true;
+      return false;
+    } catch (err) {
+      console.log(err);
+    }
+  } //TODO: Add databse setters and getters 
+
 
 };
 
@@ -10568,17 +10622,6 @@ module.exports = require("discord.js");
 
 /***/ }),
 
-/***/ "dotenv":
-/*!*************************!*\
-  !*** external "dotenv" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("dotenv");
-
-/***/ }),
-
 /***/ "fs":
 /*!*********************!*\
   !*** external "fs" ***!
@@ -10587,6 +10630,17 @@ module.exports = require("dotenv");
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ "mongodb":
+/*!**************************!*\
+  !*** external "mongodb" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("mongodb");
 
 /***/ }),
 
