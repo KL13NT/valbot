@@ -1,7 +1,10 @@
+const Context = require('./CommandContext')
+
 /**
  * Command Structure
  * @constructor
  * @param {ValClient} client Valarium-bot client
+ * @param {Object} context Command context
  * @param {Object} options Command initialisation options
  * @param {String} options.name Command name
  * @param {Number} [options.cooldownTime=0] Time between calls to the same command, default 0
@@ -38,6 +41,9 @@ export default class CommandStructure{
       //TODO: respond to user message with error embed/message
     }
   }
+
+  checkContext = () => this.context instanceof Context? true: false
+
 
   async run() {
     // return true;

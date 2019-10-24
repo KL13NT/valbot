@@ -106,27 +106,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /* eslint-disable no-prototype-builtins */
 const path = __webpack_require__(/*! path */ "path");
 
-__webpack_require__(/*! dotenv */ "dotenv").config({
-  path: path.resolve('./env/dev', '.env')
-});
-
 const fs = __webpack_require__(/*! fs */ "fs");
 
-const {
-  ValClient
-} = __webpack_require__(/*! ./src/ValClient */ "./src/ValClient.js");
+const ValClient = __webpack_require__(/*! ./src/ValClient */ "./src/ValClient.js");
 
 const client = new ValClient();
-/**
- * NEW INDEX FILE
- * console.log(readFileSync('bigtitle.txt', 'utf8').toString())
- * //REQUIRE VALCLIENT HERE
- * const client = new Switchblade(CLIENT_OPTIONS)
- * client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
- * 
- */
 
-global.__ENV; // function initGlobals (){
+__webpack_require__(/*! dotenv */ "dotenv").config({
+  path: path.resolve('./env/dev', '.env')
+}); // function initGlobals (){
 //   global.__ENV = {
 //     __DATABASE_OBJECT: {},
 //     __AVAILABLE_ROLES: {},
@@ -134,35 +122,21 @@ global.__ENV; // function initGlobals (){
 //     __DISCORD_EXPLANATION: {},
 //     __WARNING_EXCEPTIONS: ['238009405176676352'],
 //     __VALARIUM_GUILD: function () { return this.__VALARIUM_CLIENT.guilds.find(guild => guild.name === 'VALARIUM') },
-//     __MEMBER_COUNT_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.find(channel => channel.id === '586768857113296897') },
-//     __MODERATION_NOTICES_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.find(channel => channel.id === '587571479173005312') },
 //     __TEST_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.filter(channel => channel.id === '571824874969104416') }
 //   }
 // }
 
+
 async function start() {
   try {
-    console.log('Starting client!', process.env.AUTH_TOKEn);
-    await client.login(process.env.AUTH_TOKEN);
-    client.on('message', message => {
-      // If the message is "ping"
-      if (message.content === 'ping') {
-        // Send "pong" to the same channel
-        message.channel.send('pong');
-      }
-    });
+    console.log('Starting client!', process.env.AUTH_TOKEN);
+    await client.init(process.env.AUTH_TOKEN);
   } catch (err) {
     console.log('ERROR OCCURED', err);
   }
 }
 
-start(); //REQUIRE VALCLIENT HERE
-// const client = new Switchblade(CLIENT_OPTIONS)
-// client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
-
-client.once('ready', async () => {
-  console.log(fs.readFileSync(path.resolve('bigtitle.txt'), 'utf8').toString());
-}); // import 'regenerator-runtime/runtime'
+start(); // import 'regenerator-runtime/runtime'
 // import commands from './commands'
 // // const fs = require('fs')
 // // const path = require('path')
@@ -10453,28 +10427,43 @@ try {
 /*!**************************!*\
   !*** ./src/ValClient.js ***!
   \**************************/
-/*! exports provided: ValClient */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ValClient", function() { return ValClient; });
 const {
   Client
-} = __webpack_require__(/*! discord.js */ "discord.js"); // const Loaders = require('./loaders')
-//TODO: use object instead of array for commands
+} = __webpack_require__(/*! discord.js */ "discord.js");
 
+const fs = __webpack_require__(/*! fs */ "fs");
 
-class ValClient extends Client {
+const path = __webpack_require__(/*! path */ "path");
+
+const Loaders = __webpack_require__(/*! ./loaders */ "./src/loaders/index.js");
+
+module.exports = class ValClient extends Client {
   constructor(options = {}) {
-    super(options); // this.initialiseLoaders()
-    //TODO: add initialise loaders
+    super(options);
+    this.isLoggedin = false;
+    this.IMPORTANT_CHANNELS = {}; //TODO: add initialise loaders
+  }
+
+  async init(token) {
+    const CLILogo = fs.readFileSync(path.resolve('bigtitle.txt'), 'utf8').toString();
+    await this.login(token);
+
+    if (this.isLoggedin) {
+      console.log(`${CLILogo}\nClient initiated successfully.`);
+      this.IMPORTANT_CHANNELS.MEMBER_COUNT = this.channels.find(channel => channel.id === '586768857113296897');
+      this.IMPORTANT_CHANNELS.MODERATION_NOTICES = this.channels.find(channel => channel.id === '587571479173005312');
+    }
   }
 
   async login(token = process.env.AUTH_TOKEN) {
     try {
       await super.login(token);
+      this.isLoggedin = true;
     } catch (err) {
+      console.error('Something went wrong while loggin in. Retrying again in 5s.', err);
       this.setTimeout(this.login, 5000);
     }
   }
@@ -10493,23 +10482,65 @@ class ValClient extends Client {
     }
 
     return command._run(context, args).catch(this.logError);
-  } // async initializeLoaders () {
-  //   //Load loaders from file
-  //   for (const name in Loaders) {
-  //     const loader = new Loaders[name](this)
-  //     let success = false
-  //     try {
-  //       success = await loader.load()
-  //     } catch (e) {
-  //       this.logError(e)
-  //     } finally {
-  //       if (!success && loader.critical) process.exit(1)
-  //     }
-  //   }
-  // }
+  }
+
+  async initializeLoaders() {
+    //Load loaders from file
+    for (const loader in Loaders) {
+      const currentLoader = new Loaders[loader](this);
+      let success = false;
+
+      try {
+        success = await currentLoader.init();
+      } catch (err) {// log err
+      } finally {
+        if (!success) process.exit(1);
+      }
+    }
+  }
+
+};
+
+/***/ }),
+
+/***/ "./src/loaders/CommandsLoader.js":
+/*!***************************************!*\
+  !*** ./src/loaders/CommandsLoader.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
 
-}
+
+/***/ }),
+
+/***/ "./src/loaders/ListenersLoader.js":
+/*!****************************************!*\
+  !*** ./src/loaders/ListenersLoader.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = class ListenersLoader {
+  constructor(client) {
+    this.client = client;
+  }
+
+};
+
+/***/ }),
+
+/***/ "./src/loaders/index.js":
+/*!******************************!*\
+  !*** ./src/loaders/index.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  ListenersLoader: __webpack_require__(/*! ./ListenersLoader */ "./src/loaders/ListenersLoader.js"),
+  CommandsLoader: __webpack_require__(/*! ./CommandsLoader */ "./src/loaders/CommandsLoader.js")
+};
 
 /***/ }),
 

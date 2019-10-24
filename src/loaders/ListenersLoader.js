@@ -1,5 +1,5 @@
 module.exports = class ListenersLoader {
-  constructor(client) {
+  constructor (client) {
     this.client = client
   }
 }

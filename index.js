@@ -1,18 +1,10 @@
 /* eslint-disable no-prototype-builtins */
 const path = require('path')
-require('dotenv').config({ path: path.resolve('./env/dev', '.env') })
 const fs = require('fs')
-const { ValClient } = require('./src/ValClient')
+const ValClient = require('./src/ValClient')
 const client = new ValClient()
-/**
- * NEW INDEX FILE
- * console.log(readFileSync('bigtitle.txt', 'utf8').toString())
- * //REQUIRE VALCLIENT HERE
- * const client = new Switchblade(CLIENT_OPTIONS)
- * client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
- * 
- */
-global.__ENV
+
+require('dotenv').config({ path: path.resolve('./env/dev', '.env') })
 
 // function initGlobals (){
 //   global.__ENV = {
@@ -22,8 +14,6 @@ global.__ENV
 //     __DISCORD_EXPLANATION: {},
 //     __WARNING_EXCEPTIONS: ['238009405176676352'],
 //     __VALARIUM_GUILD: function () { return this.__VALARIUM_CLIENT.guilds.find(guild => guild.name === 'VALARIUM') },
-//     __MEMBER_COUNT_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.find(channel => channel.id === '586768857113296897') },
-//     __MODERATION_NOTICES_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.find(channel => channel.id === '587571479173005312') },
 //     __TEST_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.filter(channel => channel.id === '571824874969104416') }
 //   }
 // }
@@ -31,15 +21,9 @@ global.__ENV
 
 async function start () {
   try {
-    console.log('Starting client!', process.env.AUTH_TOKEn)
-    await client.login(process.env.AUTH_TOKEN)
-    client.on('message', message => {
-      // If the message is "ping"
-      if (message.content === 'ping') {
-        // Send "pong" to the same channel
-        message.channel.send('pong')
-      }
-    })
+    console.log('Starting client!', process.env.AUTH_TOKEN)
+    await client.init(process.env.AUTH_TOKEN)
+
   }
   catch(err){
     console.log('ERROR OCCURED', err)
@@ -47,14 +31,7 @@ async function start () {
 }
 
 start()
-//REQUIRE VALCLIENT HERE
-// const client = new Switchblade(CLIENT_OPTIONS)
-// client.login().then(() => client.log('[32mLogged in successfully!', 'Discord')).catch(e => client.logError(e))
 
-
-client.once('ready', async () => {
-  console.log(fs.readFileSync(path.resolve('bigtitle.txt'), 'utf8').toString())
-})
 // import 'regenerator-runtime/runtime'
 // import commands from './commands'
 
