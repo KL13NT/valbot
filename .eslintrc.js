@@ -30,7 +30,7 @@ module.exports = {
 		],
 		'quotes': [
 			'error',
-			'single'
+			'backtick'
 		],
 		'semi': [
 			'error',
@@ -71,6 +71,7 @@ module.exports = {
 		'block-spacing': [
 			2,
 			'always'
-		]
+		],
+		'no-unused-vars': 1
 	},
 };

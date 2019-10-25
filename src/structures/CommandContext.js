@@ -10,16 +10,22 @@
  * @prop {string} prefix The command prefix
  */
 
-export default class CommandContext{
+module.exports = class CommandContext{
   //options is destructured here! 
-  constructor ({ client, message, command }) {
-    this.client = client
-    this.message = message
-    this.author = message.author
-    this.member = message.member
-    this.channel = message.channel
-    this.voiceChannel = message.member.voiceChannel
-    this.guild = message.guild
-    this.command = command
+  constructor (client, message, command) {
+    try{
+      this.client = client
+      this.message = message
+      this.author = message.author
+      this.member = message.member
+      this.channel = message.channel
+      this.voiceChannel = message.member.voiceChannel
+      this.guild = message.guild
+      this.command = command
+    }
+    catch(err){
+      console.log(`Context creation failed`)
+    }
   }
+  
 }

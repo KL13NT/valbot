@@ -1,4 +1,4 @@
-const Context = require('./CommandContext')
+const Context = require(`./CommandContext`)
 
 /**
  * Command Structure
@@ -12,59 +12,59 @@ const Context = require('./CommandContext')
  * @param {Array} [options.flags=[]] Required for the command to function properly
  * @param {aliases} [options.aliases=[]] Aliases for the command
  */
-export default class CommandStructure{
+module.exports =  class Command{
 
-  constructor(client, context, options = {}) {
-    const { name, flags, category, aliases, cooldownTime } = options
+  constructor (client, options = {}) {
+    const { name, flags, category, aliases, cooldownTime, critical } = options
     
     this.client = client
-    this.context = context
     
     this.name = name
     this.cooldownTime = cooldownTime || 0
-    this.category = category || 'general'
+    this.category = category || `general`
     this.flags = flags || []
     this.aliases = aliases || []
-  }
-  
-  async prerun(context) {
-    //TODO: this.checkContext();
-    //TODO: this.isolate();
+    this.critical = critical || false
+    
+    this.POSSIBLE_FLAGS = {
+      'dev-only': `dev-only`,
+      'admin-only': `admin-only`,
+      'same-channel-only': `same-channel-only`,
+      'database-only': `database-only`
+    }
+
+    if(!this.checkFlags(this.flags) && this.critical){
+      console.log(Error(`Command ${this.name} has illegal flags and is critical, check the code and try again`))
+      process.exit(1)
+    }
   }
 
-  async isolate() {
+  async init (context) {
     try {
-      this.run()
+      if (this.checkContext(context)) this.run(context)
+      else throw Error(`Context isn't an instance of ${Context}.`)
     }
     catch (err) {
+      console.log(err)
       //TODO: Log error 
       //TODO: respond to user message with error embed/message
     }
   }
 
-  checkContext = () => this.context instanceof Context? true: false
+  checkContext (context){
+    return context instanceof Context? true: false
+  }
 
 
-  async run() {
+  async run (context) {
     // return true;
   }
 
-  formatCommandMessage() {
-    // To be delcared in each command
-  }
 
-  handleRequirements(context, requirements) {
-    const { client, message, author, member, channel, voiceChannel, guild, command, prefix } = context
-  } 
-
-  checkFlags(flags) {
-    const POSSIBLE_FLAGS = [
-      'dev-only',
-      'admin-only',
-      'same-channel-only',
-      'database-only',
-      'no-cooldown'
-    ]
-    flags.
+  checkFlags (flags) {
+    const isValid = flags.findIndex(flag => this.POSSIBLE_FLAGS[flag] === undefined)
+    
+    if (isValid === -1) return true
+    return false
   }
 }

@@ -4,6 +4,7 @@ const fs = require('fs')
 const ValClient = require('./src/ValClient')
 const Database = require('./src/database/Database')
 
+
 const client = new ValClient()
 const dbclient = new Database()
 

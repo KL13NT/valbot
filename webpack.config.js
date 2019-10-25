@@ -15,7 +15,6 @@ fs.readdirSync('node_modules')
 
 module.exports = function (env, argv){
   return {
-    devtool: 'sourcemap',
     target: 'node',
     mode: 'development',
 
@@ -28,7 +27,6 @@ module.exports = function (env, argv){
 
 
     output: {
-      libraryTarget: 'umd',
       filename: '[name].prod.js',
       path: path.resolve(__dirname, 'releases')
     },
@@ -47,9 +45,10 @@ module.exports = function (env, argv){
               loader: 'eslint-loader',
               options: {
                 fix: true,
-                cache: true,
+                cache: false,
                 failOnWarning: false,
                 failOnError: false,
+                quiet: true,
                 globals: ['__ENV']
               } 
             }
@@ -61,13 +60,13 @@ module.exports = function (env, argv){
 
 
     plugins: argv.mode === 'production'? [
-      new CompressionPlugin({
-        test: /\.(js|svg|png|jpg|webp|css|svg|jpeg)$/i,
-        cache: true,
-        algorithm: 'gzip',
-        threshold: 4096,
-        deleteOriginalAssets: true
-      })
+      // new CompressionPlugin({
+      //   test: /\.(js|svg|png|jpg|webp|css|svg|jpeg)$/i,
+      //   cache: true,
+      //   algorithm: 'gzip',
+      //   threshold: 4096,
+      //   deleteOriginalAssets: true
+      // })
     ]: [],
 
 

@@ -13,7 +13,6 @@ module.exports = class Database extends MongoClient{
 
     this.host = host
     this.name = name
-    
     this.isReady = false
 
     this.init()
@@ -34,8 +33,8 @@ module.exports = class Database extends MongoClient{
   async initDB () {
     try {
       await this.connect()
+
       this._db = this.db(this.NAME)
-      
       if (typeof this._db !== 'undefined') return true
       
       return false
@@ -45,5 +44,7 @@ module.exports = class Database extends MongoClient{
     }
   }
 
-  //TODO: Add databse setters and getters 
+  async updateWarnings (){
+    
+  }
 }

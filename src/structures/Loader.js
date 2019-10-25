@@ -18,14 +18,14 @@
   * }
   */
 
-export default class Loader {
+module.exports = class Loader {
   constructor (client){
     this.client = client
   }
 
-  init () {
+  async init () {
     try {
-      this.load()
+      await this.load()
       return true
     }
     catch (err) {
@@ -33,6 +33,6 @@ export default class Loader {
     }
   }
 
-  load (){}
+  async load (){}
 }
 
