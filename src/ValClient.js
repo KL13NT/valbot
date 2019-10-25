@@ -32,6 +32,7 @@ module.exports = class ValClient extends Client {
     }
 
     this.initLoaders()
+    this.initListeners()
   }
 
   async login (token = process.env.AUTH_TOKEN) {
@@ -40,8 +41,8 @@ module.exports = class ValClient extends Client {
       this.isLoggedin = true
     }
     catch (err) {
-      console.error(`Something went wrong while loggin in. Retrying again in 5s.`, err)
-      this.setTimeout(this.login, 5000)
+      console.error(`Something went wrong while loggin in. Retrying again in 3s.`, err)
+      this.setTimeout(this.login, 3000)
     }
   }
 
@@ -71,6 +72,20 @@ module.exports = class ValClient extends Client {
       } catch (err) {
         // log err
       } 
+    }
+  }
+
+  async initListeners (){
+    try{
+      this.on(`message`, (message) => {
+        const { mentions: { users } } = message
+        console.log(users, typeof users)
+        if(users.some(el => el.id === process.env.CLIENT_ID))
+          message.reply(`Hello?`)
+      })
+    }
+    catch(err){
+      console.log(err)
     }
   }
 }

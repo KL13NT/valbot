@@ -9,7 +9,7 @@ module.exports = class Warn extends Command{
   constructor (client){
     const commandOptions = {
       name: `Warn`,
-      flags: ['alolo'],
+      flags: [],
       category: `short`,
       aliases: [],
       cooldownTime: 0,
