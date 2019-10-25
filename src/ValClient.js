@@ -2,7 +2,7 @@ const { Client } = require(`discord.js`)
 const fs = require(`fs`)
 const path = require(`path`)
 const Loaders = require(`./loaders`)
-
+const Listeners = require(`./listeners`)
 
 /**
  * @param { ClientOptions	} options DiscordClientOptions
@@ -16,6 +16,11 @@ module.exports = class ValClient extends Client {
     this.prefix = prefix || `val!`
     this.importantChannels = {}
     this.commands = {}
+    this.presences = [
+      { message: `for val!`, type: `WATCHING` },
+      { message: `something?`, type: `PLAYING` },
+      { message: `Spotify`, type: `LISTENING` }
+    ]
     //TODO: add initialise loaders
   }
 
@@ -46,22 +51,7 @@ module.exports = class ValClient extends Client {
     }
   }
 
-  async runCommand (command, context, args) {
-    //TODO: refactor
-    if (context.guild && !command.hidden) {
-      const deepSubcmd = (c, a) => {
-        const [arg] = a
-        const cmd = c.subcommands
-          ? c.subcommands.find(s => s.name.toLowerCase() === arg || (s.aliases && s.aliases.includes(arg)))
-          : null
-        return cmd ? deepSubcmd(cmd, a.slice(1)) : c
-      }
-      const verify = await this.modules.commandRules.verifyCommand(deepSubcmd(command, args), context)
-      if (!verify) return
-    }
-
-    return command._run(context, args).catch(this.logError)
-  }
+  async runCommand (command, context, args){}
 
   async initLoaders () {
     //Load loaders from file
@@ -70,22 +60,29 @@ module.exports = class ValClient extends Client {
         const currentLoader = new Loaders[loader](this)
         await currentLoader.load()
       } catch (err) {
-        // log err
+        console.log(err)
       } 
     }
   }
 
   async initListeners (){
-    try{
-      this.on(`message`, (message) => {
-        const { mentions: { users } } = message
-        console.log(users, typeof users)
-        if(users.some(el => el.id === process.env.CLIENT_ID))
-          message.reply(`Hello?`)
-      })
+    for (const listener in Listeners) {
+      try {
+        const currentListener = new Listeners[listener](this).init()
+        
+      } catch (err) {
+        console.log(err)
+      } 
     }
-    catch(err){
-      console.log(err)
-    }
+    // try{
+    //   this.on(`message`, (message) => {
+    //     const { mentions: { users } } = message
+    //     if(users.some(el => el.id === process.env.CLIENT_ID))
+    //       message.reply(`Hello?`)
+    //   })
+    // }
+    // catch(err){
+    //   console.log(err)
+    // }
   }
 }

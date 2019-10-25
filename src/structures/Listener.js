@@ -22,7 +22,9 @@ module.exports = class Listener{
   
   async init () {
     this.events.forEach(event => {
-      this[`on${event[0].toUpperCase()}${event.substr(1)}`]()
+      this.client.on(event, this[`on${capitalise(event)}`])
     })
   }
 }
+  
+const capitalise = (event) => `${event[0].toUpperCase()}${event.substr(1)}`
