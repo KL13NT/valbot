@@ -18,6 +18,8 @@ module.exports = class Listener{
   constructor (client, events = []) {
     this.client = client
     this.events = events
+
+    this.init()
   }
   
   async init () {

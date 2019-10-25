@@ -16,7 +16,7 @@ module.exports = class ValClient extends Client {
     this.prefix = prefix || `val!`
     this.importantChannels = {}
     this.commands = {}
-    this.presences = [
+    this.customPresences = [
       { message: `for val!`, type: `WATCHING` },
       { message: `something?`, type: `PLAYING` },
       { message: `Spotify`, type: `LISTENING` }
@@ -68,7 +68,7 @@ module.exports = class ValClient extends Client {
   async initListeners (){
     for (const listener in Listeners) {
       try {
-        const currentListener = new Listeners[listener](this).init()
+        new Listeners[listener](this)
         
       } catch (err) {
         console.log(err)
