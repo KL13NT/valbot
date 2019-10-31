@@ -13,6 +13,7 @@
 module.exports = class CommandContext{
   //options is destructured here! 
   constructor (client, message, command) {
+    this.hasError = false
     try{
       this.client = client
       this.message = message
@@ -25,7 +26,12 @@ module.exports = class CommandContext{
     }
     catch(err){
       console.log(`Context creation failed`)
+      this.hasError = true
     }
+  }
+  
+  isReady(){
+    return this.hasError? false: true
   }
   
 }

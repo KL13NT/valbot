@@ -25,7 +25,7 @@ module.exports = class ValClient extends Client {
   }
 
   async init (token) {
-    const CLILogo = fs.readFileSync(path.resolve(`./text/bigtitle.txt`), `utf8`).toString()
+    const CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
     
     await this.login(token)
 
