@@ -26,31 +26,22 @@ module.exports = class ValClient extends Client {
 
   async init (token) {
     try {
-      const CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
-      
+      this.CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
+
+      this.initLoaders()
       await this.login(token)
-  
-      if (this.isLoggedin) {
-        console.log(`${ CLILogo }\nClient initiated successfully.`)
-        
-        this.importantChannels.memberCount = this.channels.find(channel => channel.id === `586768857113296897`)
-        this.importantChannels.moderationNotices = this.channels.find(channel => channel.id === `587571479173005312`)
-        
-        this.initLoaders()
-        this.initListeners()
-        this.setPresence()
-        this.updateMemberCount()
-      }
-      else throw Error(`Something went wrong while logging in`)
     }
     catch(err){
-      console.log(`Failed to init`, err.message, err.stack)
-      //log error
+      console.log(err)
     }
   }
 
   async updateMemberCount (){
-    this.importantChannels.memberCount
+    const membersCountChannel = this.guilds.first().channels.find(channel => channel.id === `586768857113296897`)
+    console.log(this.guilds.first().members.length)
+    console.log(membersCountChannel)
+    membersCountChannel.edit({ name: this.guilds.first().members.length })
+    // this.importantChannels.memberCount.setName(`Members: ${this.users.length}`)
   }
 
   async setPresence (){

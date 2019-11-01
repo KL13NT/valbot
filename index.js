@@ -1,12 +1,7 @@
-/* eslint-disable no-prototype-builtins */
-const path = require('path')
-const fs = require('fs')
-const ValClient = require('./src/ValClient')
-const Database = require('./src/database/Database')
-
-
-const client = new ValClient()
-const dbclient = new Database()
+const path = require(`path`)
+const ValClient = new (require(`./src/ValClient`))({ fetchAllMembers: true })
+const Database = new (require(`./src/database/Database`))()
+const Logger = new (require(`./src/utils/Logger`))(path.resolve(__dirname, `./logs`))
 
 // function initGlobals (){
 //   global.__ENV = {
@@ -22,13 +17,19 @@ const dbclient = new Database()
 
 
 async function start () {
-  console.log('Starting client!')
-  await client.init(process.env.AUTH_TOKEN)
+  console.log(`Starting ValClient!`)
+  await ValClient.init(process.env.AUTH_TOKEN)
 
-  console.log('Starting Database')
-  await dbclient.init()
+  console.log(`Starting Database`)
+  await Database.init()
 
 }
+
+ValClient.on(`ready`, async function (){
+  console.log(this.CLILogo, this.guilds.first().available)
+
+  this.initListeners()
+})
 
 start()
 

@@ -9,11 +9,11 @@ module.exports = class Warn extends Command{
   constructor (client){
     const commandOptions = {
       name: `Warn`,
-      flags: [],
+      flags: [`mod-only`],
       category: `short`,
       aliases: [],
       cooldownTime: 0,
-      critical: true
+      isCritical: false,
     }
     super(client, commandOptions)
     
@@ -21,7 +21,6 @@ module.exports = class Warn extends Command{
 
   async run (context){
     const { message } = context
-    console.log(message)
   }
 }
 

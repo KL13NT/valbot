@@ -9,7 +9,8 @@ module.exports = class FileUtils {
       FSExists: fs.existsSync,
       FSRead: fs.readFileSync,
       FSReplace: fs.writeFileSync,
-      FSAppend: fs.appendFileSync
+      FSAppend: fs.appendFileSync,
+      FSReadDir: fs.readdirSync
     }
 
     Object.assign(this, methods)
@@ -74,6 +75,20 @@ module.exports = class FileUtils {
   read (dirname = ``, filepath){
     try {
       return this.FSRead(path.resolve(dirname, filepath), `utf-8`)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  /**
+   * 
+   * @param {string} dirname 
+   * @param {string} folderpath 
+   */
+  readdir (dirname, folderpath){
+    try {
+      return this.FSReadDir(path.resolve(dirname, folderpath))
     }
     catch(err){
       console.log(err)

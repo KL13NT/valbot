@@ -28,5 +28,5 @@ module.exports = class Listener{
     })
   }
 }
-  
+
 const capitalise = (event) => `${event[0].toUpperCase()}${event.substr(1)}`

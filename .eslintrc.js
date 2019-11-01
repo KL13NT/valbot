@@ -54,6 +54,20 @@ module.exports = {
 			'error',
 			'always'
 		],
+		'array-bracket-spacing': [
+			'error',
+			'always'
+		],
+		'no-whitespace-before-property': 2,
+		'space-unary-ops': [
+        2, {
+          "words": true,
+          "nonwords": false,
+          "overrides": {
+						"new": true,
+						"=": true
+          }
+    }],
 		"prefer-destructuring": ["error", {
       "array": true,
       "object": true
