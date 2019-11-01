@@ -1,5 +1,5 @@
-# valbot
-A bot for our Valarium Discord server
+# Valarium-Bot
+A bot for the Valarium community discord server.
 
 # Contents
 - [Prerequisites](#Prerequisites)
@@ -17,6 +17,7 @@ A bot for our Valarium Discord server
   - [Code Contributors](#Code-Contributors)
   - [Helpers](#Helpers)
   - [Discussions Creator](#Discussions-Creator)
+- [Where this project is headed](#Where-this-project-is-headed)
 
 # Prerequisites
 - Appropriate env variables, see [#Environment Variables](#Environment-Variables)
@@ -24,7 +25,7 @@ A bot for our Valarium Discord server
 - Invite the development version `valarium-bot-development` to test exclusive and new features
 
 ## Environment Variables
-Environment Variables are loaded using [motdotla's `dotenv`](https://github.com/motdotla/dotenv). To change deployment mode place an appropriate `.env` file in the base directory before running any tasks. 
+Environment Variables are loaded using [motdotla's `dotenv`](https://github.com/motdotla/dotenv). `.env` files are saved in their respective folders inside `./env`. `dotenv` doesn't override variables, so if you have production environment variables set on your cloud hosting solution, those will be used instead of the ones in the folders.
 
 #### Example valid `.env`
 These keys are required for proper functionality, if any of the ones preceded with `*` isn't present or properly set the bot will fail to start, mostly.
@@ -132,45 +133,7 @@ Please follow the linting rules in `.eslintrc.js` and use only that. Prettier ha
 ## Testing
 Testing has not yet been implmeneted, but shall be done using Jest.
 
-# Contributing
-Any contribution aimed at improving performance/ease of use is of high priority. 
+# Where this project is headed
+I'm a lone wolf, working on and maintaining this project alone. If you have any questions contact me on Twitter [@Nabil_Tharwat16](https://twitter.com/Nabil_Tharwat16). As for the project, I'm willing to keep maintaining it and improving it as long as [Valarium](https://discord.gg/xrGAnTg) lives, who knows how long that could be.
 
-Types of issues to use: 
-- Performance
-- Accessibility
-- Readability
-- Documentation
-- Feature Request
-- Open Discussion
-- Other
-
-
-The steps I go about this process is: 
-
-1. Open an issue with the title schema `[Type_of_issue_here] Issue brief description`, replacing `Type_of_issue_here` with a corresponding issue type from the list above, and the `Issue brief description` with an actual description.
-
-2. If the issue is accepted and you want to modify/add the code yourself, open a PR. else, it'll be left open until someone is assigned or a PR is made.
-
-3. If you're opening a PR, make sure every commit you make is signed. See this to learn more about commit signing: [Developer Certificate of Origin](https://github.com/probot/dco#how-it-works). 
-
-> Every contribution you make adds you to the [Contributors List](#Contributors), unless you're asking for help understanding something in the codebase.
-
-I appreciate every single person who tries -- in any way -- to help the development of this codebase, that's why I decided to add people who open positive discussions, help others learn how to operate this bot or how to contribute to it, or are contributors who shared some bits of code or even total reworks of code. 
-
-There are three main classes of contributions: 
-- Discussions Creator
-- Helper
-- Code Contributor
-
-
-# Contributors
-This section lists all contributors to this project. 
-
-## Code Contributors
-[KL13NT](https://github.com/KL13NT)
-
-## Helpers
-Want to appear on this list? See [Contributing](#Contributing).
-
-## Discussions Creator
-Want to appear on this list? See [Contributing](#Contributing).
+As for the upcoming features that I'm thinking of adding or am planning to add, you can look at the [Roadmap](./Roadmap.md) file.

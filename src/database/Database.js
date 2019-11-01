@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient } = require(`mongodb`)
 
 
 /**
@@ -22,8 +22,8 @@ module.exports = class Database extends MongoClient{
     try {
       this.isReady = await this.initDB()
       
-      if (!this.isReady) throw Error('Couldn\'t initalise DB')
-      else console.log('Initialised DB!')
+      if (!this.isReady) throw Error(`Couldn't initalise DB`)
+      else console.log(`Initialised DB!`)
     }
     catch (err) {
       console.log(err)
@@ -35,7 +35,7 @@ module.exports = class Database extends MongoClient{
       await this.connect()
 
       this._db = this.db(this.NAME)
-      if (typeof this._db !== 'undefined') return true
+      if (typeof this._db !== `undefined`) return true
       
       return false
     }

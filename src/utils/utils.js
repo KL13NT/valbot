@@ -19,7 +19,7 @@ export const updateMemberCount =  async function (){
     console.log(`Updated member count. New count is: ${memberCount}`)
   }
   catch(err){
-    console.log('Could not execute updateMemberCount\n', err)
+    console.log(`Could not execute updateMemberCount\n`, err)
   }
 }
 
@@ -33,7 +33,7 @@ export const enforceCommandArguments = async (message, requiredArgs, passedArgs)
     let valid = true
     passedArgs.forEach(arg => {
       if(valid !== true) return
-      if(arg==='' || arg.length === 0) valid = false
+      if(arg===`` || arg.length === 0) valid = false
     })
     return valid
   }
@@ -46,7 +46,7 @@ export const onCommandArgsNotCorrect = async (message, requiredArgs, passedArgs)
 
 export const getWarningsFromDatabase = async (warnedMember, __ENV) => {
   try{
-    const warnings = await __ENV.__DATABASE_OBJECT.collection('GUILD_WARNINGS').findOne({ USER_ID: warnedMember.id })
+    const warnings = await __ENV.__DATABASE_OBJECT.collection(`GUILD_WARNINGS`).findOne({ USER_ID: warnedMember.id })
     return warnings
   }
   catch(err){ console.log(err) }
@@ -60,13 +60,13 @@ export const getWarningsFromDatabase = async (warnedMember, __ENV) => {
  */
 export const onStartup = async function (){
   try { 
-    global.__ENV.__DATABASE_OBJECT = await require('./dbconnect').getDB()
-    global.__ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection('AVAILABLE_ROLES').find({}).project({ _id:0 }).toArray()
-    global.__ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection('WATCHED_MESSAGES').find({}).toArray()
-    global.__ENV.__DATABASE_OBJECT.collection('GUILD_WARNINGS').deleteMany({})
+    global.__ENV.__DATABASE_OBJECT = await require(`./dbconnect`).getDB()
+    global.__ENV.__AVAILABLE_ROLES = await __ENV.__DATABASE_OBJECT.collection(`AVAILABLE_ROLES`).find({}).project({ _id:0 }).toArray()
+    global.__ENV.__WATCHED_MESSAGES = await __ENV.__DATABASE_OBJECT.collection(`WATCHED_MESSAGES`).find({}).toArray()
+    global.__ENV.__DATABASE_OBJECT.collection(`GUILD_WARNINGS`).deleteMany({})
   }
   catch(err){
-    console.log('Error in onStartup', err)
+    console.log(`Error in onStartup`, err)
   }
 }
 
@@ -82,7 +82,7 @@ export const onStartup = async function (){
  */
 export const checkWatchedMessage = message => __ENV.__WATCHED_MESSAGES.find(watched => watched.MESSAGE_ID === message.id)
 
-const [Heda, HighTableMember, Protectors, Volatile, Tester] = ['571716246660448318', '571705643073929226', '571705797583831040', '571710033210114069', '571824921576079362']
+const [Heda, HighTableMember, Protectors, Volatile, Tester] = [`571716246660448318`, `571705643073929226`, `571705797583831040`, `571710033210114069`, `571824921576079362`]
 
 const commandCategories = [
   // {
@@ -94,27 +94,27 @@ const commandCategories = [
   //   roles: [HighTableMember]
   // },
   {
-    name: 'mute',
+    name: `mute`,
     roles: [HighTableMember, Protectors]
   },
   {
-    name: 'unmute',
+    name: `unmute`,
     roles: [HighTableMember, Protectors]
   },
   {
-    name: 'warn',
+    name: `warn`,
     roles: [HighTableMember, Protectors]
   },
   {
-    name: 'dmAllMembers',
+    name: `dmAllMembers`,
     roles: [HighTableMember]
   },
   {
-    name: 'clear',
+    name: `clear`,
     roles: [HighTableMember]
   },
   {
-    name: 'reactionRoles',
+    name: `reactionRoles`,
     roles: [HighTableMember]
   }
 ]
@@ -136,7 +136,7 @@ export const isAllowedToUseCommand = function (callee, commandName){
     else return false
   }
   catch(err){
-    console.log('Something went wrong in isAllowedToUseCommand', err)
+    console.log(`Something went wrong in isAllowedToUseCommand`, err)
   }
 }
 
@@ -148,5 +148,5 @@ export const messageExists = async (messageId, channel) => channel.fetchMessage(
 
 export const formatMentionReason = rest => {
   const [mention, ...reason] = rest
-  return [ mention.toString().replace(/<|>|@/ig, ''), reason.join(' ') ]
+  return [ mention.toString().replace(/<|>|@/ig, ``), reason.join(` `) ]
 }

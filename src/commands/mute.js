@@ -7,13 +7,13 @@ export const mute = async (message, rest) => {
     if(!enforceCommandArguments(message, 2, formatMentionReason(rest))) return
     
     const [memberMention, reason] = formatMentionReason(rest)
-    const memberId = memberMention.toString().replace(/<|>|@/ig, '')
+    const memberId = memberMention.toString().replace(/<|>|@/ig, ``)
     const date = new Date().toString()
     const mutedMember = await __ENV.__VALARIUM_GUILD().fetchMember(memberId)
-    const slicedReason = reason || 'Violation of the rules'
+    const slicedReason = reason || `Violation of the rules`
         
-    mutedMember.addRole('586839490102951936')
-    !mutedMember.roles.some(role => role.id === '586839490102951936') ? mutedMember.addRole('586839490102951936'): message.reply('this user is already muted')
+    mutedMember.addRole(`586839490102951936`)
+    !mutedMember.roles.some(role => role.id === `586839490102951936`) ? mutedMember.addRole(`586839490102951936`): message.reply(`this user is already muted`)
 
     sendEmbedNotification(
       undefined, 
@@ -24,10 +24,10 @@ export const mute = async (message, rest) => {
         color: 0xfade78,
         footer: date
       }, [
-        { name: 'Member', value: `${mutedMember}` }, 
-        { name: 'Moderator', value: `${message.member}` }, 
-        { name: 'Reason', value: slicedReason }, 
-        { name: 'Status', value: 'This user is now muted and will be automatically unmuted in 15 minutes' }
+        { name: `Member`, value: `${mutedMember}` }, 
+        { name: `Moderator`, value: `${message.member}` }, 
+        { name: `Reason`, value: slicedReason }, 
+        { name: `Status`, value: `This user is now muted and will be automatically unmuted in 15 minutes` }
       ], 
       undefined, 
       [__ENV.__MODERATION_NOTICES_CHANNEL()])

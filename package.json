@@ -8,9 +8,9 @@
   "license": "MIT",
   "scripts": {
     "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json",
-    "develop": "nodemon -r dotenv/config index.js",
-    "start": "node -r dotenv/config ./releases/index.prod.js",
-    "lint": "eslint --ext .jsx --ext .js ./src --config .eslintrc.js",
+    "develop": "nodemon -r dotenv/config index.js dotenv_config_path=./env/dev/.env",
+    "start": "node -r dotenv/config ./releases/index.prod.js dotenv_config_path=./env/prod/.env",
+    "lint": "eslint --ext .js ./src --config .eslintrc.js --fix --global __ENV",
     "test": "jest --colors --expand --logHeapUsage --config jest.config.js"
   },
   "devDependencies": {

@@ -18,14 +18,7 @@ module.exports = class MessageListener extends Listener {
 
 
   async onReady () {
-    const { customPresences } = this.client
     
-    setInterval(() => {
-      
-      const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]
-      this.client.user.setActivity(randomPresence.message, { type: randomPresence.type })
-
-    }, 10 * 60 * 1000)
   }
 
   onMessage (message){

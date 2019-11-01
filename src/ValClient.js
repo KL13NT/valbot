@@ -25,19 +25,43 @@ module.exports = class ValClient extends Client {
   }
 
   async init (token) {
-    const CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
-    
-    await this.login(token)
-
-    if (this.isLoggedin) {
-      console.log(`${ CLILogo }\nClient initiated successfully.`)
+    try {
+      const CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
       
-      this.importantChannels.MEMBER_COUNT = this.channels.find(channel => channel.id === `586768857113296897`)
-      this.importantChannels.MODERATION_NOTICES = this.channels.find(channel => channel.id === `587571479173005312`)
+      await this.login(token)
+  
+      if (this.isLoggedin) {
+        console.log(`${ CLILogo }\nClient initiated successfully.`)
+        
+        this.importantChannels.memberCount = this.channels.find(channel => channel.id === `586768857113296897`)
+        this.importantChannels.moderationNotices = this.channels.find(channel => channel.id === `587571479173005312`)
+        
+        this.initLoaders()
+        this.initListeners()
+        this.setPresence()
+        this.updateMemberCount()
+      }
+      else throw Error(`Something went wrong while logging in`)
     }
+    catch(err){
+      console.log(`Failed to init`, err.message, err.stack)
+      //log error
+    }
+  }
 
-    this.initLoaders()
-    this.initListeners()
+  async updateMemberCount (){
+    this.importantChannels.memberCount
+  }
+
+  async setPresence (){
+    const { customPresences } = this
+    
+    setInterval(() => {
+      
+      const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]
+      this.user.setActivity(randomPresence.message, { type: randomPresence.type })
+
+    }, 10 * 60 * 1000)
   }
 
   async login (token = process.env.AUTH_TOKEN) {
@@ -74,15 +98,5 @@ module.exports = class ValClient extends Client {
         console.log(err)
       } 
     }
-    // try{
-    //   this.on(`message`, (message) => {
-    //     const { mentions: { users } } = message
-    //     if(users.some(el => el.id === process.env.CLIENT_ID))
-    //       message.reply(`Hello?`)
-    //   })
-    // }
-    // catch(err){
-    //   console.log(err)
-    // }
   }
 }

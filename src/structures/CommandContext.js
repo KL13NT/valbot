@@ -30,7 +30,7 @@ module.exports = class CommandContext{
     }
   }
   
-  isReady(){
+  isReady (){
     return this.hasError? false: true
   }
   

@@ -1,4 +1,3 @@
 node_modules/*
-src/templates/*
-src/GLOBAL_CSS/*
-data/
+data/*
+src/commands/*

@@ -15,7 +15,7 @@ const Context = require(`./CommandContext`)
 module.exports =  class Command{
 
   constructor (client, options = {}) {
-    const { name, flags, category, aliases, cooldownTime, critical } = options
+    const { name, flags, category, aliases, cooldownTime, isCritical } = options
     
     this.client = client
     
@@ -24,8 +24,9 @@ module.exports =  class Command{
     this.category = category || `general`
     this.flags = flags || []
     this.aliases = aliases || []
-    this.critical = critical || false
-    
+    this.isCritical = isCritical || false
+    this.isReady = false
+
     this.POSSIBLE_FLAGS = {
       'dev-only': `dev-only`,
       'admin-only': `admin-only`,
@@ -33,10 +34,17 @@ module.exports =  class Command{
       'database-only': `database-only`
     }
 
-    if(!this.checkFlags(this.flags) && this.critical){
-      console.log(Error(`Command ${this.name} has illegal flags and is critical, check the code and try again`))
-      process.exit(1)
+  }
+  
+  construct (){
+    if(!this.checkFlags(this.flags)){
+      if(this.isCritical) {
+        console.error(`Command ${this.name} has illegal flags and is isCritical, check the code and try again.`)
+        process.exit(1)
+      }
+      else throw Error(`Command ${this.name} has illegal flags, will not work.`)
     }
+    else this.isReady = true 
   }
 
   async init (context) {
@@ -45,7 +53,7 @@ module.exports =  class Command{
       else throw Error(`Context isn't an instance of ${Context}.`)
     }
     catch (err) {
-      console.log(err)
+      console.err(err)
       //TODO: Log error 
       //TODO: respond to user message with error embed/message
     }
