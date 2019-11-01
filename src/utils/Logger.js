@@ -22,15 +22,13 @@ module.exports = class Logger{
     this.logsDir = logsDir
     this.logPath = `${this.logsDir}/${this.logName}`
 
-    if(!FileUtils.fileExists(this.dirname, this.logPath)) {
-      FileUtils.create(dirname, this.logPath, ``)
-    }
-
-    this.startLogging()
+    if(!FileUtils.fileExists(this.dirname, this.logPath)) this.initLogFile()
+    
   }
+  
+  initLogFile (){
+    FileUtils.create(this.dirname, this.logPath, ``)
 
-
-  startLogging (){
     this.console(`Log started on ${this.logName} ${new Date().toLocaleTimeString()}\n`, `info`)
     FileUtils.append(this.dirname, this.logPath, `\n\nLog started on ${this.logName} ${new Date().toLocaleTimeString()}\n`)
   }
@@ -51,7 +49,7 @@ module.exports = class Logger{
     const date = new Date()
     
     if(this.verifyLogType(type)){
-      FileUtils.append(this.dirname, this.logPath, `[${String.prototype.toUpperCase.call(type)} ${date.toLocaleTimeString()}] ${JSON.stringify(data, undefined, `\n`)}\n`)
+      FileUtils.append(this.dirname, this.logPath, `[${String.prototype.toUpperCase.call(type)} ${date.toLocaleTimeString()}] ${JSON.stringify(data)}\n`)
     }
     else console.log(`Log type is wrong!`)
   }
@@ -68,7 +66,9 @@ module.exports = class Logger{
   }
 
   readLog (dirname, filepath){
-    const log = FileUtils.read(dirname, filepath)
+    const log = FileUtils
+      .read(dirname, filepath)
+      .split(/]\s"|\n\[/ig)
     console.log(log)
   }
 }
