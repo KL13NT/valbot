@@ -17,10 +17,11 @@ const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
 
 
 async function start () {
-  Logger.file(`Initialised ${process.env.MODE} environment`, `info`)
+  Logger.file(Error('uhasd'), `warn`)
+  Logger.readLog(__dirname, './logs/1-10-2019')
   
   Logger.file(`Starting ValClient`, `info`)
-  ValClient.init(process.env.AUTH_TOKEN)
+  await ValClient.init(process.env.AUTH_TOKEN)
   Logger.file(`ValClient started successfully, waiting for ready status`, `info`)
 
 
@@ -31,7 +32,8 @@ async function start () {
 }
 
 ValClient.on(`ready`, async function (){
-  console.log(this.CLILogo, this.guilds.first().available)
+  console.log(this.CLILogo)
+  Logger.file(`Client ready status reached`, `info`)
 
   this.initListeners()
 })
