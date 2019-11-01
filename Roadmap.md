@@ -7,6 +7,10 @@ This document discusses upcoming changes to the bot, planned actions, and though
   - Use `nodemon`
   - Remove old way of handling commands
   - Use a more robust architecture that's easily scalable and maintainable.
+  - Improved command permissions security
+  - Improved performance
+  - File Utilities
+  - New Logger 
 
 ## Perhaps? 
 - Conversational AI implementation to reply to bot mentions that are not commands
