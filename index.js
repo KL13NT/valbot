@@ -1,7 +1,7 @@
 const path = require(`path`)
 const ValClient = new (require(`./src/ValClient`))({ fetchAllMembers: true })
 const Database = new (require(`./src/database/Database`))()
-const Logger = new (require(`./src/utils/Logger`))(path.resolve(__dirname, `./logs`))
+const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
 
 // function initGlobals (){
 //   global.__ENV = {
@@ -17,11 +17,16 @@ const Logger = new (require(`./src/utils/Logger`))(path.resolve(__dirname, `./lo
 
 
 async function start () {
-  console.log(`Starting ValClient!`)
-  await ValClient.init(process.env.AUTH_TOKEN)
+  Logger.file(`Initialised ${process.env.MODE} environment`, `info`)
+  
+  Logger.file(`Starting ValClient`, `info`)
+  ValClient.init(process.env.AUTH_TOKEN)
+  Logger.file(`ValClient started successfully, waiting for ready status`, `info`)
 
-  console.log(`Starting Database`)
-  await Database.init()
+
+  Logger.file(`Initialising Database`, `info`)
+  Database.init()
+  Logger.file(`Initialised Database successfully`, `info`)
 
 }
 

@@ -88,7 +88,7 @@ module.exports = class FileUtils {
    */
   readdir (dirname, folderpath){
     try {
-      return this.FSReadDir(path.resolve(dirname, folderpath))
+      return [ ...this.FSReadDir(path.resolve(dirname, folderpath)) ]
     }
     catch(err){
       console.log(err)

@@ -7,7 +7,7 @@ const FileUtils = new (require(`./FileUtils`))()
  * @param logsDir
  */
 module.exports = class Logger{
-  constructor (logsDir) {
+  constructor (dirname, logsDir) {
     
     this.colors = {
       info: `\x1b[36m`,
@@ -16,20 +16,41 @@ module.exports = class Logger{
       reset: `\x1b[0m`
     }
 
-    this.name = new Date().toLocaleDateString(`uk`)
+    this.logName = this.constructFileName()
+    this.dirname = dirname
     this.logsDir = logsDir
-    this.isFileCreated = false
+    this.logPath = `${this.logsDir}/${this.logName}`
 
-    this.checkFile()
+    if(!FileUtils.fileExists(this.dirname, this.logPath)) {
+      FileUtils.create(dirname, this.logPath, `Log started on ${this.logName}-${new Date().toLocaleTimeString()}.\n\n`)
+    }
   }
 
+  constructFileName (){
+    const date = new Date()
+    const day = date.getUTCDate()
+    const month = date.getUTCMonth()
+    const year = date.getUTCFullYear()
+    
+    const filename = `${day}-${month}-${year}`
+    return filename
+  }
 
-  checkFile (){
-    console.log(FileUtils.readdir(``, this.logsDir).find(file => file === this.name))
+  file (data, type){
+    const date = new Date()
+    
+    if(this.verifyLogType(type)){
+      FileUtils.append(this.dirname, this.logPath, `[${String.prototype.toUpperCase.call(type)} ${date.toLocaleTimeString()}] ${data}\n`)
+    }
+    else console.log(`Log type is wrong!`)
   }
 
   console (data, type) {
     
+  }
+
+  verifyLogType (type){
+    return Object.keys(this.colors).includes(type)
   }
 
   // initialiseLogger (pathToLogsFolder) {
