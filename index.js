@@ -1,4 +1,3 @@
-const path = require(`path`)
 const ValClient = new (require(`./src/ValClient`))({ fetchAllMembers: true })
 const Database = new (require(`./src/database/Database`))()
 const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
@@ -17,21 +16,19 @@ const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
 
 
 async function start () {
-  Logger.file(`error`, Error(`uhasd`))
   
   Logger.file(`info`, `Starting ValClient`)
   await ValClient.init(process.env.AUTH_TOKEN)
-  Logger.file(`info`, `ValClient started successfully, waiting for ready status`)
+  Logger.file(`info`, `ValClient logged in successfully`)
 
 
   Logger.file(`info`, `Initialising Database`)
-  Database.init()
-  Logger.file(`info`, `Initialised Database successfully`)
+  if(Database.init()) Logger.file(`info`, `Initialised Database successfully`)
 
 }
 
 ValClient.on(`ready`, async function (){
-  console.log(this.CLILogo)
+  Logger.console(`info`, `${this.CLILogo}`)
   Logger.file(`info`, `Client ready status reached`)
 
   this.initListeners()

@@ -15,7 +15,6 @@ module.exports = class Database extends MongoClient{
     this.name = name
     this.isReady = false
 
-    this.init()
   }
 
   async init () {
@@ -23,7 +22,8 @@ module.exports = class Database extends MongoClient{
       this.isReady = await this.initDB()
       
       if (!this.isReady) throw Error(`Couldn't initalise DB`)
-      else console.log(`Initialised DB!`)
+
+      return true
     }
     catch (err) {
       console.log(err)
