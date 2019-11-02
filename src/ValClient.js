@@ -32,7 +32,7 @@ module.exports = class ValClient extends Client {
       await super.login(token)
     }
     catch(err){
-      Logger.file(`Error while client logging in. ${err.message}, ${JSON.stringify(err.stack)}`, `error`)
+      Logger.file(`error`, `Error while client logging in. ${err.message}, ${JSON.stringify(err.stack)}`)
     }
   }
 

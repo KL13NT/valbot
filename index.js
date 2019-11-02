@@ -17,23 +17,22 @@ const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
 
 
 async function start () {
-  Logger.file(Error('uhasd'), `warn`)
-  Logger.readLog(__dirname, './logs/1-10-2019')
+  Logger.file(`error`, Error(`uhasd`))
   
-  Logger.file(`Starting ValClient`, `info`)
+  Logger.file(`info`, `Starting ValClient`)
   await ValClient.init(process.env.AUTH_TOKEN)
-  Logger.file(`ValClient started successfully, waiting for ready status`, `info`)
+  Logger.file(`info`, `ValClient started successfully, waiting for ready status`)
 
 
-  Logger.file(`Initialising Database`, `info`)
+  Logger.file(`info`, `Initialising Database`)
   Database.init()
-  Logger.file(`Initialised Database successfully`, `info`)
+  Logger.file(`info`, `Initialised Database successfully`)
 
 }
 
 ValClient.on(`ready`, async function (){
   console.log(this.CLILogo)
-  Logger.file(`Client ready status reached`, `info`)
+  Logger.file(`info`, `Client ready status reached`)
 
   this.initListeners()
 })

@@ -43,20 +43,26 @@ module.exports = class Logger{
     return filename
   }
 
-  file (data, type){
-    // if(!this.isLogging) return this.console(data, type) //fallback for when developing to avoid clutter and space waste
+  file (type, data){
+    if(!this.isLogging) return this.console(type, data) //fallback for when developing to avoid clutter and space waste
 
     const date = new Date()
     
     if(this.verifyLogType(type)){
-      FileUtils.append(this.dirname, this.logPath, `[${String.prototype.toUpperCase.call(type)} ${date.toLocaleTimeString()}] ${JSON.stringify(data)}\n`)
+      //TODO: if you need to stringify error objects in other areas, move this code to Utils
+      const dataString = data instanceof Error ? JSON.stringify({ message: data.message, stack: data.stack }) : JSON.stringify(data)
+      
+      FileUtils.append(this.dirname, this.logPath, `[${String.prototype.toUpperCase.call(type)} ${date.toLocaleTimeString()}] ${dataString}\n`)
     }
     else console.log(`Log type is wrong!`)
   }
 
-  console (data, type) {
+  /**
+   * Logs all arguments but the first one. First argument is the type, either 'error', 'warn', 'info'
+   */
+  console (type, ...data) {
     if(this.verifyLogType(type)){
-      console.log(`${this.colors[type]}`, data, `${this.colors[`reset`]}`)
+      console.log(`${this.colors[type]}`, ...data, `${this.colors[`reset`]}`)
     }
     else console.log(`Log type is wrong!`)
   }
@@ -65,10 +71,60 @@ module.exports = class Logger{
     return Object.keys(this.colors).includes(type)
   }
 
-  readLog (dirname, filepath){
-    const log = FileUtils
+  /**
+   * Reads log files and returns an object containing both parsed data and raw data. Also accepts a call back that's passed those two types of data. 
+   * @param {string} dirname 
+   * @param {string} filepath 
+   * @param {function} callback 
+   */
+  readLog (dirname, filepath, callback){
+    const lineStartReg = /(WARN|ERROR|INFO)/ig
+    const rawLogs = FileUtils
       .read(dirname, filepath)
-      .split(/]\s"|\n\[/ig)
-    console.log(log)
+      .replace(/\n+/ig, `\n`)
+    
+    const logs = rawLogs
+      .split(/\n/ig)
+      .reduce((acc = [], curr, index) => {
+        if(lineStartReg.test(curr)){ // make sure line is parse-able
+          const key = curr.substr(0, curr.indexOf(`]`) + 1) // date and type
+          const rawValue = curr.substr(curr.indexOf(`]`) + 1) // actual log value
+          const [ type ] = curr.match(lineStartReg)
+          let rawParsed //rawValue after parsing using JSON.parse
+
+          if(/ERROR/gi.test(curr)) {
+            // handling for malformed error objects 
+            try {
+              rawParsed = JSON.parse(rawValue)
+              
+              if(!rawParsed === `object`) throw Error(`Error value is not of type Object.`, rawParsed)
+              if(!rawParsed.message || !rawParsed.stack) throw Error(`Error object is malformed, doesn't have message or stack.`, rawParsed)
+              
+              const value = new LogError(JSON.parse(rawValue))
+              
+              return [ ...acc, { key, value, type } ]
+            }
+            catch(err){
+              this.console(`error`, `Error at log file line ${index + 1}`, err)
+            }
+          }
+          else {
+            return [ ...acc, { key, value: rawValue, type } ]
+          }
+        }
+        else return acc
+      }, [])
+    
+    if(callback) return callback(rawLogs, logs)
+
+    return { rawLogs, logs }
+  }
+}
+
+
+class LogError extends Error{
+  constructor (data){
+    super(data.message)
+    this.stack = data.stack 
   }
 }
