@@ -24,8 +24,6 @@ async function start () {
   await ValClient.init(process.env.AUTH_TOKEN)
   Logger.file(`info`, `ValClient logged in successfully`)
 
-
-
   // We don't need a database currently so
   // Logger.file(`info`, `Initialising Database`)
   // if(Database.init()) Logger.file(`info`, `Initialised Database successfully`)
