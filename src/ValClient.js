@@ -92,7 +92,7 @@ class ValClient extends Client {
 
   async setPresence (){
     const { customPresences, user } = this
-		console.log(this.user)
+    console.log(this.user)
     setInterval(() => {
       
       const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]

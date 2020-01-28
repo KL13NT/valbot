@@ -20,9 +20,9 @@ const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
 //TODO: add user join listener and welcomer/tutorial
 async function start () {
 
-  Logger.file(`info`, `Starting ValClient`)
+  Logger.console(`info`, `Starting ValClient`)
   await ValClient.init(process.env.AUTH_TOKEN)
-  Logger.file(`info`, `ValClient logged in successfully`)
+  Logger.console(`info`, `ValClient logged in successfully`)
 
   // We don't need a database currently so
   // Logger.file(`info`, `Initialising Database`)
@@ -32,7 +32,7 @@ async function start () {
 
 ValClient.on(`ready`, async function (){
   Logger.console(`info`, `\n${this.CLILogo}`)
-  Logger.file(`info`, `Client ready status reached`)
+  // Logger.file(`info`, `Client ready status reached`)
 
   await this.initListeners()
   await this.setPresence()

@@ -21,6 +21,26 @@ module.exports = class FileUtils {
    * @param {string} dirname 
    * @param {string} filepath 
    */
+
+  dirExists (dirname){
+    let exists = false
+		
+    fs.stat(dirname, (err, stat) => {
+      if(stat) exists = true
+    })
+	
+    return exists
+  }
+	
+  createDir (dirname){
+    try{
+      fs.mkdirSync(dirname)
+    }
+    catch(err){
+      return false
+    }
+  }
+
   fileExists (dirname = ``, filepath){
     try {
       return this.FSExists(path.resolve(dirname, filepath))
