@@ -1,3 +1,4 @@
 module.exports = {
-  MessageListener: require(`./MessageListener`)
+  MessageListener: require(`./MessageListener`),
+  NewGuildMemberListener: require(`./NewGuildMemberListener`)
 }

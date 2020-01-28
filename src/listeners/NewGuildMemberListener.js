@@ -7,30 +7,27 @@ module.exports = class NewGuildMemberListener extends Listener {
     super(client, [
       `guildMemberAdd`
     ])
-    
-    this.onReady()
   }
 
 
 
-  async onReady () {
-    const { customPresences } = this.client
-    
-    setInterval(() => {
-      
-      const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]
-      this.client.user.setActivity(randomPresence.message, { type: randomPresence.type })
+  async onGuildMemberAdd (member) {
+    try{
+			
+      const dm = await member.createDM()
+      dm.send(`
+			اهلاً بيك في فالاريوم! سعداء بيك معانا جداً! :sparkler: :partying_face:
+			حابين انك تقرا القواعد الاول في تشانل #rules.
+			في تشانلز مقفوله مش هتتفتح الا لما تقرا القواعد, و ده عشان نضمن ان كل الموجودين موافقين على القواعد دي و عاملين بيها.
+			اهلاً بيك مره تانية, و لو في اي حاجة نقدر نساعدك فيها متترددش! اعتبرنا بيتك التاني :star_struck: 
+			`)
 
-    }, 10 * 60 * 1000)
+    }
+    catch(err){
+      console.log(err)
+      const management = this.channels.find(channel => channel.id == `571741573134417920`)
+      if(management) management.send(`Something went wrong while greeting the new member, could yall do it for me?`)
+    }
   }
 
-  onMessage (message){
-    if(message.author.id !== BotID && message.author.id === `238009405176676352`) message.reply(`I got that!`) //remove this experimental &&
-  }
-
-
-
-  onBotMention (message){
-
-  }
 }

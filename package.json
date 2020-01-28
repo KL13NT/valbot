@@ -9,7 +9,7 @@
   "scripts": {
     "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json",
     "develop": "nodemon -r dotenv/config index.js dotenv_config_path=./env/dev/.env",
-    "start": "node -r dotenv/config ./releases/index.prod.js dotenv_config_path=./env/prod/.env",
+    "start": "node -r dotenv/config index.js dotenv_config_path=./env/prod/.env",
     "lint": "eslint --ext .js ./src --config .eslintrc.js --fix --global __ENV",
     "test": "jest --colors --expand --logHeapUsage --config jest.config.js"
   },
@@ -41,6 +41,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
+    "@tensorflow-models/toxicity": "^1.2.2",
+    "@tensorflow/tfjs": "^1.5.1",
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
