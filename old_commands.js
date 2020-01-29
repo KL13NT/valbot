@@ -1,3 +1,7 @@
+/* eslint-disable quotes */
+/* eslint-disable no-undef */
+/* eslint-disable array-bracket-spacing */
+/* eslint-disable indent */
 import { getWarningsFromDatabase, enforceCommandArguments, formatMentionReason } from './utils'
 
 

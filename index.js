@@ -1,17 +1,7 @@
 const ValClient = new (require(`./src/ValClient`))({ fetchAllMembers: true })
 // const Database = new (require(`./src/database/Database`))()
 const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
-// function initGlobals (){
-//   global.__ENV = {
-//     __DATABASE_OBJECT: {},
-//     __AVAILABLE_ROLES: {},
-//     __WATCHED_MESSAGES: {},
-//     __DISCORD_EXPLANATION: {},
-//     __WARNING_EXCEPTIONS: ['238009405176676352'],
-//     __VALARIUM_GUILD: function () { return this.__VALARIUM_CLIENT.guilds.find(guild => guild.name === 'VALARIUM') },
-//     __TEST_CHANNEL: function () { return this.__VALARIUM_GUILD().channels.filter(channel => channel.id === '571824874969104416') }
-//   }
-// }
+
 
 //WORK UNDER PROGRESS
 //If you've landed on this codebase it means you've been given permission to modify and/or redistribute
@@ -24,7 +14,7 @@ async function start () {
 	await ValClient.init(process.env.AUTH_TOKEN)
 	Logger.console(`info`, `ValClient logged in successfully`)
 
-	// We don't need a database currently so
+	// We don't need a database currently
 	// Logger.file(`info`, `Initialising Database`)
 	// if(Database.init()) Logger.file(`info`, `Initialised Database successfully`)
 

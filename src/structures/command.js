@@ -75,7 +75,7 @@ module.exports =  class Command{
 		return context instanceof Context? true: false
 	}
 
-
+ 
 	async run (context) {
 		// return true;
 	}

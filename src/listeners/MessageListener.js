@@ -14,24 +14,16 @@ module.exports = class MessageListener extends Listener {
 			if(message.content.startsWith(this.prefix)) message.reply(`commands aren't available yet, check again later.`)
 			
 			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
-			if(this.isToxic(message)){				
-				message.reply(`please stop your toxic behaviour.`)
-				await this.autoWarn(message)
-				message.delete()
+			if(this.ToxicityFilter && this.ToxicityFilter.ready){
+				if(await this.ToxicityFilter.classify(message.content)){
+					message.reply(`please stop your toxic behaviour.`)
+					await this.autoWarn(message)
+					message.delete()
+				}
 			}
 			// }
 			// else if(message.mentions.members.has(CLIENT_ID)) this.onBotMention(message)
 		}
-	}
-
-	/**
-	 * 
-	 * @param {GuildMessage} message 
-	 */
-	async isToxic (message){
-		if(this.ToxicityFilter && this.ToxicityFilter.ready)
-			return await this.ToxicityFilter.classify(message.content)
-		
 	}
 
 	onCommand (message){

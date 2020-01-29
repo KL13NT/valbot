@@ -18,7 +18,9 @@ class ValClient extends Client {
 		super(options)
 		this.isLoggedin = false
 		this.prefix = prefix || `val!`
-		this.importantChannels = {}
+		this.importantChannels = {
+			notifications: `587571479173005312`
+		}
 		this.commands = {}
 		this.customPresences = [
 			{ message: `for val!`, type: `WAITING` },
@@ -35,19 +37,34 @@ class ValClient extends Client {
 	}
 
 	async mutedChecker (){
-		this.setInterval(() => {
+		setInterval(() => {
 			const newTime = new Date().getTime()
+			
+			for(const mutedId in this.mutedMembers){
+				try{
+					if(newTime - this.mutedMembers[mutedId].time >= 1000 * 60 * 15) {
+						const guild = this.guilds.find(guild => guild.name === `VALARIUM`)
 
-			for(const muted in this.mutedMembers){
-				if(newTime - muted.time >= 1000 * 60 * 15) {
-					const member = this.guilds[0].members.find(member => member.id == muted.id)
-					if(member) member.removeRole(this.importantRoles.muted)
+						if(guild.available){
+							const member = guild.members.find(member => member.id === mutedId)
+
+							if(member) {
+								member.removeRole(this.importantRoles.muted)
+								delete this.mutedMembers[mutedId]
+
+								this.notify(`<@${mutedId}> you have been unmuted. Enjoy your stay!`)
+								
+							}
+						}
+					}
 				}
-        
-			}
-		}, 1000 * 60 * 5) // every 5 minutes
-		//TODO: check for muted and unmute after 15 mins
+				catch(err){
+					Logger.file(`info`, err)
+				}
+			}	
+		}, 1000 * 60) // every 1 minute
 	}
+	//TODO: check for muted and unmute after 15 mins
 
 	/**
    * @param message
@@ -58,9 +75,8 @@ class ValClient extends Client {
 		const warnings = this.warnedMembers[id]
     
 		if(warnings){
-			console.log(warnings)
 			if(warnings == 2){
-				message.reply(`you're getting muted for 15 for your toxic behaviour`)
+				message.reply(`you're getting muted for 15 minutes because of your toxic behaviour`)
 				member.addRole(this.importantRoles.muted)
         
 				const muted = {
@@ -125,6 +141,12 @@ class ValClient extends Client {
 				console.log(err)
 			} 
 		}
+	}
+
+	async notify (message){
+		this.guilds.find(guild => guild.name === `VALARIUM`)
+			.channels.find(ch => ch.id === this.importantChannels.notifications)
+			.send(message)
 	}
 }
 
