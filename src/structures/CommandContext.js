@@ -11,27 +11,27 @@
  */
 
 module.exports = class CommandContext{
-  //options is destructured here! 
-  constructor (client, message, command) {
-    this.hasError = false
-    try{
-      this.client = client
-      this.message = message
-      this.author = message.author
-      this.member = message.member
-      this.channel = message.channel
-      this.voiceChannel = message.member.voiceChannel
-      this.guild = message.guild
-      this.command = command
-    }
-    catch(err){
-      console.log(`Context creation failed`)
-      this.hasError = true
-    }
-  }
+	//options is destructured here! 
+	constructor (client, message, command) {
+		this.hasError = false
+		try{
+			this.client = client
+			this.message = message
+			this.author = message.author
+			this.member = message.member
+			this.channel = message.channel
+			this.voiceChannel = message.member.voiceChannel
+			this.guild = message.guild
+			this.command = command
+		}
+		catch(err){
+			console.log(`Context creation failed`)
+			this.hasError = true
+		}
+	}
   
-  isReady (){
-    return this.hasError? false: true
-  }
+	isReady (){
+		return this.hasError? false: true
+	}
   
 }

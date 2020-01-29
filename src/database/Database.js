@@ -8,43 +8,43 @@ const { MongoClient } = require(`mongodb`)
  */
 
 module.exports = class Database extends MongoClient{
-  constructor (host = process.env.DB_HOST, name = process.env.DB_NAME) {
-    super(host, { useNewUrlParser: true })
+	constructor (host = process.env.DB_HOST, name = process.env.DB_NAME) {
+		super(host, { useNewUrlParser: true })
 
-    this.host = host
-    this.name = name
-    this.isReady = false
+		this.host = host
+		this.name = name
+		this.isReady = false
 
-  }
+	}
 
-  async init () {
-    try {
-      this.isReady = await this.initDB()
+	async init () {
+		try {
+			this.isReady = await this.initDB()
       
-      if (!this.isReady) throw Error(`Couldn't initalise DB`)
+			if (!this.isReady) throw Error(`Couldn't initalise DB`)
 
-      return true
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+			return true
+		}
+		catch (err) {
+			console.log(err)
+		}
+	}
 
-  async initDB () {
-    try {
-      await this.connect()
+	async initDB () {
+		try {
+			await this.connect()
 
-      this._db = this.db(this.NAME)
-      if (typeof this._db !== `undefined`) return true
+			this._db = this.db(this.NAME)
+			if (typeof this._db !== `undefined`) return true
       
-      return false
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+			return false
+		}
+		catch (err) {
+			console.log(err)
+		}
+	}
 
-  async updateWarnings (){
+	async updateWarnings (){
     
-  }
+	}
 }

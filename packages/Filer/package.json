@@ -1,9 +1,0 @@
-{
-  "name": "valarium-bot-filer",
-  "version": "1.0.0",
-  "description": "A collection of File utilities for valarium-bot that handles all disk/IO operations.",
-  "main": "index.js",
-  "author": "KL13NT",
-  "license": "MIT",
-  "private": true
-}

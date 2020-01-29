@@ -19,20 +19,20 @@
   */
 
 module.exports = class Loader {
-  constructor (client){
-    this.client = client
-  }
+	constructor (client){
+		this.client = client
+	}
 
-  async init () {
-    try {
-      await this.load()
-      return true
-    }
-    catch (err) {
-      //Log err
-    }
-  }
+	async init () {
+		try {
+			await this.load()
+			return true
+		}
+		catch (err) {
+			//Log err
+		}
+	}
 
-  async load (){}
+	async load (){}
 }
 

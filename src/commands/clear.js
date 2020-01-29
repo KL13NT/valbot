@@ -1,5 +1,4 @@
-// import CommandStructure from "../structures/Command"
-// TODO: import Command structure from structures index.js
+import CommandStructure from "../structures"
 
 export default class Clear extends Structures.Command {
   constructor(client, options={}) {
