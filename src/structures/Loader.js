@@ -18,21 +18,16 @@
   * }
   */
 
-module.exports = class Loader {
+class Loader {
 	constructor (client){
 		this.client = client
 	}
 
-	async init () {
-		try {
-			await this.load()
-			return true
-		}
-		catch (err) {
-			//Log err
-		}
+	init () {
+		this.load()
 	}
 
-	async load (){}
+	load (){}
 }
 
+module.exports = Loader

@@ -4,8 +4,9 @@ const fs = require(`fs`)
 const path = require(`path`)
 const Loaders = require(`./loaders`)
 const Listeners = require(`./listeners`)
-const Logger = new (require(`./utils/Logger`))(__dirname, `../logs`)
 const ToxicityFilter = require(`./utils/InsultFiltering`)
+const Logger = new (require(`./utils/Logger`))(__dirname, `../logs`)
+const FileUtils = require(`./utils/FileUtils`)
 
 
 /**
@@ -16,10 +17,15 @@ const ToxicityFilter = require(`./utils/InsultFiltering`)
 class ValClient extends Client {
 	constructor (options = {}, prefix) {
 		super(options)
+
 		this.isLoggedin = false
 		this.prefix = prefix || `val!`
 		this.importantChannels = {
-			notifications: `587571479173005312`
+			notifications: `587571479173005312`,
+			rules: `571718462179770369`
+		}
+		this.importantRoles = {
+			muted: `586839490102951936`
 		}
 		this.commands = {}
 		this.customPresences = [
@@ -31,15 +37,15 @@ class ValClient extends Client {
 		this.mutedMembers = {}
 
 		this.mutedChecker()
-		this.importantRoles = {
-			muted: `586839490102951936`
-		}
 	}
 
+	/**
+	 * The working interval for muted members
+	 */
 	async mutedChecker (){
 		setInterval(() => {
 			const newTime = new Date().getTime()
-			
+
 			for(const mutedId in this.mutedMembers){
 				try{
 					if(newTime - this.mutedMembers[mutedId].time >= 1000 * 60 * 15) {
@@ -53,7 +59,7 @@ class ValClient extends Client {
 								delete this.mutedMembers[mutedId]
 
 								this.notify(`<@${mutedId}> you have been unmuted. Enjoy your stay!`)
-								
+
 							}
 						}
 					}
@@ -61,24 +67,27 @@ class ValClient extends Client {
 				catch(err){
 					Logger.file(`info`, err)
 				}
-			}	
+			}
 		}, 1000 * 60) // every 1 minute
 	}
 	//TODO: check for muted and unmute after 15 mins
 
 	/**
+	 * Warns users automatically
+	 * TODO: Replace it with Command Warn
    * @param message
    */
 	async autoWarn (message){
 		const { member } = message
 		const { id } = member
 		const warnings = this.warnedMembers[id]
-    
+
 		if(warnings){
 			if(warnings == 2){
+
 				message.reply(`you're getting muted for 15 minutes because of your toxic behaviour`)
 				member.addRole(this.importantRoles.muted)
-        
+
 				const muted = {
 					time: new Date().getTime(),
 					id: id
@@ -93,53 +102,56 @@ class ValClient extends Client {
 	}
 
 	async init (token = process.env.AUTH_TOKEN) {
-		try {
-			this.ToxicityFilter = new ToxicityFilter(0.8)
 
-			this.CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
-
+		try{
 			this.initLoaders()
+			this.initListeners()
+
+
 			await super.login(token)
+
+			this.setPresence()
+			if(process.env.mode !== `DEVELOPMENT`) this.ToxicityFilter = await new ToxicityFilter(0.8)
+
+			console.log(fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString(), `Loaded successfully`)
+
 		}
 		catch(err){
-			Logger.file(`error`, `Error while client logging in. ${err.message}, ${JSON.stringify(err.stack)}`)
+			console.log(`Something went wrong when initiating ValClient. Fix it and try again.`, err)
+			process.exit()
 		}
+
 	}
 
 	async setPresence (){
 		const { customPresences, user } = this
-		console.log(this.user)
+
 		setInterval(() => {
-      
+
 			const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]
 			user.setActivity(randomPresence.message, { type: randomPresence.type })
-      
+
 			console.log(`Current presence: ${randomPresence.type} ${randomPresence.message}`)
-      
+
 		}, 10 * 60 * 1000)
 	}
 
-	async runCommand (command, context, args){}
-
-	async initLoaders () {
+	/**
+	 * Initialises client loaders. Doesn't handle exceptions on purpose.
+	 */
+	initLoaders () {
 		//Load loaders from file
 		for (const loader in Loaders) {
-			try {
-				const currentLoader = new Loaders[loader](this)
-				await currentLoader.load()
-			} catch (err) {
-				console.log(err)
-			} 
+			new Loaders[loader](this).load()
 		}
 	}
 
-	async initListeners (){
+	/**
+	 * Initialises client listeners. Doesn't handle exceptions on purpose.
+	 */
+	initListeners (){
 		for (const listener in Listeners) {
-			try {
-				new Listeners[listener](this)
-			} catch (err) {
-				console.log(err)
-			} 
+			new Listeners[listener](this).init()
 		}
 	}
 

@@ -1,9 +1,18 @@
 const fs = require(`fs`)
 const path = require(`path`)
 
-module.exports = class FileUtils {
-	//This module is created as a Sync module to make sure i/o operations happen in series and not cause conflics
-	constructor (){
+
+/**
+ * By default all methods require a __dirname as the last argument to resolve a path. This is to abstract away the use of `path.resolve`. You can also set a default through the constructor. All operations are sync by default & may throw fs errors when they occur. Handle these exceptions yourself. Uses utf-8
+ */
+class FileUtils {
+	/**
+	 * @constructor
+	 * @param {string} [dirname = undefined] NodeJS __dirname
+	 */
+	constructor (dirname){
+
+		this.dirname = dirname
 
 		const methods = {
 			FSExists: fs.existsSync,
@@ -11,108 +20,105 @@ module.exports = class FileUtils {
 			FSReplace: fs.writeFileSync,
 			FSAppend: fs.appendFileSync,
 			FSReadDir: fs.readdirSync,
-			FSResolve: fs.resolve
+			FSResolve: path.resolve
 		}
 
 		Object.assign(this, methods)
 	}
 
 	/**
-   * Checks whether file exists
-   * @param {string} dirname 
-   * @param {string} filepath 
+   * Checks whether directory exists
+	 * @param {string} dirPath path to directory
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 * @returns boolean indicating whether directory exists
    */
-
-	dirExists (dirname){
-		let exists = false
-		
-		fs.stat(dirname, (err, stat) => {
-			if(stat) exists = true
-		})
-	
-		return exists
-	}
-	
-	createDir (dirname){
-		try{
-			fs.mkdirSync(dirname)
-		}
-		catch(err){
+	dirExists (dirPath, dirname = this.dirname){		
+		return fs.stat(this.FSResolve(dirname, dirPath), (err, stat) => {
+			if(stat) return true
 			return false
-		}
+		})
 	}
+	
+	/**
+	 * Checks whether file exists
+	 * @param {string} filePath path to file 
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 * @returns boolean indicating whether file exists
+   */
+	
+	fileExists (filePath, dirname = this.dirname){
+		return this.FSExists(this.FSResolve(dirname, filePath))
+	}
+	
+	/**
+	 * Creates a new directory
+	 * @param {string} dirPath path to directory
+	 * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 */
+	createDir (dirPath, dirname = this.dirname){
+		fs.mkdirSync(this.FSResolve(dirname, dirPath))
+	}
+	
+	/**
+   * Creates new file with optional contents
+	 * @param {string} filePath path to file
+	 * @param {string} [content] optional data to append 
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 * @throws if file already exists
+   */
 
-	fileExists (dirname = ``, filepath){
-		try {
-			return this.FSExists(path.resolve(dirname, filepath))
-		}
-		catch(err){
-			console.log(err)
-		}
+	create (filePath, content = ``, dirname = this.dirname){
+		if(this.fileExists(dirname, filePath)) throw Error(`File already exists, maybe use append instead?`)
+		else this.FSReplace(path.resolve(dirname, filePath), content, `utf-8`)
 	}
 
 	/**
-   * 
-   * @param {string} dirname 
-   * @param {string} filepath 
-   * @param {string} content 
+   * Replaces given file with new contents
+	 * @param {string} filePath path to file
+	 * @param {string} content data to replace with
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 * @throws if file doesn't exist
    */
-	create (dirname = ``, filepath, content){
-		if(this.fileExists(dirname, filepath)) throw Error(`File already exists, did you mean to use append?`)
-		else this.FSReplace(path.resolve(dirname, filepath), content, `utf-8`)
+	
+	replace (filePath, content, dirname = this.dirname){
+		if(this.fileExists(filePath, dirname)) 
+			this.FSReplace(path.resolve(dirname, filePath), content, `utf-8`)
+		
+		else throw Error(`File doesn't exist, maybe use create instead?`)
 	}
 
 	/**
-   * 
-   * @param {string} dirname
-   * @param {string} filepath
-   * @param {string} content
+   * Appends new contents to file
+	 * @param {string} filePath path to file
+	 * @param {string} content data to append
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
    */
-	replace (dirname = ``, filepath, content){
-		if(this.fileExists(dirname, filepath)) this.FSReplace(path.resolve(dirname, filepath), content, `utf-8`)
-		else throw Error(`File doesn't exist, did you mean to use create?`)
+	append (filePath, content, dirname = this.dirname){
+		if(this.fileExists(filePath, dirname)) 
+			this.FSAppend(path.resolve(dirname, filePath), content, `utf-8`)
+
+		else throw Error(`File doesn't exist, maybe use create instead?`)
 	}
 
 	/**
-   * 
-   * @param {string} dirname 
-   * @param {string} filepath 
-   * @param {string} content 
+   * Reads contents of file
+   * @param {string} filePath path to file
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 * @returns contents of file
    */
-	append (dirname = ``, filepath, content){
-		try{
-			this.FSAppend(path.resolve(dirname, filepath), content, `utf-8`)
-		}
-		catch(err){
-			console.log(err)
-		}
+	read (filePath, dirname = this.dirname){
+		return this.FSRead(path.resolve(dirname, filePath), `utf-8`)
 	}
 
 	/**
-   * 
-   * @param {string} dirname 
-   * @param {string} filepath 
+	 * Reads contents of directory
+   * @param {string} folderPath The path to the required directory
+   * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
+	 * @returns an array of file names in the current folder or `false` in case of error
    */
-	read (dirname = ``, filepath){
-		try {
-			return this.FSRead(path.resolve(dirname, filepath), `utf-8`)
-		}
-		catch(err){
-			console.log(err)
-		}
-	}
-
-	/**
-   * 
-   * @param {string} dirname 
-   * @param {string} folderpath 
-   */
-	readdir (dirname, folderpath){
-		try {
-			return [ ...this.FSReadDir(path.resolve(dirname, folderpath)) ]
-		}
-		catch(err){
-			console.log(err)
-		}
+	readDir (folderPath, dirname = this.dirname){
+		return [ ...this.FSReadDir(path.resolve(dirname, folderPath)) ]
 	}
 }
+
+module.exports = FileUtils

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: utils/Logger.js | ValBot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <a href="function link() { [native code] }" rel="noopener noreferrer" target="_blank">
+                <img src="img/toast-ui.png" width="100%" height="100%">
+            </a>
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">ValBot</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Externals</h3><ul><li><a href="external-Guild.html">Guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Guild_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Command.html">Command</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Command_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Command.html#AUTH_LEVELS">AUTH_LEVELS</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Command.html#run">run</a></li></ul></div></li><li><a href="CommandContext.html">CommandContext</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommandContext_sub"></div></li><li><a href="CommandOptions.html">CommandOptions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommandOptions_sub"></div></li><li><a href="FileUtils.html">FileUtils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="FileUtils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="FileUtils.html#append">append</a></li><li><a href="FileUtils.html#create">create</a></li><li><a href="FileUtils.html#createDir">createDir</a></li><li><a href="FileUtils.html#dirExists">dirExists</a></li><li><a href="FileUtils.html#fileExists">fileExists</a></li><li><a href="FileUtils.html#read">read</a></li><li><a href="FileUtils.html#readDir">readDir</a></li><li><a href="FileUtils.html#replace">replace</a></li></ul></div></li><li><a href="module.exports.html">exports</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module.exports_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module.exports.html#console">console</a></li><li><a href="module.exports.html#readLog">readLog</a></li></ul></div></li><li><a href="ValClient.html">ValClient</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="ValClient_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="ValClient.html#autoWarn">autoWarn</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#checkWatchedMessage">checkWatchedMessage</a></li><li><a href="global.html#onStartup">onStartup</a></li><li><a href="global.html#updateMemberCount">updateMemberCount</a></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const FileUtils = new (require(`./FileUtils`))()
+
+/**
+ * @constructor
+ * @param data
+ * @param type
+ * @param logsDir
+ */
+module.exports = class Logger{
+	constructor (dirname) {
+    
+		this.colors = {
+			info: `\x1b[36m`,
+			warn: `\x1b[43m\x1b[30m`,
+			error: `\x1b[31m`,
+			reset: `\x1b[0m`
+		}
+
+		this.isLogging = process.env.MODE === `DEVELOPMENT`? false: true
+		this.logName = this.constructFileName()
+		this.dirname = dirname
+		this.logsDir = `./logs`
+		this.logPath = `${this.logsDir}/${this.logName}`
+		this.error = false
+
+		if(!FileUtils.dirExists(this.dirname)) {
+			try{
+				FileUtils.createDir(FileUtils.FSResolve(dirname, `./logs`))
+			}
+			catch(err){
+				this.error = true
+			}
+		}
+		if(!FileUtils.fileExists(this.dirname, this.logPath)) this.initLogFile()
+    
+	}
+	
+	//TODO: fix bug when file doesn't exist
+	initLogFile (){
+		if(this.error) return
+		try{
+			
+			FileUtils.create(this.dirname, this.logPath, ``)
+	
+			this.console(`Log started on ${this.logName} ${new Date().toLocaleTimeString()}\n`, `info`)
+			
+			FileUtils.append(this.dirname, this.logPath, `\n\nLog started on ${this.logName} ${new Date().toLocaleTimeString()}\n`)
+		}
+		catch(err){
+			console.log(err)
+			this.error = true
+		}
+	}
+
+	constructFileName (){
+		const date = new Date()
+		const day = date.getUTCDate()
+		const month = date.getUTCMonth()
+		const year = date.getUTCFullYear()
+    
+		const filename = `${day}-${month}-${year}`
+		return filename
+	}
+
+	file (type, data){
+		if(!this.isLogging) return this.console(type, data) //fallback for when developing to avoid clutter and space waste
+		if(this.error) return
+
+		try{
+			const date = new Date()
+			
+			if(this.verifyLogType(type)){
+				//TODO: if you need to stringify error objects in other areas, move this code to Utils
+				const dataString = data instanceof Error ? JSON.stringify({ message: data.message, stack: data.stack }) : JSON.stringify(data)
+				
+				FileUtils.append(this.dirname, this.logPath, `[${String.prototype.toUpperCase.call(type)} ${date.toLocaleTimeString()}] ${dataString}\n`)
+			}
+			else console.log(`Log type is wrong!`)
+
+		}
+		catch(err){
+			console.log(err)
+		}
+	}
+
+	/**
+   * Logs all arguments but the first one. First argument is the type, either 'error', 'warn', 'info'
+   */
+	console (type, ...data) {
+		if(this.verifyLogType(type)){
+			console.log(`${this.colors[type]}`, ...data, `${this.colors[`reset`]}`)
+		}
+		else console.log(`Log type is wrong!`)
+	}
+
+	verifyLogType (type){
+		return Object.keys(this.colors).includes(type)
+	}
+
+	/**
+   * Reads log files and returns an object containing both parsed data and raw data. Also accepts a call back that's passed those two types of data. 
+   * @param {string} dirname 
+   * @param {string} filepath 
+   * @param {function} callback 
+   */
+	readLog (dirname, filepath, callback){
+		if(this.error) return
+
+		try{
+
+			const lineStartReg = /(WARN|ERROR|INFO)/ig
+			const rawLogs = FileUtils
+				.read(dirname, filepath)
+				.replace(/\n+/ig, `\n`)
+			
+			const logs = rawLogs
+				.split(/\n/ig)
+				.reduce((acc = [], curr, index) => {
+					if(lineStartReg.test(curr)){ // make sure line is parse-able
+						const key = curr.substr(0, curr.indexOf(`]`) + 1) // date and type
+						const rawValue = curr.substr(curr.indexOf(`]`) + 1) // actual log value
+						const [ type ] = curr.match(lineStartReg)
+						let rawParsed //rawValue after parsing using JSON.parse
+	
+						if(/ERROR/gi.test(curr)) {
+							// handling for malformed error objects 
+							try {
+								rawParsed = JSON.parse(rawValue)
+								
+								if(!rawParsed === `object`) throw Error(`Error value is not of type Object.`, rawParsed)
+								if(!rawParsed.message || !rawParsed.stack) throw Error(`Error object is malformed, doesn't have message or stack.`, rawParsed)
+								
+								const value = new LogError(JSON.parse(rawValue))
+								
+								return [ ...acc, { key, value, type } ]
+							}
+							catch(err){
+								this.console(`error`, `Error at log file line ${index + 1}`, err)
+							}
+						}
+						else {
+							return [ ...acc, { key, value: rawValue, type } ]
+						}
+					}
+					else return acc
+				}, [])
+			
+			if(callback) return callback(rawLogs, logs)
+	
+			return { rawLogs, logs }
+		}
+		catch(err){
+			console.log(err)
+		}
+	}
+}
+
+
+class LogError extends Error{
+	constructor (data){
+		super(data.message)
+		this.stack = data.stack 
+	}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">This documentation is not complete yet and is subject to change</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>

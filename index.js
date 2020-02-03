@@ -5,14 +5,13 @@ const Logger = new (require(`./src/utils/Logger`))(__dirname, `./logs`)
 
 //WORK UNDER PROGRESS
 //If you've landed on this codebase it means you've been given permission to modify and/or redistribute
-//I'm currently moving the codebase from a webpack based approach 
+//I'm currently moving the codebase from a webpack based approach
 //to a pure serverless environment so it's taking some time
 //TODO: add user join listener and welcomer/tutorial
 async function start () {
 
 	Logger.console(`info`, `Starting ValClient`)
-	await ValClient.init(process.env.AUTH_TOKEN)
-	Logger.console(`info`, `ValClient logged in successfully`)
+	ValClient.init(process.env.AUTH_TOKEN)
 
 	// We don't need a database currently
 	// Logger.file(`info`, `Initialising Database`)
@@ -21,11 +20,8 @@ async function start () {
 }
 
 ValClient.on(`ready`, async function (){
-	Logger.console(`info`, `\n${this.CLILogo}`)
 	// Logger.file(`info`, `Client ready status reached`)
 
-	await this.initListeners()
-	await this.setPresence()
 })
 
 start()
@@ -86,7 +82,7 @@ start()
 //     if(watchedMessage != null && watchedMessage != undefined){
 //       const reactedMember = message.member
 //       const reaction = watchedMessage.WATCHED_REACTIONS.find(reaction => reaction.REACTION_NAME === packet.d.emoji.name)
-      
+
 //       if(reaction != null && reaction != undefined){
 //         if(packet.t === 'MESSAGE_REACTION_ADD') await reactedMember.addRole(reaction.REACTION_ROLE_ID)
 //         else if(packet.t === 'MESSAGE_REACTION_REMOVE') await reactedMember.removeRole(reaction.REACTION_ROLE_ID)
@@ -110,7 +106,7 @@ start()
 // __ENV.__VALARIUM_CLIENT.on('guildMemberAdd', async member => {
 //   try{
 //     updateMemberCount()
-    
+
 //     const DMChannel = await member.createDM()
 
 //     //Set #newcomer role
@@ -122,7 +118,7 @@ start()
 //     //Tutorial
 //     await DMChannel.send(`\`\`\`md\n${__ENV.__DISCORD_EXPLANATION.part1}\`\`\``)
 //     await DMChannel.send(`\`\`\`md\n${__ENV.__DISCORD_EXPLANATION.part2}\`\`\``)
-    
+
 //     const channel = member.guild.channels.find(ch => ch.name === 'ｖ﹞main-chat')
 
 //     if(channel) await channel.send(`Everyone, greet ${member}! Welcome to Valarium, your new home! :sweat_smile::raised_hands::fireworks:`)
@@ -151,7 +147,7 @@ start()
 //  * @async
 //  * @param {Message} message The message object to check
 //  * @return {Document} The watched message fetched from DB
-//  * @since 1.0.0 
+//  * @since 1.0.0
 //  */
 
 
@@ -161,7 +157,7 @@ start()
 
 // const formatMessage = message => {
 //   return [prefix, command, ...rest] = message.split(' ')
-// } 
+// }
 
 
 
@@ -179,7 +175,7 @@ start()
 //       else if (!isValid) commands.reply(message, 'it seems my database has not yet been exposed to such knowledge. :sob:')
 //       else commands.reply(message, 'you\'re not allowed to use that command.')
 //     }
-    
+
 //     if(hasInsult && !isUserInExceptions(message)){
 //       const reason = 'This user has used a swear word/insulted someone'
 
@@ -193,8 +189,8 @@ start()
 //     if(message.channel.id === '571717874146607129') message.react('✅') && message.react('❌')
 
 //   }
-//   catch(err){ 
-//     console.log('ERROR IN MESSAGE HANDLING: handleMessage\n', err) 
+//   catch(err){
+//     console.log('ERROR IN MESSAGE HANDLING: handleMessage\n', err)
 //     console.trace()
 //   }
 // }

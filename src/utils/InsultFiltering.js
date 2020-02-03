@@ -1,5 +1,5 @@
 const toxicity = require(`@tensorflow-models/toxicity`)
-
+const { insults } = require(`./arabic-insults.json`)
 
 
 // Load the model. Users optionally pass in a threshold and an array of
@@ -16,6 +16,7 @@ class ToxicityLoader {
 			`toxicity`
 		]
 		
+		this.arInsultsRegex = new RegExp(insults)
 		this.ready = false
     
 		toxicity.load(threshold).then(model => {
@@ -29,8 +30,10 @@ class ToxicityLoader {
 	async classify (sentence){
 		const predictions = await this.classifier.classify([ sentence ])
 
+		if(this.arInsultsRegex.test(sentence)) return true
+
 		for(const curr of predictions){
-			if(curr.results[0].match === true) return true
+			if(curr.results[0].match === true && curr.results[0].probabilities[1] > 0.92) return true
 		}
 
 		return false

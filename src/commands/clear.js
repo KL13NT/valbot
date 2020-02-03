@@ -1,28 +1,28 @@
-import CommandStructure from "../structures"
+const { Command } = require("../structures")
+const { CommandOptions } = require("../structures")
 
-export default class Clear extends Structures.Command {
-  constructor(client, options={}) {
+class Clear extends Command {
+  constructor(client) {
+		const options = new CommandOptions(`clear`, 1000, 2, 1)
     super(client, options)
   }
-  
-  run() {
-      const count = parseInt(rest[0])
-  
-      if(!enforceCommandArguments(message, 1, rest)) return
-  
-      if(count === 0) {
-        message.reply('Supplying 0 as count is a dangerous move. Please supply `n` where `n > 0`')
-        return
-      }
-      let deletedMessages = await message.channel.bulkDelete(count)
-      deletedMessages = deletedMessages.map(message => ({ author: { name: message.author.username, id: message.author.id }, content: message.content }))
-      __ENV.__DATABASE_OBJECT.collection('DELETED_MESSAGES').insertMany(deletedMessages)
-  
-      message.reply(`deleted ${count} messages.`)
-  }
 
-  formatCommandMessage() {
-    
-  }
-  
+  async run(context) {
+		const { message, params, channel } = context
+		const count = parseInt(params[0])
+
+		if(count === 0) {
+			message.reply('لما تكتب صفر للكوماند دي هتخلي ديسكورد يمسح كل الرسايل اللي ف التشانل! جرب رقم تاني')
+			return
+		}
+
+		await channel.bulkDelete(count)
+		// deletedMessages = deletedMessages.map(message => ({ author: { name: message.author.username, id: message.author.id }, content: message.content }))
+		// __ENV.__DATABASE_OBJECT.collection('DELETED_MESSAGES').insertMany(deletedMessages)
+
+		message.reply(`مسحت ${count} رسايل. تحب اجيبلك كوبايتين لمون؟`)
+	}
+
 }
+
+module.exports = Clear

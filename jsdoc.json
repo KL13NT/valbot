@@ -1,0 +1,16 @@
+{
+	"source": {
+		"exclude": [ "./node_modules" ],
+		"includePatterns": "(\\.\\/src\\/.+\\.js)|(\\.\\/index\\.js)",
+		"excludePatterns": "(\\.\\/src\\/.+\\/index\\.js)|(\\.\\/node_modules\\/.+\\.js)"
+	},
+	"sourceType": "module",
+  "opts":{
+    "template": "node_modules/tui-jsdoc-template"
+  },
+  "templates": {
+    "logo": "./valarium-bot-prod.png",
+    "name": "ValBot",
+    "footerText": "This documentation is not complete yet and is subject to change"
+  }
+}

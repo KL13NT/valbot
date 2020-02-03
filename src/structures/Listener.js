@@ -18,11 +18,9 @@ module.exports = class Listener{
 	constructor (client, events = []) {
 		this.client = client
 		this.events = events
-
-		this.init()
 	}
-  
-	async init () {
+
+	init () {
 		this.events.forEach(event => {
 			this.client.on(event, this[`on${capitalise(event)}`])
 		})

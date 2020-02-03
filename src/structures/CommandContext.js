@@ -1,37 +1,37 @@
 /**
- * @param {Object} options The context options
- * @prop {ValClient} client The Valarium-Client
- * @prop {Message} message The command message
- * @prop {?GuildMember} member The author of the message as a guild member
- * @prop {TextChannel} channel The channel of the message
- * @prop {?VoiceChannel} voiceChannel The voice channel of the author of the message, if any
- * @prop {?Guild} guild The guild of the channel of the message
- * @prop {Command} command The command
- * @prop {string} prefix The command prefix
+ * @external Guild
+ * @description Discord's Guild Class
+ * @see {@link https://discord.js.org/#/docs/main/stable/class/Guild|Guild}
  */
 
-module.exports = class CommandContext{
-	//options is destructured here! 
-	constructor (client, message, command) {
-		this.hasError = false
-		try{
+/**
+ * @prop {ValClient} client The current ValClient instance
+ * @prop {GuildMessage} message Message object
+ * @prop {User} message.author Author(User) who sent the message
+ * @prop {Guild} message.guild Guild in which message was sent
+ * @prop {GuildMember} message.member Member who sent the message
+ * @prop {GuildChannel} message.channel The channel of the message
+ * @prop {AuthLevel} userAuthLevel Authorization level of user
+ * @prop {array} params Authorization level of user
+ */
+
+class CommandContext{
+	/**
+	 * @param {ValClient} client The current ValClient instance
+ 	 * @param {GuildMessage} message Message object
+	 */
+	constructor (client, message) {
+		if(client && message.author && message.member){
 			this.client = client
 			this.message = message
 			this.author = message.author
 			this.member = message.member
 			this.channel = message.channel
-			this.voiceChannel = message.member.voiceChannel
 			this.guild = message.guild
-			this.command = command
-		}
-		catch(err){
-			console.log(`Context creation failed`)
-			this.hasError = true
+			this.userAuthLevel = 4
+			this.params = []
 		}
 	}
-  
-	isReady (){
-		return this.hasError? false: true
-	}
-  
 }
+
+module.exports = CommandContext

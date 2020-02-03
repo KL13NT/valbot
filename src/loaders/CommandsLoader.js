@@ -1,6 +1,6 @@
 const fs = require(`fs`)
 const path = require(`path`)
-const FileUtils = new (require(`../utils/FileUtils`))()
+const FileUtils = new (require(`../utils/FileUtils`))(__dirname)
 const { Loader } = require(`../structures`)
 
 module.exports = class CommandsLoader extends Loader{
@@ -10,19 +10,20 @@ module.exports = class CommandsLoader extends Loader{
 
 	load () {
 		this.commands = FileUtils
-			.readdir(__dirname, `../commands`)
+			.readDir(`../commands`)
 			.reduce((acc = [], cur) => {
-				if(cur.charAt(0) !== cur.charAt(0).toLowerCase()){ //first letter is capitalised
+				if(cur.charAt(0) === cur.charAt(0).toUpperCase()){ //first letter is capitalised
 					return [ ...acc, cur.replace(`.js`, ``) ]
 				}
 				return acc
 			}, [])
 
+
 		this.commands.forEach(async command => {
 			const Command = require(`../commands/${command}`)
 			const newCommand = new Command(this.client)
-        
-			if(newCommand.isReady) this.client.commands[command] = newCommand
+
+			this.client.commands[command] = newCommand
 		})
 	}
 }

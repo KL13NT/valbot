@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: ValClient.js | ValBot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <a href="function link() { [native code] }" rel="noopener noreferrer" target="_blank">
+                <img src="img/toast-ui.png" width="100%" height="100%">
+            </a>
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">ValBot</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Externals</h3><ul><li><a href="external-Guild.html">Guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Guild_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Command.html">Command</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Command_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Command.html#AUTH_LEVELS">AUTH_LEVELS</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Command.html#run">run</a></li></ul></div></li><li><a href="CommandContext.html">CommandContext</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommandContext_sub"></div></li><li><a href="CommandOptions.html">CommandOptions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommandOptions_sub"></div></li><li><a href="FileUtils.html">FileUtils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="FileUtils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="FileUtils.html#append">append</a></li><li><a href="FileUtils.html#create">create</a></li><li><a href="FileUtils.html#createDir">createDir</a></li><li><a href="FileUtils.html#dirExists">dirExists</a></li><li><a href="FileUtils.html#fileExists">fileExists</a></li><li><a href="FileUtils.html#read">read</a></li><li><a href="FileUtils.html#readDir">readDir</a></li><li><a href="FileUtils.html#replace">replace</a></li></ul></div></li><li><a href="module.exports.html">exports</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module.exports_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module.exports.html#console">console</a></li><li><a href="module.exports.html#readLog">readLog</a></li></ul></div></li><li><a href="ValClient.html">ValClient</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="ValClient_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="ValClient.html#autoWarn">autoWarn</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#checkWatchedMessage">checkWatchedMessage</a></li><li><a href="global.html#onStartup">onStartup</a></li><li><a href="global.html#updateMemberCount">updateMemberCount</a></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { Client } = require(`discord.js`)
+
+const fs = require(`fs`)
+const path = require(`path`)
+const Loaders = require(`./loaders`)
+const Listeners = require(`./listeners`)
+const Logger = new (require(`./utils/Logger`))(__dirname, `../logs`)
+const ToxicityFilter = require(`./utils/InsultFiltering`)
+const FileUtils = require(`./utils/FileUtils`)
+
+
+/**
+ * @param { ClientOptions	} options DiscordClientOptions
+ * @param { String } prefix The prefix used for all commands
+ */
+
+class ValClient extends Client {
+	constructor (options = {}, prefix) {
+		super(options)
+		this.isLoggedin = false
+		this.prefix = prefix || `val!`
+		this.importantChannels = {
+			notifications: `587571479173005312`,
+			rules: `571718462179770369`
+		}
+		this.commands = {}
+		this.customPresences = [
+			{ message: `for val!`, type: `WAITING` },
+			{ message: `something?`, type: `PLAYING` },
+			{ message: `Dubstep`, type: `LISTENING` }
+		]
+		this.warnedMembers = {}
+		this.mutedMembers = {}
+
+		this.mutedChecker()
+		this.importantRoles = {
+			muted: `586839490102951936`
+		}
+	}
+
+	async mutedChecker (){
+		setInterval(() => {
+			const newTime = new Date().getTime()
+			
+			for(const mutedId in this.mutedMembers){
+				try{
+					if(newTime - this.mutedMembers[mutedId].time >= 1000 * 60 * 15) {
+						const guild = this.guilds.find(guild => guild.name === `VALARIUM`)
+
+						if(guild.available){
+							const member = guild.members.find(member => member.id === mutedId)
+
+							if(member) {
+								member.removeRole(this.importantRoles.muted)
+								delete this.mutedMembers[mutedId]
+
+								this.notify(`&lt;@${mutedId}> you have been unmuted. Enjoy your stay!`)
+								
+							}
+						}
+					}
+				}
+				catch(err){
+					Logger.file(`info`, err)
+				}
+			}	
+		}, 1000 * 60) // every 1 minute
+	}
+	//TODO: check for muted and unmute after 15 mins
+
+	/**
+   * @param message
+   */
+	async autoWarn (message){
+		const { member } = message
+		const { id } = member
+		const warnings = this.warnedMembers[id]
+    
+		if(warnings){
+			if(warnings == 2){
+				message.reply(`you're getting muted for 15 minutes because of your toxic behaviour`)
+				member.addRole(this.importantRoles.muted)
+        
+				const muted = {
+					time: new Date().getTime(),
+					id: id
+				}
+
+				this.mutedMembers[id] = { ...muted }
+				delete this.warnedMembers[id]
+			}
+			else this.warnedMembers[id] = warnings + 1
+		}
+		else this.warnedMembers[id] = 1
+	}
+
+	async init (token = process.env.AUTH_TOKEN) {
+		try {
+			this.ToxicityFilter = await new ToxicityFilter(0.8)
+			
+			
+			this.CLILogo = fs.readFileSync(path.resolve(__dirname, `../text/bigtitle.txt`), `utf8`).toString()
+			
+			this.initLoaders()
+			await super.login(token)
+			
+			FileUtils
+		}
+		catch(err){
+			Logger.file(`error`, `Error while client logging in. ${err.message}, ${JSON.stringify(err.stack)}`)
+		}
+	}
+
+	async setPresence (){
+		const { customPresences, user } = this
+		console.log(this.user)
+		setInterval(() => {
+      
+			const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]
+			user.setActivity(randomPresence.message, { type: randomPresence.type })
+      
+			console.log(`Current presence: ${randomPresence.type} ${randomPresence.message}`)
+      
+		}, 10 * 60 * 1000)
+	}
+
+	async runCommand (command, context, args){}
+
+	async initLoaders () {
+		//Load loaders from file
+		for (const loader in Loaders) {
+			try {
+				const currentLoader = new Loaders[loader](this)
+				await currentLoader.load()
+			} catch (err) {
+				console.log(err)
+			} 
+		}
+	}
+
+	async initListeners (){
+		for (const listener in Listeners) {
+			try {
+				new Listeners[listener](this)
+			} catch (err) {
+				console.log(err)
+			} 
+		}
+	}
+
+	async notify (message){
+		this.guilds.find(guild => guild.name === `VALARIUM`)
+			.channels.find(ch => ch.id === this.importantChannels.notifications)
+			.send(message)
+	}
+}
+
+module.exports = ValClient</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">This documentation is not complete yet and is subject to change</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>

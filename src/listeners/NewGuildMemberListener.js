@@ -2,7 +2,7 @@ const { CommandContext } = require(`..`)
 const { Listener } = require(`../structures`)
 const { CLIENT_ID: BotID } = process.env
 
-module.exports = class NewGuildMemberListener extends Listener {
+class NewGuildMemberListener extends Listener {
 	constructor (client) {
 		super(client, [
 			`guildMemberAdd`
@@ -31,3 +31,5 @@ module.exports = class NewGuildMemberListener extends Listener {
 	}
 
 }
+
+module.exports = NewGuildMemberListener

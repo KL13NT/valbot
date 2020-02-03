@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: structures/Command.js | ValBot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <a href="function link() { [native code] }" rel="noopener noreferrer" target="_blank">
+                <img src="img/toast-ui.png" width="100%" height="100%">
+            </a>
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">ValBot</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Externals</h3><ul><li><a href="external-Guild.html">Guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Guild_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="Command.html">Command</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Command_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Command.html#AUTH_LEVELS">AUTH_LEVELS</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Command.html#run">run</a></li></ul></div></li><li><a href="CommandContext.html">CommandContext</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommandContext_sub"></div></li><li><a href="CommandOptions.html">CommandOptions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommandOptions_sub"></div></li><li><a href="FileUtils.html">FileUtils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="FileUtils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="FileUtils.html#append">append</a></li><li><a href="FileUtils.html#create">create</a></li><li><a href="FileUtils.html#createDir">createDir</a></li><li><a href="FileUtils.html#dirExists">dirExists</a></li><li><a href="FileUtils.html#fileExists">fileExists</a></li><li><a href="FileUtils.html#read">read</a></li><li><a href="FileUtils.html#readDir">readDir</a></li><li><a href="FileUtils.html#replace">replace</a></li></ul></div></li><li><a href="module.exports.html">exports</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module.exports_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module.exports.html#console">console</a></li><li><a href="module.exports.html#readLog">readLog</a></li></ul></div></li><li><a href="ValClient.html">ValClient</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="ValClient_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="ValClient.html#autoWarn">autoWarn</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#checkWatchedMessage">checkWatchedMessage</a></li><li><a href="global.html#onStartup">onStartup</a></li><li><a href="global.html#updateMemberCount">updateMemberCount</a></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const CommandContext = require(`./CommandContext`)
+const CommandOptions = require(`./CommandOptions`)
+
+/**
+ * Command Structure
+ * @param {ValClient} client Valarium-bot client
+ * @param {CommandOptions} options Command initialisation options
+ * @property {boolean} ready Whether command can be used
+ */
+
+class Command{
+	constructor (client, options) {
+		
+		if(!(options instanceof CommandOptions)) throw Error(`Command options invalid`)
+		
+		this.client = client
+		this.options = options
+		this.ready = false
+
+		/**
+		 * Auth levels description:
+		 * @property {RoleID} 0 Developers
+		 * @property {RoleID} 1 High Table [admin]
+		 * @property {RoleID} 2 Protectors [mod]
+		 * @property {RoleID} 3 Verified members role
+		 * @property {RoleID} 4 Unauthorised to use bot
+		 */
+		this.AUTH_LEVELS = {
+			639855023970451457: 0,
+			571705643073929226: 1,
+			571705797583831040: 2, 
+			586490288579543041: 3
+		}
+
+		this.construct()
+	}
+	
+	/**
+	 * Checks whether member has sufficient auth
+	 * @param {GuildMember} context message context
+	 * @private
+	 */
+	isAllowed ({ member }){
+		for(const role in member.roles.array()){
+			console.log(`looping in classifyAuthLevels`, role)
+
+			if(this.AUTH_LEVELS[role]){
+				return true
+			}
+		}
+		return false
+	}
+
+	/**
+	 * Enforces command code to create context correctly
+	 * @param {CommandContext} context message context
+	 * @private
+	 */
+	checkContext (context){
+		return context instanceof CommandContext 
+	}
+
+	/**
+	 * Determines whether user is allowed to use this command
+	 * @param {CommandContext} context message context
+	 * @private
+	 * @override
+	 */
+	prerun (context){
+		if(this.checkContext(context) &amp;&amp; this.isAllowed(context)) {
+			this.ready = true
+		}
+	}
+
+	/**
+	 * Responsible for running commands. Should be overridden in each command. Each overriding command should call the internal prerun() method 
+	 * @param {CommandContext} context 
+	 */
+	async run (context) {
+		// return true;
+	}
+}
+
+module.exports = Command</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">This documentation is not complete yet and is subject to change</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>
