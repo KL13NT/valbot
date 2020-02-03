@@ -9,6 +9,7 @@ module.exports = class CommandsLoader extends Loader{
 	}
 
 	load () {
+		console.log(__dirname, path.resolve(__dirname, '../commands'))
 		this.commands = FileUtils
 			.readDir(`../commands`)
 			.reduce((acc = [], cur) => {
