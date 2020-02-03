@@ -15,7 +15,7 @@ class Command{
 
 		this.client = client
 		this.options = options
-		this.ready = false
+		this.ready = true
 
 		/**
 		 * Auth levels description:

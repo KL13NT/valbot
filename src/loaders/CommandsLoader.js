@@ -1,7 +1,7 @@
 const fs = require(`fs`)
 const path = require(`path`)
 const FileUtils = new (require(`../utils/FileUtils`))(__dirname)
-const { Loader } = require(`../structures`)
+const { Loader, Command } = require(`../structures`)
 
 module.exports = class CommandsLoader extends Loader{
 	constructor (client) {
@@ -9,11 +9,10 @@ module.exports = class CommandsLoader extends Loader{
 	}
 
 	load () {
-		console.log(__dirname, path.resolve(__dirname, '../commands'))
 		this.commands = FileUtils
 			.readDir(`../commands`)
 			.reduce((acc = [], cur) => {
-				if(cur.charAt(0) === cur.charAt(0).toUpperCase()){ //first letter is capitalised
+				if(new require(`../commands/${cur}`)().prototype instanceof Command){ //first letter is capitalised
 					return [ ...acc, cur.replace(`.js`, ``) ]
 				}
 				return acc
