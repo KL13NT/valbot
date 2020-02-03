@@ -15,11 +15,13 @@ module.exports = class CommandsLoader extends Loader{
 	}
 
 	load () {
+		console.log(Commands)
 
 		Commands.forEach(async command => {
 			const newCommand = new command(this.client)
 
 			this.client.commands[newCommand.options.name] = newCommand
+			console.log(this.client.commands)
 		})
 	}
 }
