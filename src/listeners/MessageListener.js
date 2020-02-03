@@ -86,18 +86,17 @@ class MessageListener extends Listener {
 
 			else if(!MessageListener.checkParams(command, params)){
 				message.reply(`
-						الكوماند اللي بتحاول تشغلها دي بتحتاج
-						${command.options.nOfParams}
-						وانت كتبت
-						${params.length}`
+						الكوماند اللي بتحاول تشغلها دي بتحتاج ${command.options.nOfParams} باراميترز وانت كتبت ${params.length} بس`
 				)
 			}
 
 			else if(MessageListener.checkParams(command, params)){
 				const context = new CommandContext(this, message)
-
 				context.params = [ ...params ] //to delete old references to params and avoid memory leaks
-				command.run(context)
+
+				if(params.includes(`help`)) command.help(context)
+				else command.run(context)
+
 			}
 
 

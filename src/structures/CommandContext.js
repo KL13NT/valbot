@@ -12,7 +12,7 @@
  * @prop {GuildMember} message.member Member who sent the message
  * @prop {GuildChannel} message.channel The channel of the message
  * @prop {AuthLevel} userAuthLevel Authorization level of user
- * @prop {array} params Authorization level of user
+ * @prop {array} params Params the command's _run is expecting
  */
 
 class CommandContext{

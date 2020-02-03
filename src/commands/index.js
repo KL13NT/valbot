@@ -1,3 +1,4 @@
 module.exports = [
-	require(`./clear`)
+	require(`./clear`),
+	require(`./help`)
 ]

@@ -26,7 +26,7 @@ class Command{
 		 * @property {RoleID} 4 Unauthorised to use bot
 		 */
 		this.AUTH_LEVELS = {
-			639855023970451457: 0,
+			571824921576079362: 0,
 			571705643073929226: 1,
 			571705797583831040: 2,
 			586490288579543041: 3
@@ -39,16 +39,19 @@ class Command{
 	 * @private
 	 */
 	isAllowed ({ member }){
-		for(const role in member.roles.array()){
-			console.log(`looping in classifyAuthLevels`, role)
-
-			// if a user's authLevel is lower than required in means they have higher roles
-			// and qualified to run command
-			if(this.AUTH_LEVELS[role] <= this.options.authLevel){
-				return true
-			}
+		for(const permission of this.options.requiredPermissions){
+			if(!member.hasPermission(permission)) return false
 		}
-		return false
+		return true
+		// for(const { id: roleId } of Array.from(member.roles.values())){
+		// 	// if a user's authLevel is lower than required in means they have higher roles
+		// 	// and qualified to run command
+		// 	console.log(this.AUTH_LEVELS[roleId], roleId)
+		// 	if(this.AUTH_LEVELS[roleId] <= this.options.authLevel){
+		// 		return true
+		// 	}
+		// }
+		// return false
 	}
 
 	/**
@@ -93,6 +96,20 @@ class Command{
 	 */
 	async _run (context) {
 		// return true;
+	}
+
+	help (context){
+
+		const { message } = context
+		const { nOfParams, exampleUsage, description } = this.options
+
+		message.reply(`
+			معلومات عن ${this.options.name}:
+			الاستعمال:\n\`${exampleUsage}\`
+			الوظيفة:\n\`${description}\`
+			بتاخد كام باراميتير\n\`${nOfParams}\`
+		`)
+
 	}
 }
 
