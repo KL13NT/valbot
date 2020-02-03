@@ -15,44 +15,45 @@ class MessageListener extends Listener {
 		const commandRegex = /(val!\s)([a-zA-Z؀-ۿ]+)(\s?)/
 		const { content, member, author, type } = message
 
-		//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
-		if(this.ToxicityFilter && this.ToxicityFilter.ready){
-			if(await this.ToxicityFilter.classify(message.content)){
+		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== `dm`){
 
-				message.reply(`لو سمحت متستعملش لغة بذيئة, انا بتكلم بالأدب اهو. لو عايز تعرف القوانين بتاعت المكان ده خش على <#${this.importantChannels.rules}>`)
+			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
+			if(this.ToxicityFilter && this.ToxicityFilter.ready){
+				if(await this.ToxicityFilter.classify(message.content)){
 
-				await this.autoWarn(message)
-				message.delete()
+					message.reply(`لو سمحت متستعملش لغة بذيئة, انا بتكلم بالأدب اهو. لو عايز تعرف القوانين بتاعت المكان ده خش على <#${this.importantChannels.rules}>`)
 
-				return
+					await this.autoWarn(message)
+					message.delete()
+
+					return
+				}
 			}
-		}
 
-		if(message.mentions.members.some(member => member.id === CLIENT_ID || member.id === DEV_CLIENT_ID)){
-			const greetingsRegex = /ها+ي+|هي|hai|hi|hui|hello|heyo|hiya|yo|مرحب/i
-			const generalRegex = /how are you|how you doin|عامل ايه|اخبارك|ايه|بتعمل ايه|([a-zA-Z؀-ۿ]+)/i
-			const b7bkRegex = /بحبك|شش+ بحبك/i
+			if(message.mentions.members.some(member => member.id === CLIENT_ID || member.id === DEV_CLIENT_ID)){
+				const greetingsRegex = /ها+ي+|هي|hai|hi|hui|hello|heyo|hiya|yo|مرحب/i
+				const generalRegex = /how are you|how you doin|عامل ايه|اخبارك|ايه|بتعمل ايه|([a-zA-Z؀-ۿ]+)/i
+				const b7bkRegex = /بحبك|شش+ بحبك/i
 
-			const randomResponses = [
-				`مش فاهم لا`,
-				`انتوا لو قاصدين تزلوني عشان مش فاهم انتوا كاتبين ايه مش هتعملوا فيا كده`,
-				`لا بص, انا اه بعرف ارد على هاي بس متوصلش بيك الجرأة تفتكر اني بوت ذكي للدرجة دي يعني, هما كام if اللي معمولينلي, خف عليا شوية بلز`,
+				const randomResponses = [
+					`مش فاهم لا`,
+					`انتوا لو قاصدين تزلوني عشان مش فاهم انتوا كاتبين ايه مش هتعملوا فيا كده`,
+					`لا بص, انا اه بعرف ارد على هاي بس متوصلش بيك الجرأة تفتكر اني بوت ذكي للدرجة دي يعني, هما كام if اللي معمولينلي, خف عليا شوية بلز`
 
-			]
+				]
 
-			if(content.match(greetingsRegex)) message.reply(`هاي يصحب, اخبارك ايه؟`)
-			else if(content.match(b7bkRegex))
-				message.reply(`انا اول مره اشوف حد بيحب بوت!`, {
-					files: [ {
-						attachment: path.resolve(__dirname, `../../b7bk.jpg`),
-						name: `اول مره اشوف حد بيحب بوت.jpg`
-					} ]
-				})
-			else if(content.match(generalRegex)) message.reply(randomResponses[ Math.floor(Math.random() * randomResponses.length) ])
+				if(content.match(greetingsRegex)) message.reply(`هاي يصحب, اخبارك ايه؟`)
+				else if(content.match(b7bkRegex))
+					message.reply(`انا اول مره اشوف حد بيحب بوت!`, {
+						files: [ {
+							attachment: path.resolve(__dirname, `../../b7bk.jpg`),
+							name: `اول مره اشوف حد بيحب بوت.jpg`
+						} ]
+					})
+				else if(content.match(generalRegex)) message.reply(randomResponses[ Math.floor(Math.random() * randomResponses.length) ])
 
-		}
+			}
 
-		else if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== `dm`){
 
 			if(content.startsWith(this.prefix)) {
 				commandify.apply(this)
