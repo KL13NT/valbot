@@ -14,7 +14,7 @@ class MessageListener extends Listener {
 	async onMessage (message){
 		const commandRegex = /(val!\s)([a-zA-Z؀-ۿ]+)(\s?)/
 		const { content, member, author, type } = message
-		console.log(message.content, type)
+
 		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== `dm`){
 
 			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
@@ -74,7 +74,6 @@ class MessageListener extends Listener {
 			}
 
 			const commandName = String.prototype.concat(matchGroup[2].charAt(0).toUpperCase(), matchGroup[2].substr(1)) //turn first letter to uppercase and concatenate with rest
-			console.log(commandName, this.commands, matchGroup)
 			const command = this.commands[ commandName ] //2nd match group, actual command name
 			const split = content.split(` `)
 			const params = split.slice(2)

@@ -1,29 +1,25 @@
-const fs = require(`fs`)
-const path = require(`path`)
 const FileUtils = new (require(`../utils/FileUtils`))(__dirname)
 const { Loader, Command } = require(`../structures`)
+const Commands = require(`../commands`)
 
+/**
+ * Loads commands based on commands/index
+ */
 module.exports = class CommandsLoader extends Loader{
+	/**
+	 *
+	 * @param {ValClient} client used to attach loaded commands
+	 */
 	constructor (client) {
 		super(client)
 	}
 
 	load () {
-		this.commands = FileUtils
-			.readDir(`../commands`)
-			.reduce((acc = [], cur) => {
-				if(new require(`../commands/${cur}`)().prototype instanceof Command){ //first letter is capitalised
-					return [ ...acc, cur.replace(`.js`, ``) ]
-				}
-				return acc
-			}, [])
 
+		Commands.forEach(async command => {
+			const newCommand = new command(this.client)
 
-		this.commands.forEach(async command => {
-			const Command = require(`../commands/${command}`)
-			const newCommand = new Command(this.client)
-
-			this.client.commands[command] = newCommand
+			this.client.commands[newCommand.options.name] = newCommand
 		})
 	}
 }
