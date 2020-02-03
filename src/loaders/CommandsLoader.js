@@ -1,4 +1,3 @@
-const FileUtils = new (require(`../utils/FileUtils`))(__dirname)
 const { Loader, Command } = require(`../structures`)
 const Commands = require(`../commands`)
 
@@ -15,13 +14,11 @@ module.exports = class CommandsLoader extends Loader{
 	}
 
 	load () {
-		console.log(Commands)
-
 		Commands.forEach(async command => {
-			const newCommand = new command(this.client)
 
+			const newCommand = new command(this.client)
 			this.client.commands[newCommand.options.name] = newCommand
-			console.log(this.client.commands)
+
 		})
 	}
 }

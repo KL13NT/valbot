@@ -73,7 +73,7 @@ class MessageListener extends Listener {
 				return
 			}
 
-			const commandName = String.prototype.concat(matchGroup[2].charAt(0).toUpperCase(), matchGroup[2].substr(1)) //turn first letter to uppercase and concatenate with rest
+			const [ ,, commandName ] = matchGroup
 			const command = this.commands[ commandName ] //2nd match group, actual command name
 			const split = content.split(` `)
 			const params = split.slice(2)
