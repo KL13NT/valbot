@@ -92,7 +92,6 @@ class Command{
 	/**
 	 * Responsible for running commands. Should be overridden in each command.
 	 * @param {CommandContext} context
-	 * @override
 	 */
 	async _run (context) {
 		// return true;

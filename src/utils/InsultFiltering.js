@@ -15,10 +15,10 @@ class ToxicityLoader {
 			`sexual_explicit`,
 			`toxicity`
 		]
-		
+
 		this.arInsultsRegex = new RegExp(insults)
 		this.ready = false
-    
+
 		toxicity.load(threshold).then(model => {
 			this.classifier = model
 			this.ready = true
@@ -26,11 +26,11 @@ class ToxicityLoader {
 			console.log(`Toxicity Classifier has been loaded`)
 		})
 	}
-  
+
 	async classify (sentence){
 		const predictions = await this.classifier.classify([ sentence ])
 
-		if(this.arInsultsRegex.test(sentence)) return true
+		// if(this.arInsultsRegex.test(sentence)) return true
 
 		for(const curr of predictions){
 			if(curr.results[0].match === true && curr.results[0].probabilities[1] > 0.92) return true
