@@ -32,7 +32,9 @@ class ToxicityLoader {
 
 		// if(this.arInsultsRegex.test(sentence)) return true
 
+
 		for(const curr of predictions){
+			console.log(curr.results[0].probabilities[1])
 			if(curr.results[0].match === true && curr.results[0].probabilities[1] > 0.92) return true
 		}
 
