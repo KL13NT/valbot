@@ -1,5 +1,5 @@
 const path = require('path')
-const errors = require('../utils/errors')
+const errors = require('../utils/Errors')
 
 const { CLIENT_ID, DEV_CLIENT_ID } = process.env
 const { Listener } = require('../structures')
