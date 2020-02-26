@@ -1,0 +1,80 @@
+{"_id":{"$oid":"5cfe7c8acd006a200c92ab60"},"command":"val! mod warn \u003c@391344281639452682\u003e","author":"CreaturalAdvance"}
+{"_id":{"$oid":"5cfe7c9dcd006a200c92ab61"},"command":"val! mod warn \u003c@391344281639452682\u003e hh I can do it hh","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8067712cf1143cbf943e"},"command":"val! org mute \u003c@493438593835204608\u003e Testing","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8079712cf1143cbf943f"},"command":"val! org vmute \u003c@493438593835204608\u003e Testin","author":"Sovereign"}
+{"_id":{"$oid":"5cfe80fa37ccbae588e92041"},"command":"val! org mute \u003c@493438593835204608\u003e Testin","author":"Sovereign"}
+{"_id":{"$oid":"5cfe810137ccbae588e92042"},"command":"val! org vmute \u003c@493438593835204608\u003e Testin","author":"Sovereign"}
+{"_id":{"$oid":"5cfe811037ccbae588e92043"},"command":"val! org vmute \u003c@238009405176676352\u003e Testin","author":"Sovereign"}
+{"_id":{"$oid":"5cfe828587f4f27111237c4c"},"command":"val! org vmute \u003c@493438593835204608\u003e Testin","author":"Sovereign"}
+{"_id":{"$oid":"5cfe82b387f4f27111237c4d"},"command":"val! org vmute \u003c@493438593835204608\u003e Testin Testing reason here!","author":"Sovereign"}
+{"_id":{"$oid":"5cfe850a87f4f27111237c4e"},"command":"val! mod clear 10","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8a137c0ecbfdecb8d112"},"command":"val! mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8a1b7c0ecbfdecb8d113"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8a297c0ecbfdecb8d114"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8a8c4e9cfddea4ef4574"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8c251236b6bb40ebc003"},"command":"val! mod clear 10","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8c2c1236b6bb40ebc00e"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8c639ea3eb54ae34ce81"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8c6f9ea3eb54ae34ce82"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8c8c9ea3eb54ae34ce83"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8ca19ea3eb54ae34ce84"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8cb39ea3eb54ae34ce85"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8cc79ea3eb54ae34ce86"},"command":"val! org unmute \u003c@238009405176676352\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8cd69ea3eb54ae34ce87"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8d10f0a6eca9e0c1a520"},"command":"val! org unmute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8d80f0a6eca9e0c1a521"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8dcef0a6eca9e0c1a522"},"command":"val! org unmute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8e06f0a6eca9e0c1a523"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8e1ff0a6eca9e0c1a524"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8e5ca64fda370c99914a"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8ea5b92e05145da2b165"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8ece1dfe4b109847a6b6"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8edc1dfe4b109847a6b7"},"command":"val! org unmute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8ef11dfe4b109847a6b8"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8efa1dfe4b109847a6b9"},"command":"val! org unmute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8f20957f23ed2451172b"},"command":"val! org mute \u003c@576002313764732929\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8f4a957f23ed2451172c"},"command":"val! mod clear 15","author":"Sovereign"}
+{"_id":{"$oid":"5cfe8f4f957f23ed2451173c"},"command":"val! mod clear 15","author":"Sovereign"}
+{"_id":{"$oid":"5cff78797b85ae93e9075bd6"},"command":"val! mod clear 5","author":"Sovereign"}
+{"_id":{"$oid":"5cffbe89cd9ebf7d0e43231e"},"command":"val! mod clear 1","author":"Sovereign"}
+{"_id":{"$oid":"5cffd850d38bbbb396f61bcb"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffd8e50ba7f7b55e7b6d8e"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdbc59b3165bcb2eee854"},"command":"val! mod clear 5","author":"Sovereign"}
+{"_id":{"$oid":"5cffdbd49b3165bcb2eee85a"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdc293ace5abc96185853"},"command":"val! mod clear 4","author":"Sovereign"}
+{"_id":{"$oid":"5cffdc303ace5abc96185858"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdc723443abbc96c8f455"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdcde92b777c2668f78a1"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdd6233e4e2c2ba18676e"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdd8c33e4e2c2ba18676f"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdda433e4e2c2ba186770"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffde3f33e4e2c2ba186771"},"command":"val! mod clear 6","author":"Sovereign"}
+{"_id":{"$oid":"5cffde5733e4e2c2ba186778"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffde7133e4e2c2ba186779"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffde8733e4e2c2ba18677a"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdeab33e4e2c2ba18677b"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdec233e4e2c2ba18677c"},"command":"val! mod reactionRoles \u003c#586620199457914904\u003e 586620756251639834","author":"Sovereign"}
+{"_id":{"$oid":"5cffdedd33e4e2c2ba18677d"},"command":"val! mod clear 16","author":"Sovereign"}
+{"_id":{"$oid":"5cffdee333e4e2c2ba18678e"},"command":"val! mod clear 3","author":"Sovereign"}
+{"_id":{"$oid":"5d00f65e095d5ac87c5337e8"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d00f674095d5ac87c5337e9"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d00f67b095d5ac87c5337ea"},"command":"val! mod clear 4","author":"Sovereign"}
+{"_id":{"$oid":"5d00f6d7ebdeae1d1c0b4db4"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d00f70b7466b4aa8a6c039f"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d00f7739838a5aecdd1b04f"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d00f8b42b3fae0e9045bd17"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d00f8ec419f3088723e3dd2"},"command":"val! mod warnings \u003c@391344281639452682\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d011d8a9490e5c59a636060"},"command":"val! mod dmAllMembers","author":"Sovereign"}
+{"_id":{"$oid":"5d01d41ca4c12477da8fee8e"},"command":"val! mod warn \u003c@516702092803702807\u003e  تغفيل بديك وورننج عشان انت غفلتني وانا نايم","author":"Sovereign"}
+{"_id":{"$oid":"5d01e917491af2f21107993f"},"command":"val! mod warn \u003c@238009405176676352\u003e Swearing This person swore","author":"Sovereign"}
+{"_id":{"$oid":"5d026b125c9cfd0ae8a44dd3"},"command":"val! mod warn \u003c@516702092803702807\u003e غدر يا غدار","author":"Sovereign"}
+{"_id":{"$oid":"5d05084dccee0d1b3ca23f36"},"command":"val! mod mute \u003c@493438593835204608\u003e Loudness","author":"Sovereign"}
+{"_id":{"$oid":"5d05085cccee0d1b3ca23f37"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d0508b5ccee0d1b3ca23f38"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Sovereign"}
+{"_id":{"$oid":"5d050dd3393b8b2c8c916dae"},"command":"val! mod clear 5","author":"Sovereign"}
+{"_id":{"$oid":"5d050ddc393b8b2c8c916db4"},"command":"val! mod clear 5","author":"Sovereign"}
+{"_id":{"$oid":"5d054631f0cb974d1cced93a"},"command":"val! org mute \u003c@493438593835204608\u003e بيهه","author":"Sovereign"}
+{"_id":{"$oid":"5d054650f0cb974d1cced93b"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Amr samy"}
+{"_id":{"$oid":"5d054675f0cb974d1cced93c"},"command":"val! org mute \u003c@238009405176676352\u003e","author":"Shaarawy"}
+{"_id":{"$oid":"5d0546e4f0cb974d1cced93d"},"command":"val! org mute \u003c@493438593835204608\u003e","author":"Shaarawy"}
+{"_id":{"$oid":"5d0546f3f0cb974d1cced93e"},"command":"val! org unmute \u003c@493438593835204608\u003e","author":"Amr samy"}

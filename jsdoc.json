@@ -1,0 +1,30 @@
+{
+	"source": {
+		"exclude": [ "./node_modules" ],
+		"includePatterns": "(\\.\\/src\\/.+\\.js)|(\\.\\/index\\.js)"
+	},
+	"sourceType": "module",
+  "opts":{
+		"theme_opts": {
+			"title": "ValBot",
+			"meta": [
+				"<meta name=\"author\" content=\"Nabil Tharwat\">",
+				"<meta name=\"description\" content=\"Valarium Bot!\">"
+			],
+			"menu": [
+				{
+					"title": "Github",
+					"link": "https://github.com/KL13NT/valbot",
+					"target": "_blank"
+				}
+			]
+		},
+		"readme": "./README.md",
+		"template": "node_modules/clean-jsdoc-theme"
+  },
+  "templates": {
+    "logo": "./valarium-bot-prod.png",
+    "name": "ValBot",
+    "footerText": "This documentation is not complete yet and is subject to change"
+  }
+}
