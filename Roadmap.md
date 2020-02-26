@@ -2,17 +2,17 @@
 This document discusses upcoming changes to the bot, planned actions, and thought-of ideas.
 
 ## Upcoming Changes
-- Full Rewrite
-  - Remove `webpack`
-  - Use `nodemon`
-  - Remove old way of handling commands
-  - Use a more robust architecture that's easily scalable and maintainable.
-  - Improved command permissions security
-  - Improved performance
-  - File Utilities
-  - New Logger 
+- [x] Remove `webpack`
+- [x] Use `nodemon`
+- [x] Remove old way of handling commands
+- [x] Use a more robust architecture that's easily scalable and maintainable.
+- [x] Improved command permissions security
+- [x] Improved performance
+- [x] File Utilities
+- [] New Logger
+- [] More commands
 
-## Perhaps? 
+## Perhaps?
 - Conversational AI implementation to reply to bot mentions that are not commands
 - Music player to play from different websites
 - Mini games

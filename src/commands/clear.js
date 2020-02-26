@@ -4,12 +4,11 @@ const { CommandOptions } = require("../structures")
 class Clear extends Command {
   constructor(client) {
 
-		const requiredPerms = [`MANAGE_MESSAGES`]
 		const options = new CommandOptions(
 			`clear`,
 			1000,
 			1,
-			requiredPerms,
+			2,
 			`بتمسح رسايل بعدد n`,
 			`val! clear 5`
 		)

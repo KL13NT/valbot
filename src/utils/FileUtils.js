@@ -32,24 +32,24 @@ class FileUtils {
    * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
 	 * @returns boolean indicating whether directory exists
    */
-	dirExists (dirPath, dirname = this.dirname){		
+	dirExists (dirPath, dirname = this.dirname){
 		return fs.stat(this.FSResolve(dirname, dirPath), (err, stat) => {
 			if(stat) return true
 			return false
 		})
 	}
-	
+
 	/**
 	 * Checks whether file exists
-	 * @param {string} filePath path to file 
+	 * @param {string} filePath path to file
    * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
 	 * @returns boolean indicating whether file exists
    */
-	
+
 	fileExists (filePath, dirname = this.dirname){
 		return this.FSExists(this.FSResolve(dirname, filePath))
 	}
-	
+
 	/**
 	 * Creates a new directory
 	 * @param {string} dirPath path to directory
@@ -58,11 +58,11 @@ class FileUtils {
 	createDir (dirPath, dirname = this.dirname){
 		fs.mkdirSync(this.FSResolve(dirname, dirPath))
 	}
-	
+
 	/**
    * Creates new file with optional contents
 	 * @param {string} filePath path to file
-	 * @param {string} [content] optional data to append 
+	 * @param {string} [content] optional data to append
    * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
 	 * @throws if file already exists
    */
@@ -79,11 +79,11 @@ class FileUtils {
    * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
 	 * @throws if file doesn't exist
    */
-	
+
 	replace (filePath, content, dirname = this.dirname){
-		if(this.fileExists(filePath, dirname)) 
+		if(this.fileExists(filePath, dirname))
 			this.FSReplace(path.resolve(dirname, filePath), content, `utf-8`)
-		
+
 		else throw Error(`File doesn't exist, maybe use create instead?`)
 	}
 
@@ -94,7 +94,7 @@ class FileUtils {
    * @param {string} [dirname = this.dirname] Node's __dirname, can be assigned through the constructor
    */
 	append (filePath, content, dirname = this.dirname){
-		if(this.fileExists(filePath, dirname)) 
+		if(this.fileExists(filePath, dirname))
 			this.FSAppend(path.resolve(dirname, filePath), content, `utf-8`)
 
 		else throw Error(`File doesn't exist, maybe use create instead?`)

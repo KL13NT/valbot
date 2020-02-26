@@ -1,5 +1,10 @@
-const CommandContext = require(`./CommandContext`)
-const CommandOptions = require(`./CommandOptions`)
+const CommandContext = require('./CommandContext')
+const CommandOptions = require('./CommandOptions')
+const { getRoleObject } = require('../utils/utils')
+const { GENERIC_SOMETHING_WENT_WRONG, COMMAND_NOT_ALLOWED } = require('../utils/Errors')
+
+
+
 
 /**
  * Command Structure
@@ -9,49 +14,28 @@ const CommandOptions = require(`./CommandOptions`)
  */
 
 class Command{
+	/**
+	 *
+	 * @param {ValClient} client
+	 * @param {*} options
+	 */
 	constructor (client, options) {
 
-		if(!(options instanceof CommandOptions)) throw Error(`Command options invalid`)
+		if(!(options instanceof CommandOptions)) throw Error('Command options invalid')
 
 		this.client = client
 		this.options = options
 		this.ready = true
 
-		/**
-		 * Auth levels description:
-		 * @property {RoleID} 0 Developers
-		 * @property {RoleID} 1 High Table [admin]
-		 * @property {RoleID} 2 Protectors [mod]
-		 * @property {RoleID} 3 Verified members role
-		 * @property {RoleID} 4 Unauthorised to use bot
-		 */
-		this.AUTH_LEVELS = {
-			571824921576079362: 0,
-			571705643073929226: 1,
-			571705797583831040: 2,
-			586490288579543041: 3
-		}
 	}
 
 	/**
 	 * Checks whether member has sufficient auth
-	 * @param {GuildMember} context message context
+	 * @param {CommandContext} context message context
 	 * @private
 	 */
-	isAllowed ({ member }){
-		for(const permission of this.options.requiredPermissions){
-			if(!member.hasPermission(permission)) return false
-		}
-		return true
-		// for(const { id: roleId } of Array.from(member.roles.values())){
-		// 	// if a user's authLevel is lower than required in means they have higher roles
-		// 	// and qualified to run command
-		// 	console.log(this.AUTH_LEVELS[roleId], roleId)
-		// 	if(this.AUTH_LEVELS[roleId] <= this.options.authLevel){
-		// 		return true
-		// 	}
-		// }
-		// return false
+	isAllowed ({ authLevel }){
+		if(authLevel <= this.options.requiredAuthLevel) return true
 	}
 
 	/**
@@ -72,7 +56,7 @@ class Command{
 		const { cooldown } = this.options
 
 		if(this.checkContext(context) && this.isAllowed(context)) {
-			if(this.ready) this._run(context)
+			if(this.ready) this._run(context).catch(() => context.message.reply(GENERIC_SOMETHING_WENT_WRONG))
 
 			if(cooldown !== 0){
 				this.ready = false
@@ -83,9 +67,7 @@ class Command{
 			}
 		}
 		else {
-			context.message.reply(`
-				مش مسموح لك تستخدم الكوماند دي
-			`)
+			context.message.reply(COMMAND_NOT_ALLOWED)
 		}
 	}
 
@@ -97,9 +79,13 @@ class Command{
 		// return true;
 	}
 
-	help (context){
 
-		const { message } = context
+	/**
+	 * Replies to message with proper help
+	 * @param {GuildMessage} message message to reply to
+	 */
+	help (message){
+
 		const { nOfParams, exampleUsage, description } = this.options
 
 		message.reply(`

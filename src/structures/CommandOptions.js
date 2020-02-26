@@ -12,15 +12,15 @@ class CommandOptions {
 	 * @param {string} name Command name
 	 * @param {number} [cooldown = 0] Time between calls to the same command, default 0 (in ms)
 	 * @param {number} nOfParams Numbers of parameters required for the command
-	 * @param {array} requiredPermissions Required Member Permissions
+	 * @param {number} requiredAuthLevel Required Member Permissions
 	 * @param {string} [description = 'Unavailable'] description Description of the command
 	 * @param {string} [exampleUsage = 'Unavailable'] How the command could be used in chat
 	 */
-	constructor (name, cooldown = 0, nOfParams = 2, requiredPermissions = [], description = `unavailable`, exampleUsage = `unavailable`){
+	constructor (name, cooldown = 0, nOfParams = 2, requiredAuthLevel = 4, description = `unavailable`, exampleUsage = `unavailable`){
 		this.name = name
 		this.cooldown = cooldown
 		this.nOfParams = nOfParams
-		this.requiredPermissions = requiredPermissions
+		this.requiredAuthLevel = requiredAuthLevel
 		this.description = description
 		this.exampleUsage = exampleUsage
 	}

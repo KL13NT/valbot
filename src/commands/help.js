@@ -4,8 +4,7 @@ const { CommandOptions } = require("../structures")
 class Help extends Command {
   constructor(client) {
 
-		const requiredPerms = []
-		const options = new CommandOptions(`help`, 0, 0, requiredPerms, `لو محتاج مساعدة`, `\`val! help\` او \`val! help command\``)
+		const options = new CommandOptions(`help`, 0, 0, 4, `لو محتاج مساعدة`, `\`val! help\` او \`val! help command\``)
     super(client, options)
   }
 

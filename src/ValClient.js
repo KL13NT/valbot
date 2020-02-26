@@ -1,11 +1,12 @@
 const { Client } = require(`discord.js`)
+const { deepFreeze } = require(`./utils/utils`)
 
 const fs = require(`fs`)
 const path = require(`path`)
 const Loaders = require(`./loaders`)
 const Listeners = require(`./listeners`)
 const ToxicityFilter = require(`./utils/InsultFiltering`)
-const Logger = new (require(`./utils/Logger`))(__dirname, `../logs`)
+const Logger = new (require(`./utils/Logger`))(path.resolve(__dirname, `../logs`))
 const FileUtils = require(`./utils/FileUtils`)
 
 
@@ -20,21 +21,29 @@ class ValClient extends Client {
 
 		this.isLoggedin = false
 		this.prefix = prefix || `val!`
-		this.importantChannels = {
+
+		this.commands = {}
+		this.warnedMembers = {}
+		this.mutedMembers = {}
+
+		this.IMPORTANT_CHANNELS = {
 			notifications: `587571479173005312`,
-			rules: `571718462179770369`
+			rules: `571718462179770369`,
+			reports: `682069852738945149`
 		}
-		this.importantRoles = {
+		this.IMPORTANT_ROLES = {
 			muted: `586839490102951936`
 		}
-		this.commands = {}
-		this.customPresences = [
+		this.CUSTOM_PRESENCES = [
 			{ message: `for val!`, type: `WAITING` },
 			{ message: `something?`, type: `PLAYING` },
 			{ message: `Dubstep`, type: `LISTENING` }
 		]
-		this.warnedMembers = {}
-		this.mutedMembers = {}
+
+
+		deepFreeze(this.IMPORTANT_CHANNELS)
+		deepFreeze(this.IMPORTANT_ROLES)
+		deepFreeze(this.CUSTOM_PRESENCES)
 
 		this.mutedChecker()
 	}
@@ -55,7 +64,7 @@ class ValClient extends Client {
 							const member = guild.members.find(member => member.id === mutedId)
 
 							if(member) {
-								member.removeRole(this.importantRoles.muted)
+								member.removeRole(this.IMPORTANT_ROLES.muted)
 								delete this.mutedMembers[mutedId]
 
 								this.notify(`<@${mutedId}> you have been unmuted. Enjoy your stay!`)
@@ -86,7 +95,7 @@ class ValClient extends Client {
 			if(warnings == 2){
 
 				message.reply(`you're getting muted for 15 minutes because of your toxic behaviour`)
-				member.addRole(this.importantRoles.muted)
+				member.addRole(this.IMPORTANT_ROLES.muted)
 
 				const muted = {
 					time: new Date().getTime(),
@@ -124,11 +133,11 @@ class ValClient extends Client {
 	}
 
 	async setPresence (){
-		const { customPresences, user } = this
+		const { CUSTOM_PRESENCES, user } = this
 
 		setInterval(() => {
 
-			const randomPresence = customPresences[Math.floor(Math.random() * customPresences.length)]
+			const randomPresence = CUSTOM_PRESENCES[Math.floor(Math.random() * CUSTOM_PRESENCES.length)]
 			user.setActivity(randomPresence.message, { type: randomPresence.type })
 
 			console.log(`Current presence: ${randomPresence.type} ${randomPresence.message}`)
@@ -157,9 +166,18 @@ class ValClient extends Client {
 
 	async notify (message){
 		this.guilds.find(guild => guild.name === `VALARIUM`)
-			.channels.find(ch => ch.id === this.importantChannels.notifications)
+			.channels.find(ch => ch.id === this.IMPORTANT_CHANNELS.notifications)
 			.send(message)
 	}
+
 }
+
+Object.defineProperty(ValClient, `constant1`, {
+	value: 33,
+	writable : false,
+	enumerable : true,
+	configurable : false
+})
+
 
 module.exports = ValClient
