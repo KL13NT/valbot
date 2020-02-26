@@ -24,7 +24,6 @@ A bot for the Valarium community discord server.
   - [Development Prerequisites](#Development)
 - [Behaviour](#Behaviour)
   - [Structure](#Structure)
-  - [How it all comes together](#How-it-all-comes-together)
 - [Development Environment](#Development-Environment)
   - [Linting](#Linting)
   - [Testing](#Testing)
@@ -159,18 +158,6 @@ yarn develop
 
 > If you're running the development one instead, `valarium-bot-development` will be the one to be online.
 
-## How it all comes together
-- index.js initialises a Database instance and a ValClient instance, invoking `init` in the process.
-- ValClient invokes `login`
-- ValClient invokes `initLoaders`
-- initLoaders goes through `/loaders/index.js` and initialises every loader in that file, before invoking `load` to start them.
-- ValClient invokes `initListeners`
-- initListeners works like `initLoaders`, except it doesn't invoke a `load` method, but rather each listener invokes `init` once initialised.
-- Listener `init` attaches each listener to the respective event on ValClient. See [Listener.init:25](./src/Structures/Listener.js#L25). Now when a listened-to event happens, the respective listener will handle it.
-- If the `onMessage` event is emitted, some checks happen on it to make sure whether it's a command. If it's a command, the respective command is invoked as `commandName.init()` which in turn calls `commandName.run` if the passed `context` is appropriate and everything goes well.
-- Commands are loaded by reading all file names in `/src/commands`, formatting them, and then initialising each exported command-class until one is needed.
-- `MessageListener` handles command interpretation from messages and calls the respective command.
-
 # Development Environment
 This section describes the linters used, testing frameworks, and their configuration.
 
@@ -183,4 +170,4 @@ Testing has not yet been implmeneted, but shall be done using Jest.
 # Where this project is headed
 I'm a lone wolf, working on and maintaining this project alone. If you have any questions contact me on Twitter [@Nabil_Tharwat16](https://twitter.com/Nabil_Tharwat16). As for the project, I'm willing to keep maintaining it and improving it as long as [Valarium](https://discord.gg/xrGAnTg) lives, who knows how long that could be.
 
-As for the upcoming features that I'm thinking of adding or am planning to add, you can look at the [Roadmap](./Roadmap.md) file.
+As for the upcoming features that I'm thinking of adding or am planning to add, you can look at the [Roadmap](https://github.com/KL13NT/valbot/blob/master/Roadmap.md) file.

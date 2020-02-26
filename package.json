@@ -5,14 +5,14 @@
   "main": "index.js",
   "repository": "git@github.com:KL13NT/valbot.git",
   "author": "KL13NT <Nabil.tharwat@outlook.com>",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "scripts": {
-    "docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./",
+    "docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs",
     "develop": "nodemon -r dotenv/config index.js dotenv_config_path=./env/dev/.env",
-		"start": "node index.js",
-		"localstart": "node -r dotenv/config index.js dotenv_config_path=./env/prod/.env",
-    "lint": "eslint --ext .js ./src --config .eslintrc.js --fix --global __ENV",
-    "test": "jest --colors --expand --logHeapUsage --config jest.config.js"
+    "start": "node index.js",
+    "localstart": "node -r dotenv/config index.js dotenv_config_path=./env/prod/.env",
+    "lint": "eslint --ext .js ./src --config .eslintrc.js --fix --global global",
+    "test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
@@ -26,6 +26,7 @@
     "babel-cli": "^6.26.0",
     "babel-eslint": "^11.0.0-beta.0",
     "babel-loader": "^8.0.5",
+    "clean-jsdoc-theme": "^2.2.11",
     "compression-webpack-plugin": "^3.0.0",
     "dblapi.js": "^2.3.0",
     "docco": "^0.8.0",
@@ -50,6 +51,6 @@
     "mongodb": "^3.2.7"
   },
   "engines": {
-    "node": "10.15.0"
+    "node": "12.16.0"
   }
 }

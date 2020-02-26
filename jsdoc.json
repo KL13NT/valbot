@@ -1,12 +1,26 @@
 {
 	"source": {
 		"exclude": [ "./node_modules" ],
-		"includePatterns": "(\\.\\/src\\/.+\\.js)|(\\.\\/index\\.js)",
-		"excludePatterns": "(\\.\\/src\\/.+\\/index\\.js)|(\\.\\/node_modules\\/.+\\.js)"
+		"includePatterns": "(\\.\\/src\\/.+\\.js)|(\\.\\/index\\.js)"
 	},
 	"sourceType": "module",
   "opts":{
-    "template": "node_modules/tui-jsdoc-template"
+		"theme_opts": {
+			"title": "ValBot",
+			"meta": [
+				"<meta name=\"author\" content=\"Nabil Tharwat\">",
+				"<meta name=\"description\" content=\"Valarium Bot!\">"
+			],
+			"menu": [
+				{
+					"title": "Github",
+					"link": "https://github.com/KL13NT/valbot",
+					"target": "_blank"
+				}
+			]
+		},
+		"readme": "./README.md",
+		"template": "node_modules/clean-jsdoc-theme"
   },
   "templates": {
     "logo": "./valarium-bot-prod.png",
