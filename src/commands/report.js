@@ -18,7 +18,7 @@ class Report extends Command {
   }
 
   async _run(context) {
-		const { reports } = this.client.IMPORTANT_CHANNELS
+		const { reports } = process.IMPORTANT_CHANNELS
 		const { message, member, params, channel } = context
 
 		try{

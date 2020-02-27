@@ -1,3 +1,4 @@
+const AUTH_LEVELS = require('../config/auth-levels.json')
 /**
  * @typedef {object} AuthLevels
  * @property {number} 0 Developers
@@ -13,14 +14,6 @@
  * @prop {AuthLevel} userAuthLevel Authorization level of user
  * @prop {array} params Params the command's _run is expecting
  */
-
-const AUTH_LEVELS = {
-	'571824921576079362': 0,
-	'571705643073929226': 1,
-	'571705797583831040': 2,
-	'586490288579543041': 3,
-	'571669944618450944': 4
-}
 
 class CommandContext{
 	/**

@@ -4,14 +4,14 @@ const { CommandOptions } = require("../structures")
 class Clear extends Command {
   constructor(client) {
 
-		const options = new CommandOptions(
-			`clear`,
-			1000,
-			1,
-			2,
-			`بتمسح رسايل بعدد n`,
-			`val! clear 5`
-		)
+		const options = new CommandOptions({
+			name: `clear`,
+			cooldown: 1000,
+			nOfParams: 1,
+			requiredAuthLevel: 2,
+			description: `بتمسح رسايل بعدد n`,
+			exampleUsage: `val! clear 5`
+		})
 
 		super(client, options)
   }

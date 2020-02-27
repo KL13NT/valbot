@@ -12,6 +12,54 @@ const { RichEmbed } = require('discord.js')
  * @property {function} callback
  */
 
+
+async function warn (message){
+	message.member.addRole()
+}
+
+async function mute (message){
+	const { IMPORTANT_ROLES, IMPORTANT_CHANNELS } = process
+
+	message.member.addRole(IMPORTANT_ROLES.muted)
+
+	const muted = {
+		time: new Date().getTime(),
+		id: message.member.id
+	}
+
+	process.MUTED_MEMBERS = { ...this.mutedMembers, id: muted }
+	deepFreeze(process.MUTED_MEMBERS)
+}
+
+async function notify (notificationText){
+	const { IMPORTANT_CHANNELS } = process
+
+	this.guilds.find(guild => guild.name === 'VALARIUM')
+		.channels.find(ch => ch.id === IMPORTANT_CHANNELS.notifications)
+		.send(notificationText)
+}
+
+/**
+ * Loads configuration/global objects instead of storing them on ValClient
+ */
+function setupConfig (){
+	process.CUSTOM_PRESENCES = require('../config/custom-presences.json')
+	process.IMPORTANT_CHANNELS = require('../config/important-channels.json')
+	process.IMPORTANT_ROLES = require('../config/important-roles.json')
+	process.AUTH_LEVELS = require('../config/auth-levels.json')
+	process.MUTED_MEMBERS = {}
+	process.WARNED_MEMBERS = {}
+
+	deepFreeze(process.CUSTOM_PRESENCES)
+	deepFreeze(process.IMPORTANT_CHANNELS)
+	deepFreeze(process.IMPORTANT_ROLES)
+	deepFreeze(process.AUTH_LEVELS)
+	deepFreeze(process.MUTED_MEMBERS)
+	deepFreeze(process.WARNED_MEMBERS)
+}
+
+
+
 /**
  *
  * @param {Message} message - message
@@ -92,5 +140,6 @@ module.exports = {
 	sendEmbed,
 	getChannelObject,
 	deepFreeze,
-	getRoleObject
+	getRoleObject,
+	setupConfig
 }

@@ -1,0 +1,8 @@
+{
+	"name": "string",
+	"cooldown": "number",
+	"nOfParams": "number",
+	"requiredAuthLevel": "number",
+	"description": "string",
+	"exampleUsage": "string"
+}

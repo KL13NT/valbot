@@ -20,17 +20,8 @@ class MessageListener extends Listener {
 		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== 'dm'){
 
 			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
-			if(this.ToxicityFilter && this.ToxicityFilter.ready){
-				if(await this.ToxicityFilter.classify(message.content)){
+			if(this.ToxicityFilter && this.ToxicityFilter.ready) await this.ToxicityFilter.classify(message)
 
-					message.reply(`لو سمحت متستعملش لغة بذيئة, انا بتكلم بالأدب اهو. لو عايز تعرف القوانين بتاعت المكان ده خش على <#${this.IMPORTANT_CHANNELS.rules}>`)
-
-					await this.autoWarn(message)
-					message.delete()
-
-					return
-				}
-			}
 
 			if(message.mentions.members.some(member => member.id === CLIENT_ID || member.id === DEV_CLIENT_ID)){
 				const greetingsRegex = /ها+ي+|هي|hai|hi|hui|hello|heyo|hiya|yo|مرحب/i
@@ -49,7 +40,7 @@ class MessageListener extends Listener {
 				else if(content.match(b7bkRegex))
 					message.reply('انا اول مره اشوف حد بيحب بوت!', {
 						files: [ {
-							attachment: path.resolve(__dirname, '../../b7bk.jpg'),
+							attachment: path.resolve(__dirname, '../media/b7bk.jpg'),
 							name: 'اول مره اشوف حد بيحب بوت.jpg'
 						} ]
 					})

@@ -2,10 +2,22 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 
 class Help extends Command {
+	/**
+	 * Constructs help command
+	 * @param {ValClient} client
+	 */
   constructor(client) {
-
-		const options = new CommandOptions(`help`, 0, 0, 4, `لو محتاج مساعدة`, `\`val! help\` او \`val! help command\``)
-    super(client, options)
+		super(
+			client,
+			new CommandOptions({
+				name: 'help',
+				cooldown: 0,
+				nOfParams: 0,
+				requiredAuthLevel: 4,
+				description: `لو محتاج مساعدة`,
+				c: `\`val! help\` او \`val! help command\``
+			})
+		)
   }
 
   async _run(context) {

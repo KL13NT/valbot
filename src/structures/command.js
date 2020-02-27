@@ -1,27 +1,18 @@
 const CommandContext = require('./CommandContext')
 const CommandOptions = require('./CommandOptions')
-const { getRoleObject } = require('../utils/utils')
 const { GENERIC_SOMETHING_WENT_WRONG, COMMAND_NOT_ALLOWED } = require('../utils/Errors')
 
 
-
-
-/**
- * Command Structure
- * @param {ValClient} client Valarium-bot client
- * @param {CommandOptions} options Command initialisation options
- * @property {boolean} ready Whether command can be used
- */
 
 class Command{
 	/**
 	 *
 	 * @param {ValClient} client
-	 * @param {*} options
+	 * @param {CommandOptions} options
 	 */
 	constructor (client, options) {
 
-		if(!(options instanceof CommandOptions)) throw Error('Command options invalid')
+		if(!(options instanceof CommandOptions) || !options.verifySchema()) throw Error('Command options invalid')
 
 		this.client = client
 		this.options = options

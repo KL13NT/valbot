@@ -1,28 +1,37 @@
-
 /**
- * Command Configuration Options
- * @prop {string} name Command name
- * @prop {number} cooldown Time between calls to the same command, default 0 (in ms)
- * @prop {number} authLevel Permissions requires for the command
+ * @typedef {object} CommandOptions
+ * @description Command Configuration 	
+ * @property {string} name Command name
+ * @property {number} [cooldown = 0] Time between calls to the same command, default 0 (in ms)
+ * @property {number} nOfParams Numbers of parameters required for the command
+ * @property {number} requiredAuthLevel Required Member Permissions
+ * @property {string} [description = 'Unavailable'] Description Description of the command
+ * @property {string} [exampleUsage = 'Unavailable'] How the command could be used in chat
+ * @method {boolean} verifySchema
  */
+
 
 class CommandOptions {
 	/**
-	 * Command Configuration Options
-	 * @param {string} name Command name
-	 * @param {number} [cooldown = 0] Time between calls to the same command, default 0 (in ms)
-	 * @param {number} nOfParams Numbers of parameters required for the command
-	 * @param {number} requiredAuthLevel Required Member Permissions
-	 * @param {string} [description = 'Unavailable'] description Description of the command
-	 * @param {string} [exampleUsage = 'Unavailable'] How the command could be used in chat
+	 *
+	 * @param {object} options
 	 */
-	constructor (name, cooldown = 0, nOfParams = 2, requiredAuthLevel = 4, description = `unavailable`, exampleUsage = `unavailable`){
-		this.name = name
-		this.cooldown = cooldown
-		this.nOfParams = nOfParams
-		this.requiredAuthLevel = requiredAuthLevel
-		this.description = description
-		this.exampleUsage = exampleUsage
+	constructor (options){
+		Object.assign(this, options)
+	}
+
+	/**
+	 * Verifies the passed options object matches schema
+	 * @returns boolean
+	 */
+	verifySchema (){
+		const schema = require('../config/command-options-schema.json')
+
+		for(const key in this){
+			if(typeof this[key] !== typeof schema[key]) return false
+		}
+
+		return true
 	}
 
 }
