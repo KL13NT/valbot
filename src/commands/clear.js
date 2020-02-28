@@ -2,8 +2,11 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 
 class Clear extends Command {
+	/**
+	 * Constructs help command
+	 * @param {ValClient} client
+	 */
   constructor(client) {
-
 		const options = new CommandOptions({
 			name: `clear`,
 			cooldown: 1000,

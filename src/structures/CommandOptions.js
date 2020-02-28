@@ -1,6 +1,6 @@
 /**
  * @typedef {object} CommandOptions
- * @description Command Configuration 	
+ * @description Command Configuration Options
  * @property {string} name Command name
  * @property {number} [cooldown = 0] Time between calls to the same command, default 0 (in ms)
  * @property {number} nOfParams Numbers of parameters required for the command
@@ -28,7 +28,7 @@ class CommandOptions {
 		const schema = require('../config/command-options-schema.json')
 
 		for(const key in this){
-			if(typeof this[key] !== typeof schema[key]) return false
+			if(typeof this[key] !== schema[key]) return false
 		}
 
 		return true

@@ -5,14 +5,14 @@ const { sendEmbed, getChannelObject } = require('../utils/utils.js')
 class Report extends Command {
   constructor(client) {
 
-		const options = new CommandOptions(
-			`report`,
-			10 * 1000,
-			2,
-			3,
-			`بتعمل ريبورت لرسالة حد بعتها و السبب. لازم الريبورت يتعمل في نفس التشانل. بتعمل منشن للشخص اللي عايز تعمله ريبورت بالشكل التالي:`,
-			`val! report @Sovereign Violation of rules`
-		)
+		const options = new CommandOptions({
+			name: `report`,
+			cooldown: 10 * 1000,
+			nOfParams: 2,
+			requiredAuthLevel: 3,
+			description: `بتعمل ريبورت لرسالة حد بعتها و السبب. لازم الريبورت يتعمل في نفس التشانل. بتعمل منشن للشخص اللي عايز تعمله ريبورت بالشكل التالي:`,
+			exampleUsage: `val! report @Sovereign Violation of rules`
+		})
 
 		super(client, options)
   }

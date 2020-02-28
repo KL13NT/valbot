@@ -1,5 +1,5 @@
 const path = require('path')
-const errors = require('../utils/Errors')
+const events = require('../config/events.json')
 
 const { CLIENT_ID, DEV_CLIENT_ID } = process.env
 const { Listener } = require('../structures')
@@ -70,16 +70,18 @@ class MessageListener extends Listener {
 			const split = content.split(' ')
 			const params = split.slice(2)
 
-			if(split.length < 2) message.reply(errors.COMMANDS_REQUIRE_2_PARAMS)
-			else if(command === undefined) message.reply(errors.COMMAND_DOES_NOT_EXIST)
-			else if(params.includes('help')) command.help(message)
-			else if(MessageListener.checkParams(command, params)){
+			//REFACTOR: refactor this mess
+			if(split.length < 2) message.reply(events.ERROR_COMMANDS_REQUIRE_2_PARAMS)
+			else if(command === undefined) message.reply(events.ERROR_COMMAND_DOES_NOT_EXIST)
+			else if(params.includes('help') && command) command.help(message)
+			else if(MessageListener.checkParams(command, params) && command.isReady){
 				const context = new CommandContext(this, message)
 				context.params = [ ...params ] //to delete old references to params and avoid memory leaks
 
 				command.run(context)
 			}
-			else message.reply(errors.INSUFFICIENT_PARAMS_PASSED)
+			else if (!command.isReady) message.reply(events.ERROR_COMMAND_NOT_READY)
+			else message.reply(events.ERROR_INSUFFICIENT_PARAMS_PASSED)
 
 
 		}

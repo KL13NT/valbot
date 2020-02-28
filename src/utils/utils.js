@@ -134,6 +134,17 @@ function deepFreeze (object) {
 	return Object.freeze(object)
 }
 
+/**
+ * Returns whether an element is in a set of elements
+ * @param {*} matcher element to check
+ * @param {array} possibilities possibilities
+ */
+function isOneOf(matcher, possibilities){
+	for(const possibility of possibilities){
+		if(matcher === possibility) return true
+	}
+}
+
 
 
 module.exports = {

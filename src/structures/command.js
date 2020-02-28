@@ -1,6 +1,11 @@
 const CommandContext = require('./CommandContext')
 const CommandOptions = require('./CommandOptions')
-const { GENERIC_SOMETHING_WENT_WRONG, COMMAND_NOT_ALLOWED } = require('../utils/Errors')
+const {
+	GENERIC_SOMETHING_WENT_WRONG,
+	COMMAND_NOT_ALLOWED,
+	GENERIC_CONTROLLED_COMMAND_CANCEL,
+	ERROR_GENERIC_SOMETHING_WENT_WRONG
+} = require('../config/events.json')
 
 
 
@@ -16,7 +21,7 @@ class Command{
 
 		this.client = client
 		this.options = options
-		this.ready = true
+		this.isReady = true
 
 	}
 
@@ -47,13 +52,13 @@ class Command{
 		const { cooldown } = this.options
 
 		if(this.checkContext(context) && this.isAllowed(context)) {
-			if(this.ready) this._run(context).catch(() => context.message.reply(GENERIC_SOMETHING_WENT_WRONG))
+			if(this.isReady) this._run(context).catch(err => context.message.reply(GENERIC_SOMETHING_WENT_WRONG) && console.log(err))
 
 			if(cooldown !== 0){
-				this.ready = false
+				this.isReady = false
 
-				setTimeout(() => {
-					this.ready = true
+				this.cooldownTimer = setTimeout(() => {
+					this.isReady = true
 				}, cooldown)
 			}
 		}
@@ -70,6 +75,17 @@ class Command{
 		// return true;
 	}
 
+	/**
+	 * cancels an ongoing command
+	 */
+	stop (context, isGraceful, error){
+		if(!isGraceful) context.message.reply(error || ERROR_GENERIC_SOMETHING_WENT_WRONG)
+		else context.message.reply(GENERIC_CONTROLLED_COMMAND_CANCEL)
+
+		this.isReady = true
+
+		clearTimeout(this.cooldownTimer)
+	}
 
 	/**
 	 * Replies to message with proper help

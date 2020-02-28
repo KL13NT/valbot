@@ -7,17 +7,16 @@ class Help extends Command {
 	 * @param {ValClient} client
 	 */
   constructor(client) {
-		super(
-			client,
-			new CommandOptions({
-				name: 'help',
-				cooldown: 0,
-				nOfParams: 0,
-				requiredAuthLevel: 4,
-				description: `لو محتاج مساعدة`,
-				c: `\`val! help\` او \`val! help command\``
-			})
-		)
+		const options = new CommandOptions({
+			name: 'help',
+			cooldown: 0,
+			nOfParams: 0,
+			requiredAuthLevel: 4,
+			description: `لو محتاج مساعدة`,
+			exampleUsage: `\`val! help\` او \`val! help command\``
+		})
+
+		super(client, options)
   }
 
   async _run(context) {
