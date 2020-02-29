@@ -11,7 +11,8 @@ class Report extends Command {
 			nOfParams: 2,
 			requiredAuthLevel: 3,
 			description: `بتعمل ريبورت لرسالة حد بعتها و السبب. لازم الريبورت يتعمل في نفس التشانل. بتعمل منشن للشخص اللي عايز تعمله ريبورت بالشكل التالي:`,
-			exampleUsage: `val! report @Sovereign Violation of rules`
+			exampleUsage: `val! report @Sovereign Violation of rules`,
+			extraParams: true
 		})
 
 		super(client, options)
@@ -19,14 +20,21 @@ class Report extends Command {
 
   async _run(context) {
 		const { reports } = process.IMPORTANT_CHANNELS
+		const { CLIENT_ID, DEV_CLIENT_ID } = process.env
 		const { message, member, params, channel } = context
 
 		try{
-			const reportedMember = message.mentions._members.first()
+			const mentions = Array.from(message.mentions._members.values())
+			const reportedMember = mentions[0]
 
-			if(message.mentions.length === 0) return message.reply('لازم تعمل منشن للشخص اللي بتعمله ريبورت')
+			if(message.mentions.everyone) return message.reply('مينفعش تعمل ريبورت للسيرفر كله, خاف على نفسك بقى عشان معملكش انت ريبورت')
+			if(mentions.length === 0) return message.reply('لازم تعمل منشن للشخص اللي بتعمله ريبورت')
+			if(mentions.length > 1) return message.reply('يبشا ريبورت لواحد بس, هي حفلة؟ :PutinFacepalms:')
 			if(reportedMember.id === member.id) return message.reply('مساء الهزار, ريبورت لنفسك؟')
+			if(reportedMember.id === CLIENT_ID || reportedMember.id === DEV_CLIENT_ID) return message.reply('متهزرش معايا عشان خلقي ضيق')
+			if(!/<@.+>/.test(message.content.split(' ')[2])) return message.reply('المنشن لازم تكون اول باراميتير')
 
+			const reason = message.content.split(' ').slice(3).join(' ')
 			const embedOptions = {
 					embedOptions: {
 						title: 'Message Report',
@@ -47,7 +55,7 @@ class Report extends Command {
 						},
 						{
 							name: 'Reason',
-							value: params[1]
+							value: reason
 						},
 						{
 							name: 'Channel',

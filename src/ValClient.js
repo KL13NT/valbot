@@ -19,7 +19,7 @@ class ValClient extends Client {
 		super(options)
 
 		this.isLoggedin = false
-		this.prefix = prefix || 'val!'
+		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'valdev!': 'val!'
 
 		this.commands = {}
 
@@ -28,7 +28,7 @@ class ValClient extends Client {
 	async init (token = process.env.AUTH_TOKEN) {
 
 		try{
-			await super.login(token)
+			await this.login(token)
 
 			setupConfig()
 			this.initLoaders()
@@ -41,8 +41,8 @@ class ValClient extends Client {
 
 		}
 		catch(err){
-			console.log('Something went wrong when initiating ValClient. Fix it and try again.', err)
-			process.exit()
+			console.log('Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying', err.error)
+			this.init(token)
 		}
 
 	}
@@ -53,7 +53,7 @@ class ValClient extends Client {
 
 		function setCurrentPresence (){
 			const randomPresence = CUSTOM_PRESENCES[Math.floor(Math.random() * CUSTOM_PRESENCES.length)]
-			user.setActivity(randomPresence.message, { type: randomPresence.type })
+			user.setActivity(randomPresence.message, { type: randomPresence.type }).catch(err => console.log(err))
 
 			console.log(`Current presence: ${randomPresence.type} ${randomPresence.message}`)
 		}

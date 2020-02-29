@@ -4,5 +4,6 @@
 	"nOfParams": "number",
 	"requiredAuthLevel": "number",
 	"description": "string",
-	"exampleUsage": "string"
+	"exampleUsage": "string",
+	"extraParams": "boolean"
 }

@@ -30,6 +30,7 @@ class CommandContext{
 			this.guild = message.guild
 			this.params = []
 			this.authLevel = this.determineAuthLevel()
+			this.message.content = this.message.content.replace(/\s+/g, ' ')
 		}
 	}
 

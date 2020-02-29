@@ -14,7 +14,7 @@ class MessageListener extends Listener {
 	}
 
 	async onMessage (message){
-		const commandRegex = /(val!\s)([a-zA-Z؀-ۿ]+)(\s?)/
+		const commandRegex = RegExp(`(${this.prefix}\\s+)([a-zA-Z؀-ۿ]+)(\\s+)?`)
 		const { content, member, author, type } = message
 
 		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== 'dm'){
@@ -58,16 +58,14 @@ class MessageListener extends Listener {
 			const matchGroup = content.match(commandRegex)
 
 			if(matchGroup === null){
-				message.reply(`
-					في حاجة انا مش فاهمها ف اللي انت كتبته, جرب تاني
-				`)
+				message.reply(events.GENERIC_COMMAND_NOT_UNDERSTOOD)
 
 				return
 			}
 
 			const [ ,, commandName ] = matchGroup
 			const command = this.commands[ commandName ] //2nd match group, actual command name
-			const split = content.split(' ')
+			const split = content.replace(/\s+/g, ' ').split(' ')
 			const params = split.slice(2)
 
 			//REFACTOR: refactor this mess
@@ -89,7 +87,10 @@ class MessageListener extends Listener {
 
 
 	static checkParams (command, params){
-		return command.options.nOfParams === params.length
+		const { nOfParams, extraParams } = command.options
+
+		if(extraParams && params.length >= nOfParams) return true
+		else if(!extraParams) return params.length === nOfParams
 	}
 
 

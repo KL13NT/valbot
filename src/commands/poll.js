@@ -1,6 +1,6 @@
 const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
-const { getChannelObject } = require('../utils/utils')
+const { getChannelObject, sendEmbed } = require('../utils/utils')
 const { GENERIC_COMMAND_GRACEFUL_ERROR, ERROR_GENERIC_SOMETHING_WENT_WRONG, GENERIC_CONTROLLED_COMMAND_CANCEL } = require('../config/events.json')
 
 class Poll extends Command {
@@ -29,39 +29,93 @@ class Poll extends Command {
 		const pollsChannel = getChannelObject(this.client, polls)
 
 		const poll = {
+			title: '',
 			content: '',
 			reactions: [],
 			message: {}
 		}
 
-		message.reply('ابعت بقى رسالة فيها محتوى الاستفتاء و حط الريأكشنز اللي انت عايزها عليها')
+		message.reply('ابعت بقى رسالة فيها عنوان الاستفتاء')
 
-		let isCancelled = false
 		try{
-			await channel.awaitMessages(collected => {
+			const collector = channel.createMessageCollector(collected => collected.member.id === member.id)
+
+			collector.on('collect', collected => {
 				if(collected.member.id === member.id){
-					if(collected.content === 'cancel') isCancelled = true
+					if(collected.content === 'cancel') {
+						this.stop(context, true)
+						collector.stop()
+					}
+					else if(poll.title === ''){
+						message.reply('حلو, ابعتلي بقى تفاصيل الاستفتاء ده')
+						poll.title = collected.content
+					}
 					else if(poll.content === ''){
-						poll.message = collected
 						poll.content = collected.content
-						message.reply('حلو قدامك 60 ثانية عشان تقول فينيش او كانسل بنفسك, ريأكت عليها بقى و لما تخلص اكتب finish او اعمل cancel')
+						message
+							.reply('تمام, دلوقتي بقى ريأكت على الرسالة دي بالريأكشنز اللي انت عايزها و لما تخلص اكتبلي اي حاجة وانا هفهم')
+							.then(sent => poll.message = sent)
+					}
+					else{
+						message.reply('اشطة عليك, ثواني بظبط كبايتين شاي')
+						collector.stop()
 					}
 				}
-			}, { max: 4 })
+			})
 
-			if(isCancelled) this.stop(context, true)
-			else if(poll.content === '') this.stop(context, false, GENERIC_COMMAND_GRACEFUL_ERROR)
-			else {
+			collector.on('end', collected => {
+				if(poll.content === '' || poll.title === '') this.stop(context, false, GENERIC_COMMAND_GRACEFUL_ERROR)
+				else {
 
-				poll.reactions = Array.from(poll.message.reactions.values()).map(reaction => reaction.emoji.id? reaction.emoji.id: reaction.emoji.name)
-				message.reply('بعمل الاستفتاء اهو')
+					poll.reactions = Array
+						.from(poll.message.reactions.values())
+						.map(reaction => reaction.emoji.id || reaction.emoji.name)
 
-				pollsChannel
-					.send(poll.content)
-					.then(pollMessage => poll.reactions.forEach(reaction => pollMessage.react(reaction)))
-					.catch(err => this.stop(context, false))
+					message.reply('بعمل الاستفتاء اهو')
 
-			}
+					const embedOptions = {
+						embedOptions: {
+							title: `${poll.title} Poll`,
+							description: `${message.member} has started a new poll`
+						},
+						fields: [
+							{
+								name: 'Moderator',
+								value: message.member,
+								inline: true
+							},
+							{
+								name: 'Date',
+								value: new Date().toUTCString(),
+								inline: true
+							},
+							{
+								name: 'Description',
+								value: poll.content
+							},
+							{
+								name: 'CC',
+								value: `<@&571705643073929226> <@&571705797583831040> <@&586805502223187968> <@&586805619499991050>`
+							},
+						],
+						channels: [pollsChannel]
+					}
+
+					const mentions = [
+						'<@&571705643073929226>',
+						'<@&571705797583831040>',
+						'<@&586805502223187968>',
+						'<@&586805619499991050>'
+					]
+
+					const finalMessage = `${poll.title}\n${poll.content}\n${mentions.join(' ')}`
+					pollsChannel.send(finalMessage).then()
+					sendEmbed(this.client, embedOptions).catch(err => {
+						console.log(err)
+						message.reply('في حاجة حصلت وانا بعمل الاستفتاء. جرب تاني او بص ف اللوجز')
+					})
+				}
+			})
 		}
 		catch(err){
 			console.log(err)

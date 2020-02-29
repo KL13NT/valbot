@@ -58,6 +58,14 @@ function setupConfig (){
 	deepFreeze(process.WARNED_MEMBERS)
 }
 
+/**
+ * Reacts with a given array of reactions to a message
+ * @param {Message} message
+ * @param {string} reactions
+ */
+function react (message, reactions = []){
+	reactions.forEach(reaction => message.react(reaction).catch(err => console.log(err)))
+}
 
 
 /**
@@ -65,24 +73,23 @@ function setupConfig (){
  * @param {Message} message - message
  * @param {EmbedOptions} options - Destructured object
  */
-async function sendEmbed (message, { member, embedOptions, fields, attachments, channels, callback }) {
+async function sendEmbed (message, { member, embedOptions, fields, attachments, channels, reactions = [], callback }) {
 	try{
 		const embed = new RichEmbed(embedOptions)
-		embed.setThumbnail('https://raw.githubusercontent.com/KL13NT/valbot/cab70d78f01ad7b08c6b57ebb1494d3e30da798e/botlogo.png?token=AE6X4CRRM6XC2WQMSVJESSS6L52YM')
+		embed.setThumbnail('https://github.com/KL13NT/valbot/raw/development/src/media/valarium-bot-prod.png')
 
 		if(fields)
 			fields.forEach(field =>
-				field.name === 'Moderator' || field.name === 'Member'
+				field.inline || field.name === 'Moderator' || field.name === 'Member'
 					? embed.addField(field.name, field.value, true)
 					: embed.addField(field.name, field.value))
 
 		if(attachments) attachments.forEach(attachment => embed.attachFile(attachment.path))
-		if(channels) channels.forEach(channel => channel.send(embed))
-
+		if(channels) channels.forEach(channel => channel.send(embed).then(sent => react(sent, reactions)))
 
 		if(member){
 			const DMChannel = await member.createDM()
-			DMChannel.send(embed)
+			DMChannel.send(embed).then(sent => react(sent, reactions))
 		}
 
 		if(callback) callback(embed)
@@ -139,7 +146,7 @@ function deepFreeze (object) {
  * @param {*} matcher element to check
  * @param {array} possibilities possibilities
  */
-function isOneOf(matcher, possibilities){
+function isOneOf (matcher, possibilities){
 	for(const possibility of possibilities){
 		if(matcher === possibility) return true
 	}
