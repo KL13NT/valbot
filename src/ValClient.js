@@ -25,10 +25,10 @@ class ValClient extends Client {
 
 	async init (token = process.env.AUTH_TOKEN, retry = 0) {
 		try{
-			await this.login(token)
 			setupConfig()
-			this.initLoaders()
+			this.login(token)
 			this.initListeners()
+			this.initLoaders()
 
 			if(process.env.mode !== 'DEVELOPMENT') this.ToxicityFilter = await new ToxicityFilter(0.8)
 
@@ -81,6 +81,8 @@ class ValClient extends Client {
 		for (const listener in Listeners) {
 			new Listeners[listener](this).init()
 		}
+
+		console.log(this.listeners('ready'))
 	}
 
 }

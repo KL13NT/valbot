@@ -12,7 +12,8 @@ class Poll extends Command {
 			nOfParams: 0,
 			requiredAuthLevel: 2,
 			description: `بتعمل استفتاء جديد, خاصة بالمسؤولين فقط`,
-			exampleUsage: `val! poll`
+			exampleUsage: `val! poll`,
+			extraParams: false
 		})
 
 		super(client, options)
@@ -98,7 +99,8 @@ class Poll extends Command {
 								value: `<@&571705643073929226> <@&571705797583831040> <@&586805502223187968> <@&586805619499991050>`
 							},
 						],
-						channels: [pollsChannel]
+						channels: [pollsChannel],
+						reactions: poll.reactions
 					}
 
 					const mentions = [
@@ -108,12 +110,17 @@ class Poll extends Command {
 						'<@&586805619499991050>'
 					]
 
-					const finalMessage = `${poll.title}\n${poll.content}\n${mentions.join(' ')}`
-					pollsChannel.send(finalMessage).then()
-					sendEmbed(this.client, embedOptions).catch(err => {
-						console.log(err)
-						message.reply('في حاجة حصلت وانا بعمل الاستفتاء. جرب تاني او بص ف اللوجز')
-					})
+					const finalMessage = `**${poll.title}**\n${poll.content}\n${mentions.join(' ')}`
+
+					const errorHandler = err => (console.log(err), message.reply('في حاجة حصلت وانا بعمل الاستفتاء. جرب تاني او بص ف اللوجز'))
+					const reactByAll = sentPollMessage => poll.reactions.forEach(reaction => sentPollMessage.react(reaction).catch(errorHandler))
+
+					if(poll.content.length > 1000) {
+						if(finalMessage.length > 2000) return message.reply(`احم... بص, الرسالة طويلة اوي و مش هعرف ابعتها. قصر الموضوع شوية و جرب تاني. محتاج تشيل ${finalMessage.length - 2000} حرف`)
+
+						pollsChannel.send(finalMessage).then(reactByAll).catch(errorHandler)
+					}
+					else sendEmbed(message, embedOptions).catch(errorHandler)
 				}
 			})
 		}
