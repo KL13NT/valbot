@@ -1,10 +1,10 @@
-const { Loader, Command } = require(`../structures`)
-const Commands = require(`../commands`)
+const { Loader, Command } = require('../structures')
+const Commands = require('../commands')
 
 /**
  * Loads commands based on commands/index
  */
-module.exports = class CommandsLoader extends Loader{
+class CommandsLoader extends Loader{
 	/**
 	 *
 	 * @param {ValClient} client used to attach loaded commands
@@ -22,3 +22,5 @@ module.exports = class CommandsLoader extends Loader{
 		})
 	}
 }
+
+module.exports = CommandsLoader

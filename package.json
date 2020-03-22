@@ -5,10 +5,12 @@
   "main": "index.js",
   "repository": "git@github.com:KL13NT/valbot.git",
   "author": "KL13NT <Nabil.tharwat@outlook.com>",
-  "license": "GPL-3.0-only",
+	"license": "GPL-3.0-only",
+	"types": "index.d.ts",
   "scripts": {
     "docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs",
     "develop": "nodemon -r dotenv/config index.js dotenv_config_path=./dev.env",
+    "inspect": "nodemon --inspect -r dotenv/config index.js dotenv_config_path=./dev.env",
     "start": "node index.js",
     "localstart": "node -r dotenv/config index.js dotenv_config_path=./prod.env",
     "lint": "eslint --ext .js ./src --config .eslintrc.js --fix --global global",

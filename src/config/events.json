@@ -9,5 +9,6 @@
 	"GENERIC_COMMAND_GRACEFUL_ERROR": "مش هينفع كده, في حاجة انت عملتها غلط, جرب تاني",
 	"NOTIFY_UNMUTED": "تقدر تتكلم دلوقتي. متعملهاش تاني بقى عشان مزعلش منك",
 	"WARN_BAD_LANGUAGE": "لو سمحت متستخدمش لغة بذيئة. ده تحذير. لو جالك 3 تحذيرات هيتعملك mute",
-	"GENERIC_COMMAND_NOT_UNDERSTOOD": "في حاجة انا مش فاهمها في اللي انت كتبته. جرب تاني او قول للديف لو تعتقد ان دي حاجة لازم تشتغل وانت عاملها صح"
+	"GENERIC_COMMAND_NOT_UNDERSTOOD": "في حاجة انا مش فاهمها في اللي انت كتبته. جرب تاني او قول للديف لو تعتقد ان دي حاجة لازم تشتغل وانت عاملها صح",
+	"DATABASE_INIT_FAILED": "Failed to initialise database, retrying"
 }

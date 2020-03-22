@@ -2,9 +2,11 @@ const CommandContext = require('./CommandContext')
 const CommandOptions = require('./CommandOptions')
 const {
 	GENERIC_SOMETHING_WENT_WRONG,
+	ERROR_COMMAND_NOT_READY,
 	COMMAND_NOT_ALLOWED,
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
-	ERROR_GENERIC_SOMETHING_WENT_WRONG
+	ERROR_GENERIC_SOMETHING_WENT_WRONG,
+	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
 
@@ -34,41 +36,54 @@ class Command{
 		if(authLevel <= this.options.requiredAuthLevel) return true
 	}
 
-	/**
-	 * Enforces command code to create context correctly
-	 * @param {CommandContext} context message context
-	 * @private
-	 */
-	checkContext (context){
-		return context instanceof CommandContext
-	}
 
 	/**
 	 * Determines whether user is allowed to use this command
 	 * @param {CommandContext} context message context
 	 * @private
 	 */
-	run (context){
+	run (message){
+		message.content = message.content.replace(/\s+/g, ' ')
+
+		const split = message.content.split(' ')
+		const params = split.slice(2)
+
+		if(this.enforceParams(params, message) === true){
+			const context = new CommandContext(this, message)
+			context.params = params
+
+			if(this.isAllowed(context)) this.enforceCooldown(context)
+			else return message.reply(COMMAND_NOT_ALLOWED)
+		}
+	}
+
+
+	enforceCooldown (context){
 		const { cooldown } = this.options
 
-		if(this.checkContext(context) && this.isAllowed(context)) {
-			if(this.isReady) this._run(context).catch(err => context.message.reply(GENERIC_SOMETHING_WENT_WRONG) && console.log(err))
+		if(this.isReady) this._run(context).catch(err => context.message.reply(GENERIC_SOMETHING_WENT_WRONG) && console.log(err))
+		else context.message.reply(ERROR_COMMAND_NOT_READY)
 
-			if(cooldown !== 0){
-				this.isReady = false
+		if(cooldown !== 0){
+			this.isReady = false
 
-				this.cooldownTimer = setTimeout(() => {
-					this.isReady = true
-				}, cooldown)
-			}
+			this.cooldownTimer = setTimeout(() => {
+				this.isReady = true
+			}, cooldown)
 		}
-		else {
-			context.message.reply(COMMAND_NOT_ALLOWED)
-		}
+	}
+
+	enforceParams (params, message){
+		const { nOfParams, extraParams } = this.options
+
+		if(params.length < 1 || (params.length >= nOfParams && !extraParams)) return message.reply(ERROR_INSUFFICIENT_PARAMS_PASSED)
+		else if(params[0] === 'help') return this.help(message)
+		else return true
 	}
 
 	/**
 	 * Responsible for running commands. Should be overridden in each command.
+	 * @public
 	 * @param {CommandContext} context
 	 */
 	async _run (context) {

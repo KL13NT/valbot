@@ -63,7 +63,7 @@ class Poll extends Command {
 				}
 			})
 
-			collector.on('end', collected => {
+			collector.on('end', () => {
 				if(poll.content === '' || poll.title === '') this.stop(context, false, GENERIC_COMMAND_GRACEFUL_ERROR)
 				else {
 

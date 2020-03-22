@@ -1,4 +1,4 @@
 module.exports = {
-	// ListenersLoader: require('./ListenersLoader'),
-	CommandsLoader: require(`./CommandsLoader`)
+	DatabaseLoader: require('./DatabaseLoader'),
+	CommandsLoader: require('./CommandsLoader')
 }

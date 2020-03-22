@@ -25,7 +25,8 @@ class Report extends Command {
 
 		try{
 			const mentions = Array.from(message.mentions._members.values())
-			const reportedMember = mentions[0]
+			const [ reportedMember ] = mentions
+			const reason = message.content.split(' ').slice(3).join(' ')
 
 			if(message.mentions.everyone) return message.reply('مينفعش تعمل ريبورت للسيرفر كله, خاف على نفسك بقى عشان معملكش انت ريبورت')
 			if(mentions.length === 0) return message.reply('لازم تعمل منشن للشخص اللي بتعمله ريبورت')
@@ -34,7 +35,6 @@ class Report extends Command {
 			if(reportedMember.id === CLIENT_ID || reportedMember.id === DEV_CLIENT_ID) return message.reply('متهزرش معايا عشان خلقي ضيق')
 			if(!/<@.+>/.test(message.content.split(' ')[2])) return message.reply('المنشن لازم تكون اول باراميتير')
 
-			const reason = message.content.split(' ').slice(3).join(' ')
 			const embedOptions = {
 					embedOptions: {
 						title: 'Message Report',
@@ -55,7 +55,7 @@ class Report extends Command {
 						},
 						{
 							name: 'Reason',
-							value: reason
+							value: !/\S/.test(reason)? "Unspecified": reason
 						},
 						{
 							name: 'Channel',
@@ -65,7 +65,6 @@ class Report extends Command {
 							name: 'CC',
 							value: `<@&571705643073929226> <@&571705797583831040>`
 						},
-
 					],
 					channels: [getChannelObject(this.client, reports)]
 				}

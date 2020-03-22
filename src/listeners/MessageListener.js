@@ -1,9 +1,9 @@
 const path = require('path')
-const events = require('../config/events.json')
 
 const { CLIENT_ID, DEV_CLIENT_ID } = process.env
-const { Listener } = require('../structures')
 const { CommandContext } = require('..')
+const { Listener } = require('../structures')
+const { GENERIC_COMMAND_NOT_UNDERSTOOD, ERROR_COMMAND_DOES_NOT_EXIST } = require('../config/events.json')
 
 class MessageListener extends Listener {
 	constructor (client) {
@@ -33,7 +33,6 @@ class MessageListener extends Listener {
 					'انتوا لو قاصدين تزلوني عشان مش فاهم انتوا كاتبين ايه مش هتعملوا فيا كده',
 					'لا بص, انا اه بعرف ارد على هاي بس متوصلش بيك الجرأة تفتكر اني بوت ذكي للدرجة دي يعني, هما كام if اللي معمولينلي, خف عليا شوية بلز',
 					'خنزير, عليا الطلاق خنزير :cry:'
-
 				]
 
 				if(content.match(greetingsRegex)) message.reply('هاي يصحب, اخبارك ايه؟')
@@ -57,31 +56,14 @@ class MessageListener extends Listener {
 		async function commandify (){
 			const matchGroup = content.match(commandRegex)
 
-			if(matchGroup === null){
-				message.reply(events.GENERIC_COMMAND_NOT_UNDERSTOOD)
+			if(matchGroup === null) return message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD)
 
-				return
-			}
 
 			const [ ,, commandName ] = matchGroup
 			const command = this.commands[ commandName ] //2nd match group, actual command name
-			const split = content.replace(/\s+/g, ' ').split(' ')
-			const params = split.slice(2)
 
-			//REFACTOR: refactor this mess
-			if(split.length < 2) message.reply(events.ERROR_COMMANDS_REQUIRE_2_PARAMS)
-			else if(command === undefined) message.reply(events.ERROR_COMMAND_DOES_NOT_EXIST)
-			else if(params.includes('help') && command) command.help(message)
-			else if(MessageListener.checkParams(command, params) && command.isReady){
-				const context = new CommandContext(this, message)
-				context.params = [ ...params ] //to delete old references to params and avoid memory leaks
-
-				command.run(context)
-			}
-			else if (!command.isReady) message.reply(events.ERROR_COMMAND_NOT_READY)
-			else message.reply(events.ERROR_INSUFFICIENT_PARAMS_PASSED)
-
-
+			if(command === undefined) return message.reply(ERROR_COMMAND_DOES_NOT_EXIST)
+			else command.run(message)
 		}
 	}
 

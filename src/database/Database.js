@@ -1,50 +1,48 @@
-const { MongoClient } = require(`mongodb`)
+const { MongoClient } = require('mongodb')
+const { DATABASE_INIT_FAILED } = require('../config/events.json')
 
 
-/**
- * @constructor
- * @param { String } DB_HOST
- * @param { String } DB_NAME
- */
-
-module.exports = class Database extends MongoClient{
+class Database extends MongoClient{
+	/**
+	 * @param { string } host
+	 * @param { string } name
+	 */
 	constructor (host = process.env.DB_HOST, name = process.env.DB_NAME) {
 		super(host, { useNewUrlParser: true })
 
 		this.host = host
 		this.name = name
+		this.collections = []
 		this.isReady = false
 
 	}
 
 	async init () {
 		try {
-			this.isReady = await this.initDB()
-      
-			if (!this.isReady) throw Error(`Couldn't initalise DB`)
-
-			return true
-		}
-		catch (err) {
-			console.log(err)
-		}
-	}
-
-	async initDB () {
-		try {
+			console.log('init databse')
 			await this.connect()
 
-			this._db = this.db(this.NAME)
-			if (typeof this._db !== `undefined`) return true
-      
-			return false
+			this._db = this.db(this.name)
+
+			if (typeof this._db !== 'undefined') {
+				this.collections = await this._db.collections()
+				this.isReady = true
+			}
+
 		}
 		catch (err) {
 			console.log(err)
 		}
 	}
 
-	async updateWarnings (){
-    
+	getDb (){
+		return this.db(this.name)
+	}
+
+	ready (){
+		return this.isReady
 	}
 }
+
+
+module.exports = Database

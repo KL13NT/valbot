@@ -19,7 +19,7 @@ class ToxicityLoader {
 
 		this.isReady = false
 
-		toxicity.load(threshold).then(model => {
+		toxicity.load(threshold, this.labels).then(model => {
 			this.classifier = model
 			this.isReady = true
 
@@ -54,7 +54,6 @@ class ToxicityLoader {
 
 				message.reply(WARN_BAD_LANGUAGE)
 				message.delete()
-
 
 				delete process.WARNED_MEMBERS[id]
 			}

@@ -1,4 +1,5 @@
 const { RichEmbed } = require('discord.js')
+const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
 
 
 
@@ -15,28 +16,6 @@ const { RichEmbed } = require('discord.js')
 
 async function warn (message){
 	message.member.addRole()
-}
-
-async function mute (message){
-	const { IMPORTANT_ROLES, IMPORTANT_CHANNELS } = process
-
-	message.member.addRole(IMPORTANT_ROLES.muted)
-
-	const muted = {
-		time: new Date().getTime(),
-		id: message.member.id
-	}
-
-	process.MUTED_MEMBERS = { ...this.mutedMembers, id: muted }
-	deepFreeze(process.MUTED_MEMBERS)
-}
-
-async function notify (notificationText){
-	const { IMPORTANT_CHANNELS } = process
-
-	this.guilds.find(guild => guild.name === 'VALARIUM')
-		.channels.find(ch => ch.id === IMPORTANT_CHANNELS.notifications)
-		.send(notificationText)
 }
 
 /**
@@ -104,11 +83,15 @@ async function sendEmbed (message, { member, embedOptions, fields, attachments, 
 /**
  * @param {ValClient} client
  * @param {string} channelId
+ * @returns {GuildChannel}
  */
 function getChannelObject (client, channelId){
+	const isDevelopment = process.env.MODE === 'DEVELOPMENT'
+	const testChannelId = process.IMPORTANT_CHANNELS.test
+
 	return client.guilds
 		.find(guild => guild.name === 'VALARIUM').channels
-		.find(ch => ch.id === channelId)
+		.find(ch => isDevelopment? ch.id === testChannelId: ch.id === channelId)
 }
 
 
