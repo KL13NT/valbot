@@ -76,8 +76,8 @@ class Command{
 	enforceParams (params, message){
 		const { nOfParams, extraParams } = this.options
 
-		if((params.length < 1 && nOfParams >= 1) || (params.length > nOfParams && !extraParams)) return message.reply(ERROR_INSUFFICIENT_PARAMS_PASSED)
-		else if(params[0] === 'help') return this.help(message)
+		if(params[0] === 'help') return this.help(message)
+		else if((params.length < 1 && nOfParams >= 1) || (params.length > nOfParams && !extraParams)) return message.reply(ERROR_INSUFFICIENT_PARAMS_PASSED)
 		else return true
 	}
 

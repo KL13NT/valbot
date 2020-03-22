@@ -10,7 +10,6 @@ class MessageListener extends Listener {
 		super(client, [
 			'message'
 		])
-
 	}
 
 	async onMessage (message){
@@ -66,16 +65,6 @@ class MessageListener extends Listener {
 			else command.run(message)
 		}
 	}
-
-
-	static checkParams (command, params){
-		const { nOfParams, extraParams } = command.options
-
-		if(extraParams && params.length >= nOfParams) return true
-		else if(!extraParams) return params.length === nOfParams
-	}
-
-
 }
 
 module.exports = MessageListener
