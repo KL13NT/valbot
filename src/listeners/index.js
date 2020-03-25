@@ -1,5 +1,6 @@
 module.exports = {
+	ClientReadyListener: require('./ClientReadyListener'),
 	MessageListener: require('./MessageListener'),
 	NewGuildMemberListener: require('./NewGuildMemberListener'),
-	ClientReadyListener: require('./ClientReadyListener')
+	ReactionRolesListener: require('./ReactionRolesListener')
 }

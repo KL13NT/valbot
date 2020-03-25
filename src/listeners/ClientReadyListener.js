@@ -13,7 +13,10 @@ class ClientReadyListener extends Listener {
 	}
 
 	async onReady (){
+		console.log('Client ready')
 		this.setPresence()
+		this.initLoaders()
+		this.ready = true
 	}
 
 }

@@ -3,4 +3,5 @@ module.exports = [
 	require(`./help`),
 	require('./report'),
 	require('./poll'),
+	require('./reactionroles')
 ]

@@ -3,7 +3,7 @@ const CommandOptions = require('./CommandOptions')
 const {
 	GENERIC_SOMETHING_WENT_WRONG,
 	ERROR_COMMAND_NOT_READY,
-	COMMAND_NOT_ALLOWED,
+	ERROR_COMMAND_NOT_ALLOWED,
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
 	ERROR_GENERIC_SOMETHING_WENT_WRONG,
 	ERROR_INSUFFICIENT_PARAMS_PASSED
@@ -53,7 +53,7 @@ class Command{
 			context.params = params
 
 			if(this.isAllowed(context)) this.enforceCooldown(context)
-			else return message.reply(COMMAND_NOT_ALLOWED)
+			else return message.reply(ERROR_COMMAND_NOT_ALLOWED)
 		}
 	}
 
@@ -108,13 +108,14 @@ class Command{
 	 */
 	help (message){
 
-		const { nOfParams, exampleUsage, description } = this.options
+		const { name, requiredAuthLevel, nOfParams, exampleUsage, description } = this.options
 
 		message.reply(`
-			معلومات عن ${this.options.name}:
+			معلومات عن ${name}:
 			الاستعمال:\n\`${exampleUsage}\`
 			الوظيفة:\n\`${description}\`
 			بتاخد كام باراميتير\n\`${nOfParams}\`
+			اقل مستوى أمني مسموح بيه \n\`${requiredAuthLevel}\`
 		`)
 
 	}

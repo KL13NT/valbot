@@ -20,7 +20,10 @@ module.exports = class Listener{
 		this.events = events
 	}
 
+	_init (){}
+
 	init () {
+		this._init()
 		this.events.forEach(event => {
 			this.client.on(event, this[`on${capitalise(event)}`])
 		})

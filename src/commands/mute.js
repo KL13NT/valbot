@@ -1,11 +1,11 @@
-const { Command } = require(`../structures/Command`)
+const { Command, CommandOptions } = require(`../structures`)
 // import { enforceCommandArguments, formatMentionReason } from '../utils/utils'
 // import { unmute } from './unmute'
 // import { sendEmbedNotification } from './unmute'
 
 class Mute extends Command {
   constructor (client){
-    const commandOptions = {
+    const commandOptions = new CommandOptions({
       name: `mute`,
 			cooldown: 10 * 1000,
 			nOfParams: 2,
@@ -13,7 +13,7 @@ class Mute extends Command {
 			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 15 دقيقة`,
 			exampleUsage: `val! mute @Sovereign Violation of rules`,
 			extraParams: true
-    }
+    })
     super(client, commandOptions)
 
 	}

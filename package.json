@@ -5,8 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:KL13NT/valbot.git",
   "author": "KL13NT <Nabil.tharwat@outlook.com>",
-	"license": "GPL-3.0-only",
-	"types": "index.d.ts",
+  "license": "GPL-3.0-only",
+  "types": "index.d.ts",
   "scripts": {
     "docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs",
     "develop": "nodemon -r dotenv/config index.js dotenv_config_path=./dev.env",
@@ -47,7 +47,7 @@
     "@babel/polyfill": "^7.4.4",
     "@tensorflow-models/toxicity": "^1.2.2",
     "@tensorflow/tfjs": "^1.5.1",
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.2.7"

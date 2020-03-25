@@ -5,10 +5,17 @@
 	"ERROR_GENERIC_SOMETHING_WENT_WRONG": "في حاجة غلط حصلت وانا بشغل الكوماند دي. كلم حد من الديفيلوبرز قولهم.",
 	"ERROR_COMMAND_NOT_ALLOWED": "مش مسمحولك تستعمل الكوماند دي",
 	"ERROR_COMMAND_NOT_READY": "الكوماند دي مش جاهزة دلوقتي. جرب ف وقت تاني",
+	"ERROR_CHANNEL_NOT_FOUND": "التشانل دي مش موجودة دلوقتي, اتاكد من الـ ID",
+	"ERROR_MESSAGE_NOT_FOUND": "الرسالة دي مش موجودة دلوقتي, اتاكد من الـ ID",
+	"ERROR_ROLE_NOT_FOUND": "الـ Role دي مش موجودة دلوقتي, اتاكد من الـ ID",
+	"ERROR_CHANNEL_TYPE_MISMATCH": "نوع التشانل مش مظبوط. جرب تاني.",
+	"ERROR_CONTEXT_PARAMS_MALFORMED": "في حاجة غلط حصلت ف ديسكورد. قول للديفلوبرز يبصوا ف اللوجز",
 	"GENERIC_CONTROLLED_COMMAND_CANCEL": "لغيت الكوماند, جايين تبهدلوني ع الفاضي و الله",
 	"GENERIC_COMMAND_GRACEFUL_ERROR": "مش هينفع كده, في حاجة انت عملتها غلط, جرب تاني",
 	"NOTIFY_UNMUTED": "تقدر تتكلم دلوقتي. متعملهاش تاني بقى عشان مزعلش منك",
 	"WARN_BAD_LANGUAGE": "لو سمحت متستخدمش لغة بذيئة. ده تحذير. لو جالك 3 تحذيرات هيتعملك mute",
 	"GENERIC_COMMAND_NOT_UNDERSTOOD": "في حاجة انا مش فاهمها في اللي انت كتبته. جرب تاني او قول للديف لو تعتقد ان دي حاجة لازم تشتغل وانت عاملها صح",
-	"DATABASE_INIT_FAILED": "Failed to initialise database, retrying"
+	"DATABASE_INIT_FAILED": "Failed to initialise database, retrying",
+	"ROLE_ADDED": "اديتك روول جديد اهو, اي خدمة. اسم الروول:",
+	"ROLE_REMOVED": "بلاش لعب بالروولز بقى, شيلت روول:"
 }

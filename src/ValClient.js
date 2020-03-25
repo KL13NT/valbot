@@ -17,8 +17,8 @@ class ValClient extends Client {
 	constructor (options = {}, prefix) {
 		super(options)
 
+		this.ready = false
 		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'valdev!': 'val!'
-
 		this.commands = {}
 
 	}
@@ -28,7 +28,6 @@ class ValClient extends Client {
 			setupConfig()
 			this.login(token)
 			this.initListeners()
-			this.initLoaders()
 
 			if(process.env.mode !== 'DEVELOPMENT') this.ToxicityFilter = await new ToxicityFilter(0.8)
 
@@ -82,7 +81,7 @@ class ValClient extends Client {
 			new Listeners[listener](this).init()
 		}
 
-		console.log(this.listeners('ready'))
+		console.log('\nlisteners ready\n')
 	}
 
 }

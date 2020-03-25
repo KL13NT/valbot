@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
 
 
@@ -12,8 +12,6 @@ const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
  * @property {GuildChannel[]} channels
  * @property {function} callback
  */
-
-
 async function warn (message){
 	message.member.addRole()
 }
@@ -38,6 +36,17 @@ function setupConfig (){
 }
 
 /**
+ * Caches messages based on a channel object and a message id. If failed to cache, retries.
+ * @param {TextChannel} channel
+ * @param {string} messageId
+ */
+function cacheMessage (channel, messageId){
+	channel.messages.fetch(messageId, true).catch(err => {
+		if(err.code !== 10008) return cacheMessage(channel, messageId)
+	})
+}
+
+/**
  * Reacts with a given array of reactions to a message
  * @param {Message} message
  * @param {string} reactions
@@ -54,8 +63,9 @@ function react (message, reactions = []){
  */
 async function sendEmbed (message, { member, embedOptions, fields, attachments, channels, reactions = [], callback }) {
 	try{
-		const embed = new RichEmbed(embedOptions)
+		const embed = new MessageEmbed(embedOptions)
 		embed.setThumbnail('https://github.com/KL13NT/valbot/raw/development/src/media/valarium-bot-prod.png')
+		embed.setColor('#f9a826')
 
 		if(fields)
 			fields.forEach(field =>
@@ -75,7 +85,7 @@ async function sendEmbed (message, { member, embedOptions, fields, attachments, 
 	}
 	catch(err){
 		console.log(err)
-		message.reply('في حاجة غلط حصلت. جرب تاني بعدين او بص ف اللوجز لو انت ديف')
+		if(message) message.reply('في حاجة غلط حصلت. جرب تاني بعدين او بص ف اللوجز لو انت ديف')
 	}
 }
 
@@ -89,8 +99,8 @@ function getChannelObject (client, channelId){
 	const isDevelopment = process.env.MODE === 'DEVELOPMENT'
 	const testChannelId = process.IMPORTANT_CHANNELS.test
 
-	return client.guilds
-		.find(guild => guild.name === 'VALARIUM').channels
+	return client.guilds.cache
+		.find(guild => guild.name === 'VALARIUM').channels.cache
 		.find(ch => isDevelopment? ch.id === testChannelId: ch.id === channelId)
 }
 
@@ -100,9 +110,46 @@ function getChannelObject (client, channelId){
  * @param {string} channelId
  */
 function getRoleObject (client, roleId){
-	return client.guilds
-		.find(guild => guild.name === 'VALARIUM').roles
+	return client.guilds.cache
+		.find(guild => guild.name === 'VALARIUM').roles.cache
 		.find(role => role.id === roleId)
+}
+
+/**
+ * @param {ValClient} client
+ * @param {string} channelId
+ */
+function getMessageObject (client, channelObject, messageId){
+	let messageObject = {}
+
+	channelObject.messages
+		.fetch(messageId, true)
+		.then(message => messageObject = message)
+		.catch(err => {
+			console.log(err)
+			messageObject = null
+		})
+
+	return messageObject
+}
+
+function dmMember (member, content){
+	try{
+		member.createDM().then(dm => dm.send(content))
+	}
+	catch(err){
+		console.log(err)
+	}
+}
+
+/**
+ * @param {ValClient} client
+ * @param {string} channelId
+ */
+function getMemberObject (client, userId){
+	return client.guilds.cache
+		.find(guild => guild.name === 'VALARIUM').members.cache
+		.find(member => member.id === userId)
 }
 
 
@@ -140,7 +187,11 @@ function isOneOf (matcher, possibilities){
 module.exports = {
 	sendEmbed,
 	getChannelObject,
-	deepFreeze,
 	getRoleObject,
-	setupConfig
+	getMessageObject,
+	deepFreeze,
+	setupConfig,
+	cacheMessage,
+	getMemberObject,
+	dmMember
 }

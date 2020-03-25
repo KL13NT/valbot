@@ -69,7 +69,7 @@ class Poll extends Command {
 				else {
 
 					poll.reactions = Array
-						.from(poll.message.reactions.values())
+						.from(poll.message.reactions.cache.values())
 						.map(reaction => reaction.emoji.id || reaction.emoji.name)
 
 					message.reply('بعمل الاستفتاء اهو')
