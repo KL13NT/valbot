@@ -1,5 +1,5 @@
 const { Loader, Command } = require('../structures')
-const Database = require('../database/Database')
+const Database = require('../structures/Database')
 
 class DatabaseLoader extends Loader{
 	/**

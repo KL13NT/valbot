@@ -17,8 +17,13 @@ class ReactionRolesLoader extends Loader {
 	}
 
 	load () {
-		require('../config/reaction-roles.json')
-			.forEach(({ channelId, messageId }) => cacheMessage(getChannelObject(this.client, channelId), messageId))
+		this.client.database.on('ready', ()=>{
+			this.client.database
+				.getDb()
+				.collection('reactionroles')
+				.find()
+				.forEach(({ channelId, messageId }) => cacheMessage(getChannelObject(this.client, channelId), messageId))
+		})
 	}
 }
 

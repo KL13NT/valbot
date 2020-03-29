@@ -27,9 +27,10 @@ class ValClient extends Client {
 		try{
 			setupConfig()
 			this.login(token)
-			this.initListeners()
+			await this.initLoaders()
+			await this.initListeners()
 
-			if(process.env.mode !== 'DEVELOPMENT') this.ToxicityFilter = await new ToxicityFilter(0.8)
+			this.ToxicityFilter = new ToxicityFilter(0.8)
 
 			console.log(fs.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8').toString(), 'Loaded successfully')
 

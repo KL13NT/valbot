@@ -101,7 +101,7 @@ function getChannelObject (client, channelId){
 
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM').channels.cache
-		.find(ch => isDevelopment? ch.id === testChannelId: ch.id === channelId)
+		.find(ch => isDevelopment? ch.id === channelId: ch.id === channelId)
 }
 
 
@@ -116,21 +116,12 @@ function getRoleObject (client, roleId){
 }
 
 /**
- * @param {ValClient} client
- * @param {string} channelId
+ *
+ * @param {TextChannel} channel
+ * @param {string} messageId
  */
-function getMessageObject (client, channelObject, messageId){
-	let messageObject = {}
-
-	channelObject.messages
-		.fetch(messageId, true)
-		.then(message => messageObject = message)
-		.catch(err => {
-			console.log(err)
-			messageObject = null
-		})
-
-	return messageObject
+async function getMessageObject (channel, messageId){
+	return await channel.messages.fetch(messageId) || null
 }
 
 function dmMember (member, content){
