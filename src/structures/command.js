@@ -4,8 +4,10 @@ const {
 	GENERIC_SOMETHING_WENT_WRONG,
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
 	ERROR_GENERIC_SOMETHING_WENT_WRONG,
-	ERROR_COMMAND_NOT_ALLOWED
+	ERROR_COMMAND_NOT_ALLOWED,
+	ERROR_COMMAND_NOT_READY
 } = require('../config/events.json')
+
 
 
 
@@ -34,19 +36,17 @@ class Command{
 		if(authLevel <= this.options.requiredAuthLevel) return true
 	}
 
+
 	/**
-	 * Enforces command code to create context correctly
+	 * Determines whether user is allowed to use this command
 	 * @param {CommandContext} context message context
 	 * @private
 	 */
 	run (message){
-		const { channel, content } = message
-		const params = content.split(/\s+/).slice(2)
+		message.content = message.content.replace(/\s+/g, ' ')
 
-
-		console.log(params)
-
-		channel.startTyping()
+		const split = message.content.split(' ')
+		const params = split.slice(2)
 
 		if(this.enforceParams(params, message) === true){
 			const context = new CommandContext(this, message)
@@ -55,10 +55,31 @@ class Command{
 			if(this.isAllowed(context)) this.enforceCooldown(context)
 			else return message.reply(ERROR_COMMAND_NOT_ALLOWED)
 		}
-
-		channel.stopTyping()
 	}
 
+
+	enforceCooldown (context){
+		const { cooldown } = this.options
+
+		if(this.isReady) this._run(context).catch(err => context.message.reply(GENERIC_SOMETHING_WENT_WRONG) && console.log(err))
+		else context.message.reply(ERROR_COMMAND_NOT_READY)
+
+		if(cooldown !== 0){
+			this.isReady = false
+
+			this.cooldownTimer = setTimeout(() => {
+				this.isReady = true
+			}, cooldown)
+		}
+	}
+
+	enforceParams (params, message){
+		const { nOfParams, extraParams } = this.options
+
+		if(params[0] === 'help') return this.help(message)
+		else if((params.length < 1 && nOfParams >= 1) || (params.length > nOfParams && !extraParams)) return message.reply(ERROR_INSUFFICIENT_PARAMS_PASSED)
+		else return true
+	}
 
 	/**
 	 * Responsible for running commands. Should be overridden in each command.
@@ -99,5 +120,6 @@ class Command{
 
 	}
 }
+
 
 module.exports = Command
