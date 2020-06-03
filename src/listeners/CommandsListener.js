@@ -13,7 +13,6 @@ class CommandsListener extends Listener {
 	}
 
 	async onCommand (message){
-		console.log('commands!')
 		const { content, member, author, type } = message
 		const commandRegex = RegExp(`(${this.prefix}\\s+)([a-zA-Z؀-ۿ]+)(\\s+)?`)
 		const matchGroup = content.match(commandRegex)

@@ -1,5 +1,4 @@
 const { Client } = require('discord.js')
-const { setupConfig } = require('./utils/utils')
 
 const fs = require('fs')
 const path = require('path')
@@ -18,14 +17,23 @@ class ValClient extends Client {
 		super(options)
 
 		this.ready = false
-		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'valdev!': 'val!'
+		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'vd!': 'v!'
 		this.commands = {}
+		this.controllers = {}
+
+		this.levels = {
+			// 128937192837129: {
+			// 	text: 50,
+			// 	voice: 1,
+			// 	exp: 99 * 9
+			// }
+		} //id -> exp
 
 	}
 
 	async init (token = process.env.AUTH_TOKEN, retry = 0) {
 		try{
-			setupConfig()
+			this.setupConfig()
 			this.login(token)
 			await this.initLoaders()
 			await this.initListeners()
@@ -39,7 +47,6 @@ class ValClient extends Client {
 			console.log('Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying', err)
 
 			if(retry === 5) {
-				console.log('Failed to init ValClient after 5 attempts. Clean exit.', err)
 				process.exit(1)
 			}
 
@@ -49,7 +56,7 @@ class ValClient extends Client {
 	}
 
 	async setPresence (){
-		const { CUSTOM_PRESENCES: customPresences } = process
+		const { CUSTOM_PRESENCES: customPresences } = this.config
 		const { user } = this
 
 		function setCurrentPresence (){
@@ -83,6 +90,24 @@ class ValClient extends Client {
 		}
 
 		console.log('\nlisteners ready\n')
+	}
+
+
+	/**
+	 * Loads configuration/global objects instead of storing them on ValClient
+	 */
+	setupConfig (){
+		const config = {
+			CUSTOM_PRESENCES: require('./config/custom-presences.json'),
+			IMPORTANT_CHANNELS_ID: require('./config/important-channels.json'),
+			IMPORTANT_ROLES: require('./config/important-roles.json'),
+			AUTH_LEVELS: require('./config/auth-levels.json'),
+			MUTED_MEMBERS: {},
+			WARNED_MEMBERS: {},
+			IMPORTANT_CHANNELS: {}
+		}
+
+		this.config = config
 	}
 
 }

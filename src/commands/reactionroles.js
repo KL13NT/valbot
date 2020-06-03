@@ -73,13 +73,4 @@ class ReactionRoles extends Command{
 	}
 }
 
-function isDuplicateReaction(watchedMessages, { messageId, channelId, roleId, reactions }){
-	return watchedMessages.some(watchedMessage =>
-		watchedMessage.messageId === messageId
-		&& watchedMessage.channelId === channelId
-		&& watchedMessage.roleId === roleId
-		&& JSON.stringify(watchedMessage.reactions) === JSON.stringify(reactions)
-	)
-}
-
 module.exports = ReactionRoles

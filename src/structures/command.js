@@ -5,7 +5,8 @@ const {
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
 	ERROR_GENERIC_SOMETHING_WENT_WRONG,
 	ERROR_COMMAND_NOT_ALLOWED,
-	ERROR_COMMAND_NOT_READY
+	ERROR_COMMAND_NOT_READY,
+	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
 
@@ -43,6 +44,8 @@ class Command{
 	 * @private
 	 */
 	run (message){
+		if(!this.client.isReady) return message.reply('Client not ready yet')
+		
 		message.content = message.content.replace(/\s+/g, ' ')
 
 		const split = message.content.split(' ')

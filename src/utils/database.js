@@ -23,7 +23,7 @@ const {
 async function reactionRolesMessageAdd (db, message){
 	try {
 		const collection = db.collection('reactionroles')
-		collection.insert(message)
+		await collection.insertOne(message)
 	}
 	catch (err) {
 		return Error(ERROR_DB_REACTIONROLESADD_FAILED)

@@ -16,24 +16,6 @@ async function warn (message){
 	message.member.addRole()
 }
 
-/**
- * Loads configuration/global objects instead of storing them on ValClient
- */
-function setupConfig (){
-	process.CUSTOM_PRESENCES = require('../config/custom-presences.json')
-	process.IMPORTANT_CHANNELS = require('../config/important-channels.json')
-	process.IMPORTANT_ROLES = require('../config/important-roles.json')
-	process.AUTH_LEVELS = require('../config/auth-levels.json')
-	process.MUTED_MEMBERS = {}
-	process.WARNED_MEMBERS = {}
-
-	deepFreeze(process.CUSTOM_PRESENCES)
-	deepFreeze(process.IMPORTANT_CHANNELS)
-	deepFreeze(process.IMPORTANT_ROLES)
-	deepFreeze(process.AUTH_LEVELS)
-	deepFreeze(process.MUTED_MEMBERS)
-	deepFreeze(process.WARNED_MEMBERS)
-}
 
 /**
  * Caches messages based on a channel object and a message id. If failed to cache, retries.
@@ -97,7 +79,7 @@ async function sendEmbed (message, { member, embedOptions, fields, attachments, 
  */
 function getChannelObject (client, channelId){
 	const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-	const testChannelId = process.IMPORTANT_CHANNELS.test
+	// const testChannelId = process.IMPORTANT_CHANNELS.test
 
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM').channels.cache
@@ -181,7 +163,6 @@ module.exports = {
 	getRoleObject,
 	getMessageObject,
 	deepFreeze,
-	setupConfig,
 	cacheMessage,
 	getMemberObject,
 	dmMember

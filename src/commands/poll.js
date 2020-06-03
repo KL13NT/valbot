@@ -1,7 +1,11 @@
 const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { getChannelObject, sendEmbed } = require('../utils/utils')
-const { GENERIC_COMMAND_GRACEFUL_ERROR, ERROR_GENERIC_SOMETHING_WENT_WRONG, GENERIC_CONTROLLED_COMMAND_CANCEL } = require('../config/events.json')
+const {
+	GENERIC_COMMAND_GRACEFUL_ERROR,
+	ERROR_GENERIC_SOMETHING_WENT_WRONG,
+	GENERIC_CONTROLLED_COMMAND_CANCEL
+} = require('../config/events.json')
 
 class Poll extends Command {
   constructor(client) {
@@ -39,7 +43,9 @@ class Poll extends Command {
 		message.reply('ابعت بقى رسالة فيها عنوان الاستفتاء. مش هتقدر تلغي الا ف الاخر خالص.')
 
 		try{
-			const collector = channel.createMessageCollector(collected => collected.member.id === member.id)
+			const collector = channel.createMessageCollector(
+				collected => collected.member.id === member.id
+			)
 
 			collector.on('collect', collected => {
 				if(collected.member.id === member.id){
@@ -72,12 +78,13 @@ class Poll extends Command {
 	}
 
 	async createPoll(poll){
-		if(poll.content === '' || poll.title === '') this.stop(context, false, GENERIC_COMMAND_GRACEFUL_ERROR)
-			else {
+		if(poll.content === '' || poll.title === '')
+			this.stop(context, false, GENERIC_COMMAND_GRACEFUL_ERROR)
 
-			poll.reactions = Array
-				.from(poll.message.reactions.cache.values())
-				.map(reaction => reaction.emoji.id || reaction.emoji.name)
+		else {
+			poll.reactions = Array.from(poll.message.reactions.cache.values()).map(
+				reaction => reaction.emoji.id || reaction.emoji.name
+			)
 
 			message.reply('بعمل الاستفتاء اهو')
 

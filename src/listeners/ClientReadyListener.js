@@ -10,12 +10,20 @@ class ClientReadyListener extends Listener {
 		super(client, [
 			'ready'
 		])
+
+		this.onReady = this.onReady.bind(this)
 	}
 
 	async onReady (){
 		console.log('Client ready')
-		this.setPresence()
-		this.ready = true
+		this.client.setPresence()
+		this.client.isReady = true
+
+		const importantChannels = this.client.config.IMPORTANT_CHANNELS_ID
+		Object.keys(importantChannels).forEach(channelName => {
+			const channelID = importantChannels[channelName]
+			this.client.config.IMPORTANT_CHANNELS[channelName] = getChannelObject(this.client, channelID)
+		})
 	}
 
 }

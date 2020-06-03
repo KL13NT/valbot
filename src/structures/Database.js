@@ -24,7 +24,7 @@ class Database extends MongoClient{
 
 			this.connect().then(() => {
 				this._db = this.db(this.name)
-				this.emit('ready')
+				this.emit('ready', this)
 				this.isReady = true
 			})
 

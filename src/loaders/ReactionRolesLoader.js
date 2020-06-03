@@ -17,13 +17,15 @@ class ReactionRolesLoader extends Loader {
 	}
 
 	load () {
-		this.client.database.on('ready', ()=>{
-			this.client.database
-				.getDb()
-				.collection('reactionroles')
-				.find()
-				.forEach(({ channelId, messageId }) => cacheMessage(getChannelObject(this.client, channelId), messageId))
-		})
+		// this.client.on('ready', () => {
+		// 	this.client.database.on('ready', ()=>{
+		// 		this.client.database
+		// 			.getDb()
+		// 			.collection('reactionroles')
+		// 			.find()
+		// 			.forEach(({ channelId, messageId }) => cacheMessage(getChannelObject(this.client, channelId), messageId))
+		// 	})
+		// })
 	}
 }
 

@@ -38,9 +38,10 @@ class CommandContext{
 	}
 
 	determineAuthLevel (){
-		const roleManager = this.member.roles
-
-		return Object.keys(AUTH_LEVELS).reduce((authLevel, role) => roleManager.cache.get(role) && AUTH_LEVELS[role] < authLevel? AUTH_LEVELS[role]: authLevel)
+		const userRoles = this.member.roles.cache
+		const authLevels = Object.keys(AUTH_LEVELS)
+		
+		return authLevels.reduce((authLevel, role) => userRoles.get(role) && AUTH_LEVELS[role] < authLevel? AUTH_LEVELS[role]: authLevel)
 	}
 }
 

@@ -3,5 +3,7 @@ module.exports = {
 	CommandContext: require('./CommandContext'),
 	CommandOptions: require('./CommandOptions'),
 	Loader: require('./Loader'),
-	Listener: require('./Listener')
+	Listener: require('./Listener'),
+	Controller: require('./Controller'),
+	Level: require('./Level')
 }
