@@ -38,7 +38,10 @@ async function generateRankCard ({ avatar_url, displayName, displayID, exp }) {
 					${template}
 				</body>
 				</html>`,
-		content
+		content,
+		puppeteerArgs: {
+			args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
+		}
 	})
 }
 
