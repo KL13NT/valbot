@@ -10,12 +10,16 @@
 	"ERROR_ROLE_NOT_FOUND": "الـ Role دي مش موجودة دلوقتي, اتاكد من الـ ID",
 	"ERROR_CHANNEL_TYPE_MISMATCH": "نوع التشانل مش مظبوط. جرب تاني.",
 	"ERROR_CONTEXT_PARAMS_MALFORMED": "في حاجة غلط حصلت ف ديسكورد. قول للديفلوبرز يبصوا ف اللوجز",
+	"ERROR_DATABASE_INIT_FAILED": "Failed to initialise database, retrying",
+	"ERROR_DATABASE_REACTIONROLESREMOVE_FAILED": "Failed to remove message from watched list",
+	"ERROR_DATABASE_REACTIONROLESADD_FAILED": "Failed to add message to watched list",
+	"ERROR_DATABASE_GET_COLLECTION_FAILED": "Failed to get collection",
+	"ERROR_DATABASE_CREATE_COLLECTION_FAILED": "Failed to create collection",
 	"GENERIC_CONTROLLED_COMMAND_CANCEL": "لغيت الكوماند, جايين تبهدلوني ع الفاضي و الله",
 	"GENERIC_COMMAND_GRACEFUL_ERROR": "مش هينفع كده, في حاجة انت عملتها غلط, جرب تاني",
 	"NOTIFY_UNMUTED": "تقدر تتكلم دلوقتي. متعملهاش تاني بقى عشان مزعلش منك",
 	"WARN_BAD_LANGUAGE": "لو سمحت متستخدمش لغة بذيئة. ده تحذير. لو جالك 3 تحذيرات هيتعملك mute",
 	"GENERIC_COMMAND_NOT_UNDERSTOOD": "في حاجة انا مش فاهمها في اللي انت كتبته. جرب تاني او قول للديف لو تعتقد ان دي حاجة لازم تشتغل وانت عاملها صح",
-	"DATABASE_INIT_FAILED": "Failed to initialise database, retrying",
-	"ROLE_ADDED": "اديتك روول جديد اهو, اي خدمة. اسم الروول:",
-	"ROLE_REMOVED": "بلاش لعب بالروولز بقى, شيلت روول:"
+	"ROLE_ADDED": "You have received a new role by reacting in Valarium: ",
+	"ROLE_REMOVED": "You have removed a role by reacting in Valarium: "
 }

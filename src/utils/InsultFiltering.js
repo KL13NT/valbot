@@ -3,8 +3,6 @@ const { NOTIFY_UNMUTED, WARN_BAD_LANGUAGE } = require('../config/events.json')
 const { notify } = require('./utils')
 
 
-// Load the model. Users optionally pass in a threshold and an array of
-// labels to include.
 class ToxicityLoader {
 	constructor (threshold){
 		this.labels = [
@@ -19,23 +17,22 @@ class ToxicityLoader {
 
 		this.isReady = false
 
-		toxicity.load(threshold, this.labels).then(model => {
-			this.classifier = model
-			this.isReady = true
+		if(process.env.mode !== 'DEVELOPMENT')
+			toxicity.load(threshold, this.labels).then(model => {
+				this.classifier = model
+				this.isReady = true
 
-			console.log('Toxicity Classifier has been loaded')
-		})
+				console.log('Toxicity Classifier has been loaded')
+			})
 	}
 
-	async classifyAndWarn (message){
+	async classify (message){
+		if(process.env.mode === 'DEVELOPMENT') return
+
 		const { content: sentence } = message
 		const predictions = await this.classifier.classify([ sentence ])
 
-		for(const curr of predictions){
-			if(curr.results[0].match === true && curr.results[0].probabilities[1] > 0.90) return this.warn(message)
-		}
-
-		return false
+		return predictions.reduce((prediction, curr) => curr.results[0].match === true && curr.results[0].probabilities[1] > 0.90? true: prediction)
 	}
 
 	/**

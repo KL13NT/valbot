@@ -16,24 +16,6 @@ async function warn (message){
 	message.member.addRole()
 }
 
-/**
- * Loads configuration/global objects instead of storing them on ValClient
- */
-function setupConfig (){
-	process.CUSTOM_PRESENCES = require('../config/custom-presences.json')
-	process.IMPORTANT_CHANNELS = require('../config/important-channels.json')
-	process.IMPORTANT_ROLES = require('../config/important-roles.json')
-	process.AUTH_LEVELS = require('../config/auth-levels.json')
-	process.MUTED_MEMBERS = {}
-	process.WARNED_MEMBERS = {}
-
-	deepFreeze(process.CUSTOM_PRESENCES)
-	deepFreeze(process.IMPORTANT_CHANNELS)
-	deepFreeze(process.IMPORTANT_ROLES)
-	deepFreeze(process.AUTH_LEVELS)
-	deepFreeze(process.MUTED_MEMBERS)
-	deepFreeze(process.WARNED_MEMBERS)
-}
 
 /**
  * Caches messages based on a channel object and a message id. If failed to cache, retries.
@@ -97,11 +79,11 @@ async function sendEmbed (message, { member, embedOptions, fields, attachments, 
  */
 function getChannelObject (client, channelId){
 	const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-	const testChannelId = process.IMPORTANT_CHANNELS.test
+	// const testChannelId = process.IMPORTANT_CHANNELS.test
 
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM').channels.cache
-		.find(ch => isDevelopment? ch.id === testChannelId: ch.id === channelId)
+		.find(ch => isDevelopment? ch.id === channelId: ch.id === channelId)
 }
 
 
@@ -116,21 +98,12 @@ function getRoleObject (client, roleId){
 }
 
 /**
- * @param {ValClient} client
- * @param {string} channelId
+ *
+ * @param {TextChannel} channel
+ * @param {string} messageId
  */
-function getMessageObject (client, channelObject, messageId){
-	let messageObject = {}
-
-	channelObject.messages
-		.fetch(messageId, true)
-		.then(message => messageObject = message)
-		.catch(err => {
-			console.log(err)
-			messageObject = null
-		})
-
-	return messageObject
+async function getMessageObject (channel, messageId){
+	return await channel.messages.fetch(messageId) || null
 }
 
 function dmMember (member, content){
@@ -182,6 +155,42 @@ function isOneOf (matcher, possibilities){
 	}
 }
 
+/**
+ *
+ * @param {*} client
+ * @param {*} notification
+ * @param {*} alertLevel
+ */
+function log (client, notification, alertLevel){
+	console.log(notification)
+
+	if(client.isReady && process.env.MODE !== 'DEVELOPMENT'){
+		const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
+		const fullNotification = `${notification}, ${alertLevel==='error'? '<@&639855023970451457>': ''}`
+
+		botStatusChannel.send(fullNotification)
+	}
+	else {
+		client.queue.enqueue(log, client, notification, alertLevel)
+	}
+}
+
+/**
+ *
+ * @param {*} messageContent
+ */
+function calculateUniqueWords (messageContent){
+	const unique = {}
+
+	return messageContent.split(' ').filter(word => {
+		if(!unique[word] && word.length >= 2){
+			unique[word] = word
+			return true
+		}
+
+		return false
+	}).length
+}
 
 
 module.exports = {
@@ -190,8 +199,9 @@ module.exports = {
 	getRoleObject,
 	getMessageObject,
 	deepFreeze,
-	setupConfig,
 	cacheMessage,
 	getMemberObject,
-	dmMember
+	dmMember,
+	log,
+	calculateUniqueWords
 }

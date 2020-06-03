@@ -1,7 +1,7 @@
 
 /**
-  * Base Loader 
-  * @param {ValClient} client The active ValClient instance 
+  * Base Loader
+  * @param {ValClient} client The active ValClient instance
   * @example EventLoader
   * class ListenersLoader extends Loader(){
   *   constructor(client){

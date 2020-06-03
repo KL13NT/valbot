@@ -1,9 +1,9 @@
 const path = require('path')
 
 const { CLIENT_ID, DEV_CLIENT_ID } = process.env
-const { CommandContext } = require('..')
-const { Listener } = require('../structures')
+const { Listener, CommandContext } = require('../structures')
 const { getMemberObject, getRoleObject, dmMember, sendEmbed } = require('../utils/utils')
+const { getReactionRolesMessage } = require('../utils/database')
 const { ROLE_ADDED, ROLE_REMOVED } = require('../config/events.json')
 
 class ReactionRolesListener extends Listener {
@@ -18,21 +18,16 @@ class ReactionRolesListener extends Listener {
 	}
 
 	async onMessageReactionAdd (reaction, user){
-		console.log('Message Reaction Add!')
+		try{
+			if(reaction.partial) await reaction.fetch()
 
-		const messageId = reaction.message.id
-		const channelId = reaction.message.channel.id
-		const reactionId = reaction.emoji.id || reaction.emoji.name
+			const messageId = reaction.message.id
+			const channelId = reaction.message.channel.id
+			const reactionId = reaction.emoji.id || reaction.emoji.name
+			const message = await getReactionRolesMessage(this.client.database.getDb(), { messageId, channelId })
 
-		const message = require('../config/reaction-roles.json')
-			.find( message =>
-				channelId === message.channelId
-				&& messageId === message.messageId
-				&& message.reactions.some(reaction => reaction === reactionId || reaction === reactionId)
-			)
+			if(message && message.reactions.some(reaction => reaction === reactionId)){
 
-		if(message){
-			try{
 				const member = getMemberObject(this.client, user.id)
 				const embedOptions = {
 					member,
@@ -44,28 +39,23 @@ class ReactionRolesListener extends Listener {
 
 				member.roles.add(message.roleId).then(() => sendEmbed(null, embedOptions))
 			}
-			catch(err){
-				console.log(err)
-			}
+		}
+		catch(err){
+			console.log(err)
 		}
 	}
 
 	async onMessageReactionRemove (reaction, user){
-		console.log('Message Reaction Removed!')
+		if(reaction.partial) await reaction.fetch()
 
 		const messageId = reaction.message.id
 		const channelId = reaction.message.channel.id
 		const reactionId = reaction.emoji.id || reaction.emoji.name
+		const message = await getReactionRolesMessage(this.client.database.getDb(), { messageId, channelId })
 
-		const message = require('../config/reaction-roles.json')
-			.find( message =>
-				channelId === message.channelId
-				&& messageId === message.messageId
-				&& message.reactions.some(reaction => reaction === reactionId || reaction === reactionId)
-			)
+		try {
+			if(message && message.reactions.some(reaction => reaction === reactionId)){
 
-		if(message){
-			try{
 				const member = getMemberObject(this.client, user.id)
 				const embedOptions = {
 					member,
@@ -77,12 +67,11 @@ class ReactionRolesListener extends Listener {
 
 				member.roles.remove(message.roleId).then(() => sendEmbed(null, embedOptions))
 			}
-			catch(err){
-				console.log(err)
-			}
+		}
+		catch(err){
+			console.log(err)
 		}
 	}
-
 }
 
 module.exports = ReactionRolesListener

@@ -20,7 +20,7 @@ class Report extends Command {
 
   async _run(context) {
 		const { reports } = process.IMPORTANT_CHANNELS
-		const { CLIENT_ID, DEV_CLIENT_ID } = process.env
+		const { CLIENT_ID } = process.env
 		const { message, member, params, channel } = context
 
 		try{
@@ -32,7 +32,7 @@ class Report extends Command {
 			if(mentions.length === 0) return message.reply('لازم تعمل منشن للشخص اللي بتعمله ريبورت')
 			if(mentions.length > 1) return message.reply('يبشا ريبورت لواحد بس, هي حفلة؟ :PutinFacepalms:')
 			if(reportedMember.id === member.id) return message.reply('مساء الهزار, ريبورت لنفسك؟')
-			if(reportedMember.id === CLIENT_ID || reportedMember.id === DEV_CLIENT_ID) return message.reply('متهزرش معايا عشان خلقي ضيق')
+			if(reportedMember.id === CLIENT_ID) return message.reply('متهزرش معايا عشان خلقي ضيق')
 			if(!/<@.+>/.test(message.content.split(' ')[2])) return message.reply('المنشن لازم تكون اول باراميتير')
 
 			const embedOptions = {
