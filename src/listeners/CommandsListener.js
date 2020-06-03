@@ -1,8 +1,7 @@
 const path = require('path')
 
 const { CLIENT_ID } = process.env
-const { CommandContext } = require('..')
-const { Listener } = require('../structures')
+const { Listener, CommandContext } = require('../structures')
 const { GENERIC_COMMAND_NOT_UNDERSTOOD, ERROR_COMMAND_DOES_NOT_EXIST } = require('../config/events.json')
 
 class CommandsListener extends Listener {

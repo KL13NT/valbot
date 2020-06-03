@@ -155,6 +155,42 @@ function isOneOf (matcher, possibilities){
 	}
 }
 
+/**
+ *
+ * @param {*} client
+ * @param {*} notification
+ * @param {*} alertLevel
+ */
+function log (client, notification, alertLevel){
+	console.log(notification)
+
+	if(client.isReady && process.env.MODE !== 'DEVELOPMENT'){
+		const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
+		const fullNotification = `${notification}, ${alertLevel==='error'? '<@&639855023970451457>': ''}`
+
+		botStatusChannel.send(fullNotification)
+	}
+	else {
+		client.queue.enqueue(log, client, notification, alertLevel)
+	}
+}
+
+/**
+ *
+ * @param {*} messageContent
+ */
+function calculateUniqueWords (messageContent){
+	const unique = {}
+
+	return messageContent.split(' ').filter(word => {
+		if(!unique[word] && word.length >= 2){
+			unique[word] = word
+			return true
+		}
+
+		return false
+	}).length
+}
 
 
 module.exports = {
@@ -165,5 +201,7 @@ module.exports = {
 	deepFreeze,
 	cacheMessage,
 	getMemberObject,
-	dmMember
+	dmMember,
+	log,
+	calculateUniqueWords
 }

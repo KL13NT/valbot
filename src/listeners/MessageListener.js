@@ -17,11 +17,11 @@ class MessageListener extends Listener {
 		if(author.id !== CLIENT_ID && type !== 'dm'){
 			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
 			if(this.ToxicityFilter && this.client.ToxicityFilter.ready && isToxic) return this.client.ToxicityFilter.warn(message)
-			if(message.mentions.members.some(member => member.id === CLIENT_ID)) this.client.emit('conversationMessage', message)
-			if(content.startsWith(this.prefix)) this.client.emit('command', message)
 
-			//TODO: add levels logic
-			this.client.controllers.TextLevelsController.run(message)
+			if(content.startsWith(this.client.prefix)) this.client.emit('command', message)
+			else if(message.mentions.members.some(member => member.id === CLIENT_ID)) this.client.emit('conversationMessage', message)
+
+			LevelsController.message(message)
 		}
 	}
 }

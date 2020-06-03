@@ -1,8 +1,7 @@
 const path = require('path')
 
 const { CLIENT_ID, DEV_CLIENT_ID } = process.env
-const { CommandContext } = require('..')
-const { Listener } = require('../structures')
+const { Listener, CommandContext } = require('../structures')
 const { getMemberObject, getRoleObject, dmMember, sendEmbed } = require('../utils/utils')
 const { getReactionRolesMessage } = require('../utils/database')
 const { ROLE_ADDED, ROLE_REMOVED } = require('../config/events.json')
@@ -48,7 +47,7 @@ class ReactionRolesListener extends Listener {
 
 	async onMessageReactionRemove (reaction, user){
 		if(reaction.partial) await reaction.fetch()
-		
+
 		const messageId = reaction.message.id
 		const channelId = reaction.message.channel.id
 		const reactionId = reaction.emoji.id || reaction.emoji.name

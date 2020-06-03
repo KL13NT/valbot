@@ -3,6 +3,7 @@ const { Client } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
 const Loaders = require('./loaders')
+const { Queue } = require('./structures')
 const Listeners = require('./listeners')
 const ToxicityFilter = require('./utils/InsultFiltering')
 
@@ -20,14 +21,7 @@ class ValClient extends Client {
 		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'vd!': 'v!'
 		this.commands = {}
 		this.controllers = {}
-
-		this.levels = {
-			// 128937192837129: {
-			// 	text: 50,
-			// 	voice: 1,
-			// 	exp: 99 * 9
-			// }
-		} //id -> exp
+		this.queue = new Queue()
 
 	}
 

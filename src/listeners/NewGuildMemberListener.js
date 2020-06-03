@@ -1,5 +1,4 @@
-const { CommandContext } = require('..')
-const { Listener } = require('../structures')
+const { Listener, CommandContext } = require('../structures')
 const { CLIENT_ID: BotID } = process.env
 
 class NewGuildMemberListener extends Listener {

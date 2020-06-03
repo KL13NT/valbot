@@ -24,24 +24,6 @@ async function generateRankCard ({ avatar_url, displayName, displayID, exp }) {
 		USER_TEXT_EXP: exp.text
 	}
 
-	nodeHtmlToImage({
-		output: './image.png', //https://github.com/frinyvonnick/node-html-to-image#using-the-buffer-instead-of-saving-to-disk
-		html: `<html>
-					<head>
-						<style>
-							body {
-								width: 1580px;
-								height: 390px;
-							}
-						</style>
-					</head>
-					<body>
-						${template}
-					</body>
-					</html>`,
-		content
-	})
-
 	return nodeHtmlToImage({
 		html: `<html>
 				<head>

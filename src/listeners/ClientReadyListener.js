@@ -1,7 +1,6 @@
 const path = require('path')
 
 const { CLIENT_ID } = process.env
-const { CommandContext } = require('..')
 const { Listener } = require('../structures')
 const { getChannelObject } = require('../utils/utils')
 
@@ -24,6 +23,8 @@ class ClientReadyListener extends Listener {
 			const channelID = importantChannels[channelName]
 			this.client.config.IMPORTANT_CHANNELS[channelName] = getChannelObject(this.client, channelID)
 		})
+
+		this.client.queue.executeAll()
 	}
 
 }

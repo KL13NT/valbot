@@ -13,7 +13,8 @@ class Clear extends Command {
 			nOfParams: 1,
 			requiredAuthLevel: 2,
 			description: `بتمسح رسايل بعدد n`,
-			exampleUsage: `val! clear 5`
+			exampleUsage: `val! clear 5`,
+			extraParams: false
 		})
 
 		super(client, options)
