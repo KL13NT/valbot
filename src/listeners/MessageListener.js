@@ -13,9 +13,10 @@ class MessageListener extends Listener {
 	async onMessage (message){
 		const { content, author, type } = message
 		const isToxic = await this.client.ToxicityFilter.classify(message)
-		const isClientMentioned = message.mentions.members.some(member => member.id === CLIENT_ID)
+		const isClientMentioned = message.mentions.members.some(member => member.id === CLIENT_ID || member.id === DEV_CLIENT_ID)
 
-		if((author.id !== CLIENT_ID || author.id !== DEV_CLIENT_ID) && type !== 'dm'){
+		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== 'dm'){
+
 			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
 			if(this.ToxicityFilter && this.client.ToxicityFilter.ready && isToxic) return this.client.ToxicityFilter.warn(message)
 
