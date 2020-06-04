@@ -22,6 +22,8 @@ class ValClient extends Client {
 		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'vd!': 'v!'
 		this.commands = {}
 		this.controllers = {}
+
+		this.setPresence = this.setPresence.bind(this)
 	}
 
 	async init (token = process.env.AUTH_TOKEN, retry = 0) {
@@ -62,7 +64,7 @@ class ValClient extends Client {
 			log(this, `Current presence: ${randomPresence.type} ${randomPresence.message}`, 'info')
 		}
 
-		setCurrentPresence()
+		setCurrentPresence.apply(this)
 		setInterval(setCurrentPresence, 10 * 60 * 1000)
 	}
 
