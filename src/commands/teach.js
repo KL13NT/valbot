@@ -11,7 +11,7 @@ class Teach extends Command {
 		const options = new CommandOptions({
 			name: `teach`,
 			cooldown: 1000,
-			nOfParams: 1,
+			nOfParams: 0,
 			requiredAuthLevel: 2,
 			description: `بتعلم البوت يرد على حاجة`,
 			exampleUsage: `${client.prefix} teach hello`,
@@ -26,7 +26,13 @@ class Teach extends Command {
 		const invoker = params.join(' ').replace(/"/g, '')
 
 		if(params.length === 0){
-			
+			const responses = ConversationController.getAllResponses()
+
+			const reply = Object.values(responses).map(res => {
+				return `${res.invoker}\n الرد: ${res.reply}\n--------\n`
+			})
+
+			return message.reply(`\n${reply}`)
 		}
 
 		const collectorOptions = { max: 1, time: 60000, errors: ['time'] }

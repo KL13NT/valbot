@@ -50,16 +50,12 @@ class ConversationController extends Controller {
 	}
 
 	async teach (response){
-		const reg = new RegExp(`${response.invoker}`, 'gi')
-		const know = Object.values(this.responses).find(res => reg.test(res.invoker))
+		this.responses[response.invoker] = response
+		return MongoController.saveResponse(response)
+	}
 
-		if(know){
-			throw Error ('I already know how to reply to that')
-		}
-		else {
-			this.responses[response.invoker] = response
-			return MongoController.saveResponse(response)
-		}
+	getAllResponses (){
+		return this.responses
 	}
 
 }
