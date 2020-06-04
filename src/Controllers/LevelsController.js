@@ -23,8 +23,7 @@ class LevelsController extends Controller {
 	async init (){
 		if(MongoController.ready){
 			MongoController.getLevels().then(async levels => {
-				levels.forEach(({ id, exp, text, voice }) => {
-					RedisController.set(`EXP:${id}`, Number(exp))
+				levels.forEach(({ id, text, voice }) => {
 					RedisController.set(`TEXT:${id}`, Number(text))
 					RedisController.set(`VOICE:${id}`, Number(voice))
 				})
