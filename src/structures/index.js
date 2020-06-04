@@ -5,6 +5,5 @@ module.exports = {
 	Loader: require('./Loader'),
 	Listener: require('./Listener'),
 	Controller: require('./Controller'),
-	Level: require('./Level'),
-	Queue: require('./Queue')
+	Level: require('./Level')
 }

@@ -12,6 +12,8 @@ module.exports = {
 		"LevelsController": "readonly",
 		"MongoController": "readonly",
 		"RedisController": "readonly",
+		"QueueController": "readonly",
+		"ConversationController": "readonly",
 	},
 	'parser': 'babel-eslint',
 	'parserOptions': {

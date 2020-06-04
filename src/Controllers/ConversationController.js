@@ -8,19 +8,28 @@ class ConversationController extends Controller {
 		})
 		this.ready = false
 		this.responses = {}
+
+		this.init = this.init.bind(this)
+
+
 		this.init()
 	}
 
 	async init (){
 		try{
-			const responses = await MongoController.getResponses()
+			if(MongoController.ready){
+				const responses = await MongoController.getResponses()
 
-			responses.forEach(({ invoker, reply }) => {
-				this.responses[invoker] = {
-					invoker,
-					reply
-				}
-			})
+				responses.forEach(({ invoker, reply }) => {
+					this.responses[invoker] = {
+						invoker,
+						reply
+					}
+				})
+			}
+			else {
+				QueueController.enqueue(this.init)
+			}
 		}
 		catch(err){
 			const message = `Something went wrong when initialising ConversationController, ${err.message}`

@@ -5,7 +5,7 @@ const path = require('path')
 const Loaders = require('./loaders')
 const Listeners = require('./listeners')
 const ToxicityFilter = require('./utils/InsultFiltering')
-const { Queue } = require('./structures')
+
 const { log } = require('./utils/utils')
 
 
@@ -22,8 +22,6 @@ class ValClient extends Client {
 		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'vd!': 'v!'
 		this.commands = {}
 		this.controllers = {}
-		this.queue = new Queue()
-
 	}
 
 	async init (token = process.env.AUTH_TOKEN, retry = 0) {

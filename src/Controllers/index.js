@@ -1,6 +1,7 @@
 module.exports = [
-	require('./LevelsController'),
+	require('./QueueController'),
 	require('./RedisController'),
 	require('./MongoController'),
-	require('./ConversationController')
+	require('./LevelsController'),
+	require('./ConversationController'),
 ]

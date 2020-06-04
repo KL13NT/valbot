@@ -175,7 +175,7 @@ function log (client, notification, alertLevel){
 			botStatusChannel.send(fullNotification)
 		}
 		else {
-			client.queue.enqueue(log, client, notification, alertLevel)
+			QueueController.enqueue(log, client, notification, alertLevel)
 		}
 	}
 }

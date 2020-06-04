@@ -53,6 +53,7 @@ class MongoController extends Controller {
 						upsert: true
 					})
 		}
+		else QueueController.enqueue(this.syncLevels, id, { exp, text, voice })
 	}
 
 	async getLevel (id){
@@ -86,6 +87,7 @@ class MongoController extends Controller {
 				upsert: true
 			})
 		}
+		else QueueController.enqueue(this.saveResponse, { invoker, reply } )
 	}
 }
 

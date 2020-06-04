@@ -24,7 +24,7 @@ class ClientReadyListener extends Listener {
 			this.client.config.IMPORTANT_CHANNELS[channelName] = getChannelObject(this.client, channelID)
 		})
 
-		this.client.queue.executeAll()
+		QueueController.executeAll()
 	}
 
 }

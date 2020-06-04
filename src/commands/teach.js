@@ -13,9 +13,9 @@ class Teach extends Command {
 			cooldown: 1000,
 			nOfParams: 1,
 			requiredAuthLevel: 2,
-			description: `بتمسح رسايل بعدد n`,
+			description: `بتعلم البوت يرد على حاجة`,
 			exampleUsage: `${client.prefix} teach hello`,
-			extraParams: false
+			extraParams: true
 		})
 
 		super(client, options)
@@ -24,6 +24,10 @@ class Teach extends Command {
   async _run(context) {
 		const { message, channel, params, member } = context
 		const invoker = params.join(' ').replace(/"/g, '')
+
+		if(params.length === 0){
+			
+		}
 
 		const collectorOptions = { max: 1, time: 60000, errors: ['time'] }
 		const collectorFilter = m => m.author.id === member.id
