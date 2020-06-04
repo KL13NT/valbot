@@ -28,10 +28,12 @@ class ValClient extends Client {
 		try{
 			this.setupConfig()
 			this.login(token)
+
+
+			this.ToxicityFilter = new ToxicityFilter(0.8)
 			await this.initLoaders()
 			await this.initListeners()
 
-			this.ToxicityFilter = new ToxicityFilter(0.8)
 
 			console.log(fs.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8').toString(), 'Loaded successfully')
 
@@ -80,11 +82,12 @@ class ValClient extends Client {
 	 * Initialises client listeners. Doesn't handle exceptions on purpose.
 	 */
 	async initListeners (){
+		log(this, 'Listeners loading', 'info')
+
 		for (const listener in Listeners) {
 			new Listeners[listener](this).init()
 		}
 
-		console.log('\nlisteners ready\n')
 	}
 
 

@@ -27,7 +27,7 @@ class ToxicityLoader {
 	}
 
 	async classify (message){
-		if(process.env.mode === 'DEVELOPMENT') return
+		if(process.env.mode === 'DEVELOPMENT' || !this.isReady) return false
 
 		const { content: sentence } = message
 		const predictions = await this.classifier.classify([ sentence ])

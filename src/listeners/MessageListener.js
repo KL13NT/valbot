@@ -1,4 +1,4 @@
-const { CLIENT_ID } = process.env
+const { CLIENT_ID, DEV_CLIENT_ID } = process.env
 const { Listener } = require('../structures')
 
 class MessageListener extends Listener {
@@ -15,7 +15,7 @@ class MessageListener extends Listener {
 		const isToxic = await this.client.ToxicityFilter.classify(message)
 		const isClientMentioned = message.mentions.members.some(member => member.id === CLIENT_ID)
 
-		if(author.id !== CLIENT_ID && type !== 'dm'){
+		if((author.id !== CLIENT_ID || author.id !== DEV_CLIENT_ID) && type !== 'dm'){
 			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
 			if(this.ToxicityFilter && this.client.ToxicityFilter.ready && isToxic) return this.client.ToxicityFilter.warn(message)
 
