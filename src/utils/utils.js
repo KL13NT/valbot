@@ -165,7 +165,7 @@ function isOneOf (matcher, possibilities){
  * @param {*} alertLevel
  */
 function log (client, notification, alertLevel){
-	console.log(notification)
+	console.log(`[${alertLevel}] ${notification}`)
 
 	const statusEmoji = alertLevel === 'info'? ':grey_question:': alertLevel === 'warn'? ':warning:': ':x:'
 	const isProduction = process.env.MODE !== 'DEVELOPMENT'
@@ -173,7 +173,7 @@ function log (client, notification, alertLevel){
 	if(isProduction){
 		if(client.ready){
 			const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
-			const fullNotification = `${statusEmoji} ${notification}, ${alertLevel === 'error' || alertLevel === 'warn'? '<@&639855023970451457>': ''}`
+			const fullNotification = `${statusEmoji} ${notification} ${alertLevel === 'error' || alertLevel === 'warn'? '<@&639855023970451457>': ''}`
 
 			botStatusChannel.send(fullNotification)
 		}

@@ -28,10 +28,7 @@ class MongoController extends Controller {
 			this.db = this.mongo.db(process.env.DB_NAME)
 
 			if(typeof this.db !== 'undefined'){
-				const message = 'Mongo controller ready!'
 				this.ready = true
-
-				log(this.client, message, 'info')
 			}
 		}
 		catch(err){
@@ -57,6 +54,14 @@ class MongoController extends Controller {
 	}
 
 	async getLevel (id){
+		if(this.ready){
+			return this.db
+				.collection('levels')
+				.findOne({ id })
+		}
+	}
+
+	async getLevels (id){
 		if(this.ready){
 			return this.db
 				.collection('levels')

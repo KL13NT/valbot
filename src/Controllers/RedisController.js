@@ -12,17 +12,13 @@ class RedisController extends Controller {
 			name: 'RedisController'
 		})
 		this.ready = false
-		let times = 0
+		const times = 0
 
 		this.redis = redis.createClient(process.env.REDIS_URL)
 		this.getAsync = promisify(this.redis.get).bind(this.redis)
 
 		this.redis.on('ready', () => {
 			this.ready = true
-			console.log(times++)
-			const message = 'Redis controller ready!'
-
-			log(this.client, message, 'info')
 		})
 
 		this.redis.on('error', (err) => {

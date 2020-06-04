@@ -15,6 +15,8 @@ class QueueController extends Controller {
 
 		this.ready = false
 		this.calls = []
+
+		log(this.client, 'Queue controller loaded', 'info')
 	}
 
 	async enqueue (func, ...args) {
@@ -27,7 +29,7 @@ class QueueController extends Controller {
 	async executeAll () {
 		for(let i = this.calls.length - 1; i >= 0; i--){
 			this.calls[i].func.apply(this, this.calls[i].args)
-			this.calls.pop()
+			console.log(`Executed ${this.calls.pop().name} from the queue`)
 		}
 	}
 }

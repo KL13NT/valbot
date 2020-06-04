@@ -14,7 +14,23 @@ class LevelsController extends Controller {
 		this.levelUpMessage = this.levelUpMessage.bind(this)
 		// this.voice = this.voice.bind(this)
 		// this.levelUpVoice = this.levelUpVoice.bind(this)
-		console.log('Text levels controller ready!')
+
+		this.init = this.init.bind(this)
+
+		this.init()
+	}
+
+	async init (){
+		if(!MongoController.ready)
+			MongoController.getLevels().then(async levels => {
+				levels.forEach(({ id, exp, text, voice }) => {
+					RedisController.set(`EXP:${id}`, Number(exp))
+					RedisController.set(`TEXT:${id}`, Number(text))
+					RedisController.set(`VOICE:${id}`, Number(voice))
+				})
+			})
+
+		else QueueController.enqueue(this.init)
 	}
 	/**
 	 *
