@@ -18,9 +18,9 @@ class RedisController extends Controller {
 		this.getAsync = promisify(this.redis.get).bind(this.redis)
 
 		this.redis.on('ready', () => {
-			this.ready = true
+			if(!this.ready) this.client.emit('queueExecute', 'Redis controller ready')
 
-			this.client.emit('queueExecute', 'Redis controller ready')
+			this.ready = true
 		})
 
 		this.redis.on('error', (err) => {
