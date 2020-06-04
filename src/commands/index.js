@@ -5,6 +5,7 @@ module.exports = [
 	require('./rank'),
 	require('./teach'),
 	require('./giverole'),
+	require('./removerole'),
 	// require('./poll'),
 	// require('./reactionroles')
 ]
