@@ -26,8 +26,6 @@ class ConversationController extends Controller {
 						reply
 					}
 				})
-
-				log(this.client, 'Conversation controller loaded', 'info')
 			}
 			else {
 				QueueController.enqueue(this.init)

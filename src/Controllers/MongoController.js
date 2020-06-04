@@ -29,6 +29,8 @@ class MongoController extends Controller {
 
 			if(typeof this.db !== 'undefined'){
 				this.ready = true
+
+				this.client.emit('queueExecute', 'Mongo controller ready')
 			}
 		}
 		catch(err){
@@ -61,11 +63,11 @@ class MongoController extends Controller {
 		}
 	}
 
-	async getLevels (id){
+	async getLevels (){
 		if(this.ready){
 			return this.db
 				.collection('levels')
-				.findOne({ id })
+				.find({})
 		}
 	}
 

@@ -35,11 +35,11 @@ class ValClient extends Client {
 			await this.initListeners()
 
 
-			console.log(fs.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8').toString(), 'Loaded successfully')
+			console.log(fs.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8').toString())
 
 		}
 		catch(err){
-			console.log('Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying', err)
+			log(this, `Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying ${err.message}`, 'error')
 
 			if(retry === 5) {
 				process.exit(1)
@@ -59,7 +59,7 @@ class ValClient extends Client {
 			const randomPresence = customPresences[randomIndex]
 			user.setActivity(randomPresence.message, { type: randomPresence.type }).catch(err => console.log(err))
 
-			console.log(`Current presence: ${randomPresence.type} ${randomPresence.message}`)
+			log(this, `Current presence: ${randomPresence.type} ${randomPresence.message}`, 'info')
 		}
 
 		setCurrentPresence()
@@ -70,12 +70,13 @@ class ValClient extends Client {
 	 * Initialises client loaders. Doesn't handle exceptions on purpose.
 	 */
 	async initLoaders () {
-		//Load loaders from file
+		log(this, 'Loaders loading', 'info')
+
 		for (const loader in Loaders) {
 			new Loaders[loader](this).load()
 		}
 
-		log(this, 'All loaders completed successfully', 'info')
+		log(this, 'All loaders loaded successfully', 'info')
 	}
 
 	/**
@@ -88,6 +89,7 @@ class ValClient extends Client {
 			new Listeners[listener](this).init()
 		}
 
+		log(this, 'All listeners loaded successfully', 'info')
 	}
 
 

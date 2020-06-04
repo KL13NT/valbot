@@ -1,6 +1,8 @@
 const { Loader } = require('../structures')
 const Controllers = require('../Controllers')
 
+const { log } = require('../utils/utils')
+
 /**
  * Loads Controllers based on Controllers/index
  */
@@ -17,6 +19,8 @@ class ControllersLoader extends Loader{
 		Controllers.forEach(controller => {
 			const controllerInstance = new controller(this.client)
 			global[controllerInstance.constructor.name] = controllerInstance
+
+			log(this.client, `${controller.name} loaded`, 'info')
 		})
 	}
 }

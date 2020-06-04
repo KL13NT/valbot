@@ -1,5 +1,7 @@
-const { Loader, Command } = require('../structures')
+const { Loader } = require('../structures')
 const Commands = require('../commands')
+
+const { log } = require('../utils/utils')
 
 /**
  * Loads commands based on commands/index
@@ -20,6 +22,8 @@ class CommandsLoader extends Loader{
 			this.client.commands[newCommand.options.name] = newCommand
 
 		})
+
+		log(this.client, 'Commands loaded successfully', 'info')
 	}
 }
 

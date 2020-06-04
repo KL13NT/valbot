@@ -21,15 +21,16 @@ class LevelsController extends Controller {
 	}
 
 	async init (){
-		if(!MongoController.ready)
+		if(MongoController.ready){
 			MongoController.getLevels().then(async levels => {
 				levels.forEach(({ id, exp, text, voice }) => {
 					RedisController.set(`EXP:${id}`, Number(exp))
 					RedisController.set(`TEXT:${id}`, Number(text))
 					RedisController.set(`VOICE:${id}`, Number(voice))
 				})
-			})
 
+			})
+		}
 		else QueueController.enqueue(this.init)
 	}
 	/**

@@ -2,7 +2,7 @@ const path = require('path')
 
 const { CLIENT_ID } = process.env
 const { Listener } = require('../structures')
-const { getChannelObject } = require('../utils/utils')
+const { getChannelObject, log } = require('../utils/utils')
 
 class ClientReadyListener extends Listener {
 	constructor (client) {
@@ -14,7 +14,6 @@ class ClientReadyListener extends Listener {
 	}
 
 	async onReady (){
-		console.log('Client ready')
 		this.client.setPresence()
 		this.client.ready = true
 
@@ -26,8 +25,9 @@ class ClientReadyListener extends Listener {
 		})
 
 		QueueController.executeAll()
-	}
 
+		log(this.client, 'Client ready', 'info')
+	}
 }
 
 module.exports = ClientReadyListener

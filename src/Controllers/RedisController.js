@@ -19,6 +19,8 @@ class RedisController extends Controller {
 
 		this.redis.on('ready', () => {
 			this.ready = true
+
+			this.client.emit('queueExecute', 'Redis controller ready')
 		})
 
 		this.redis.on('error', (err) => {

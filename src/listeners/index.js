@@ -3,5 +3,6 @@ module.exports = {
 	MessageListener: require('./MessageListener'),
 	NewGuildMemberListener: require('./NewGuildMemberListener'),
 	ReactionRolesListener: require('./ReactionRolesListener'),
-	CommandsListener: require('./CommandsListener')
+	CommandsListener: require('./CommandsListener'),
+	QueueExecuteListener: require('./QueueExecuteListener')
 }

@@ -165,7 +165,6 @@ function isOneOf (matcher, possibilities){
  * @param {*} alertLevel
  */
 function log (client, notification, alertLevel){
-	console.log(`[${alertLevel}] ${notification}`)
 
 	const statusEmoji = alertLevel === 'info'? ':grey_question:': alertLevel === 'warn'? ':warning:': ':x:'
 	const isProduction = process.env.MODE !== 'DEVELOPMENT'
@@ -175,12 +174,14 @@ function log (client, notification, alertLevel){
 			const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
 			const fullNotification = `${statusEmoji} ${notification} ${alertLevel === 'error' || alertLevel === 'warn'? '<@&639855023970451457>': ''}`
 
+			console.log(`[${alertLevel}] ${notification}`)
 			botStatusChannel.send(fullNotification)
 		}
 		else {
 			QueueController.enqueue(log, client, notification, alertLevel)
 		}
 	}
+	else console.log(`[${alertLevel}] ${notification}`)
 }
 
 /**
