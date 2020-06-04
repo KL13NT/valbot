@@ -3,9 +3,10 @@ const { Client } = require('discord.js')
 const fs = require('fs')
 const path = require('path')
 const Loaders = require('./loaders')
-const { Queue } = require('./structures')
 const Listeners = require('./listeners')
 const ToxicityFilter = require('./utils/InsultFiltering')
+const { Queue } = require('./structures')
+const { log } = require('./utils/utils')
 
 
 /**
@@ -73,6 +74,8 @@ class ValClient extends Client {
 		for (const loader in Loaders) {
 			new Loaders[loader](this).load()
 		}
+
+		log(this, 'All loaders completed successfully', 'info')
 	}
 
 	/**

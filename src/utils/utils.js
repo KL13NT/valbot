@@ -164,14 +164,19 @@ function isOneOf (matcher, possibilities){
 function log (client, notification, alertLevel){
 	console.log(notification)
 
-	if(client.isReady && process.env.MODE !== 'DEVELOPMENT'){
-		const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
-		const fullNotification = `${notification}, ${alertLevel==='error'? '<@&639855023970451457>': ''}`
+	const statusEmoji = alertLevel === 'info'? ':grey_question:': alertLevel === 'warn'? ':warning:': ':x:'
+	const isProduction = process.env.MODE !== 'DEVELOPMENT'
 
-		botStatusChannel.send(fullNotification)
-	}
-	else {
-		client.queue.enqueue(log, client, notification, alertLevel)
+	if(isProduction){
+		if(client.isReady){
+			const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
+			const fullNotification = `${statusEmoji} ${notification}, ${alertLevel === 'error' || alertLevel === 'warn'? '<@&639855023970451457>': ''}`
+
+			botStatusChannel.send(fullNotification)
+		}
+		else {
+			client.queue.enqueue(log, client, notification, alertLevel)
+		}
 	}
 }
 

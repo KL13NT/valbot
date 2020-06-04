@@ -106,12 +106,6 @@ class LevelsController extends Controller {
 	}
 
 	async levelUpMessage (message){
-		const welcome = `
-			Welcome aboard! We have a fair levelling system,
-			the more you contribute and chat, the more points you earn.
-			When you reach certain levels you unlock new roles.
-			To know more type v! levels`
-
 		const { id } = message.member.user
 		const exp = Number(await RedisController.get(`EXP:${id}`))
 		const text = Number(await RedisController.get(`TEXT:${id}`))
@@ -119,11 +113,6 @@ class LevelsController extends Controller {
 
 
 		MongoController.syncLevels(id, { exp, text, voice })
-
-
-		if(text === 1 && exp === 1){
-			message.reply(welcome)
-		}
 
 		message.reply(`مستواك علي! بقيت في المستوى ${text}# :fireworks: <:PutinWaves:668209208113627136> `)
 	}

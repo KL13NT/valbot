@@ -8,6 +8,11 @@ module.exports = {
 	"extends": [
 		"eslint:recommended"
 	],
+	"globals": {
+		"LevelsController": "readonly",
+		"MongoController": "readonly",
+		"RedisController": "readonly",
+	},
 	'parser': 'babel-eslint',
 	'parserOptions': {
 		'ecmaVersion': 10,
