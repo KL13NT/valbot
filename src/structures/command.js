@@ -9,8 +9,7 @@ const {
 	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
-
-
+const { generateEvent } = require('../utils/utils')
 
 class Command{
 	/**
@@ -44,8 +43,8 @@ class Command{
 	 * @private
 	 */
 	run (message){
-		if(!this.client.isReady) return message.reply('Client not ready yet')
-		
+		if(!this.client.ready) return message.reply('مش جاهز لسه')
+
 		message.content = message.content.replace(/\s+/g, ' ')
 
 		const split = message.content.split(' ')
@@ -80,7 +79,15 @@ class Command{
 		const { nOfParams, extraParams } = this.options
 
 		if(params[0] === 'help') return this.help(message)
-		else if((params.length < 1 && nOfParams >= 1) || (params.length > nOfParams && !extraParams)) return message.reply(ERROR_INSUFFICIENT_PARAMS_PASSED)
+		else if((params.length < 1 && nOfParams >= 1) || (params.length > nOfParams && !extraParams))
+			return message.reply(
+				generateEvent(
+					this.client,
+					ERROR_INSUFFICIENT_PARAMS_PASSED,
+					{
+						_PREFIX: this.client.prefix,
+						COMMAND_NAME: this.options.name
+					}))
 		else return true
 	}
 

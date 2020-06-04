@@ -13,7 +13,7 @@ class Giverole extends Command {
 			cooldown: 1000,
 			nOfParams: 2,
 			requiredAuthLevel: 2,
-			description: `بتدري لميمبر روول معين`,
+			description: `بتدي لميمبر روول معين`,
 			exampleUsage: `val! giverole @Sovereign#4984 <role_name|role_id>`,
 			extraParams: false
 		})

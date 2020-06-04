@@ -16,7 +16,7 @@ class ClientReadyListener extends Listener {
 	async onReady (){
 		console.log('Client ready')
 		this.client.setPresence()
-		this.client.isReady = true
+		this.client.ready = true
 
 		const importantChannels = this.client.config.IMPORTANT_CHANNELS_ID
 

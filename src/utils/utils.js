@@ -217,6 +217,47 @@ function calculateUniqueWords (messageContent){
 	}).length
 }
 
+/**
+ * Generates an event string dynamically based on events.json
+ * @param {*} client
+ * @param {*} event
+ */
+function generateEvent (client, event, content){
+	let generated = event
+
+	Object.keys(content).forEach(variable => {
+		generated = generated.replace(new RegExp(`{{${variable}}}`), content[variable])
+	})
+
+	return generated
+}
+
+/**
+ * returns a parsed level string
+ * @param {*} securityLevel
+ */
+function translateSecurityLevel (securityLevel){
+	/**
+ * @typedef {object} AuthLevels
+ * @property {number} 0 Developers
+ * @property {number} 1 High Table [admin]
+ * @property {number} 2 Protectors [mod]
+ * @property {number} 3 Verified members role
+ * @property {number} 4 Everyone
+ */
+
+	/**
+	* TODO: move logic out of here,
+	* perhaps replace all levels across codebase with objects
+	* {
+		levelInt: 0|1|2|3|4,
+		levelString: Developer
+	}
+	*/
+	// if(securityLevel)
+
+}
+
 
 module.exports = {
 	sendEmbed,
@@ -229,5 +270,6 @@ module.exports = {
 	dmMember,
 	log,
 	notify,
+	generateEvent,
 	calculateUniqueWords
 }
