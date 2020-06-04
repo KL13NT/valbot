@@ -25,6 +25,8 @@ class LevelsController extends Controller {
 		const { user } = member
 		const { id } = user
 
+		if(member.id === CLIENT_ID) return
+
 		try{
 			const exp = Number(await RedisController.get(`EXP:${id}`)) // 40
 			const text = Number(await RedisController.get(`TEXT:${id}`)) // 40

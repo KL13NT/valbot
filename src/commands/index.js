@@ -3,6 +3,7 @@ module.exports = [
 	require('./help'),
 	require('./report'),
 	require('./rank'),
+	require('./teach'),
 	// require('./poll'),
 	// require('./reactionroles')
 ]

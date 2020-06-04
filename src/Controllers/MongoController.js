@@ -4,7 +4,9 @@ const { DATABASE_INIT_FAILED } = require('../config/events.json')
 const { Controller } = require('../structures')
 const { log } = require('../utils/utils')
 
-
+/**
+ * @global
+ */
 class MongoController extends Controller {
 	constructor (client){
 		super(client, {
@@ -58,6 +60,31 @@ class MongoController extends Controller {
 			return this.db
 				.collection('levels')
 				.findOne({ id })
+		}
+	}
+
+	async getResponses (){
+		if(this.ready){
+			return this.db.collection('responses').find({})
+		}
+	}
+
+	/**
+	 * Stores new responses, teaches bot
+	 * @param {*} param0 reponse
+	 */
+	async saveResponse ({ invoker, reply }){
+		if(this.ready){
+			return this.db.collection('responses').updateOne({
+				invoker
+			}, {
+				$set: {
+					invoker,
+					reply
+				}
+			}, {
+				upsert: true
+			})
 		}
 	}
 }
