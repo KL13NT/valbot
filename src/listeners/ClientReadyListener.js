@@ -19,6 +19,7 @@ class ClientReadyListener extends Listener {
 		this.client.isReady = true
 
 		const importantChannels = this.client.config.IMPORTANT_CHANNELS_ID
+
 		Object.keys(importantChannels).forEach(channelName => {
 			const channelID = importantChannels[channelName]
 			this.client.config.IMPORTANT_CHANNELS[channelName] = getChannelObject(this.client, channelID)

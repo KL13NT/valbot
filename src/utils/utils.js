@@ -89,12 +89,15 @@ function getChannelObject (client, channelId){
 
 /**
  * @param {ValClient} client
- * @param {string} channelId
+ * @param {string} roleId|rolename
  */
-function getRoleObject (client, roleId){
+function getRoleObject (client, roleID){
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM').roles.cache
-		.find(role => role.id === roleId)
+		.find(role => {
+			if(/\d+/.test(roleID)) return role.id === roleID
+			else return role.name === roleID
+		})
 }
 
 /**
@@ -182,6 +185,23 @@ function log (client, notification, alertLevel){
 
 /**
  *
+ * @param {*} client
+ * @param {*} notification
+ * @param {*} alertLevel
+ */
+function notify (client, notification){
+	if(client.isReady){
+		const notificationsChannel = client.channels.cache.find(ch => ch.id === client.config.IMPORTANT_CHANNELS['notifications'])
+
+		notificationsChannel.send(notification)
+	}
+	else {
+		QueueController.enqueue(notify, client, notification)
+	}
+}
+
+/**
+ *
  * @param {*} messageContent
  */
 function calculateUniqueWords (messageContent){
@@ -208,5 +228,6 @@ module.exports = {
 	getMemberObject,
 	dmMember,
 	log,
+	notify,
 	calculateUniqueWords
 }
