@@ -171,7 +171,7 @@ function log (client, notification, alertLevel){
 	const isProduction = process.env.MODE !== 'DEVELOPMENT'
 
 	if(isProduction){
-		if(client.isReady){
+		if(client.ready){
 			const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
 			const fullNotification = `${statusEmoji} ${notification}, ${alertLevel === 'error' || alertLevel === 'warn'? '<@&639855023970451457>': ''}`
 
@@ -189,10 +189,11 @@ function log (client, notification, alertLevel){
  * @param {*} notification
  * @param {*} alertLevel
  */
-function notify (client, notification){
-	if(client.isReady){
-		const notificationsChannel = client.channels.cache.find(ch => ch.id === client.config.IMPORTANT_CHANNELS['notifications'])
-
+async function notify (client, notification){
+	if(client.ready){
+		//REFACTORME: have better logic for important config stuff
+		const isDevelopment = process.env.MODE === 'DEVELOPMENT'
+		const notificationsChannel = client.config.IMPORTANT_CHANNELS[isDevelopment? 'test': 'notifications']
 		notificationsChannel.send(notification)
 	}
 	else {

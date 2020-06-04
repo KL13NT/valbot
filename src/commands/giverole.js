@@ -41,7 +41,7 @@ class Giverole extends Command {
 
 		member.roles.add(role)
 			.then(()=>{
-				nchannel.send(`<@!${targetMemberID}>, جالك روول ${role.name}`)
+				notify(this.client, `<@!${targetMemberID}>, جالك روول ${role.name}`)
 				message.reply(`اديت الميمبر ده روول ${role.name}`)
 			})
 			.catch(err => {

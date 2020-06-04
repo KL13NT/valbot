@@ -25,8 +25,9 @@ class QueueController extends Controller {
 	}
 
 	async executeAll () {
-		this.calls.forEach(({ func, args }) => {
+		this.calls.reverse().forEach(({ func, args }) => {
 			func.apply(this, args)
+			this.calls.pop()
 		})
 	}
 }
