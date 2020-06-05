@@ -33,7 +33,12 @@ class Clear extends Command {
 			}
 
 			await channel.bulkDelete(count)
-			message.reply(`مسحت ${count} رسايل. تحب اجيبلك كوبايتين لمون؟`)
+
+			message.reply(`مسحت ${count} رسايل. تحب اجيبلك كوبايتين لمون؟`).then(sent => {
+				setTimeout(()=>{
+					sent.delete()
+				}, 3 * 1000)
+			})
 
 		}
 		else message.reply(`لازم تدخل رقم كـتالت باراميتير للكوماند دي`)
