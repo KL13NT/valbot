@@ -30,7 +30,7 @@ class Debug extends Command {
 
 			message.reply(`I'll report on the dev channel ${this.client.config.IMPORTANT_CHANNELS['bot_status']}`)
 
-			log(this.client, 'Logging every 2000ms', 'info')
+			log(this.client, 'Logging every 2000ms', 'warn')
 			IntervalsController.setInterval(2000, {name: 'debug'}, ()=>{
 				log(this.client, this.usageToString(), 'info')
 			})
