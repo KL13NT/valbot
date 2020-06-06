@@ -9,7 +9,7 @@ class Report extends Command {
 			name: `report`,
 			cooldown: 10 * 1000,
 			nOfParams: 2,
-			requiredAuthLevel: 3,
+			requiredRole: 'verified',
 			description: `بتعمل ريبورت لرسالة حد بعتها و السبب. لازم الريبورت يتعمل في نفس التشانل. بتعمل منشن للشخص اللي عايز تعمله ريبورت بالشكل التالي:`,
 			exampleUsage: `val! report @Sovereign Violation of rules`,
 			extraParams: true

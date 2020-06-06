@@ -9,7 +9,7 @@ class Rank extends Command{
       name: `rank`,
 			cooldown: 1000,
 			nOfParams: 0,
-			requiredAuthLevel: 3,
+			requiredRole: 'verified',
 			description: `بتشوف مستوى شخص ما`,
 			exampleUsage: `val! rank <user_id>`,
 			extraParams: true
@@ -24,7 +24,7 @@ class Rank extends Command{
 
 			const id = userMention? userMention.replace(/<|>|!|@/g, ''): ctxMember.user.id
 
-			if(id === process.env.CLIENT_ID) return message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
+			if(id === process.env.CLIENT_ID || id === process.env.CLIENT_DEV_ID) return message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
 
 			const member = getMemberObject(this.client, id)
 
@@ -54,13 +54,12 @@ class Rank extends Command{
 						}]
 					});
 				})
-			}).catch(err => {
-				log(err)
 			})
 		}
 		catch(err){
 			console.error(err)
 			context.message.reply(err.message)
+			log(this.client, err.message, 'error')
 		}
 	}
 }

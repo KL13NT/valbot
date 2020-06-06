@@ -2,7 +2,7 @@
 	"name": "string",
 	"cooldown": "number",
 	"nOfParams": "number",
-	"requiredAuthLevel": "number",
+	"requiredRole": "string",
 	"description": "string",
 	"exampleUsage": "string",
 	"extraParams": "boolean"

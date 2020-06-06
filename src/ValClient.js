@@ -103,7 +103,6 @@ class ValClient extends Client {
 			CUSTOM_PRESENCES: require('./config/custom-presences.json'),
 			IMPORTANT_CHANNELS_ID: require('./config/important-channels.json'),
 			IMPORTANT_ROLES: require('./config/important-roles.json'),
-			AUTH_LEVELS: require('./config/auth-levels.json'),
 			MUTED_MEMBERS: {},
 			WARNED_MEMBERS: {},
 			IMPORTANT_CHANNELS: {}

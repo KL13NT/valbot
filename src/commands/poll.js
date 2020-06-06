@@ -14,7 +14,7 @@ class Poll extends Command {
 			name: `poll`,
 			cooldown: 10 * 60 * 1000,
 			nOfParams: 0,
-			requiredAuthLevel: 2,
+			requiredRole: 'mod',
 			description: `بتعمل استفتاء جديد, خاصة بالمسؤولين فقط`,
 			exampleUsage: `val! poll`,
 			extraParams: false

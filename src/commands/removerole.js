@@ -12,7 +12,7 @@ class Removerole extends Command {
 			name: `removerole`,
 			cooldown: 1000,
 			nOfParams: 2,
-			requiredAuthLevel: 2,
+			requiredRole: 'mod',
 			description: `بتشيل روول من ميمبر`,
 			exampleUsage: `val! removerole @Sovereign#4984 <role_name|role_id>`,
 			extraParams: false

@@ -46,7 +46,7 @@ class ConversationController extends Controller {
 		if(response){
 			message.reply(response.reply)
 		}
-		else if(isClientMentioned) message.reply('لو محتاجين مساعدة تقدروا تكتبوا `val! help`')
+		else if(isClientMentioned) message.reply(`لو محتاجين مساعدة تقدروا تكتبوا \`${this.client.prefix} help\``)
 	}
 
 	async teach (response){

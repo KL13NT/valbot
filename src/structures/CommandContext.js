@@ -1,5 +1,4 @@
 const { ERROR_CONTEXT_PARAMS_MALFORMED } = require('../config/events.json')
-const AUTH_LEVELS = require('../config/auth-levels.json')
 /**
  * @typedef {object} AuthLevels
  * @property {number} 0 Developers
@@ -30,18 +29,10 @@ class CommandContext{
 			this.channel = message.channel
 			this.guild = message.guild
 			this.params = []
-			this.authLevel = this.determineAuthLevel()
 			this.message.content = this.message.content.replace(/\s+/g, ' ')
 		}
 
 		else throw Error(ERROR_CONTEXT_PARAMS_MALFORMED)
-	}
-
-	determineAuthLevel (){
-		const userRoles = this.member.roles.cache
-		const authLevels = Object.keys(AUTH_LEVELS)
-		
-		return authLevels.reduce((authLevel, role) => userRoles.get(role) && AUTH_LEVELS[role] < authLevel? AUTH_LEVELS[role]: authLevel)
 	}
 }
 

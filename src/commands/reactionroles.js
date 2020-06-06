@@ -27,7 +27,7 @@ class ReactionRoles extends Command{
       name: `reactionroles`,
 			cooldown: 10 * 1000,
 			nOfParams: 3,
-			requiredAuthLevel: 1,
+			requiredRole: 'admin',
 			description: `بتضيف روولز على حسب الريأكشنز و خاصة بالمدراء`,
 			exampleUsage: `val! reactionroles <channel_id> <message_id> <role_id>`,
 			extraParams: false

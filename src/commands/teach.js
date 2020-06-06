@@ -12,7 +12,7 @@ class Teach extends Command {
 			name: `teach`,
 			cooldown: 1000,
 			nOfParams: 0,
-			requiredAuthLevel: 2,
+			requiredRole: 'mod',
 			description: `بتعلم البوت يرد على حاجة`,
 			exampleUsage: `${client.prefix} teach hello`,
 			extraParams: true

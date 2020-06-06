@@ -1,5 +1,7 @@
 const CommandContext = require('./CommandContext')
 const CommandOptions = require('./CommandOptions')
+
+const AUTH_ROLES = require('../config/auth-roles.json')
 const {
 	GENERIC_SOMETHING_WENT_WRONG,
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
@@ -9,7 +11,7 @@ const {
 	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
-const { generateEvent } = require('../utils/utils')
+const { generateEvent, log, getRoleObject } = require('../utils/utils')
 
 class Command{
 	/**
@@ -28,16 +30,6 @@ class Command{
 	}
 
 	/**
-	 * Checks whether member has sufficient auth
-	 * @param {CommandContext} context message context
-	 * @private
-	 */
-	isAllowed ({ authLevel }){
-		if(authLevel <= this.options.requiredAuthLevel) return true
-	}
-
-
-	/**
 	 * Determines whether user is allowed to use this command
 	 * @param {CommandContext} context message context
 	 * @private
@@ -51,7 +43,7 @@ class Command{
 		const params = split.slice(2)
 
 		if(this.enforceParams(params, message) === true){
-			const context = new CommandContext(this, message)
+			const context = new CommandContext(this, message, this.options)
 			context.params = params
 
 			if(this.isAllowed(context)) this.enforceCooldown(context)
@@ -59,11 +51,37 @@ class Command{
 		}
 	}
 
+	/**
+	 * Checks whether member has sufficient auth
+	 * @param {CommandContext} context message context
+	 * @private
+	 */
+	isAllowed ({ member }){
+		return member.roles.cache.some(
+			(role) => {
+				if(role.id === AUTH_ROLES[this.options.requiredRole])
+					return true
+				else {
+					const values = Object.values(AUTH_ROLES)
+					const indexOfRole = values.indexOf(role.id)
+					const indexOfRequiredRole = values.indexOf(AUTH_ROLES[this.options.requiredRole])
+
+					if(indexOfRole > -1 && indexOfRole <= indexOfRequiredRole) return true
+				}
+			}
+		)
+	}
 
 	enforceCooldown (context){
 		const { cooldown } = this.options
 
-		if(this.isReady) this._run(context).catch(err => context.message.reply(GENERIC_SOMETHING_WENT_WRONG) && console.log(err))
+		if(this.isReady)
+			this
+				._run(context)
+				.catch(err => {
+					context.message.reply(GENERIC_SOMETHING_WENT_WRONG)
+					log(this.client, err.message, 'error')
+				})
 		else context.message.reply(ERROR_COMMAND_NOT_READY)
 
 		if(cooldown !== 0){
@@ -87,7 +105,9 @@ class Command{
 					{
 						_PREFIX: this.client.prefix,
 						COMMAND_NAME: this.options.name
-					}))
+					}
+				)
+			)
 		else return true
 	}
 
@@ -117,15 +137,16 @@ class Command{
 	 * @param {GuildMessage} message message to reply to
 	 */
 	help (message){
+		const { name, requiredRole, nOfParams, exampleUsage, description } = this.options
 
-		const { name, requiredAuthLevel, nOfParams, exampleUsage, description } = this.options
+		const role = getRoleObject(this.client, AUTH_ROLES[requiredRole])
 
 		message.reply(`
 			معلومات عن ${name}:
 			الاستعمال:\n\`${exampleUsage}\`
 			الوظيفة:\n\`${description}\`
 			بتاخد كام باراميتير\n\`${nOfParams}\`
-			اقل مستوى أمني مسموح بيه \n\`${requiredAuthLevel}\`
+			اقل role مسموح بيه \n\`${role.name}\`
 		`)
 
 	}

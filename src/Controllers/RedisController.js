@@ -12,22 +12,31 @@ class RedisController extends Controller {
 			name: 'RedisController'
 		})
 		this.ready = false
-		const times = 0
 
 		this.redis = redis.createClient(process.env.REDIS_URL)
 		this.getAsync = promisify(this.redis.get).bind(this.redis)
+		this.readyListener = this.readyListener.bind(this)
+		this.errorListener = this.errorListener.bind(this)
 
-		this.redis.on('ready', () => {
-			if(!this.ready) this.client.emit('queueExecute', 'Redis controller ready')
+		this.redis.on('ready', this.readyListener)
+		this.redis.on('error', this.errorListener)
+	}
 
-			this.ready = true
-		})
+	errorListener (err){
+		const message = `Something went wrong when initialising Redis, ${err.message}, <@238009405176676352>`
 
-		this.redis.on('error', (err) => {
-			const message = `Something went wrong when initialising Redis, ${err.message}, <@238009405176676352>`
+		log(this.client, message, 'error')
+		this.redis.removeAllListeners()
+		delete global.RedisController
+	}
 
-			log(this.client, message, 'error')
-		})
+	readyListener (){
+		log(this.client, 'Redis controller ready', 'info')
+		this.client.emit('queueExecute', 'Redis controller ready')
+
+		this.ready = true
+
+		this.redis.removeListener('ready', this.readyListener)
 	}
 
 	set (key, value){

@@ -6,6 +6,7 @@ module.exports = [
 	require('./teach'),
 	require('./giverole'),
 	require('./removerole'),
+	require('./debug'),
 	// require('./poll'),
 	// require('./reactionroles')
 ]

@@ -11,7 +11,7 @@ class Clear extends Command {
 			name: `clear`,
 			cooldown: 1000,
 			nOfParams: 1,
-			requiredAuthLevel: 2,
+			requiredRole: 'mod',
 			description: `بتمسح رسايل بعدد n`,
 			exampleUsage: `val! clear 5`,
 			extraParams: false
@@ -25,7 +25,7 @@ class Clear extends Command {
 		const numbersRegex = /\d+/
 
 		if(numbersRegex.test(params[0])){
-			const count = parseInt(params[0])
+			const count = parseInt(params[0]) + 1
 
 			if(count === 0) {
 				message.reply('لما تكتب صفر للكوماند دي هتخلي ديسكورد يمسح كل الرسايل اللي ف التشانل! جرب رقم تاني')

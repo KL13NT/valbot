@@ -9,7 +9,7 @@ class Mute extends Command {
       name: `mute`,
 			cooldown: 10 * 1000,
 			nOfParams: 2,
-			requiredAuthLevel: 2,
+			requiredRole: 'mod',
 			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 15 دقيقة`,
 			exampleUsage: `val! mute @Sovereign Violation of rules`,
 			extraParams: true

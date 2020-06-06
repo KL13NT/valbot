@@ -3,5 +3,6 @@ module.exports = [
 	require('./RedisController'),
 	require('./MongoController'),
 	require('./LevelsController'),
-	require('./ConversationController')
+	require('./ConversationController'),
+	require('./IntervalsController')
 ]

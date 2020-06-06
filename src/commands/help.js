@@ -11,7 +11,7 @@ class Help extends Command {
 			name: 'help',
 			cooldown: 0,
 			nOfParams: 0,
-			requiredAuthLevel: 4,
+			requiredRole: 'everyone',
 			description: `لو محتاج مساعدة`,
 			exampleUsage: `\`val! help\` او \`val! help command\``
 		})

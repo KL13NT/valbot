@@ -28,7 +28,6 @@ class CommandOptions {
 		const schema = require('../config/command-options-schema.json')
 
 		for(const key in this){
-			//TODO: change all optoins into objects
 			if(key === 'extraParams') continue
 			else if(typeof this[key] !== schema[key]) return false
 		}

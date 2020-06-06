@@ -167,7 +167,7 @@ function isOneOf (matcher, possibilities){
 function log (client, notification, alertLevel){
 
 	const statusEmoji = alertLevel === 'info'? ':grey_question:': alertLevel === 'warn'? ':warning:': ':x:'
-	const isProduction = process.env.MODE !== 'DEVELOPMENT'
+	const isProduction = process.env.MODE === 'PRODUCTION'
 
 	if(isProduction){
 		if(client.ready){
