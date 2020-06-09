@@ -222,10 +222,9 @@ class LevelsController extends Controller {
 
 		MongoController.syncLevels(id, { exp, text, voice, level, textXP, voiceXP })
 
-		const notification = ` <@${id}>, مستواك علي! بقيت في المستوى ${level}# :fireworks: <:PutinWaves:668209208113627136> `
+		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`
 
-		if(type === 'message') message.reply(notification)
-		else notify(this.client, notification)
+		notify(this.client, notification)
 	}
 }
 
