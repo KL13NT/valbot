@@ -15,12 +15,12 @@ class IntervalsController extends Controller {
 		this.intervals = {}
 	}
 
-	setInterval (interval, intervalOptions, callback){
+	setInterval (time, intervalOptions, callback){
 		const { name } = intervalOptions
 
 		if(this.intervals[name]) this.clearInterval(name)
 
-		this.intervals[name] = setInterval(callback, interval)
+		this.intervals[name] = setInterval(callback, time)
 	}
 
 	clearInterval (name){

@@ -1,4 +1,4 @@
-<svg width="1596" height="392" viewBox="0 0 1596 392" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="1596" height="392" viewBox="0 0 1596 392" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="">
 <g id="Frame 1">
 <g clip-path="url(#clip0)">
 <g id="Bg" filter="url(#filter0_iif)">
@@ -19,19 +19,19 @@
 <path id="Vector_6" d="M1475.58 92H1404.42C1399.41 92 1394.64 93.572 1390.62 96.546C1389.85 97.13 1389.7 98.224 1390.27 99C1390.84 99.776 1391.94 99.946 1392.72 99.382C1396.12 96.86 1400.17 95.528 1404.42 95.528H1475.58C1486.43 95.528 1495.26 104.356 1495.26 115.206V161.88C1495.26 172.732 1486.43 181.558 1475.58 181.558H1445.5C1444.77 181.56 1444.08 181.862 1443.58 182.392L1419.42 208.076C1418.9 208.63 1418.29 208.474 1418.06 208.38C1417.82 208.288 1417.28 207.988 1417.28 207.226V184.204C1417.28 182.746 1416.09 181.56 1414.63 181.56H1404.42C1393.57 181.56 1384.74 172.732 1384.74 161.882V115.206C1384.74 111.214 1385.93 107.372 1388.18 104.094C1388.7 103.29 1388.49 102.212 1387.7 101.668C1386.91 101.124 1385.82 101.316 1385.27 102.098C1382.61 105.966 1381.21 110.5 1381.21 115.206V161.88C1381.21 174.676 1391.62 185.088 1404.42 185.088H1413.75V207.226C1413.75 209.194 1414.93 210.936 1416.76 211.66C1417.32 211.884 1417.92 212 1418.53 212C1419.81 212 1421.07 211.476 1421.99 210.494L1445.89 185.088H1475.58C1488.38 185.088 1498.79 174.676 1498.79 161.882V115.206C1498.79 102.41 1488.38 92 1475.58 92Z" fill="black"/>
 <path id="Vector_7" d="M1457.58 145.328C1457.25 145.658 1457.06 146.106 1457.06 146.574C1457.06 147.042 1457.25 147.492 1457.58 147.822C1457.91 148.152 1458.36 148.338 1458.83 148.338C1459.29 148.338 1459.74 148.152 1460.07 147.822L1465.34 142.554C1471.46 136.43 1471.46 126.468 1465.34 120.344C1459.22 114.222 1449.25 114.222 1443.13 120.344L1440.06 123.42C1440.03 123.442 1440.01 123.454 1439.98 123.452C1439.94 123.454 1439.92 123.442 1439.9 123.42L1436.87 120.394C1430.75 114.27 1420.78 114.27 1414.66 120.394C1408.54 126.516 1408.54 136.48 1414.66 142.602L1437.4 165.346C1438.08 166.03 1439.01 166.414 1439.98 166.412C1440.95 166.412 1441.86 166.034 1442.55 165.346L1455.05 152.846C1455.38 152.514 1455.57 152.066 1455.57 151.598C1455.57 151.13 1455.38 150.682 1455.05 150.35C1454.72 150.02 1454.27 149.834 1453.8 149.834C1453.33 149.834 1452.89 150.02 1452.56 150.35L1440.06 162.85C1440.04 162.872 1440.01 162.884 1439.98 162.884C1439.95 162.884 1439.92 162.872 1439.9 162.85L1417.15 140.108C1412.41 135.36 1412.41 127.636 1417.15 122.888C1421.9 118.14 1429.63 118.14 1434.37 122.888L1437.4 125.914C1438.08 126.6 1439.01 126.984 1439.97 126.98C1440.95 126.98 1441.86 126.602 1442.55 125.914L1445.63 122.84C1450.37 118.092 1458.1 118.092 1462.85 122.84C1467.59 127.586 1467.59 135.312 1462.85 140.06L1457.58 145.328Z" fill="black"/>
 </g>
-<text id="#4984" fill="#DADADA" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="48" letter-spacing="0em"><tspan x="1000" y="187.196">#{{USER_ID}}</tspan></text>
-<text id="Sovereign" fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="164" font-weight="250" letter-spacing="0em"><tspan x="359" y="211.628">{{USER_NAME}}</tspan></text>
+<text id="#4984" fill="#DADADA" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="48" letter-spacing="0em"/>
+<tspan x="1000" y="187.196">#{{USER_ID}}</tspan><text id="Sovereign" fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="164" font-weight="250" letter-spacing="0em"><tspan x="359" y="211.628">{{USER_NAME}}</tspan></text>
 <g id="XP to next level: 50XP">
-<text fill="#22CCDD" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" letter-spacing="0em"><tspan x="368" y="307.62">XP to next level: </tspan></text>
-<text fill="#FF7744" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" font-weight="600" letter-spacing="0em"><tspan x="840.508" y="307.62">XP</tspan></text>
-<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" font-weight="600" letter-spacing="0em"><tspan x="730.812" y="307.62">{{USER_EXP_TO_NEXT_LEVEL}}</tspan></text>
+<text fill="#22CCDD" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" letter-spacing="0em"><tspan x="368" y="307.62">Level #</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" font-weight="600" letter-spacing="0em"><tspan y="307.62" x="530.812">{{CURRENT_LEVEL}}</tspan></text><text fill="#FF7744" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" font-weight="600" letter-spacing="0em"><tspan y="307.62" x="650.508">XP</tspan></text>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" font-weight="600" letter-spacing="0em"><tspan y="307.62" x="720.812">{{CURRENT_EXP}}/{{LEVEL_EXP}}</tspan></text>
 </g>
 <g id="#99">
-<text fill="#7DFFC6" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1256.74" y="323.584">{{USER_VOICE_EXP}}</tspan></text>
+<text fill="#7DFFC6" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1256.74" y="323.584">9</tspan></text>
 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1212" y="323.584">#</tspan></text>
 </g>
 <g id="#99_2">
-<text fill="#EC5569" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1416.74" y="323.584">{{USER_TEXT_EXP}}</tspan></text>
+<text fill="#EC5569" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1416.74" y="323.584">8</tspan></text>
 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1372" y="323.584">#</tspan></text>
 </g>
 <rect id="2963514 1" x="1220" y="92" width="120" height="120" fill="url(#pattern2)"/>

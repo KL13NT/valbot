@@ -40,14 +40,14 @@ class MongoController extends Controller {
 		}
 	}
 
-	async syncLevels (id, { exp, text, voice }){
+	async syncLevels (id, { exp, text, voice, level, textXP, voiceXP }){
 		if(this.ready){
 			await this.db
 				.collection('levels')
 				.updateOne(
 					{ id },
 					{
-						$set: { exp, text, voice }
+						$set: { exp, text, voice, level, textXP, voiceXP }
 					}, {
 						upsert: true
 					})

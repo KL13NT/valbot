@@ -17,7 +17,6 @@ class MessageListener extends Listener {
 
 		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== 'dm'){
 
-			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
 			if(this.ToxicityFilter && this.client.ToxicityFilter.ready && isToxic) return this.client.ToxicityFilter.warn(message)
 
 			if(content.startsWith(this.client.prefix)) this.client.emit('command', message)

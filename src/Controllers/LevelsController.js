@@ -11,11 +11,13 @@ class LevelsController extends Controller {
 		})
 
 		this.message = this.message.bind(this)
+		this.voiceIncrement = this.voiceIncrement.bind(this)
 		this.levelUpMessage = this.levelUpMessage.bind(this)
-		// this.voice = this.voice.bind(this)
-		// this.levelUpVoice = this.levelUpVoice.bind(this)
+		this.trackUser = this.trackUser.bind(this)
+		this.untrackUser = this.untrackUser.bind(this)
 
 		this.init = this.init.bind(this)
+		this.activeVoice = []
 
 		this.init()
 	}
@@ -23,10 +25,20 @@ class LevelsController extends Controller {
 	async init (){
 		if(MongoController.ready){
 			MongoController.getLevels().then(async levels => {
-				levels.forEach(({ id, text, voice }) => {
+				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
+					console.log(id, text, voice, level, textXP, voiceXP)
 					RedisController.set(`TEXT:${id}`, Number(text))
+					RedisController.set(`TEXT:XP:${id}`, Number(textXP))
 					RedisController.set(`VOICE:${id}`, Number(voice))
+					RedisController.set(`VOICE:XP:${id}`, Number(voiceXP))
+					RedisController.set(`LEVEL:${id}`, Number(level))
 				})
+
+				IntervalsController.setInterval(
+					1000,
+					{ name: 'voiceIncrementer' },
+					this.voiceIncrement
+				)
 
 			})
 		}
@@ -95,14 +107,8 @@ class LevelsController extends Controller {
 		/**
 		 * The way the voice algorithm will work
 		 * Users join and leave voice channels
-		 * Start a background interval that synchronises levels to the DB
-		 *   If user has been in voice channel for 5 minutes or more, sync
-		 *   If user leaves keep it local and flag it until another user is synced
-		 *     And Piggy back on the other
-		 *   If no users are connected but this user, don't sync time for them
 		 * On user join event
 		 * 	Add user to currently active users (lcoal)
-		 * It'll then check currently available ValClient.levels for the user
 		 * 	If user is found it'll increment
 		 * 		If user is at a point where they should level up
 		 * 			Reply to their message and increase their level
@@ -121,6 +127,65 @@ class LevelsController extends Controller {
 			* Perhaps a key-value (RedisController?) store should be used for local operations
 			* And then flushed to the mongo instance
 			*/
+	}
+
+	async voiceIncrement (){
+		this.activeVoice.forEach(async id => {
+			try{
+				const voiceXP = Number(await RedisController.get(`VOICE:XP:${id}`))
+				const voice = Number(await RedisController.get(`VOICE:${id}`))
+
+				const level = Number(await RedisController.get(`LEVEL:${id}`))
+				const exp = Number(await RedisController.get(`EXP:${id}`))
+
+				if(exp){
+					const nextVoice = Math.floor(((voiceXP + 60) / 6) - 60)
+					const voiceIncrBy = nextVoice - voice <= 0? 1: nextVoice - voice
+
+					const nextLevel = Math.floor(((exp + 60) / 6) - 60)
+					const levelIncrBy = nextLevel - voice <= 0? 1: nextLevel - voice
+
+					if(exp + 60 >= ((60 * Number(voice) * 0.1) + 60)) {
+						if(exp + 60 >= ((60 * Number(level) * 0.1) + 60)){
+							RedisController.incrby(`LEVEL:${id}`, levelIncrBy)
+							RedisController.set(`EXP:${id}`, 1)
+						}
+
+						RedisController.incrby(`VOICE:${id}`, voiceIncrBy)
+						RedisController.set(`VOICE:XP:${id}`, 1)
+						// this.levelUpMessage(message)
+					}
+					else {
+						RedisController.incrby(`EXP:${id}`, 60)
+						RedisController.incrby(`VOICE:XP:${id}`, 60)
+					}
+				}
+				else {
+					RedisController.set(`EXP:${id}`, 1)
+					RedisController.set(`LEVEL:${id}`, 1)
+					RedisController.set(`TEXT:XP:${id}`, 1)
+					RedisController.set(`TEXT:${id}`, 1)
+					RedisController.set(`VOICE:XP:${id}`, 1)
+					RedisController.set(`VOICE:${id}`, 1)
+
+					// this.levelUpMessage(message)
+				}
+
+			}
+			catch(err){
+				log(this.client, err.message, 'error')
+			}
+		})
+	}
+
+	trackUser (id){
+		this.activeVoice.push(id)
+	}
+
+	untrackUser (id){
+		const index = this.activeVoice.indexOf(id)
+
+		if(index !== -1) this.activeVoice.splice(index, 1)
 	}
 
 	async levelUpMessage (message){

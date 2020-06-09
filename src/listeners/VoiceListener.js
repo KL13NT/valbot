@@ -4,23 +4,29 @@ const { Listener } = require('../structures')
 class VoiceListener extends Listener {
 	constructor (client) {
 		super(client, [
-			'message'
+			'voiceStateUpdate'
 		])
 	}
 
-	async onMessage (message){
-		const { content, author, type } = message
-		const isToxic = await this.ToxicityFilter.classify(message)
-
-		if(author.id !== CLIENT_ID && type !== 'dm'){
-			//TODO: perhaps implement a DB to collect deleted messages in case of false positives? Maybe a bit too overkill
-			if(this.ToxicityFilter && this.ToxicityFilter.ready && isToxic) return this.ToxicityFilter.warn(message)
-			if(message.mentions.members.some(member => member.id === CLIENT_ID)) this.emit('conversationMessage', message)
-			if(content.startsWith(this.prefix)) this.emit('command', message)
-
-			//TODO: add levels logic
+	async onVoiceStateUpdate (oldState, newState){
+		if(!newState.deaf && !newState.mute){
+			console.log('tracking')
+			LevelsController.trackUser(newState.id)
 		}
+		else LevelsController.untrackUser(newState.id)
 	}
+
+	/**
+	 * If user  just joined a voice channel
+	 * 	If user is NOT muted & NOT deafened start timer
+	 * 	If user is deafened OR muted stop timer
+
+	 * If user already joined
+	 * 	If mute/deafen/disconnect event fired
+	 * 		Stop timer
+	 * 	If unmute/undeafen event fired
+	 * 		Start timer
+	 */
 }
 
 module.exports = VoiceListener
