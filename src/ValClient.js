@@ -23,6 +23,8 @@ class ValClient extends Client {
 		this.commands = {}
 		this.controllers = {}
 
+		this.ValGuild = {}
+
 		this.setPresence = this.setPresence.bind(this)
 	}
 

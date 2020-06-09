@@ -17,6 +17,8 @@ class ClientReadyListener extends Listener {
 		this.client.setPresence()
 		this.client.ready = true
 
+		this.client.ValGuild = this.client.guilds.cache.first()
+
 		const importantChannels = this.client.config.IMPORTANT_CHANNELS_ID
 
 		Object.keys(importantChannels).forEach(channelName => {
@@ -24,7 +26,7 @@ class ClientReadyListener extends Listener {
 			this.client.config.IMPORTANT_CHANNELS[channelName] = getChannelObject(this.client, channelID)
 		})
 
-		QueueController.executeAll()
+		this.client.emit('queueExecute', 'Client ready')
 
 		log(this.client, 'Client ready', 'info')
 	}

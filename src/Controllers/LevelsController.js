@@ -25,7 +25,15 @@ class LevelsController extends Controller {
 	}
 
 	async init (){
-		if(MongoController.ready && RedisController.ready){
+		if(MongoController.ready && RedisController.ready && this.client.ValGuild.available){
+			const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values())
+
+			voiceStates.forEach(state => {
+				if(!state.deaf && !state.mute){
+					this.activeVoice.push(state.id)
+				}
+			})
+
 			MongoController.getLevels().then(async levels => {
 				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
 					RedisController.set(`TEXT:${id}`, (Number(text) || 1))
