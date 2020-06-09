@@ -3,7 +3,10 @@ const path = require('path')
 const nodeHtmlToImage = require('node-html-to-image')
 const fetch = require('node-fetch')
 
-async function generateRankCard ({ avatar_url, displayName, displayID, exp }) {
+async function generateRankCard (userInfo, levelInfo) {
+	const { avatar_url, displayName, displayID } = userInfo
+	const { exp, levelEXP, level, text, voice } = levelInfo
+
 	const background = imagetoURI('../media/bg.jpg')
 	const mic = imagetoURI('../media/mic.png')
 	const framePath = path.resolve(__dirname, '../media/Frame 1.svg')
@@ -13,15 +16,18 @@ async function generateRankCard ({ avatar_url, displayName, displayID, exp }) {
 	const buffer = await avatarRes.buffer()
 	const avatar = imagetoURI(buffer)
 
+
 	const content = {
 		CANVAS_BACKGROUND: background,
 		USER_AVATAR: avatar, //User.avatarURL()
 		ICON_MIC: mic,
 		USER_ID: displayID,
+		CURRENT_LEVEL: level,
 		USER_NAME: displayName,
-		USER_EXP_TO_NEXT_LEVEL: exp.expToNextLevel,
-		USER_VOICE_EXP: exp.voice,
-		USER_TEXT_EXP: exp.text
+		CURRENT_EXP: exp,
+		LEVEL_EXP: levelEXP,
+		VOICE_LEVEL: voice,
+		TEXT_LEVEL: text
 	}
 
 	return nodeHtmlToImage({

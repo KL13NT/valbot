@@ -36,24 +36,29 @@ class Rank extends Command{
 				const voice = res? res.voice: await RedisController.get(`VOICE:${id}`)
 				const text = res? res.text : await RedisController.get(`TEXT:${id}`)
 				const exp = await RedisController.get(`EXP:${id}`)
+				const level = await RedisController.get(`LEVEL:${id}`)
 
-				const card  = generateRankCard({
+				const userInfo = {
 					avatar_url,
-					displayName: displayName.length > 9? displayName.substr(0, 9) + '..': displayName,
-					displayID,
-					exp: {
-						voice: voice,
-						text: text,
-						expToNextLevel: ((60 * Number(text) * 0.1) + 60) - Number(exp)
-					}
-				})
-				.then(card => {
-					channel.send("Here's the requested rank", {
-						files: [{
-							attachment: card
-						}]
-					});
-				})
+					displayName,
+					displayID
+				}
+				const levelInfo = {
+					exp,
+					text,
+					voice,
+					level,
+					levelEXP: ((60 * Number(level) * 0.1) + 60)
+				}
+
+				generateRankCard(userInfo, levelInfo)
+					.then(card => {
+						channel.send("Here's the requested rank", {
+							files: [{
+								attachment: card
+							}]
+						});
+					})
 			})
 		}
 		catch(err){

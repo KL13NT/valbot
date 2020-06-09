@@ -10,7 +10,6 @@ class VoiceListener extends Listener {
 
 	async onVoiceStateUpdate (oldState, newState){
 		if(!newState.deaf && !newState.mute){
-			console.log('tracking')
 			LevelsController.trackUser(newState.id)
 		}
 		else LevelsController.untrackUser(newState.id)

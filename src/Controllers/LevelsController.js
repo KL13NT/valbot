@@ -1,6 +1,6 @@
 const { CLIENT_ID } = process.env
 const { Controller, Level } = require('../structures')
-const { log, calculateUniqueWords } = require('../utils/utils')
+const { log, calculateUniqueWords, notify } = require('../utils/utils')
 
 
 
@@ -13,8 +13,10 @@ class LevelsController extends Controller {
 		this.message = this.message.bind(this)
 		this.voiceIncrement = this.voiceIncrement.bind(this)
 		this.levelUpMessage = this.levelUpMessage.bind(this)
+		this.levelUp = this.levelUp.bind(this)
 		this.trackUser = this.trackUser.bind(this)
 		this.untrackUser = this.untrackUser.bind(this)
+		this.initUser = this.initUser.bind(this)
 
 		this.init = this.init.bind(this)
 		this.activeVoice = []
@@ -26,16 +28,15 @@ class LevelsController extends Controller {
 		if(MongoController.ready){
 			MongoController.getLevels().then(async levels => {
 				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
-					console.log(id, text, voice, level, textXP, voiceXP)
-					RedisController.set(`TEXT:${id}`, Number(text))
-					RedisController.set(`TEXT:XP:${id}`, Number(textXP))
-					RedisController.set(`VOICE:${id}`, Number(voice))
-					RedisController.set(`VOICE:XP:${id}`, Number(voiceXP))
-					RedisController.set(`LEVEL:${id}`, Number(level))
+					RedisController.set(`TEXT:${id}`, (Number(text) || 1))
+					RedisController.set(`TEXT:XP:${id}`, (Number(textXP) || 1))
+					RedisController.set(`VOICE:${id}`, (Number(voice) || 1))
+					RedisController.set(`VOICE:XP:${id}`, (Number(voiceXP) || 1))
+					RedisController.set(`LEVEL:${id}`, (Number(level) || 1))
 				})
 
 				IntervalsController.setInterval(
-					1000,
+					1000 * 60,
 					{ name: 'voiceIncrementer' },
 					this.voiceIncrement
 				)
@@ -56,32 +57,40 @@ class LevelsController extends Controller {
 		if(member.id === CLIENT_ID) return
 
 		try{
-			const exp = Number(await RedisController.get(`EXP:${id}`)) // 40
-			const text = Number(await RedisController.get(`TEXT:${id}`)) // 40
-			const gainedWords = calculateUniqueWords(content) // 120
+			const textXP = Number(await RedisController.get(`TEXT:XP:${id}`))
+			const text = Number(await RedisController.get(`TEXT:${id}`))
+
+			const level = Number(await RedisController.get(`LEVEL:${id}`))
+			const exp = Number(await RedisController.get(`EXP:${id}`))
+
+			const gainedWords = calculateUniqueWords(content)
 
 			if(exp){
-				const nextText = Math.floor(((exp + gainedWords) / 6) - 60)
+				const nextText = Math.floor(((textXP + gainedWords) / 6) - 60)
 				const textIncrBy = nextText - text <= 0? 1: nextText - text
 
-				if(exp + gainedWords >= ((60 * Number(text) * 0.1) + 60)) {
+				const nextLevel = Math.floor(((exp + gainedWords) / 6) - 60)
+				const levelIncrBy = nextLevel - level <= 0? 1: nextLevel - level
 
-					RedisController.incrby(`TEXT:${id}`, textIncrBy)
+				if(exp + gainedWords >= ((60 * Number(level) * 0.1) + 60)){
+
+					RedisController.incrby(`LEVEL:${id}`, levelIncrBy)
 					RedisController.set(`EXP:${id}`, 1)
 
-					this.levelUpMessage(message)
+					this.levelUp(message)
 				}
-				else RedisController.incrby(`EXP:${id}`, gainedWords)
+
+				if(textXP + gainedWords >= ((60 * Number(text) * 0.1) + 60)) {
+					RedisController.incrby(`TEXT:${id}`, textIncrBy)
+					RedisController.set(`TEXT:EXP:${id}`, 1)
+				}
+				else {
+					RedisController.incrby(`EXP:${id}`, gainedWords)
+					RedisController.incrby(`TEXT:XP:${id}`, gainedWords)
+				}
 			}
 
-			else {
-				RedisController.set(`EXP:${id}`, 1)
-				RedisController.set(`TEXT:${id}`, 1)
-				RedisController.set(`VOICE:${id}`, 1)
-				// this.client.levels[id] = new Level(1, 1, 1)
-
-				this.levelUpMessage(message)
-			}
+			else this.initUser(id)
 
 		}
 		catch(err){
@@ -138,44 +147,50 @@ class LevelsController extends Controller {
 				const level = Number(await RedisController.get(`LEVEL:${id}`))
 				const exp = Number(await RedisController.get(`EXP:${id}`))
 
+				const XP_PER_MINUTE = 1
+
 				if(exp){
-					const nextVoice = Math.floor(((voiceXP + 60) / 6) - 60)
+					const nextVoice = Math.floor(((voiceXP + XP_PER_MINUTE) / 6) - 60)
 					const voiceIncrBy = nextVoice - voice <= 0? 1: nextVoice - voice
 
-					const nextLevel = Math.floor(((exp + 60) / 6) - 60)
+					const nextLevel = Math.floor(((exp + XP_PER_MINUTE) / 6) - 60)
 					const levelIncrBy = nextLevel - voice <= 0? 1: nextLevel - voice
 
-					if(exp + 60 >= ((60 * Number(voice) * 0.1) + 60)) {
-						if(exp + 60 >= ((60 * Number(level) * 0.1) + 60)){
-							RedisController.incrby(`LEVEL:${id}`, levelIncrBy)
-							RedisController.set(`EXP:${id}`, 1)
-						}
+					if(exp + XP_PER_MINUTE >= ((60 * Number(level) * 0.1) + 60)){
+						RedisController.incrby(`LEVEL:${id}`, levelIncrBy)
+						RedisController.set(`EXP:${id}`, 1)
 
+						this.levelUp(id)
+					}
+
+					if(voiceXP + XP_PER_MINUTE >= ((60 * Number(voice) * 0.1) + 60)) {
 						RedisController.incrby(`VOICE:${id}`, voiceIncrBy)
 						RedisController.set(`VOICE:XP:${id}`, 1)
-						// this.levelUpMessage(message)
+
 					}
 					else {
-						RedisController.incrby(`EXP:${id}`, 60)
-						RedisController.incrby(`VOICE:XP:${id}`, 60)
+						RedisController.incrby(`EXP:${id}`, 1)
+						RedisController.incrby(`VOICE:XP:${id}`, 1)
 					}
 				}
-				else {
-					RedisController.set(`EXP:${id}`, 1)
-					RedisController.set(`LEVEL:${id}`, 1)
-					RedisController.set(`TEXT:XP:${id}`, 1)
-					RedisController.set(`TEXT:${id}`, 1)
-					RedisController.set(`VOICE:XP:${id}`, 1)
-					RedisController.set(`VOICE:${id}`, 1)
-
-					// this.levelUpMessage(message)
-				}
+				else this.initUser(id)
 
 			}
 			catch(err){
 				log(this.client, err.message, 'error')
 			}
 		})
+	}
+
+	async initUser (id){
+		RedisController.set(`EXP:${id}`, 1)
+		RedisController.set(`LEVEL:${id}`, 1)
+		RedisController.set(`TEXT:XP:${id}`, 1)
+		RedisController.set(`TEXT:${id}`, 1)
+		RedisController.set(`VOICE:XP:${id}`, 1)
+		RedisController.set(`VOICE:${id}`, 1)
+
+		this.levelUp(id)
 	}
 
 	trackUser (id){
@@ -188,16 +203,29 @@ class LevelsController extends Controller {
 		if(index !== -1) this.activeVoice.splice(index, 1)
 	}
 
-	async levelUpMessage (message){
-		const { id } = message.member.user
+	async levelUp (message){
+		const type = typeof message === 'string'? 'id': 'message'
+		const id = typeof message === 'string'? message: message.member.user.id
+
+		this.levelUpMessage(id, type, message)
+	}
+
+	async levelUpMessage (id, type, message){
 		const exp = Number(await RedisController.get(`EXP:${id}`))
-		const text = Number(await RedisController.get(`TEXT:${id}`))
+		const level = Number(await RedisController.get(`LEVEL:${id}`))
+
+		const voiceXP = Number(await RedisController.get(`VOICE:XP:${id}`))
 		const voice = Number(await RedisController.get(`VOICE:${id}`))
 
+		const textXP = Number(await RedisController.get(`TEXT:XP:${id}`))
+		const text = Number(await RedisController.get(`TEXT:${id}`))
 
-		MongoController.syncLevels(id, { exp, text, voice })
+		MongoController.syncLevels(id, { exp, text, voice, level, textXP, voiceXP })
 
-		message.reply(`مستواك علي! بقيت في المستوى ${text}# :fireworks: <:PutinWaves:668209208113627136> `)
+		const notification = ` <@${id}>, مستواك علي! بقيت في المستوى ${level}# :fireworks: <:PutinWaves:668209208113627136> `
+
+		if(type === 'message') message.reply(notification)
+		else notify(this.client, notification)
 	}
 }
 

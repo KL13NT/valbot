@@ -27,11 +27,11 @@
 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="60" font-weight="600" letter-spacing="0em"><tspan y="307.62" x="720.812">{{CURRENT_EXP}}/{{LEVEL_EXP}}</tspan></text>
 </g>
 <g id="#99">
-<text fill="#7DFFC6" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1256.74" y="323.584">9</tspan></text>
+<text fill="#7DFFC6" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1256.74" y="323.584">{{VOICE_LEVEL}}</tspan></text>
 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1212" y="323.584">#</tspan></text>
 </g>
 <g id="#99_2">
-<text fill="#EC5569" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1416.74" y="323.584">8</tspan></text>
+<text fill="#EC5569" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1416.74" y="323.584">{{TEXT_LEVEL}}</tspan></text>
 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Oswald" font-size="92" letter-spacing="0em"><tspan x="1372" y="323.584">#</tspan></text>
 </g>
 <rect id="2963514 1" x="1220" y="92" width="120" height="120" fill="url(#pattern2)"/>
