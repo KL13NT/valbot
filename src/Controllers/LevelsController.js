@@ -25,7 +25,7 @@ class LevelsController extends Controller {
 	}
 
 	async init (){
-		if(MongoController.ready){
+		if(MongoController.ready && RedisController.ready){
 			MongoController.getLevels().then(async levels => {
 				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
 					RedisController.set(`TEXT:${id}`, (Number(text) || 1))
@@ -37,7 +37,7 @@ class LevelsController extends Controller {
 
 				IntervalsController.setInterval(
 					1000 * 60,
-					{ name: 'voiceIncrementer' },
+					{ name: 'voiceIncrement' },
 					this.voiceIncrement
 				)
 
@@ -139,6 +139,7 @@ class LevelsController extends Controller {
 	}
 
 	async voiceIncrement (){
+		console.log(this.activeVoice)
 		this.activeVoice.forEach(async id => {
 			try{
 				const voiceXP = Number(await RedisController.get(`VOICE:XP:${id}`))
@@ -194,7 +195,9 @@ class LevelsController extends Controller {
 	}
 
 	trackUser (id){
-		this.activeVoice.push(id)
+		const index = this.activeVoice.indexOf(id)
+
+		if(index === -1) this.activeVoice.push(id)
 	}
 
 	untrackUser (id){
@@ -203,14 +206,9 @@ class LevelsController extends Controller {
 		if(index !== -1) this.activeVoice.splice(index, 1)
 	}
 
-	async levelUp (message){
-		const type = typeof message === 'string'? 'id': 'message'
-		const id = typeof message === 'string'? message: message.member.user.id
+	async levelUp (messageOrId){
+		const id = typeof messageOrId === 'string'? messageOrId: messageOrId.member.user.id
 
-		this.levelUpMessage(id, type, message)
-	}
-
-	async levelUpMessage (id, type, message){
 		const exp = Number(await RedisController.get(`EXP:${id}`))
 		const level = Number(await RedisController.get(`LEVEL:${id}`))
 
@@ -222,6 +220,10 @@ class LevelsController extends Controller {
 
 		MongoController.syncLevels(id, { exp, text, voice, level, textXP, voiceXP })
 
+		this.levelUpMessage(id, level)
+	}
+
+	async levelUpMessage (id, level){
 		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`
 
 		notify(this.client, notification)
