@@ -96,7 +96,7 @@ class LevelsController extends Controller {
 			const level = Number(await RedisController.get(`LEVEL:${id}`))
 			const exp = Number(await RedisController.get(`EXP:${id}`))
 
-			const gainedWords = calculateUniqueWords(content)
+			const gainedWords = Math.ceil(calculateUniqueWords(content) * 0.4)
 
 			if(exp){
 				const nextText = Math.floor(((textXP + gainedWords) / 6) - 60)
@@ -202,8 +202,8 @@ class LevelsController extends Controller {
 
 					}
 					else {
-						RedisController.incrby(`EXP:${id}`, 1)
-						RedisController.incrby(`VOICE:XP:${id}`, 1)
+						RedisController.incrby(`EXP:${id}`, XP_PER_MINUTE)
+						RedisController.incrby(`VOICE:XP:${id}`, XP_PER_MINUTE)
 					}
 				}
 				else this.initUser(id)
