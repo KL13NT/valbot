@@ -28,7 +28,7 @@ class CommandOptions {
 		const schema = require('../config/command-options-schema.json')
 
 		for(const key in this){
-			if(key === 'extraParams') continue
+			if(key === 'extraParams' || key === 'optionalParams') continue
 			else if(typeof this[key] !== schema[key]) return false
 		}
 

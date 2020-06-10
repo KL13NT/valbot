@@ -9,23 +9,11 @@ class VoiceListener extends Listener {
 	}
 
 	async onVoiceStateUpdate (oldState, newState){
-		if(!newState.deaf && !newState.mute){
+		if(!newState.deaf && !newState.mute && !newState.member.user.bot){
 			LevelsController.trackUser(newState.id)
 		}
 		else LevelsController.untrackUser(newState.id)
 	}
-
-	/**
-	 * If user  just joined a voice channel
-	 * 	If user is NOT muted & NOT deafened start timer
-	 * 	If user is deafened OR muted stop timer
-
-	 * If user already joined
-	 * 	If mute/deafen/disconnect event fired
-	 * 		Stop timer
-	 * 	If unmute/undeafen event fired
-	 * 		Start timer
-	 */
 }
 
 module.exports = VoiceListener

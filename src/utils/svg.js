@@ -4,7 +4,7 @@ const nodeHtmlToImage = require('node-html-to-image')
 const fetch = require('node-fetch')
 
 async function generateRankCard (userInfo, levelInfo) {
-	const { avatar_url, displayName, displayID } = userInfo
+	const { avatar_url, displayName, USER_ID } = userInfo
 	const { exp, levelEXP, level, text, voice } = levelInfo
 
 	const background = imagetoURI('../media/bg.jpg')
@@ -21,7 +21,7 @@ async function generateRankCard (userInfo, levelInfo) {
 		CANVAS_BACKGROUND: background,
 		USER_AVATAR: avatar, //User.avatarURL()
 		ICON_MIC: mic,
-		USER_ID: displayID,
+		USER_ID,
 		CURRENT_LEVEL: level,
 		USER_NAME: displayName,
 		CURRENT_EXP: exp,

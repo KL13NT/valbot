@@ -30,7 +30,7 @@ class Rank extends Command{
 
 			MongoController.getLevel(id).then(async res => {
 				const avatar_url = member.user.avatarURL()
-				const displayName = member.user.username
+				const displayName = member.user.username.substr(0, 12)
 				const displayID = member.user.tag.split('#')[1]
 
 				const voice = res? res.voice: await RedisController.get(`VOICE:${id}`)
@@ -41,7 +41,7 @@ class Rank extends Command{
 				const userInfo = {
 					avatar_url,
 					displayName,
-					displayID
+					USER_ID: displayID
 				}
 				const levelInfo = {
 					exp,

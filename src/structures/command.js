@@ -94,10 +94,10 @@ class Command{
 	}
 
 	enforceParams (params, message){
-		const { nOfParams, extraParams } = this.options
+		const { nOfParams, extraParams, optionalParams } = this.options
 
 		if(params[0] === 'help') return this.help(message)
-		else if((params.length < 1 && nOfParams >= 1) || (params.length > nOfParams && !extraParams))
+		else if((params.length < nOfParams - optionalParams) || (params.length > nOfParams && !extraParams))
 			return message.reply(
 				generateEvent(
 					this.client,

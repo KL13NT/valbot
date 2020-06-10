@@ -23,7 +23,7 @@ class Giverole extends Command {
 
   async _run(context) {
 		const { message, params, channel } = context
-		const roleNameRegex = /\w+/i
+		const roleNameRegex = /\S+/i
 		const roleIDRegex = /\d+/i
 		const mentionRegex = /<@!(\d+)>/
 

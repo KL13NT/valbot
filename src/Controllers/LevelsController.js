@@ -17,9 +17,25 @@ class LevelsController extends Controller {
 		this.trackUser = this.trackUser.bind(this)
 		this.untrackUser = this.untrackUser.bind(this)
 		this.initUser = this.initUser.bind(this)
+		this.addMilestone = this.addMilestone.bind(this)
+		this.removeMilestone = this.removeMilestone.bind(this)
 
 		this.init = this.init.bind(this)
 		this.activeVoice = []
+		this.milestones = {
+			12: [
+				{
+					roleID: '712589843909312582',
+					name: 'achievement name',
+					description: 'ausiodasod iaosjd ioasd jasiodj aiosjd o'
+				},
+				{
+					roleID: '712589843909312582',
+					name: 'achievement name',
+					description: 'ausiodasod iaosjd ioasd jasiodj aiosjd o'
+				}
+			]
+		}
 
 		this.init()
 	}
@@ -147,7 +163,6 @@ class LevelsController extends Controller {
 	}
 
 	async voiceIncrement (){
-		console.log(this.activeVoice)
 		this.activeVoice.forEach(async id => {
 			try{
 				const voiceXP = Number(await RedisController.get(`VOICE:XP:${id}`))
@@ -228,6 +243,13 @@ class LevelsController extends Controller {
 
 		MongoController.syncLevels(id, { exp, text, voice, level, textXP, voiceXP })
 
+		// const milestone = this.milestones[level]
+		// if(milestone){
+		// 	milestone.forEach(id => {
+		// 		notify(this.client, `GG <@${id}>, you just unlocked an achievement! `)
+		// 	})
+		// }
+
 		this.levelUpMessage(id, level)
 	}
 
@@ -235,6 +257,60 @@ class LevelsController extends Controller {
 		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`
 
 		notify(this.client, notification)
+	}
+
+	addMilestone (level, name, description,  roleID){
+		const milestone = this.milestones[level]
+		const newMilestone = {
+			name,
+			roleID,
+			description
+		}
+
+		if(milestone){
+			if(milestone.find(mile => mile.roleID === roleID || mile.name === name)) return
+			else {
+				milestone.push(newMilestone)
+			}
+		}
+		else {
+			this.milestones[level] = [ newMilestone ]
+		}
+
+		MongoController.db.collection('milestones').updateOne(
+			{
+				level
+			},
+			{
+				$set: { level, ...newMilestone }
+			}, {
+				upsert: true
+			})
+	}
+
+	getMilestone (level, roleID, name){
+		const milestone = this.milestones[level]
+
+		if(milestone) return milestone.find(m => m.roleID === roleID && m.name === name)
+		else return milestone
+	}
+
+
+	async removeMilestone (level, name){
+		const milestone = this.milestones[level]
+
+		if(milestone){
+			const ach = milestone.findIndex(ach => ach.name === name)
+
+			delete this.milestones[level][ach]
+
+			MongoController.db
+				.collection('milestones')
+				.deleteOne({
+					level,
+					name
+				})
+		}
 	}
 }
 
