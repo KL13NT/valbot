@@ -55,19 +55,13 @@ class ValClient extends Client {
 	}
 
 	async setPresence (){
-		const { CUSTOM_PRESENCES: customPresences } = this.config
-		const { user } = this
-
-		function setCurrentPresence (){
-			const randomIndex = Math.floor(Math.random() * customPresences.length)
-			const randomPresence = customPresences[randomIndex]
-			user.setActivity(randomPresence.message, { type: randomPresence.type }).catch(err => console.log(err))
-
-			log(this, `Current presence: ${randomPresence.type} ${randomPresence.message}`, 'info')
+		const presence = {
+			message: `${this.prefix} help`, type: 'PLAYING'
 		}
 
-		setCurrentPresence.apply(this)
-		setInterval(setCurrentPresence, 10 * 60 * 1000)
+		log(this, `Current presence: ${presence.type} ${presence.message}`, 'info')
+
+		this.user.setActivity(presence.message, { type: presence.type }).catch(err => log(this, err.message, 'error'))
 	}
 
 	/**
