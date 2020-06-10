@@ -74,11 +74,10 @@ class LevelsController extends Controller {
 	 * @param {Message} message
 	 */
 	async message (message) {
-		const { member, content } = message
-		const { user } = member
-		const { id } = user
+		const { author, content } = message
+		const { id, bot } = author
 
-		if(member.id === CLIENT_ID) return
+		if(id === CLIENT_ID || bot) return
 
 		try{
 			const textXP = Number(await RedisController.get(`TEXT:XP:${id}`))
