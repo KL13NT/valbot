@@ -8,11 +8,13 @@ class VoiceListener extends Listener {
 		])
 	}
 
-	async onVoiceStateUpdate (oldState, newState){
-		if(!newState.deaf && !newState.mute && !newState.member.user.bot){
-			LevelsController.trackUser(newState.id)
+	async onVoiceStateUpdate (oldState, { member, deaf, mute, id, channel }){
+		if(!member.user.bot){
+			if(!deaf && !mute && channel){
+				LevelsController.trackUser(id)
+			}
+			else LevelsController.untrackUser(id)
 		}
-		else LevelsController.untrackUser(newState.id)
 	}
 }
 
