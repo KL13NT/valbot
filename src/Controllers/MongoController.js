@@ -71,6 +71,14 @@ class MongoController extends Controller {
 		}
 	}
 
+	async getMilestones (){
+		if(this.ready){
+			return this.db
+				.collection('milestones')
+				.find({})
+		}
+	}
+
 	async getResponses (){
 		if(this.ready){
 			return this.db.collection('responses').find({})

@@ -14,7 +14,7 @@ class Milestone extends Command {
 			nOfParams: 3,
 			requiredRole: 'admin',
 			description: `بتحدد achievement تدي الميمبرز روول معين عند ليفل معين. ممكن متديهاش باراميتيرز و هتجيبلك كل ال achievements الموجودة`,
-			exampleUsage: `val! milestone <"set"|"remove"> <level> <role_name|role_id>`,
+			exampleUsage: `val! milestone add <level> <role_name|role_id>\nval! milestone remove <level> <milestone_name>`,
 			extraParams: false,
 			optionalParams: 3
 		})
@@ -27,7 +27,7 @@ class Milestone extends Command {
   async _run(context) {
 		const { message, member, params, channel } = context
 
-		const actionRegex = /(set|remove)/i
+		const actionRegex = /(add|remove)/i
 		const levelRegex = /(\d+)/i
 		const roleNameRegex = /(\S+)/i
 		const roleIDRegex = /(\d+)/i
@@ -56,26 +56,35 @@ class Milestone extends Command {
 		if(!roleIDNameMatch)
 		return message.reply('لازم تكتب اسم او الاي دي بتاع الروول')
 
-		const roleIDName = roleIDNameMatch[1]
-		const role = getRoleObject(this.client, roleIDName)
-
-		if(typeof role !== 'object') return message.reply('لازم ال role يكون موجود في السيرفر')
-
 		try{
-			message.reply('ايه اسم الـ achievement؟')
+			if(action === 'add'){
+				const roleIDName = roleIDNameMatch[1]
+				const role = getRoleObject(this.client, roleIDName)
 
-			const name = (await channel.awaitMessages(filter, awaitOptions)).first().content
+				if(typeof role !== 'object') return message.reply('لازم ال role يكون موجود في السيرفر')
 
-			if(!nameRegex.test(name)) return message.reply('الاسم لازم يبقى مابين 1 و 40 حرف, و يبقى فيه حروف و مسافات و ارقام فقط و يكون انجلش')
+				message.reply('ايه اسم الـ achievement؟')
 
-			message.reply('ايه وصف الـ achievement؟')
+				const name = (await channel.awaitMessages(filter, awaitOptions)).first().content
 
-			const description = (await channel.awaitMessages(filter, awaitOptions)).first().content
+				if(!nameRegex.test(name)) return message.reply('الاسم لازم يبقى مابين 1 و 40 حرف, و يبقى فيه حروف و مسافات و ارقام فقط و يكون انجلش')
 
-			if(!descriptionRegex.test(description)) return message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش')
+				message.reply('ايه وصف الـ achievement؟')
 
-			if(action === 'set') LevelsController.addMilestone(level, name, description, role.id)
-			else LevelsController.removeMilestone(level, name, role.id)
+				const description = (await channel.awaitMessages(filter, awaitOptions)).first().content
+
+				if(!descriptionRegex.test(description)) return message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش')
+
+				LevelsController.addMilestone(level, name, description, role.id)
+
+				message.reply('ضيفت الـ milestone دي. ')
+			}
+			else {
+				const name = roleIDNameMatch[1]
+				LevelsController.removeMilestone(level, name)
+
+				message.reply('شيلت الـ milestone دي')
+			}
 		}
 		catch(err){
 			console.log(err)

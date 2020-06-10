@@ -1,6 +1,9 @@
 const { CLIENT_ID } = process.env
+
+const Discord = require('discord.js')
+
 const { Controller, Level } = require('../structures')
-const { log, calculateUniqueWords, notify } = require('../utils/utils')
+const { log, calculateUniqueWords, notify, getMemberObject, getRoleObject } = require('../utils/utils')
 
 
 
@@ -19,11 +22,13 @@ class LevelsController extends Controller {
 		this.initUser = this.initUser.bind(this)
 		this.addMilestone = this.addMilestone.bind(this)
 		this.removeMilestone = this.removeMilestone.bind(this)
+		this.enforceMilestone = this.enforceMilestone.bind(this)
 
 		this.init = this.init.bind(this)
 		this.activeVoice = []
-		this.milestones = {
-			12: [
+		this.milestones = {}
+		/**
+		 * 12: [
 				{
 					roleID: '712589843909312582',
 					name: 'achievement name',
@@ -35,7 +40,7 @@ class LevelsController extends Controller {
 					description: 'ausiodasod iaosjd ioasd jasiodj aiosjd o'
 				}
 			]
-		}
+		 */
 
 		this.init()
 	}
@@ -64,7 +69,12 @@ class LevelsController extends Controller {
 					{ name: 'voiceIncrement' },
 					this.voiceIncrement
 				)
+			})
 
+			MongoController.getMilestones().then(found => {
+				found.forEach(level => {
+					this.milestones[level.level] = level.milestones
+				})
 			})
 		}
 		else QueueController.enqueue(this.init)
@@ -242,14 +252,40 @@ class LevelsController extends Controller {
 
 		MongoController.syncLevels(id, { exp, text, voice, level, textXP, voiceXP })
 
-		// const milestone = this.milestones[level]
-		// if(milestone){
-		// 	milestone.forEach(id => {
-		// 		notify(this.client, `GG <@${id}>, you just unlocked an achievement! `)
-		// 	})
-		// }
-
+		this.enforceMilestone(level, id)
 		this.levelUpMessage(id, level)
+	}
+
+	async enforceMilestone (userLevel, id){
+		const level = this.milestones[userLevel]
+
+		if(level){
+			const member = getMemberObject(this.client, id)
+
+			level.forEach(async milestone => {
+				try{
+					const role = getRoleObject(this.client, milestone.roleID)
+
+
+					const embed = new Discord.MessageEmbed()
+						.setColor('#ffcc5c')
+						.setTitle(`Achievement Unlocked - ${milestone.name}`)
+						.setDescription(`GG! You unlocked the ${milestone.name} achievement\nYou just received the ${role.name} role!`)
+						.addFields(
+							{ name: 'Achievement name', value: milestone.name },
+							{ name: 'Achievement description', value: milestone.description }
+						)
+						.setTimestamp()
+						.setFooter('To get all available milestones ask an admin')
+
+					member.roles.add(milestone.roleID)
+					notify(this.client, `<@${id}>`, embed)
+				}
+				catch(err){
+					log(this.client, err.message, 'error')
+				}
+			})
+		}
 	}
 
 	async levelUpMessage (id, level){
@@ -281,7 +317,7 @@ class LevelsController extends Controller {
 				level
 			},
 			{
-				$set: { level, ...newMilestone }
+				$push: { milestones: newMilestone }
 			}, {
 				upsert: true
 			})
@@ -305,9 +341,10 @@ class LevelsController extends Controller {
 
 			MongoController.db
 				.collection('milestones')
-				.deleteOne({
-					level,
-					name
+				.updateOne({
+					level
+				}, {
+					$pull: { milestones : { name: name } }
 				})
 		}
 	}

@@ -190,15 +190,21 @@ function log (client, notification, alertLevel){
  * @param {*} notification
  * @param {*} alertLevel
  */
-async function notify (client, notification){
-	if(client.ready){
-		//REFACTORME: have better logic for important config stuff
-		const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-		const notificationsChannel = client.config.IMPORTANT_CHANNELS[isDevelopment? 'test': 'notifications']
-		notificationsChannel.send(notification)
+async function notify (client, notification, embed){
+	try{
+		if(client.ready){
+			//REFACTORME: have better logic for important config stuff
+			const isDevelopment = process.env.MODE === 'DEVELOPMENT'
+			const notificationsChannel = client.config.IMPORTANT_CHANNELS[isDevelopment? 'test': 'notifications']
+			notificationsChannel.send(notification, { embed })
+		}
+		else {
+			QueueController.enqueue(notify, client, notification)
+		}
 	}
-	else {
-		QueueController.enqueue(notify, client, notification)
+	catch(err){
+		console.log(err)
+		log(client, err.message, 'error')
 	}
 }
 
