@@ -1,3 +1,5 @@
+const Discord = require('discord.js')
+
 const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { log, getChannelObject, getRoleObject, notify } = require("../utils/utils")
@@ -13,10 +15,10 @@ class Announce extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 1,
 			requiredRole: 'admin',
-			description: `بتعمل اعلان بالشكل اللي تحبه`,
-			exampleUsage: `val! announce <channel_id|channel_mention>`,
+			description: `بتعمل اعلان بالشكل اللي تحبه. ممكن كمان تستغل الـ webhook.`,
+			exampleUsage: `val! announce <channel_id|channel_mention|"hook">`,
 			extraParams: false,
-			optionalParams: 0
+			optionalParams: 1
 		})
 
 		super(client, options)
@@ -31,29 +33,44 @@ class Announce extends Command {
 			max: 1
 		}
 
+		const webhookID = '720259656299184148'
+		const webhookToken = 'wDp4me4FSLPx4DTMFTQZiVfuQKieO96gWB1lqh2P5hW3Oufj1YA-MVeSHOC1LH9KQxPZ'
+
 		const channelIdRegex = /(<#(\d+)>)|(\d+)/
 		const channelIdMatch = params[0].match(channelIdRegex)
 
 
-		if(channelIdMatch){
-			const channelId = channelIdMatch[2] || channelIdMatch[3]
-			const targetChannel = getChannelObject(this.client, channelId)
+		try{
+		if(channelIdMatch || params[0] === 'hook'){
+			let target = {}
 
-			if(!targetChannel) return message.reply('التشانل دي مش موجودة')
+			if(channelIdMatch){
+				const channelId = channelIdMatch[2] || channelIdMatch[3]
+				const targetChannel = getChannelObject(this.client, channelId)
 
-			try{
+				if(!targetChannel) return message.reply('التشانل دي مش موجودة')
+				if(targetChannel.type !== 'text') return message.reply('التشانل دي مش تيكست')
+
+				target = targetChannel
+			}
+			else if(params[0] === 'hook'){
+				target = new Discord.WebhookClient(webhookID, webhookToken)
+			}
+
+
 				message.reply('ابعت بقى الـ announcement')
 
 				const collected = await channel.awaitMessages(filter, awaitOptions)
 				const announcement = collected.first().content
 
-				targetChannel.send(announcement)
+				target.send(announcement).then(console.log)
+
 			}
-			catch(err){
-				message.reply(err.message)
-			}
+			else return message.reply('لازم تعمل منشن للتشانل او تكتب الاي دي بتاعها')
 		}
-		else return message.reply('لازم تعمل منشن للتشانل او تكتب الاي دي بتاعها')
+		catch(err){
+			message.reply(err.message)
+		}
 	}
 
 }
