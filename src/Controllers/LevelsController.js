@@ -174,13 +174,16 @@ class LevelsController extends Controller {
 	async voiceIncrement (){
 		this.activeVoice.forEach(async id => {
 			try{
+
+				console.log('Currently tracked users: ', this.activeVoice)
+
 				const voiceXP = Number(await RedisController.get(`VOICE:XP:${id}`))
 				const voice = Number(await RedisController.get(`VOICE:${id}`))
 
 				const level = Number(await RedisController.get(`LEVEL:${id}`))
 				const exp = Number(await RedisController.get(`EXP:${id}`))
 
-				const XP_PER_MINUTE = 1
+				const XP_PER_MINUTE = 10
 
 				if(exp){
 					const nextVoice = Math.floor(((voiceXP + XP_PER_MINUTE) / 6) - 60)
