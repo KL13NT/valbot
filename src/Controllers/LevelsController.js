@@ -46,12 +46,13 @@ class LevelsController extends Controller {
 	}
 
 	async init (){
+		//REFACTORME: SPLIT THIS MISS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
 		if(MongoController.ready && RedisController.ready && this.client.ValGuild.available){
 			const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values())
 
 			voiceStates.forEach(state => {
-				if(!state.deaf && !state.mute){
-					this.activeVoice.push(state.id)
+				if(state.channel.id !== '571721579214667786' && !state.member.user.bot && !state.deaf && !state.mute){
+					this.activeVoice.push(state.member.id)
 				}
 			})
 
@@ -175,7 +176,6 @@ class LevelsController extends Controller {
 		this.activeVoice.forEach(async id => {
 			try{
 
-				console.log('Currently tracked users: ', this.activeVoice)
 
 				const voiceXP = Number(await RedisController.get(`VOICE:XP:${id}`))
 				const voice = Number(await RedisController.get(`VOICE:${id}`))

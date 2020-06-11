@@ -11,7 +11,7 @@ class VoiceListener extends Listener {
 	async onVoiceStateUpdate (oldState, { member, deaf, mute, id, channel }){
 		if(!member.user.bot){
 			if(!deaf && !mute && channel){
-				LevelsController.trackUser(id)
+				if(channel.id !== '571721579214667786') LevelsController.trackUser(id)
 			}
 			else LevelsController.untrackUser(id)
 		}
