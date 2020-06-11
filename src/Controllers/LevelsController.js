@@ -183,7 +183,7 @@ class LevelsController extends Controller {
 				const level = Number(await RedisController.get(`LEVEL:${id}`))
 				const exp = Number(await RedisController.get(`EXP:${id}`))
 
-				const XP_PER_MINUTE = 10
+				const XP_PER_MINUTE = 4
 
 				if(exp){
 					const nextVoice = Math.floor(((voiceXP + XP_PER_MINUTE) / 6) - 60)
