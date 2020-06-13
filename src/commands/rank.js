@@ -64,7 +64,7 @@ class Rank extends Command{
 		catch(err){
 			console.error(err)
 			context.message.reply(err.message)
-			log(this.client, err.message, 'error')
+			log(this.client, err, 'error')
 		}
 	}
 }

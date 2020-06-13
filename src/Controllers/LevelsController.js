@@ -128,7 +128,7 @@ class LevelsController extends Controller {
 
 		}
 		catch(err){
-			log(this.client, err.message, 'error')
+			log(this.client, err, 'error')
 		}
 		// message.reply('Hello')
 
@@ -213,7 +213,7 @@ class LevelsController extends Controller {
 
 			}
 			catch(err){
-				log(this.client, err.message, 'error')
+				log(this.client, err, 'error')
 			}
 		})
 	}
@@ -285,7 +285,7 @@ class LevelsController extends Controller {
 					notify(this.client, `<@${id}>`, embed)
 				}
 				catch(err){
-					log(this.client, err.message, 'error')
+					log(this.client, err, 'error')
 				}
 			})
 		}
@@ -326,11 +326,8 @@ class LevelsController extends Controller {
 			})
 	}
 
-	getMilestone (level, roleID, name){
-		const milestone = this.milestones[level]
-
-		if(milestone) return milestone.find(m => m.roleID === roleID && m.name === name)
-		else return milestone
+	getMilestone (level){
+		return this.milestones[level]
 	}
 
 
@@ -342,9 +339,12 @@ class LevelsController extends Controller {
 
 			delete this.milestones[level][ach]
 
-			if(Object.keys(this.milestones[level]).length === 0) delete this.milestones[level]
+			if(Object.keys(this.milestones[level]).length === 0) {
+				delete this.milestones[level]
+				MongoController.db.collection('milestones').deleteOne({ level })
+			}
 
-			MongoController.db
+			else MongoController.db
 				.collection('milestones')
 				.updateOne({
 					level

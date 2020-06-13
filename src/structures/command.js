@@ -80,7 +80,7 @@ class Command{
 				._run(context)
 				.catch(err => {
 					context.message.reply(GENERIC_SOMETHING_WENT_WRONG)
-					log(this.client, err.message, 'error')
+					log(this.client, err, 'error')
 				})
 		else context.message.reply(ERROR_COMMAND_NOT_READY)
 
