@@ -50,9 +50,9 @@ class LevelsController extends Controller {
 		if(MongoController.ready && RedisController.ready && this.client.ValGuild.available){
 			const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values())
 
-			voiceStates.forEach(state => {
-				if(state.channel.id !== '571721579214667786' && !state.member.user.bot && !state.deaf && !state.mute){
-					this.activeVoice.push(state.member.id)
+			voiceStates.forEach(({ deaf, mute, member, channel }) => {
+				if(channel.id !== '571721579214667786' && !member.user.bot && !deaf && !mute){
+					this.activeVoice.push(member.id)
 				}
 			})
 
