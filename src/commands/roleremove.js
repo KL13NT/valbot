@@ -2,19 +2,19 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { log, getMemberObject, getRoleObject, notify } = require("../utils/utils")
 
-class Removerole extends Command {
+class RoleRemove extends Command {
 	/**
 	 * Constructs help command
 	 * @param {ValClient} client
 	 */
   constructor(client) {
 		const options = new CommandOptions({
-			name: `removerole`,
+			name: `roleremove`,
 			cooldown: 1000,
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتشيل روول من ميمبر`,
-			exampleUsage: `val! removerole @Sovereign#4984 <role_name|role_id>`,
+			exampleUsage: `val! roleremove @Sovereign#4984 <role_name|role_id>`,
 			extraParams: false
 		})
 
@@ -51,4 +51,4 @@ class Removerole extends Command {
 	}
 }
 
-module.exports = Removerole
+module.exports = RoleRemove

@@ -2,19 +2,19 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { log, getMemberObject, getRoleObject, notify } = require("../utils/utils")
 
-class Giverole extends Command {
+class RoleGive extends Command {
 	/**
 	 * Constructs help command
 	 * @param {ValClient} client
 	 */
   constructor(client) {
 		const options = new CommandOptions({
-			name: `giverole`,
+			name: `rolegive`,
 			cooldown: 1000,
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتدي لميمبر روول معين`,
-			exampleUsage: `val! giverole @Sovereign#4984 <role_name|role_id>`,
+			exampleUsage: `val! rolegive @Sovereign#4984 <role_name|role_id>`,
 			extraParams: false
 		})
 
@@ -51,4 +51,4 @@ class Giverole extends Command {
 	}
 }
 
-module.exports = Giverole
+module.exports = RoleGive
