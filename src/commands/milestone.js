@@ -94,6 +94,8 @@ class Milestone extends Command {
 	getAllMilestones(){
 		let milestones = '\n'
 
+		if(Object.keys(LevelsController.milestones).length === 0) return 'there are no milestones set.'
+
 		Object.keys(LevelsController.milestones).forEach(level => {
 			milestones += `Level #${level} Achievements\n${'-'.repeat(30)}\n`
 

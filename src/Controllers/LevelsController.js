@@ -46,7 +46,7 @@ class LevelsController extends Controller {
 	}
 
 	async init (){
-		//REFACTORME: SPLIT THIS MISS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
+		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
 		if(MongoController.ready && RedisController.ready && this.client.ValGuild.available){
 			const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values())
 
@@ -341,6 +341,8 @@ class LevelsController extends Controller {
 			const ach = milestone.findIndex(ach => ach.name === name)
 
 			delete this.milestones[level][ach]
+
+			if(Object.keys(this.milestones[level]).length === 0) delete this.milestones[level]
 
 			MongoController.db
 				.collection('milestones')
