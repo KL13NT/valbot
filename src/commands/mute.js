@@ -11,7 +11,7 @@ class Mute extends Command {
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 15 دقيقة`,
-			exampleUsage: `val! mute @Sovereign Violation of rules`,
+			exampleUsage: `mute @Sovereign Violation of rules`,
 			extraParams: true
     })
     super(client, commandOptions)

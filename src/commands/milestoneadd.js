@@ -14,7 +14,7 @@ class MilestoneAdd extends Command {
 			nOfParams: 2,
 			requiredRole: 'admin',
 			description: `بتحدد achievement تدي الميمبرز روول معين عند ليفل معين.`,
-			exampleUsage: `val! milestoneadd <level> <role_name|role_id>`,
+			exampleUsage: `milestoneadd <level> <role_name|role_id>`,
 			extraParams: false,
 			optionalParams: 0
 		})

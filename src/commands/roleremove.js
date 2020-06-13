@@ -14,7 +14,7 @@ class RoleRemove extends Command {
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتشيل روول من ميمبر`,
-			exampleUsage: `val! roleremove @Sovereign#4984 <role_name|role_id>`,
+			exampleUsage: `roleremove @Sovereign#4984 <role_name|role_id>`,
 			extraParams: false
 		})
 

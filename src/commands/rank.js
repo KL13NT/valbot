@@ -11,7 +11,7 @@ class Rank extends Command{
 			nOfParams: 0,
 			requiredRole: 'verified',
 			description: `بتشوف مستوى شخص ما`,
-			exampleUsage: `val! rank <user_id>`,
+			exampleUsage: `rank <user_id>`,
 			extraParams: true
     })
     super(client, commandOptions)

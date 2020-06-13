@@ -15,7 +15,7 @@ class Debug extends Command {
 			nOfParams: 1,
 			requiredRole: 'dev',
 			description: `بتوريك الاداء بتاع البوت و معلومات عن البروسيس بتاعه`,
-			exampleUsage: `val! debug <"on"|"off">`,
+			exampleUsage: `debug <"on"|"off">`,
 			extraParams: false
 		})
 

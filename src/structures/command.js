@@ -143,7 +143,7 @@ class Command{
 
 		message.reply(`
 			معلومات عن ${name}:
-			الاستعمال:\n\`${exampleUsage}\`
+			الاستعمال:\n\`${this.client.prefix} ${exampleUsage}\`
 			الوظيفة:\n\`${description}\`
 			بتاخد كام باراميتير\n\`${nOfParams}\`
 			اقل role مسموح بيه \n\`${role.name}\`

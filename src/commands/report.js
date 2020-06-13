@@ -11,7 +11,7 @@ class Report extends Command {
 			nOfParams: 2,
 			requiredRole: 'verified',
 			description: `بتعمل ريبورت لرسالة حد بعتها و السبب. لازم الريبورت يتعمل في نفس التشانل. بتعمل منشن للشخص اللي عايز تعمله ريبورت بالشكل التالي:`,
-			exampleUsage: `val! report @Sovereign Violation of rules`,
+			exampleUsage: `report @Sovereign Violation of rules`,
 			extraParams: true
 		})
 

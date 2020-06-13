@@ -14,7 +14,7 @@ class MilestoneGet extends Command {
 			nOfParams: 1,
 			requiredRole: 'admin',
 			description: `بتجيبلكوا الـ milestone اللي عايزنها في level معين. ممكن مديهاش level فا تجيبلكوا كل ال milestones`,
-			exampleUsage: `val! milesetoneget <level>`,
+			exampleUsage: `milesetoneget <level>`,
 			extraParams: false,
 			optionalParams: 1
 		})

@@ -14,7 +14,7 @@ class MilestoneRemove extends Command {
 			nOfParams: 1,
 			requiredRole: 'admin',
 			description: `بتشيل مايلستوون معينة`,
-			exampleUsage: `val! milestoneremove <level>`,
+			exampleUsage: `milestoneremove <level>`,
 			extraParams: false,
 			optionalParams: 0
 		})

@@ -29,7 +29,7 @@ class ReactionRoles extends Command{
 			nOfParams: 3,
 			requiredRole: 'admin',
 			description: `بتضيف روولز على حسب الريأكشنز و خاصة بالمدراء`,
-			exampleUsage: `val! reactionroles <channel_id> <message_id> <role_id>`,
+			exampleUsage: `reactionroles <channel_id> <message_id> <role_id>`,
 			extraParams: false
     })
     super(client, commandOptions)

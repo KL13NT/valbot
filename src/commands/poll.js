@@ -16,7 +16,7 @@ class Poll extends Command {
 			nOfParams: 0,
 			requiredRole: 'mod',
 			description: `بتعمل استفتاء جديد, خاصة بالمسؤولين فقط`,
-			exampleUsage: `val! poll`,
+			exampleUsage: `poll`,
 			extraParams: false
 		})
 
