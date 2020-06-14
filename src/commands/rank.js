@@ -28,38 +28,35 @@ class Rank extends Command{
 
 			const member = getMemberObject(this.client, id)
 
-			MongoController.getLevel(id).then(async res => {
-				const avatar_url = member.user.avatarURL()
-				const displayName = member.user.username.substr(0, 12)
-				const displayID = member.user.tag.split('#')[1]
+			const res = await MongoController.getLevel(id)
+			const avatar_url = member.user.displayAvatarURL()
+			const displayName = member.user.username.substr(0, 12) + '...'
+			const displayID = member.user.tag.split('#')[1]
 
-				const voice = res? res.voice: await RedisController.get(`VOICE:${id}`)
-				const text = res? res.text : await RedisController.get(`TEXT:${id}`)
-				const exp = await RedisController.get(`EXP:${id}`)
-				const level = await RedisController.get(`LEVEL:${id}`)
+			const voice = res? res.voice: await RedisController.get(`VOICE:${id}`)
+			const text = res? res.text : await RedisController.get(`TEXT:${id}`)
+			const exp = await RedisController.get(`EXP:${id}`)
+			const level = await RedisController.get(`LEVEL:${id}`)
 
-				const userInfo = {
-					avatar_url,
-					displayName,
-					USER_ID: displayID
-				}
-				const levelInfo = {
-					exp,
-					text,
-					voice,
-					level,
-					levelEXP: ((60 * Number(level) * 0.1) + 60)
-				}
+			const userInfo = {
+				avatar_url,
+				displayName,
+				USER_ID: displayID
+			}
+			const levelInfo = {
+				exp: exp || 1,
+				text: text || 1,
+				voice: voice || 1,
+				level: level || 1,
+				levelEXP: ((60 * Number(level) * 0.1) + 60)  || 1
+			}
 
-				generateRankCard(userInfo, levelInfo)
-					.then(card => {
-						channel.send("Here's the requested rank", {
-							files: [{
-								attachment: card
-							}]
-						});
-					})
-			})
+			const card = await generateRankCard(userInfo, levelInfo)
+					message.reply("Here's the requested rank", {
+						files: [{
+							attachment: card
+						}]
+					});
 		}
 		catch(err){
 			console.error(err)

@@ -1,6 +1,9 @@
-const { Command, CommandOptions } = require(`../structures`)
+const { Command, CommandOptions } = require("../structures")
+const { log, getMemberObject, getRoleObject, notify } = require("../utils/utils")
+
 const FileUtils = require('../utils/FileUtils')
 const reactionRolesJSONPath = '../config/reaction-roles.json'
+
 
 const {
 	getChannelObject,
