@@ -16,7 +16,7 @@ class Announce extends Command {
 			nOfParams: 1,
 			requiredRole: 'admin',
 			description: `بتعمل اعلان بالشكل اللي تحبه. ممكن كمان تستغل الـ webhook.`,
-			exampleUsage: `announce <channel_id|channel_mention|"hook">`,
+			exampleUsage: `<channel_id|channel_mention|"hook">`,
 			extraParams: false,
 			optionalParams: 1
 		})

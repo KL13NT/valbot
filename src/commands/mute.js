@@ -11,7 +11,7 @@ class Mute extends Command {
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 5 دقايق`,
-			exampleUsage: `mute <user_mention> <reason>`,
+			exampleUsage: `<user_mention> <reason>`,
 			extraParams: true,
 			optionalParams: 0
     })

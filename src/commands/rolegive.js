@@ -14,7 +14,7 @@ class RoleGive extends Command {
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتدي لميمبر روول معين`,
-			exampleUsage: `rolegive @Sovereign#4984 <role_name|role_id>`,
+			exampleUsage: `@Sovereign#4984 <role_name|role_id>`,
 			extraParams: false
 		})
 

@@ -13,7 +13,7 @@ class Clear extends Command {
 			nOfParams: 1,
 			requiredRole: 'mod',
 			description: `بتمسح رسايل بعدد n`,
-			exampleUsage: `clear 5`,
+			exampleUsage: `5`,
 			extraParams: false
 		})
 

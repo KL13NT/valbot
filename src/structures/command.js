@@ -142,11 +142,11 @@ class Command{
 		const role = getRoleObject(this.client, AUTH_ROLES[requiredRole])
 
 		message.reply(`
-			معلومات عن ${name}:
-			الاستعمال:\n\`${this.client.prefix} ${exampleUsage}\`
-			الوظيفة:\n\`${description}\`
-			بتاخد كام باراميتير\n\`${nOfParams}\`
-			اقل role مسموح بيه \n\`${role.name}\`
+			**معلومات عن ${name}**\n
+			**الاستعمال**\n\`${this.client.prefix} ${this.options.name} ${exampleUsage}\`
+			**الوظيفة**\n\`${description}\`
+			**بتاخد كام باراميتير**\n\`${nOfParams}\`
+			**اقل role مسموح بيه** \n\`${role.name}\`
 		`)
 
 	}
