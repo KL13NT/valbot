@@ -1,70 +1,60 @@
-const { Command, CommandContext } = require(`../structures/`)
+const { Command, CommandOptions } = require(`../structures`)
+const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
+const { warned } = require('../config/important-roles.json')
 
-/**
- * 
- * @param {DiscordGuildMessage} message The original message object
- * @param {Array} rest Array resulting from splitting the message and removing [val!, commandName]
- */
-module.exports = class Warn extends Command{
+
+class Warn extends Command {
   constructor (client){
-    const commandOptions = {
-      name: `Warn`,
-      flags: [`mod-only`],
-      category: `short`,
-      aliases: [],
-      cooldownTime: 0,
-      isCritical: false,
-    }
+    const commandOptions = new CommandOptions({
+      name: `warn`,
+			cooldown: 1000,
+			nOfParams: 2,
+			requiredRole: 'mod',
+			description: `بتحذر ميمبر على حاجة عملها`,
+			exampleUsage: `<user_mention> <reason>`,
+			extraParams: true,
+			optionalParams: 0
+    })
     super(client, commandOptions)
-    
-  }
+	}
 
-  async run (context){
-    const { message } = context
-  }
+	async _run({member, message, channel, params}){
+		const [mention, ...reasonWords] = params
+		const mentionRegex = /<@!(\d+)>/
+
+		if(!mentionRegex.test(mention)) return message.reply('لازم تعمل منشن للـ member')
+
+		const id = mention.match(mentionRegex)[1]
+		const reason = reasonWords.join(' ')
+		const targetMember = getMemberObject(this.client, id)
+
+		const embed = createEmbed({
+			title: 'Warned User',
+			fields: [
+				{ name: '**User**', value: `${mention} | ${id}` },
+				{ name: '**Moderator**', value: `<@${member.id}> | ${id}` },
+				{ name: '**Location**', value: `<#${channel.id}>`, inline: true },
+				{ name: '**Date / Time**', value: `${new Date().toUTCString()}`, inline: true },
+				{ name: '**Reason**', value: reason },
+			]
+		})
+
+		try{
+			if(this.isWarned(targetMember)) return message.reply('الميمبر ده متحذر قبل كده')
+
+
+			await targetMember.roles.add(warned)
+			notify(this.client, ``, embed, 'mod-logs')
+		}
+		catch(err){
+			log(this.client, err, 'error')
+		}
+	}
+
+	isWarned(member){
+		return member.roles.cache.find(role => role.id === warned)
+	}
 }
 
 
-// export const warn = async (message, rest) => {
-//   if(!enforceCommandArguments(message, 2, rest)) return
-
-//   const [memberMention, reason] = rest
-//   const memberId = memberMention.toString().replace(/<|>|@/ig, '')
-//   const date = new Date().toString()
-//   const callee = message.member
-
-//   try{
-//     const warnedMember = await __ENV.__VALARIUM_GUILD().fetchMember(memberId)
-
-//     const userWarnings = (await __ENV.__DATABASE_OBJECT.collection('GUILD_WARNINGS').findOneAndUpdate({ USER_ID: warnedMember.id }, {
-//       $push: { 
-//         RECORDED_WARNINGS: {
-//           WARNING_REASON: reason,
-//           WARNING_DATE: new Date().toString()
-//         }   
-//       }
-//     }, { upsert: true, returnOriginal: false })).value
-
-//     sendEmbedNotification(
-//       warnedMember, 
-//       { 
-//         description: `${warnedMember} has been warned at ${date} by ${callee}`, 
-//         title:`WARNING, ${warnedMember}`, 
-//         color: 0xfade78,
-//         footer: date
-//       }, [
-//         { name: 'Member', value: `${warnedMember}` }, 
-//         { name: 'Moderator', value: `${callee}` }, 
-//         { name: 'Reason', value: reason }, 
-//         { name: 'Status', value: `This user now has ${userWarnings.RECORDED_WARNINGS.length} warnings` }
-//       ], 
-//       [], 
-//       [__ENV.__MODERATION_NOTICES_CHANNEL()])
-
-//     if(userWarnings.RECORDED_WARNINGS.length === 3){
-//       // ban(message, args, __ENV, 'Warned 3 times')
-//       console.log('USER SHOULD BE BANNED')
-//     }
-//   }
-//   catch(err){ console.log(err) }
-// }
+module.exports = Warn

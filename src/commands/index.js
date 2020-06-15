@@ -13,6 +13,7 @@ module.exports = [
 	require('./announce'),
 	require('./mute'),
 	require('./ban'),
+	require('./warn'),
 	// require('./poll'),
 	// require('./reactionroles')
 ]
