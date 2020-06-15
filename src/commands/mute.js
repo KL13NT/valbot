@@ -1,61 +1,57 @@
 const { Command, CommandOptions } = require(`../structures`)
-// import { enforceCommandArguments, formatMentionReason } from '../utils/utils'
-// import { unmute } from './unmute'
-// import { sendEmbedNotification } from './unmute'
+const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
+const { muted } = require('../config/important-roles.json')
+
 
 class Mute extends Command {
   constructor (client){
     const commandOptions = new CommandOptions({
       name: `mute`,
-			cooldown: 10 * 1000,
+			cooldown: 1000,
 			nOfParams: 2,
 			requiredRole: 'mod',
-			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 15 دقيقة`,
-			exampleUsage: `mute @Sovereign Violation of rules`,
-			extraParams: true
+			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 5 دقايق`,
+			exampleUsage: `mute <user_mention> <reason>`,
+			extraParams: true,
+			optionalParams: 0
     })
     super(client, commandOptions)
-
 	}
 
-	_run(context){
+	async _run({member, message, channel, params}){
+		const [mention, ...reasonWords] = params
+		const mentionRegex = /<@!(\d+)>/
 
+		if(!mentionRegex.test(mention)) return message.reply('لازم تعمل منشن للـ member')
+
+		const id = mention.match(mentionRegex)[1]
+		const reason = reasonWords.join(' ')
+		const targetMember = getMemberObject(this.client, id)
+
+		const embed = createEmbed({
+			title: 'Muted User',
+			fields: [
+				{ name: '**User**', value: `${mention} | ${id}` },
+				{ name: '**Moderator**', value: `<@${member.id}> | ${id}` },
+				{ name: '**Location**', value: `<#${channel.id}>`, inline: true },
+				{ name: '**Date / Time**', value: `${new Date().toUTCString()}`, inline: true },
+				{ name: '**Reason**', value: reason },
+			]
+		})
+
+		try{
+			await targetMember.roles.add(muted)
+			setTimeout(()=>{
+				targetMember.roles.remove(muted)
+			}, 5 * 60 * 1000)
+
+			notify(this.client, ``, embed, 'mod-logs')
+		}
+		catch(err){
+			log(this.client, err, 'error')
+		}
 	}
 }
 
 
 module.exports = Mute
-// export const mute = async (message, rest) => {
-//   try{
-//     if(!enforceCommandArguments(message, 2, formatMentionReason(rest))) return
-
-//     const [memberMention, reason] = formatMentionReason(rest)
-//     const memberId = memberMention.toString().replace(/<|>|@/ig, ``)
-//     const date = new Date().toString()
-//     const mutedMember = await __ENV.__VALARIUM_GUILD().fetchMember(memberId)
-//     const slicedReason = reason || `Violation of the rules`
-
-//     mutedMember.addRole(`586839490102951936`)
-//     !mutedMember.roles.some(role => role.id === `586839490102951936`) ? mutedMember.addRole(`586839490102951936`): message.reply(`this user is already muted`)
-
-//     sendEmbedNotification(
-//       undefined,
-//       {
-//         author: message.author,
-//         description: `${mutedMember} has been muted at ${date} by ${message.member}`,
-//         title:`INFO, ${mutedMember}`,
-//         color: 0xfade78,
-//         footer: date
-//       }, [
-//         { name: `Member`, value: `${mutedMember}` },
-//         { name: `Moderator`, value: `${message.member}` },
-//         { name: `Reason`, value: slicedReason },
-//         { name: `Status`, value: `This user is now muted and will be automatically unmuted in 15 minutes` }
-//       ],
-//       undefined,
-//       [__ENV.__MODERATION_NOTICES_CHANNEL()])
-
-//     setTimeout(() => { unmute(message, args, __ENV) }, 900000) //15 minutes 900000 ms
-//   }
-//   catch(err){ console.log(err) }
-// }

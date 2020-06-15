@@ -11,6 +11,7 @@ module.exports = [
 	require('./milestoneadd'),
 	require('./milestoneremove'),
 	require('./announce'),
+	require('./mute'),
 	// require('./poll'),
 	// require('./reactionroles')
 ]

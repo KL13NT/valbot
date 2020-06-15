@@ -29,46 +29,26 @@ function cacheMessage (channel, messageId){
 }
 
 /**
- * Reacts with a given array of reactions to a message
- * @param {Message} message
- * @param {string} reactions
- */
-function react (message, reactions = []){
-	reactions.forEach(reaction => message.react(reaction).catch(err => console.log(err)))
-}
-
-
-/**
  *
- * @param {Message} message - message
  * @param {EmbedOptions} options - Destructured object
  */
-async function sendEmbed (message, { member, embedOptions, fields, attachments, channels, reactions = [], callback }) {
-	try{
-		const embed = new MessageEmbed(embedOptions)
-		embed.setThumbnail('https://github.com/KL13NT/valbot/raw/development/src/media/valarium-bot-prod.png')
-		embed.setColor('#f9a826')
+function createEmbed ({ fields, attachments, ...embedOptions }) {
+	const embed = new MessageEmbed(embedOptions)
+		.setColor('#ffcc5c')
+		.setTimestamp()
 
-		if(fields)
-			fields.forEach(field =>
+	if(fields)
+		fields.forEach(field =>
+			embed.addField(
+				field.name,
+				field.value,
 				field.inline || field.name === 'Moderator' || field.name === 'Member'
-					? embed.addField(field.name, field.value, true)
-					: embed.addField(field.name, field.value))
+			)
+		)
 
-		if(attachments) attachments.forEach(attachment => embed.attachFile(attachment.path))
-		if(channels) channels.forEach(channel => channel.send(embed).then(sent => react(sent, reactions)))
+	if(attachments) attachments.forEach(attachment => embed.attachFile(attachment.path))
 
-		if(member){
-			const DMChannel = await member.createDM()
-			DMChannel.send(embed).then(sent => react(sent, reactions))
-		}
-
-		if(callback) callback(embed)
-	}
-	catch(err){
-		console.log(err)
-		if(message) message.reply('في حاجة غلط حصلت. جرب تاني بعدين او بص ف اللوجز لو انت ديف')
-	}
+	return embed
 }
 
 
@@ -191,12 +171,12 @@ function log (client, notification, alertLevel){
  * @param {*} notification
  * @param {*} alertLevel
  */
-async function notify (client, notification, embed){
+async function notify (client, notification, embed, channel = 'notifications'){
 	try{
 		if(client.ready){
 			//REFACTORME: have better logic for important config stuff
 			const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-			const notificationsChannel = client.config.IMPORTANT_CHANNELS[isDevelopment? 'test': 'notifications']
+			const notificationsChannel = client.config.IMPORTANT_CHANNELS[isDevelopment? 'test': channel]
 			notificationsChannel.send(notification, { embed })
 		}
 		else {
@@ -269,7 +249,7 @@ function translateSecurityLevel (securityLevel){
 
 
 module.exports = {
-	sendEmbed,
+	createEmbed,
 	getChannelObject,
 	getRoleObject,
 	getMessageObject,
