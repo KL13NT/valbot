@@ -1,5 +1,6 @@
 const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
+const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 
 class Clear extends Command {
 	/**
@@ -21,27 +22,44 @@ class Clear extends Command {
   }
 
   async _run(context) {
-		const { message, params, channel } = context
+		const { message, member, params, channel } = context
 		const numbersRegex = /\d+/
 
 		if(numbersRegex.test(params[0])){
-			const count = parseInt(params[0]) + 1
+			const count = parseInt(params[0])
 
 			if(count === 0) {
-				message.reply('لما تكتب صفر للكوماند دي هتخلي ديسكورد يمسح كل الرسايل اللي ف التشانل! جرب رقم تاني')
-				return
+				return message.reply('لما تكتب صفر للكوماند دي هتخلي ديسكورد يمسح كل الرسايل اللي ف التشانل! جرب رقم تاني')
 			}
 
-			await channel.bulkDelete(count)
-
-			message.reply(`مسحت ${count} رسايل. تحب اجيبلك كوبايتين لمون؟`).then(sent => {
-				setTimeout(()=>{
-					sent.delete()
-				}, 3 * 1000)
+			const embed = createEmbed({
+				title: 'Message Purge',
+				fields: [
+					{ name: '**Moderator**', value: `<@${member.id}> | ${member.id}`, inline: true },
+					{ name: '**Purged Amount**', value: `Purged **${count}** messages`, inline: true },
+					{ name: '**Location**', value: `<#${channel.id}>` },
+					{ name: '**Date / Time**', value: `${new Date().toUTCString()}`, inline: true },
+				]
 			})
 
+			try{
+				await channel.bulkDelete(count + 1)
+
+				await message.reply(`مسحت ${count} يرايق.`).then(sent => {
+					setTimeout(()=>{
+						sent.delete()
+					}, 3 * 1000)
+				})
+
+				notify(this.client, ``, embed, 'mod-logs')
+			}
+			catch(err){
+				log(this.client, err, 'error')
+			}
+
+
 		}
-		else message.reply(`لازم تدخل رقم كـتالت باراميتير للكوماند دي`)
+		else return message.reply(`لازم تدخل رقم كـتالت باراميتير للكوماند دي`)
 	}
 
 }
