@@ -11,15 +11,14 @@ const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
  * @property {function} callback
  */
 
-
 /**
  * Caches messages based on a channel object and a message id. If failed to cache, retries.
  * @param {TextChannel} channel
  * @param {string} messageId
  */
-function cacheMessage (channel, messageId){
+function cacheMessage(channel, messageId) {
 	channel.messages.fetch(messageId, true).catch(err => {
-		if(err.code !== 10008) return cacheMessage(channel, messageId)
+		if (err.code !== 10008) return cacheMessage(channel, messageId)
 	})
 }
 
@@ -27,12 +26,12 @@ function cacheMessage (channel, messageId){
  *
  * @param {EmbedOptions} options - Destructured object
  */
-function createEmbed ({ fields, attachments, ...embedOptions }) {
+function createEmbed({ fields, attachments, ...embedOptions }) {
 	const embed = new MessageEmbed(embedOptions)
 		.setColor('#ffcc5c')
 		.setTimestamp()
 
-	if(fields)
+	if (fields)
 		fields.forEach(field =>
 			embed.addField(
 				field.name,
@@ -41,33 +40,32 @@ function createEmbed ({ fields, attachments, ...embedOptions }) {
 			)
 		)
 
-	if(attachments) attachments.forEach(attachment => embed.attachFile(attachment.path))
+	if (attachments)
+		attachments.forEach(attachment => embed.attachFile(attachment.path))
 
 	return embed
 }
-
 
 /**
  * @param {ValClient} client
  * @param {string} channelId
  * @returns {GuildChannel}
  */
-function getChannelObject (client, channelId){
+function getChannelObject(client, channelId) {
 	return client.guilds.cache
-		.find(guild => guild.name === 'VALARIUM').channels.cache
-		.find(ch => ch.id === channelId)
+		.find(guild => guild.name === 'VALARIUM')
+		.channels.cache.find(ch => ch.id === channelId)
 }
-
 
 /**
  * @param {ValClient} client
  * @param {string} roleId|rolename
  */
-function getRoleObject (client, roleID){
+function getRoleObject(client, roleID) {
 	return client.guilds.cache
-		.find(guild => guild.name === 'VALARIUM').roles.cache
-		.find(role => {
-			if(/\d+/.test(roleID)) return role.id === roleID
+		.find(guild => guild.name === 'VALARIUM')
+		.roles.cache.find(role => {
+			if (/\d+/.test(roleID)) return role.id === roleID
 			else return role.name === roleID
 		})
 }
@@ -77,15 +75,14 @@ function getRoleObject (client, roleID){
  * @param {TextChannel} channel
  * @param {string} messageId
  */
-async function getMessageObject (channel, messageId){
-	return await channel.messages.fetch(messageId) || null
+async function getMessageObject(channel, messageId) {
+	return (await channel.messages.fetch(messageId)) || null
 }
 
-function dmMember (member, content){
-	try{
+function dmMember(member, content) {
+	try {
 		member.createDM().then(dm => dm.send(content))
-	}
-	catch(err){
+	} catch (err) {
 		console.log(err)
 	}
 }
@@ -94,24 +91,23 @@ function dmMember (member, content){
  * @param {ValClient} client
  * @param {string} channelId
  */
-function getMemberObject (client, userId){
+function getMemberObject(client, userId) {
 	return client.guilds.cache
-		.find(guild => guild.name === 'VALARIUM').members.cache
-		.find(member => member.id === userId)
+		.find(guild => guild.name === 'VALARIUM')
+		.members.cache.find(member => member.id === userId)
 }
-
 
 /**
  * Recursively deep-freezes objects
  * @param {object} object object to freeze
  */
-function deepFreeze (object) {
+function deepFreeze(object) {
 	const keys = Object.keys(object)
 
 	for (const key of keys) {
 		const value = object[key]
 
-		if(value && typeof value === 'object') {
+		if (value && typeof value === 'object') {
 			deepFreeze(value)
 		}
 	}
@@ -124,9 +120,9 @@ function deepFreeze (object) {
  * @param {*} matcher element to check
  * @param {array} possibilities possibilities
  */
-function isOneOf (matcher, possibilities){
-	for(const possibility of possibilities){
-		if(matcher === possibility) return true
+function isOneOf(matcher, possibilities) {
+	for (const possibility of possibilities) {
+		if (matcher === possibility) return true
 	}
 }
 
@@ -136,25 +132,39 @@ function isOneOf (matcher, possibilities){
  * @param {*} notification
  * @param {*} alertLevel
  */
-function log (client, notification, alertLevel){
-	const statusEmoji = alertLevel === 'info'? ':grey_question:': alertLevel === 'warn'? ':warning:': ':x:'
+function log(client, notification, alertLevel) {
+	const statusEmoji =
+		alertLevel === 'info'
+			? ':grey_question:'
+			: alertLevel === 'warn'
+			? ':warning:'
+			: ':x:'
 	const shouldMention = alertLevel === 'error' || alertLevel === 'warn'
-	const message = typeof notification === 'object'? `${notification.toString()}`: notification
+	const message =
+		typeof notification === 'object'
+			? `${notification.toString()}`
+			: notification
 
-	if(process.env.MODE === 'PRODUCTION'){
-		if(client.ready){
+	if (process.env.MODE === 'PRODUCTION') {
+		if (client.ready) {
 			const { CHANNEL_BOT_STATUS } = client.config.CHANNELS
 			const botStatusChannel = getChannelObject(client, CHANNEL_BOT_STATUS)
-			const fullNotification = `${statusEmoji} ${message} ${shouldMention? '<@&639855023970451457>': ''}`
+			const fullNotification = `${statusEmoji} ${message} ${
+				shouldMention ? '<@&639855023970451457>' : ''
+			}`
 
 			console.log(`[${alertLevel}] ${message}`)
 			botStatusChannel.send(fullNotification)
+		} else {
+			if (typeof this.client.controllers.queue !== 'undefined')
+				this.client.controllers.queue.enqueue(
+					log,
+					client,
+					notification,
+					alertLevel
+				)
 		}
-		else {
-			if(typeof this.client.controllers.queue !== 'undefined') this.client.controllers.queue.enqueue(log, client, notification, alertLevel)
-		}
-	}
-	else console.log(`[${alertLevel}]`, notification)
+	} else console.log(`[${alertLevel}]`, notification)
 }
 
 /**
@@ -163,9 +173,10 @@ function log (client, notification, alertLevel){
  * @param {*} notification
  * @param {*} alertLevel
  */
-async function notify (client, notification, embed, channelID){
-	try{
-		if(client.ready){
+async function notify(client, notification, embed, channelID) {
+	// REFACTORME: refactor this mess into classes
+	try {
+		if (client.ready) {
 			const { CHANNEL_TEST } = client.config.CHANNELS
 			const notificationsChannel = getChannelObject(
 				client,
@@ -173,12 +184,10 @@ async function notify (client, notification, embed, channelID){
 			)
 
 			return notificationsChannel.send(notification, { embed })
-		}
-		else {
+		} else {
 			this.client.controllers.queue.enqueue(notify, client, notification)
 		}
-	}
-	catch(err){
+	} catch (err) {
 		log(client, err, 'error')
 	}
 }
@@ -187,11 +196,11 @@ async function notify (client, notification, embed, channelID){
  *
  * @param {*} messageContent
  */
-function calculateUniqueWords (messageContent){
+function calculateUniqueWords(messageContent) {
 	const unique = {}
 
 	return messageContent.split(' ').filter(word => {
-		if(!unique[word] && word.length >= 2){
+		if (!unique[word] && word.length >= 2) {
 			unique[word] = word
 			return true
 		}
@@ -205,11 +214,14 @@ function calculateUniqueWords (messageContent){
  * @param {*} client
  * @param {*} event
  */
-function generateEvent (client, event, content){
+function generateEvent(client, event, content) {
 	let generated = event
 
 	Object.keys(content).forEach(variable => {
-		generated = generated.replace(new RegExp(`{{${variable}}}`), content[variable])
+		generated = generated.replace(
+			new RegExp(`{{${variable}}}`),
+			content[variable]
+		)
 	})
 
 	return generated
@@ -219,16 +231,15 @@ function generateEvent (client, event, content){
  * returns a parsed level string
  * @param {*} securityLevel
  */
-function translateSecurityLevel (securityLevel){
+function translateSecurityLevel(securityLevel) {
 	/**
- * @typedef {object} AuthLevels
- * @property {number} 0 Developers
- * @property {number} 1 High Table [admin]
- * @property {number} 2 Protectors [mod]
- * @property {number} 3 Verified members role
- * @property {number} 4 Everyone
- */
-
+	 * @typedef {object} AuthLevels
+	 * @property {number} 0 Developers
+	 * @property {number} 1 High Table [admin]
+	 * @property {number} 2 Protectors [mod]
+	 * @property {number} 3 Verified members role
+	 * @property {number} 4 Everyone
+	 */
 	/**
 	* TODO: move logic out of here,
 	* perhaps replace all levels across codebase with objects
@@ -238,14 +249,11 @@ function translateSecurityLevel (securityLevel){
 	}
 	*/
 	// if(securityLevel)
-
 }
 
-
-async function awaitMessages(channel, filter, options){
+async function awaitMessages(channel, filter, options) {
 	return (await channel.awaitMessages(filter, options)).first().content
 }
-
 
 module.exports = {
 	createEmbed,

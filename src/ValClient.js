@@ -37,7 +37,6 @@ class ValClient extends Client {
 		try{
 			this.login(token)
 
-			this.ToxicityFilter = new ToxicityFilter(0.8)
 			await this.initLoaders()
 			await this.initConfig()
 			await this.initListeners()

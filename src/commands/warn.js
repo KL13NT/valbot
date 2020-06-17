@@ -1,5 +1,5 @@
 const { Command, CommandOptions } = require(`../structures`)
-const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
+const { warn, isWarned } = require('../utils/ModerationUtils')
 
 class Warn extends Command {
 	constructor(client) {
@@ -20,8 +20,6 @@ class Warn extends Command {
 	}
 
 	async _run({ member, message, channel, params }) {
-		const { ROLE_WARNED } = this.client.config.ROLES
-		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS
 		const [mention, ...reasonWords] = params
 		const mentionRegex = /<@!(\d+)>/
 
@@ -30,36 +28,15 @@ class Warn extends Command {
 
 		const id = mention.match(mentionRegex)[1]
 		const reason = reasonWords.join(' ')
-		const targetMember = getMemberObject(this.client, id)
 
-		const embed = createEmbed({
-			title: 'Warned User',
-			fields: [
-				{ name: '**User**', value: `${mention} | ${id}` },
-				{ name: '**Moderator**', value: `<@${member.id}> | ${id}` },
-				{ name: '**Location**', value: `<#${channel.id}>`, inline: true },
-				{
-					name: '**Date / Time**',
-					value: `${new Date().toUTCString()}`,
-					inline: true
-				},
-				{ name: '**Reason**', value: reason }
-			]
+		if (isWarned(id)) return message.reply('الميمبر ده متحذر قبل كده')
+
+		warn(this.client, {
+			member: id,
+			moderator: member.id,
+			channel: channel.id,
+			reason
 		})
-
-		try {
-			if (this.isWarned(targetMember))
-				return message.reply('الميمبر ده متحذر قبل كده')
-
-			await targetMember.roles.add(ROLE_WARNED)
-			notify(this.client, ``, embed, CHANNEL_MOD_LOGS)
-		} catch (err) {
-			log(this.client, err, 'error')
-		}
-	}
-
-	isWarned(member) {
-		return member.roles.cache.find(role => role.id === ROLE_WARNED)
 	}
 }
 

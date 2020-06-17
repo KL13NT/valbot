@@ -11,7 +11,9 @@ class MessageListener extends Listener {
 	}
 
 	async onMessage (message){
+		//TODO: link toxicity
 		const { content, author, type, mentions } = message
+
 		const isToxic = await this.client.ToxicityFilter.classify(message)
 		const isClientMentioned = mentions.members
 			&& mentions.members.some(
@@ -20,7 +22,7 @@ class MessageListener extends Listener {
 
 		if(author.id !== CLIENT_ID && author.id !== DEV_CLIENT_ID && type !== 'dm'){
 
-			if(this.ToxicityFilter && this.client.ToxicityFilter.ready && isToxic) return this.client.ToxicityFilter.warn(message)
+			if(this.client.controllers.toxicity.ready && isToxic) return this.client.ToxicityFilter.warn(message)
 
 			if(content.startsWith(this.client.prefix)) this.client.emit('command', message)
 			else if(isClientMentioned) this.client.controllers.conversation.converse(message, true)
