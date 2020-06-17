@@ -14,7 +14,7 @@ class QueueExecuteListener extends Listener {
 	}
 
 	async onQueueExecute (reason){
-		QueueController.executeAll()
+		this.client.controllers.queue.executeAll()
 		log(this.client, `Executing all queued calls. Reason: ${reason}`, 'info')
 	}
 }

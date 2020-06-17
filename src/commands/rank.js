@@ -33,19 +33,19 @@ class Rank extends Command {
 
 			const member = getMemberObject(this.client, id)
 
-			const res = await this.client.MongoController.getLevel(id)
+			const res = await this.client.controllers.mongo.getLevel(id)
 			const avatar_url = member.user.displayAvatarURL()
 			const displayName = member.user.username.substr(0, 12) + '...'
 			const displayID = member.user.tag.split('#')[1]
 
 			const voice = res
 				? res.voice
-				: await this.client.RedisController.get(`VOICE:${id}`)
+				: await this.client.controllers.redis.get(`VOICE:${id}`)
 			const text = res
 				? res.text
-				: await this.client.RedisController.get(`TEXT:${id}`)
-			const exp = await this.client.RedisController.get(`EXP:${id}`)
-			const level = await this.client.RedisController.get(`LEVEL:${id}`)
+				: await this.client.controllers.redis.get(`TEXT:${id}`)
+			const exp = await this.client.controllers.redis.get(`EXP:${id}`)
+			const level = await this.client.controllers.redis.get(`LEVEL:${id}`)
 
 			const userInfo = {
 				avatar_url,

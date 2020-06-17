@@ -4,12 +4,15 @@ const { log } = require('../utils/utils')
 class ConversationController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'ConversationController'
+			name: 'conversation'
 		})
 		this.ready = false
 		this.responses = {}
 
 		this.init = this.init.bind(this)
+		this.converse = this.converse.bind(this)
+		this.teach = this.teach.bind(this)
+		this.getAllResponses = this.getAllResponses.bind(this)
 
 
 		this.init()
@@ -17,8 +20,8 @@ class ConversationController extends Controller {
 
 	async init (){
 		try{
-			if(MongoController.ready){
-				const responses = await MongoController.getResponses()
+			if(this.client.controllers.mongo.ready){
+				const responses = await this.client.controllers.mongo.getResponses()
 
 				responses.forEach(({ invoker, reply }) => {
 					this.responses[invoker] = {
@@ -28,7 +31,7 @@ class ConversationController extends Controller {
 				})
 			}
 			else {
-				QueueController.enqueue(this.init)
+				this.client.controllers.queue.enqueue(this.init)
 			}
 		}
 		catch(err){
@@ -51,7 +54,7 @@ class ConversationController extends Controller {
 
 	async teach (response){
 		this.responses[response.invoker] = response
-		return MongoController.saveResponse(response)
+		return this.client.controllers.mongo.saveResponse(response)
 	}
 
 	getAllResponses (){

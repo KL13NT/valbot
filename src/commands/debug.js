@@ -33,13 +33,13 @@ class Debug extends Command {
 		const { message, params } = context
 
 		if (params[0] === 'on') {
-			if (this.client.IntervalsController.exists('debug'))
+			if (this.client.controllers.intervals.exists('debug'))
 				return message.reply('انا مشغل الdebugger اصلا يبشا')
 
 			message.reply(`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`)
 
 			log(this.client, 'Logging every 2000ms', 'warn')
-			this.client.IntervalsController.setInterval(
+			this.client.controllers.intervals.setInterval(
 				2000,
 				{ name: 'debug' },
 				() => {
@@ -47,13 +47,13 @@ class Debug extends Command {
 				}
 			)
 		} else if (params[0] === 'off') {
-			if (!this.client.IntervalsController.exists('debug'))
+			if (!this.client.controllers.intervals.exists('debug'))
 				return message.reply('انا مش مشغل الdebugger اصلا يبشا')
 
 			message.reply(`قفلت الـ debugger خلاص`)
 
 			log(this.client, 'Logger disabled', 'warn')
-			this.client.IntervalsController.clearInterval('debug')
+			this.client.controllers.intervals.clearInterval('debug')
 		} else return message.reply('اول باراميتر المفروض يبقى on او off')
 	}
 

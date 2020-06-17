@@ -10,7 +10,7 @@ const { log } = require('../utils/utils')
 class MongoController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'MongoController'
+			name: 'mongo'
 		})
 		this.ready = false
 
@@ -18,6 +18,14 @@ class MongoController extends Controller {
 			process.env.DB_HOST,
 			{ useNewUrlParser: true }
 		)
+
+		this.init = this.init.bind(this)
+		this.syncLevels = this.syncLevels.bind(this)
+		this.getLevel = this.getLevel.bind(this)
+		this.getLevels = this.getLevels.bind(this)
+		this.getMilestones = this.getMilestones.bind(this)
+		this.getResponses = this.getResponses.bind(this)
+		this.syncLevels = this.syncLevels.bind(this)
 
 		this.init()
 	}
@@ -52,7 +60,7 @@ class MongoController extends Controller {
 						upsert: true
 					})
 		}
-		else QueueController.enqueue(this.syncLevels, id, { exp, text, voice })
+		else this.client.controllers.queue.enqueue(this.syncLevels, id, { exp, text, voice })
 	}
 
 	async getLevel (id){
@@ -102,7 +110,7 @@ class MongoController extends Controller {
 				upsert: true
 			})
 		}
-		else QueueController.enqueue(this.saveResponse, { invoker, reply } )
+		else this.client.controllers.queue.enqueue(this.saveResponse, { invoker, reply } )
 	}
 }
 

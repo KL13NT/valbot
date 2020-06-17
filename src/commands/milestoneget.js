@@ -51,7 +51,7 @@ class MilestoneGet extends Command {
 	}
 
 	getLevelMilestones(level) {
-		const milestones = this.client.LevelsController.getMilestone(level)
+		const milestones = this.client.controllers.levels.getMilestone(level)
 
 		if (!milestones) return 'مفيش milestones للـ level ده'
 		else {
@@ -69,13 +69,13 @@ class MilestoneGet extends Command {
 	getAllMilestones() {
 		let milestones = '\n'
 
-		if (Object.keys(this.client.LevelsController.milestones).length === 0)
+		if (Object.keys(this.client.controllers.levels.milestones).length === 0)
 			return 'مفيش milestones خالص'
 
-		Object.keys(this.client.LevelsController.milestones).forEach(level => {
+		Object.keys(this.client.controllers.levels.milestones).forEach(level => {
 			milestones += `Level #${level} Achievements\n${'-'.repeat(30)}\n`
 
-			this.client.LevelsController.milestones[level].forEach(
+			this.client.controllers.levels.milestones[level].forEach(
 				({ name, description, roleID }) => {
 					const role = getRoleObject(this.client, roleID)
 					milestones += `Name: ${name}\nDescription: ${description}\nRole: ${role.name}\n\n`

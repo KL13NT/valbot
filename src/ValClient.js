@@ -89,8 +89,8 @@ class ValClient extends Client {
 
 	async initConfig(){
 		try{
-			if (MongoController.ready && RedisController.ready) {
-				const response = await MongoController.db
+			if (this.controllers.mongo.ready && this.controllers.redis.ready) {
+				const response = await this.controllers.mongo.db
 					.collection('config')
 					.findOne({
 						GUILD_ID: process.env.GUILD_ID
@@ -102,7 +102,7 @@ class ValClient extends Client {
 				this.ready = true
 				this.config = response || {}
 			} else {
-				QueueController.enqueue(this.initConfig)
+				this.controllers.queue.enqueue(this.initConfig)
 			}
 		} catch (err) {
 			const message = `Something went wrong when initialising ConfigController, ${err.message}`

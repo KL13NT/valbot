@@ -18,7 +18,7 @@ class ControllersLoader extends Loader{
 	load () {
 		Controllers.forEach(controller => {
 			const controllerInstance = new controller(this.client)
-			global[controllerInstance.constructor.name] = controllerInstance
+			this.client.controllers[controllerInstance.options.name] = controllerInstance
 
 			log(this.client, `${controller.name} loaded`, 'info')
 		})

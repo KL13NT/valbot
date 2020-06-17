@@ -4,7 +4,7 @@ const { log } = require('../utils/utils')
 class ReactionRolesController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'ReactionRolesController'
+			name: 'reactionroles'
 		})
 		this.ready = false
 		this.responses = {}
@@ -16,8 +16,8 @@ class ReactionRolesController extends Controller {
 
 	async init (){
 		try{
-			if(MongoController.ready){
-				const responses = await MongoController.db.collection('reactionroles').find({})
+			if(this.client.controllers.mongo.ready){
+				const responses = await this.client.controllers.mongo.db.collection('reactionroles').find({})
 
 				responses.forEach(({ invoker, reply }) => {
 					this.responses[invoker] = {
@@ -27,7 +27,7 @@ class ReactionRolesController extends Controller {
 				})
 			}
 			else {
-				QueueController.enqueue(this.init)
+				this.client.controllers.queue.enqueue(this.init)
 			}
 		}
 		catch(err){

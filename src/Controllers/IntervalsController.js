@@ -9,10 +9,14 @@ const { log } = require('../utils/utils')
 class IntervalsController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'IntervalsController'
+			name: 'intervals'
 		})
 		this.ready = true
 		this.intervals = {}
+
+		this.setInterval = this.setInterval.bind(this)
+		this.clearInterval = this.clearInterval.bind(this)
+		this.exists = this.exists.bind(this)
 	}
 
 	setInterval (time, intervalOptions, callback){

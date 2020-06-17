@@ -10,7 +10,7 @@ const { log, calculateUniqueWords, notify, getMemberObject, getRoleObject } = re
 class SpamController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'SpamController'
+			name: 'spam'
 		})
 
 		this.isSpam = this.isSpam.bind(this)
@@ -19,7 +19,7 @@ class SpamController extends Controller {
 		this.init()
 
 		this.cache = {
-			
+
 		}
 	}
 
@@ -29,7 +29,7 @@ class SpamController extends Controller {
 
 	async init (){
 		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
-		if(MongoController.ready && RedisController.ready && this.client.ValGuild.available){
+		if(this.client.controllers.mongo.ready && this.client.controllers.redis.ready && this.client.ValGuild.available){
 			const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values())
 
 			voiceStates.forEach(({ deaf, mute, member, channel }) => {
@@ -38,29 +38,29 @@ class SpamController extends Controller {
 				}
 			})
 
-			MongoController.getLevels().then(async levels => {
+			this.client.controllers.mongo.getLevels().then(async levels => {
 				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
-					RedisController.set(`TEXT:${id}`, (Number(text) || 1))
-					RedisController.set(`TEXT:XP:${id}`, (Number(textXP) || 1))
-					RedisController.set(`VOICE:${id}`, (Number(voice) || 1))
-					RedisController.set(`VOICE:XP:${id}`, (Number(voiceXP) || 1))
-					RedisController.set(`LEVEL:${id}`, (Number(level) || 1))
+					this.client.controllers.redis.set(`TEXT:${id}`, (Number(text) || 1))
+					this.client.controllers.redis.set(`TEXT:XP:${id}`, (Number(textXP) || 1))
+					this.client.controllers.redis.set(`VOICE:${id}`, (Number(voice) || 1))
+					this.client.controllers.redis.set(`VOICE:XP:${id}`, (Number(voiceXP) || 1))
+					this.client.controllers.redis.set(`LEVEL:${id}`, (Number(level) || 1))
 				})
 
-				IntervalsController.setInterval(
+				this.client.controllers.intervals.setInterval(
 					1000 * 60,
 					{ name: 'voiceIncrement' },
 					this.voiceIncrement
 				)
 			})
 
-			MongoController.getMilestones().then(found => {
+			this.client.controllers.mongo.getMilestones().then(found => {
 				found.forEach(level => {
 					this.milestones[level.level] = level.milestones
 				})
 			})
 		}
-		else QueueController.enqueue(this.init)
+		else this.client.controllers.queue.enqueue(this.init)
 	}
 }
 

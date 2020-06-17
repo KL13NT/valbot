@@ -29,7 +29,7 @@ class Teach extends Command {
 		const invoker = params.join(' ').replace(/"/g, '')
 
 		if (params.length === 0) {
-			const responses = this.client.ConversationController.getAllResponses()
+			const responses = this.client.controllers.conversation.getAllResponses()
 
 			const reply = Object.values(responses).map(res => {
 				return `${res.invoker}\n الرد: ${res.reply}\n--------\n`
@@ -47,7 +47,7 @@ class Teach extends Command {
 			channel
 				.awaitMessages(collectorFilter, collectorOptions)
 				.then(messages => {
-					this.client.ConversationController.teach({
+					this.client.controllers.conversation.teach({
 						invoker,
 						reply: messages.first().content
 					})

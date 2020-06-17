@@ -87,10 +87,10 @@ class Setup extends Command {
 	}
 
 	async setConfig(config) {
-		if (MongoController.ready && RedisController.ready) {
+		if (this.controllers.mongo.ready && this.controllers.redis.ready) {
 			this.client.config = config
 
-			MongoController.db.collection('config').updateOne(
+			this.client.controllers.mongo.db.collection('config').updateOne(
 				{ GUILD_ID: String(process.env.GUILD_ID) },
 				{
 					$set: {
@@ -101,7 +101,7 @@ class Setup extends Command {
 				{ upsert: true }
 			)
 		} else {
-			QueueController.enqueue(this.setConfig, config)
+			this.client.controllers.queue.enqueue(this.setConfig, config)
 		}
 	}
 }

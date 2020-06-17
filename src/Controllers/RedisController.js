@@ -9,14 +9,20 @@ const { log } = require('../utils/utils')
 class RedisController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'RedisController'
+			name: 'redis'
 		})
 		this.ready = false
 
 		this.redis = redis.createClient(process.env.REDIS_URL)
 		this.getAsync = promisify(this.redis.get).bind(this.redis)
+
 		this.readyListener = this.readyListener.bind(this)
 		this.errorListener = this.errorListener.bind(this)
+
+		this.set = this.set.bind(this)
+		this.get = this.get.bind(this)
+		this.incr = this.incr.bind(this)
+		this.incrby = this.incrby.bind(this)
 
 		this.redis.on('ready', this.readyListener)
 		this.redis.on('error', this.errorListener)
@@ -27,7 +33,7 @@ class RedisController extends Controller {
 
 		log(this.client, message, 'error')
 		this.redis.removeAllListeners()
-		delete global.RedisController
+		delete this.client.controllers.redis
 	}
 
 	readyListener (){

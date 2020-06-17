@@ -56,7 +56,7 @@ class MilestoneRemove extends Command {
 			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
 				.content
 
-			this.client.LevelsController.removeMilestone(level, name)
+			this.client.controllers.levels.removeMilestone(level, name)
 
 			message.reply('شيلت الـ milestone دي')
 		} catch (err) {

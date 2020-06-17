@@ -23,9 +23,9 @@ class MessageListener extends Listener {
 			if(this.ToxicityFilter && this.client.ToxicityFilter.ready && isToxic) return this.client.ToxicityFilter.warn(message)
 
 			if(content.startsWith(this.client.prefix)) this.client.emit('command', message)
-			else if(isClientMentioned) ConversationController.converse(message, true)
+			else if(isClientMentioned) this.client.controllers.conversation.converse(message, true)
 
-			LevelsController.message(message)
+			this.client.controllers.levels.message(message)
 		}
 	}
 }

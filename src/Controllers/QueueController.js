@@ -10,11 +10,14 @@ const { log } = require('../utils/utils')
 class QueueController extends Controller {
 	constructor (client){
 		super(client, {
-			name: 'QueueController'
+			name: 'queue'
 		})
 
 		this.ready = false
 		this.calls = []
+
+		this.enqueue = this.enqueue.bind(this)
+		this.executeAll = this.executeAll.bind(this)
 	}
 
 	enqueue (func, ...args) {

@@ -84,7 +84,7 @@ class MilestoneAdd extends Command {
 			if (!descriptionRegex.test(description))
 				return message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش')
 
-			this.client.LevelsController.addMilestone(
+			this.client.controllers.levels.addMilestone(
 				level,
 				name,
 				description,
