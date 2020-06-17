@@ -7,8 +7,6 @@ const {
 	notify
 } = require('../utils/utils')
 
-const { AUTH_ADMIN } = require('../config/config.js').AUTH
-
 class MilestoneRemove extends Command {
 	/**
 	 * Constructs help command
@@ -25,7 +23,7 @@ class MilestoneRemove extends Command {
 			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_ADMIN
+				required: 'AUTH_ADMIN'
 			}
 		})
 
@@ -58,7 +56,7 @@ class MilestoneRemove extends Command {
 			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
 				.content
 
-			LevelsController.removeMilestone(level, name)
+			this.client.LevelsController.removeMilestone(level, name)
 
 			message.reply('شيلت الـ milestone دي')
 		} catch (err) {

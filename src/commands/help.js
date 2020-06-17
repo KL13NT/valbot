@@ -1,8 +1,6 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
 
-const { AUTH_EVERYONE } = require('../config/config.js').AUTH
-
 class Help extends Command {
 	/**
 	 * Constructs help command
@@ -18,7 +16,7 @@ class Help extends Command {
 			exampleUsage: `\`val! help\` او \`val! help command\``,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_EVERYONE
+				required: 'AUTH_EVERYONE'
 			}
 		})
 

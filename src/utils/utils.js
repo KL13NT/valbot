@@ -1,8 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
 
-const { CHANNEL_BOT_STATUS, CHANNEL_TEST } = require('../config/config.js').CHANNELS
-
 /**
  * @typedef {object} EmbedOptions
  * @property {GuildMember} member
@@ -12,9 +10,6 @@ const { CHANNEL_BOT_STATUS, CHANNEL_TEST } = require('../config/config.js').CHAN
  * @property {GuildChannel[]} channels
  * @property {function} callback
  */
-async function warn (message){
-	message.member.addRole()
-}
 
 
 /**
@@ -148,6 +143,7 @@ function log (client, notification, alertLevel){
 
 	if(process.env.MODE === 'PRODUCTION'){
 		if(client.ready){
+			const { CHANNEL_BOT_STATUS } = client.config.CHANNELS
 			const botStatusChannel = getChannelObject(client, CHANNEL_BOT_STATUS)
 			const fullNotification = `${statusEmoji} ${message} ${shouldMention? '<@&639855023970451457>': ''}`
 
@@ -167,23 +163,23 @@ function log (client, notification, alertLevel){
  * @param {*} notification
  * @param {*} alertLevel
  */
-async function notify (client, notification, embed, channelID = CHANNEL_TEST){
+async function notify (client, notification, embed, channelID){
 	try{
 		if(client.ready){
+			const { CHANNEL_TEST } = client.config.CHANNELS
 			const notificationsChannel = getChannelObject(
 				client,
 				process.env.MODE === 'DEVELOPMENT' ? CHANNEL_TEST : channelID
 			)
 
-			notificationsChannel.send(notification, { embed })
+			return notificationsChannel.send(notification, { embed })
 		}
 		else {
 			QueueController.enqueue(notify, client, notification)
 		}
 	}
 	catch(err){
-		console.log(err)
-		log(client, err.message, 'error')
+		log(client, err, 'error')
 	}
 }
 
@@ -246,6 +242,11 @@ function translateSecurityLevel (securityLevel){
 }
 
 
+async function awaitMessages(channel, filter, options){
+	return (await channel.awaitMessages(filter, options)).first().content
+}
+
+
 module.exports = {
 	createEmbed,
 	getChannelObject,
@@ -258,5 +259,6 @@ module.exports = {
 	log,
 	notify,
 	generateEvent,
-	calculateUniqueWords
+	calculateUniqueWords,
+	awaitMessages
 }

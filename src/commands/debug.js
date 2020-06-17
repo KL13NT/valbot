@@ -1,17 +1,14 @@
-const { Command } = require("../structures")
-const { CommandOptions } = require("../structures")
+const { Command } = require('../structures')
+const { CommandOptions } = require('../structures')
 
 const { log } = require('../utils/utils')
-
-const { AUTH_DEV } = require('../config/config.js').AUTH
-const { CHANNEL_BOT_STATUS } = require('../config/config.js').CHANNELS
 
 class Debug extends Command {
 	/**
 	 * Constructs help command
 	 * @param {ValClient} client
 	 */
-  constructor(client) {
+	constructor(client) {
 		const options = new CommandOptions({
 			name: `debug`,
 			cooldown: 1000,
@@ -22,39 +19,45 @@ class Debug extends Command {
 			extraParams: false,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_DEV
+				required: 'AUTH_DEV'
 			}
 		})
 
 		super(client, options)
-  }
+	}
 
-  async _run(context) {
+	async _run(context) {
+		const { CHANNEL_BOT_STATUS } = this.client.config.CHANNELS
+		const { AUTH_DEV } = this.client.config.ROLES
+
 		const { message, params } = context
 
-		if(params[0] === 'on'){
-			if(IntervalsController.exists('debug')) return message.reply('انا مشغل الdebugger اصلا يبشا')
+		if (params[0] === 'on') {
+			if (this.client.IntervalsController.exists('debug'))
+				return message.reply('انا مشغل الdebugger اصلا يبشا')
 
 			message.reply(`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`)
 
 			log(this.client, 'Logging every 2000ms', 'warn')
-			IntervalsController.setInterval(2000, {name: 'debug'}, ()=>{
-				log(this.client, this.usageToString(), 'info')
-			})
-		}
-		else if(params[0] === 'off'){
-			if(!IntervalsController.exists('debug')) return message.reply('انا مش مشغل الdebugger اصلا يبشا')
+			this.client.IntervalsController.setInterval(
+				2000,
+				{ name: 'debug' },
+				() => {
+					log(this.client, this.usageToString(), 'info')
+				}
+			)
+		} else if (params[0] === 'off') {
+			if (!this.client.IntervalsController.exists('debug'))
+				return message.reply('انا مش مشغل الdebugger اصلا يبشا')
 
 			message.reply(`قفلت الـ debugger خلاص`)
 
 			log(this.client, 'Logger disabled', 'warn')
-			IntervalsController.clearInterval('debug')
-		}
-		else return message.reply('اول باراميتر المفروض يبقى on او off')
-
+			this.client.IntervalsController.clearInterval('debug')
+		} else return message.reply('اول باراميتر المفروض يبقى on او off')
 	}
 
-	usageToString(){
+	usageToString() {
 		const { heapTotal, heapUsed } = process.memoryUsage()
 		const { argv } = process
 
@@ -65,7 +68,6 @@ class Debug extends Command {
 		Process arguments: ${argv.join(', ')}
 		`
 	}
-
 }
 
 module.exports = Debug

@@ -3,7 +3,6 @@ const Discord = require('discord.js')
 const CommandContext = require('./CommandContext')
 const CommandOptions = require('./CommandOptions')
 
-const AUTH_ROLES = require('../config/config.js').AUTH
 const {
 	GENERIC_SOMETHING_WENT_WRONG,
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
@@ -36,7 +35,10 @@ class Command {
 	 * @private
 	 */
 	run(message) {
-		if (!this.client.ready) return message.reply('مش جاهز لسه')
+		if (!this.client.ready && this.options.name !== 'setup')
+			return message.reply(
+				`مش جاهز لسه او البوت مش معمله setup. شغلوا \`${this.client.prefix} setup\``
+			)
 
 		message.content = message.content.replace(/\s+/g, ' ')
 
@@ -58,12 +60,26 @@ class Command {
 	 * @private
 	 */
 	isAllowed(context) {
-		if (this.options.auth.method === 'ROLE') return this.isAllowedRoles(context)
-		else return this.isAllowedPermissions(context)
+		if (context.member.hasPermission('ADMINISTRATOR')) return true
+
+		if (this.options.auth.method === 'ROLE') {
+			if (this.options.auth.role === 'AUTH_DEV')
+				return this.isDevCommand(context)
+			else return this.isAllowedRoles(context)
+		} else return this.isAllowedPermissions(context)
+	}
+
+	isDevCommand(context) {
+		const { member } = context
+
+		if (member.roles.cache.has(process.env.ROLE_DEVELOPER)) {
+			return true
+		}
 	}
 
 	isAllowedRoles({ member }) {
 		const { required } = this.options.auth
+		const AUTH_ROLES = this.client.config.AUTH
 		const allRoles = Object.values(AUTH_ROLES)
 
 		return member.roles.cache.some(role => {
@@ -145,23 +161,29 @@ class Command {
 	 * @param {GuildMessage} message message to reply to
 	 */
 	help(message) {
-		const {
-			name,
-			requiredRole,
-			nOfParams,
-			exampleUsage,
-			description
-		} = this.options
+		const { name, nOfParams, exampleUsage, description, auth } = this.options
 
-		const role = getRoleObject(this.client, AUTH_ROLES[requiredRole])
+		const requiredRolePermission = this.getCommandRequired(auth)
 
-		message.reply(`
-			**معلومات عن ${name}**\n
-			**الاستعمال**\n\`${this.client.prefix} ${this.options.name} ${exampleUsage}\`
-			**الوظيفة**\n\`${description}\`
-			**بتاخد كام باراميتير**\n\`${nOfParams}\`
-			**اقل role مسموح بيه** \n\`${role.name}\`
-		`)
+		const replies = [
+			`**معلومات عن ${name}**\n`,
+			`**الاستعمال**\n\`${this.client.prefix} ${this.options.name} ${exampleUsage}\``,
+			`**الوظيفة**\n\`${description}\``,
+			`**بتاخد كام باراميتير**\n\`${nOfParams}\``,
+			`**اقل permission او role مسموح بيه** \n\`${requiredRolePermission}\``
+		]
+
+		message.reply(replies.join('\n'))
+	}
+
+	getCommandRequired({ method, required }) {
+		const { AUTH } = this.client.config
+
+		if (method === 'ROLE') {
+			if (required === 'AUTH_DEV')
+				return getRoleObject(this.client, process.env.ROLE_DEVELOPER).name
+			else return getRoleObject(this.client, AUTH[required]).name
+		} else return required
 	}
 }
 

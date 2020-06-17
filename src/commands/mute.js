@@ -1,10 +1,6 @@
 const { Command, CommandOptions } = require(`../structures`)
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 
-const { AUTH_MOD } = require('../config/config.js').AUTH
-const { ROLE_MUTED } = require('../config/config.js').ROLES
-const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
-
 class Mute extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
@@ -17,13 +13,16 @@ class Mute extends Command {
 			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_MOD
+				required: 'AUTH_MOD'
 			}
 		})
 		super(client, commandOptions)
 	}
 
 	async _run({ member, message, channel, params }) {
+		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS
+		const { ROLE_MUTED } = this.client.config.ROLES
+
 		const [mention, ...reasonWords] = params
 		const mentionRegex = /<@!(\d+)>/
 

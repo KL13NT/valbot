@@ -15,7 +15,6 @@ class ClientReadyListener extends Listener {
 
 	async onReady (){
 		this.client.setPresence()
-		this.client.ready = true
 
 		this.client.ValGuild = this.client.guilds.cache.first()
 		this.client.emit('queueExecute', 'Client ready')

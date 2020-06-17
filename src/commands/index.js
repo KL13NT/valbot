@@ -1,4 +1,5 @@
 module.exports = [
+	require('./setup'),
 	require('./clear'),
 	require('./help'),
 	require('./rank'),
@@ -12,7 +13,7 @@ module.exports = [
 	require('./announce'),
 	require('./mute'),
 	require('./ban'),
-	require('./warn'),
+	require('./warn')
 	// require('./poll'),
 	// require('./reactionroles')
 ]

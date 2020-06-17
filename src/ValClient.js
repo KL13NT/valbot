@@ -22,34 +22,31 @@ class ValClient extends Client {
 		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'vd!': 'v!'
 		this.commands = {}
 		this.controllers = {}
+		this.config = {}
 
 		this.ValGuild = {}
 
-		this.setPresence = this.setPresence.bind(this)
+		this.init = this.init.bind(this)
+		this.initLoaders = this.initLoaders.bind(this)
+		this.initConfig = this.initConfig.bind(this)
+		this.initListeners = this.initListeners.bind(this)
+
 	}
 
-	async init (token = process.env.AUTH_TOKEN, retry = 0) {
+	async init (token = process.env.AUTH_TOKEN) {
 		try{
-			this.setupConfig()
 			this.login(token)
-
 
 			this.ToxicityFilter = new ToxicityFilter(0.8)
 			await this.initLoaders()
+			await this.initConfig()
 			await this.initListeners()
-
 
 			console.log(fs.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8').toString())
 
 		}
 		catch(err){
 			log(this, `Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying ${err.message}`, 'error')
-
-			if(retry === 5) {
-				process.exit(1)
-			}
-
-			return this.init(token, ++retry)
 		}
 
 	}
@@ -90,19 +87,29 @@ class ValClient extends Client {
 		log(this, 'All listeners loaded successfully', 'info')
 	}
 
+	async initConfig(){
+		try{
+			if (MongoController.ready && RedisController.ready) {
+				const response = await MongoController.db
+					.collection('config')
+					.findOne({
+						GUILD_ID: process.env.GUILD_ID
+					})
 
-	/**
-	 * Loads configuration/global objects instead of storing them on ValClient
-	 */
-	setupConfig (){
-		const config = {
-			MUTED_MEMBERS: {},
-			WARNED_MEMBERS: {}
+				if(!response)
+					return log(this, `The bot is not setup. Commands won't work. Call ${this.prefix} setup`, 'warn')
+
+				this.ready = true
+				this.config = response || {}
+			} else {
+				QueueController.enqueue(this.initConfig)
+			}
+		} catch (err) {
+			const message = `Something went wrong when initialising ConfigController, ${err.message}`
+
+			log(this.client, message, 'error')
 		}
-
-		this.config = config
 	}
-
 }
 
 module.exports = ValClient

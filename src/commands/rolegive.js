@@ -7,8 +7,6 @@ const {
 	notify
 } = require('../utils/utils')
 
-const { AUTH_MOD } = require('../config/config.js').AUTH
-
 class RoleGive extends Command {
 	/**
 	 * Constructs help command
@@ -24,7 +22,7 @@ class RoleGive extends Command {
 			extraParams: false,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_MOD
+				required: 'AUTH_MOD'
 			}
 		})
 

@@ -7,8 +7,6 @@ const {
 	notify
 } = require('../utils/utils')
 
-const { AUTH_ADMIN } = require('../config/config.js').AUTH
-
 class MilestoneGet extends Command {
 	/**
 	 * Constructs help command
@@ -25,7 +23,7 @@ class MilestoneGet extends Command {
 			optionalParams: 1,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_ADMIN
+				required: 'AUTH_ADMIN'
 			}
 		})
 
@@ -53,7 +51,7 @@ class MilestoneGet extends Command {
 	}
 
 	getLevelMilestones(level) {
-		const milestones = LevelsController.getMilestone(level)
+		const milestones = this.client.LevelsController.getMilestone(level)
 
 		if (!milestones) return 'مفيش milestones للـ level ده'
 		else {
@@ -71,13 +69,13 @@ class MilestoneGet extends Command {
 	getAllMilestones() {
 		let milestones = '\n'
 
-		if (Object.keys(LevelsController.milestones).length === 0)
+		if (Object.keys(this.client.LevelsController.milestones).length === 0)
 			return 'مفيش milestones خالص'
 
-		Object.keys(LevelsController.milestones).forEach(level => {
+		Object.keys(this.client.LevelsController.milestones).forEach(level => {
 			milestones += `Level #${level} Achievements\n${'-'.repeat(30)}\n`
 
-			LevelsController.milestones[level].forEach(
+			this.client.LevelsController.milestones[level].forEach(
 				({ name, description, roleID }) => {
 					const role = getRoleObject(this.client, roleID)
 					milestones += `Name: ${name}\nDescription: ${description}\nRole: ${role.name}\n\n`

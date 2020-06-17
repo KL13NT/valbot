@@ -2,8 +2,6 @@ const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 
-const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
-
 class Clear extends Command {
 	/**
 	 * Constructs help command
@@ -27,6 +25,9 @@ class Clear extends Command {
 	}
 
 	async _run(context) {
+		const {
+			CHANNEL_MOD_LOGS
+		} = this.client.config.CHANNELS
 		const { message, member, params, channel } = context
 		const numbersRegex = /\d+/
 

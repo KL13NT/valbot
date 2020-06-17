@@ -1,8 +1,6 @@
 const { Command, CommandOptions } = require(`../structures`)
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 
-const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
-
 class Ban extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
@@ -23,6 +21,7 @@ class Ban extends Command {
 	}
 
 	async _run({ member, message, channel, params }) {
+		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS
 		const [mention, ...reasonWords] = params
 		const mentionRegex = /<@!(\d+)>/
 

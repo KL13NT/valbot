@@ -2,8 +2,6 @@ const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
 const { log } = require('../utils/utils')
 
-const { AUTH_ADMIN } = require('../config/config.js').AUTH
-
 class Teach extends Command {
 	/**
 	 * Constructs help command
@@ -19,7 +17,7 @@ class Teach extends Command {
 			extraParams: true,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_ADMIN
+				required: 'AUTH_ADMIN'
 			}
 		})
 
@@ -31,7 +29,7 @@ class Teach extends Command {
 		const invoker = params.join(' ').replace(/"/g, '')
 
 		if (params.length === 0) {
-			const responses = ConversationController.getAllResponses()
+			const responses = this.client.ConversationController.getAllResponses()
 
 			const reply = Object.values(responses).map(res => {
 				return `${res.invoker}\n الرد: ${res.reply}\n--------\n`
@@ -49,7 +47,7 @@ class Teach extends Command {
 			channel
 				.awaitMessages(collectorFilter, collectorOptions)
 				.then(messages => {
-					ConversationController.teach({
+					this.client.ConversationController.teach({
 						invoker,
 						reply: messages.first().content
 					})

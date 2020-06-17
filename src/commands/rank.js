@@ -2,8 +2,6 @@ const { Command, CommandOptions } = require(`../structures`)
 const { generateRankCard } = require('../utils/svg')
 const { log, getMemberObject } = require('../utils/utils')
 
-const { AUTH_VERIFIED } = require('../config/config.js').AUTH
-
 class Rank extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
@@ -15,7 +13,7 @@ class Rank extends Command {
 			extraParams: true,
 			auth: {
 				method: 'ROLE',
-				required: AUTH_VERIFIED
+				required: 'AUTH_VERIFIED'
 			}
 		})
 		super(client, commandOptions)
@@ -35,15 +33,19 @@ class Rank extends Command {
 
 			const member = getMemberObject(this.client, id)
 
-			const res = await MongoController.getLevel(id)
+			const res = await this.client.MongoController.getLevel(id)
 			const avatar_url = member.user.displayAvatarURL()
 			const displayName = member.user.username.substr(0, 12) + '...'
 			const displayID = member.user.tag.split('#')[1]
 
-			const voice = res ? res.voice : await RedisController.get(`VOICE:${id}`)
-			const text = res ? res.text : await RedisController.get(`TEXT:${id}`)
-			const exp = await RedisController.get(`EXP:${id}`)
-			const level = await RedisController.get(`LEVEL:${id}`)
+			const voice = res
+				? res.voice
+				: await this.client.RedisController.get(`VOICE:${id}`)
+			const text = res
+				? res.text
+				: await this.client.RedisController.get(`TEXT:${id}`)
+			const exp = await this.client.RedisController.get(`EXP:${id}`)
+			const level = await this.client.RedisController.get(`LEVEL:${id}`)
 
 			const userInfo = {
 				avatar_url,
