@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
 
-
+const { CHANNEL_BOT_STATUS, CHANNEL_TEST } = require('../config/config.js').CHANNELS
 
 /**
  * @typedef {object} EmbedOptions
@@ -58,12 +58,9 @@ function createEmbed ({ fields, attachments, ...embedOptions }) {
  * @returns {GuildChannel}
  */
 function getChannelObject (client, channelId){
-	const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-	// const testChannelId = process.IMPORTANT_CHANNELS.test
-
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM').channels.cache
-		.find(ch => isDevelopment? ch.id === channelId: ch.id === channelId)
+		.find(ch => ch.id === channelId)
 }
 
 
@@ -146,13 +143,12 @@ function isOneOf (matcher, possibilities){
  */
 function log (client, notification, alertLevel){
 	const statusEmoji = alertLevel === 'info'? ':grey_question:': alertLevel === 'warn'? ':warning:': ':x:'
-	const isProduction = process.env.MODE === 'PRODUCTION'
 	const shouldMention = alertLevel === 'error' || alertLevel === 'warn'
 	const message = typeof notification === 'object'? `${notification.toString()}`: notification
 
-	if(isProduction){
+	if(process.env.MODE === 'PRODUCTION'){
 		if(client.ready){
-			const botStatusChannel = client.config.IMPORTANT_CHANNELS['bot_status']
+			const botStatusChannel = getChannelObject(client, CHANNEL_BOT_STATUS)
 			const fullNotification = `${statusEmoji} ${message} ${shouldMention? '<@&639855023970451457>': ''}`
 
 			console.log(`[${alertLevel}] ${message}`)
@@ -171,14 +167,14 @@ function log (client, notification, alertLevel){
  * @param {*} notification
  * @param {*} alertLevel
  */
-async function notify (client, notification, embed, channel = 'notifications'){
+async function notify (client, notification, embed, channelID = CHANNEL_TEST){
 	try{
 		if(client.ready){
-			//REFACTORME: have better logic for important config stuff
-			const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-			const notificationsChannel = getChannelObject(client,
-				isDevelopment ? 'test' : channel
+			const notificationsChannel = getChannelObject(
+				client,
+				process.env.MODE === 'DEVELOPMENT' ? CHANNEL_TEST : channelID
 			)
+
 			notificationsChannel.send(notification, { embed })
 		}
 		else {

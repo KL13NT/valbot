@@ -1,8 +1,9 @@
 const { Command, CommandOptions } = require(`../structures`)
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
-const { muted } = require('../config/important-roles.json')
 
 const { AUTH_MOD } = require('../config/config.js').AUTH
+const { ROLE_MUTED } = require('../config/config.js').ROLES
+const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
 
 class Mute extends Command {
 	constructor(client) {
@@ -49,12 +50,12 @@ class Mute extends Command {
 		})
 
 		try {
-			await targetMember.roles.add(muted)
+			await targetMember.roles.add(ROLE_MUTED)
 			setTimeout(() => {
-				targetMember.roles.remove(muted)
+				targetMember.roles.remove(ROLE_MUTED)
 			}, 5 * 60 * 1000)
 
-			notify(this.client, ``, embed, 'mod-logs')
+			notify(this.client, ``, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(this.client, err, 'error')
 		}

@@ -2,6 +2,8 @@ const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 
+const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
+
 class Clear extends Command {
 	/**
 	 * Constructs help command
@@ -68,7 +70,7 @@ class Clear extends Command {
 					}, 3 * 1000)
 				})
 
-				notify(this.client, ``, embed, 'mod-logs')
+				notify(this.client, ``, embed, CHANNEL_MOD_LOGS)
 			} catch (err) {
 				log(this.client, err, 'error')
 			}

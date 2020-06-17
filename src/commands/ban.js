@@ -1,10 +1,11 @@
 const { Command, CommandOptions } = require(`../structures`)
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 
+const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
 
 class Ban extends Command {
-  constructor (client){
-    const commandOptions = new CommandOptions({
+	constructor(client) {
+		const commandOptions = new CommandOptions({
 			name: `ban`,
 			cooldown: 1000,
 			nOfParams: 2,
@@ -18,14 +19,15 @@ class Ban extends Command {
 				required: 'BAN_MEMBERS'
 			}
 		})
-    super(client, commandOptions)
+		super(client, commandOptions)
 	}
 
-	async _run({member, message, channel, params}){
+	async _run({ member, message, channel, params }) {
 		const [mention, ...reasonWords] = params
 		const mentionRegex = /<@!(\d+)>/
 
-		if(!mentionRegex.test(mention)) return message.reply('لازم تعمل منشن للـ member')
+		if (!mentionRegex.test(mention))
+			return message.reply('لازم تعمل منشن للـ member')
 
 		const id = mention.match(mentionRegex)[1]
 		const reason = reasonWords.join(' ')
@@ -37,23 +39,25 @@ class Ban extends Command {
 				{ name: '**User**', value: `${mention} | ${id}` },
 				{ name: '**Moderator**', value: `<@${member.id}> | ${id}` },
 				{ name: '**Location**', value: `<#${channel.id}>`, inline: true },
-				{ name: '**Date / Time**', value: `${new Date().toUTCString()}`, inline: true },
-				{ name: '**Reason**', value: reason },
+				{
+					name: '**Date / Time**',
+					value: `${new Date().toUTCString()}`,
+					inline: true
+				},
+				{ name: '**Reason**', value: reason }
 			]
 		})
 
-		try{
+		try {
 			await targetMember.ban({
 				reason: `${member.user.tag} - ${reason}`
 			})
 
-			notify(this.client, ``, embed, 'mod-logs')
-		}
-		catch(err){
+			notify(this.client, ``, embed, CHANNEL_MOD_LOGS)
+		} catch (err) {
 			log(this.client, err, 'error')
 		}
 	}
 }
-
 
 module.exports = Ban

@@ -1,8 +1,9 @@
 const { Command, CommandOptions } = require(`../structures`)
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
-const { warned } = require('../config/important-roles.json')
 
+const { ROLE_WARNED } = require('../config/config.js').ROLES
 const { AUTH_MOD } = require('../config/config.js').AUTH
+const { CHANNEL_MOD_LOGS } = require('../config/config.js').CHANNELS
 
 class Warn extends Command {
 	constructor(client) {
@@ -52,15 +53,15 @@ class Warn extends Command {
 			if (this.isWarned(targetMember))
 				return message.reply('الميمبر ده متحذر قبل كده')
 
-			await targetMember.roles.add(warned)
-			notify(this.client, ``, embed, 'mod-logs')
+			await targetMember.roles.add(ROLE_WARNED)
+			notify(this.client, ``, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(this.client, err, 'error')
 		}
 	}
 
 	isWarned(member) {
-		return member.roles.cache.find(role => role.id === warned)
+		return member.roles.cache.find(role => role.id === ROLE_WARNED)
 	}
 }
 

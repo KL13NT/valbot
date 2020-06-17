@@ -4,6 +4,7 @@ const { CommandOptions } = require("../structures")
 const { log } = require('../utils/utils')
 
 const { AUTH_DEV } = require('../config/config.js').AUTH
+const { CHANNEL_BOT_STATUS } = require('../config/config.js').CHANNELS
 
 class Debug extends Command {
 	/**
@@ -34,7 +35,7 @@ class Debug extends Command {
 		if(params[0] === 'on'){
 			if(IntervalsController.exists('debug')) return message.reply('انا مشغل الdebugger اصلا يبشا')
 
-			message.reply(`I'll report on the dev channel ${this.client.config.IMPORTANT_CHANNELS['bot_status']}`)
+			message.reply(`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`)
 
 			log(this.client, 'Logging every 2000ms', 'warn')
 			IntervalsController.setInterval(2000, {name: 'debug'}, ()=>{
