@@ -2,6 +2,8 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { log, getMemberObject, getRoleObject, notify } = require("../utils/utils")
 
+const { AUTH_MOD } = require('../config/config.js').AUTH
+
 class RoleRemove extends Command {
 	/**
 	 * Constructs help command
@@ -12,10 +14,13 @@ class RoleRemove extends Command {
 			name: `roleremove`,
 			cooldown: 1000,
 			nOfParams: 2,
-			requiredRole: 'mod',
 			description: `بتشيل روول من ميمبر`,
 			exampleUsage: `@Sovereign#4984 <role_name|role_id>`,
-			extraParams: false
+			extraParams: false,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_MOD
+			}
 		})
 
 		super(client, options)

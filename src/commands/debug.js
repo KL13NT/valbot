@@ -3,6 +3,8 @@ const { CommandOptions } = require("../structures")
 
 const { log } = require('../utils/utils')
 
+const { AUTH_DEV } = require('../config/config.js').AUTH
+
 class Debug extends Command {
 	/**
 	 * Constructs help command
@@ -16,7 +18,11 @@ class Debug extends Command {
 			requiredRole: 'dev',
 			description: `بتوريك الاداء بتاع البوت و معلومات عن البروسيس بتاعه`,
 			exampleUsage: `<"on"|"off">`,
-			extraParams: false
+			extraParams: false,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_DEV
+			}
 		})
 
 		super(client, options)

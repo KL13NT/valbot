@@ -2,6 +2,8 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { log, getMemberObject, getRoleObject, notify } = require("../utils/utils")
 
+const { AUTH_ADMIN } = require('../config/config.js').AUTH
+
 class MilestoneAdd extends Command {
 	/**
 	 * Constructs help command
@@ -16,7 +18,11 @@ class MilestoneAdd extends Command {
 			description: `بتحدد achievement تدي الميمبرز روول معين عند ليفل معين.`,
 			exampleUsage: `<level> <role_name|role_id>`,
 			extraParams: false,
-			optionalParams: 0
+			optionalParams: 0,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_ADMIN
+			}
 		})
 
 		super(client, options)

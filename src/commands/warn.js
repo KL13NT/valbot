@@ -2,27 +2,32 @@ const { Command, CommandOptions } = require(`../structures`)
 const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 const { warned } = require('../config/important-roles.json')
 
+const { AUTH_MOD } = require('../config/config.js').AUTH
 
 class Warn extends Command {
-  constructor (client){
-    const commandOptions = new CommandOptions({
-      name: `warn`,
+	constructor(client) {
+		const commandOptions = new CommandOptions({
+			name: `warn`,
 			cooldown: 1000,
 			nOfParams: 2,
-			requiredRole: 'mod',
 			description: `بتحذر ميمبر على حاجة عملها`,
 			exampleUsage: `<user_mention> <reason>`,
 			extraParams: true,
-			optionalParams: 0
-    })
-    super(client, commandOptions)
+			optionalParams: 0,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_MOD
+			}
+		})
+		super(client, commandOptions)
 	}
 
-	async _run({member, message, channel, params}){
+	async _run({ member, message, channel, params }) {
 		const [mention, ...reasonWords] = params
 		const mentionRegex = /<@!(\d+)>/
 
-		if(!mentionRegex.test(mention)) return message.reply('لازم تعمل منشن للـ member')
+		if (!mentionRegex.test(mention))
+			return message.reply('لازم تعمل منشن للـ member')
 
 		const id = mention.match(mentionRegex)[1]
 		const reason = reasonWords.join(' ')
@@ -34,27 +39,29 @@ class Warn extends Command {
 				{ name: '**User**', value: `${mention} | ${id}` },
 				{ name: '**Moderator**', value: `<@${member.id}> | ${id}` },
 				{ name: '**Location**', value: `<#${channel.id}>`, inline: true },
-				{ name: '**Date / Time**', value: `${new Date().toUTCString()}`, inline: true },
-				{ name: '**Reason**', value: reason },
+				{
+					name: '**Date / Time**',
+					value: `${new Date().toUTCString()}`,
+					inline: true
+				},
+				{ name: '**Reason**', value: reason }
 			]
 		})
 
-		try{
-			if(this.isWarned(targetMember)) return message.reply('الميمبر ده متحذر قبل كده')
-
+		try {
+			if (this.isWarned(targetMember))
+				return message.reply('الميمبر ده متحذر قبل كده')
 
 			await targetMember.roles.add(warned)
 			notify(this.client, ``, embed, 'mod-logs')
-		}
-		catch(err){
+		} catch (err) {
 			log(this.client, err, 'error')
 		}
 	}
 
-	isWarned(member){
+	isWarned(member) {
 		return member.roles.cache.find(role => role.id === warned)
 	}
 }
-
 
 module.exports = Warn

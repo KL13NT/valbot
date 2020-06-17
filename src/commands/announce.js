@@ -4,6 +4,8 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { log, getChannelObject, getRoleObject, notify } = require("../utils/utils")
 
+const { AUTH_ADMIN } = require('../config/config')
+
 class Announce extends Command {
 	/**
 	 * Constructs help command
@@ -14,11 +16,14 @@ class Announce extends Command {
 			name: `announce`,
 			cooldown: 5 * 1000,
 			nOfParams: 1,
-			requiredRole: 'admin',
 			description: `بتعمل اعلان بالشكل اللي تحبه. ممكن كمان تستغل الـ webhook.`,
 			exampleUsage: `<channel_id|channel_mention|"hook">`,
 			extraParams: false,
-			optionalParams: 1
+			optionalParams: 1,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_ADMIN
+			}
 		})
 
 		super(client, options)

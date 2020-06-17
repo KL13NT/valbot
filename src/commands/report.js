@@ -2,6 +2,8 @@ const { Command } = require("../structures")
 const { CommandOptions } = require("../structures")
 const { sendEmbed, getChannelObject } = require('../utils/utils.js')
 
+const { AUTH_VERIFIED } = require('../config/config.js').AUTH
+
 class Report extends Command {
   constructor(client) {
 
@@ -9,10 +11,13 @@ class Report extends Command {
 			name: `report`,
 			cooldown: 10 * 1000,
 			nOfParams: 2,
-			requiredRole: 'verified',
 			description: `بتعمل ريبورت لرسالة حد بعتها و السبب. لازم الريبورت يتعمل في نفس التشانل. بتعمل منشن للشخص اللي عايز تعمله ريبورت بالشكل التالي:`,
 			exampleUsage: `@Sovereign Violation of rules`,
-			extraParams: true
+			extraParams: true,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_VERIFIED
+			}
 		})
 
 		super(client, options)

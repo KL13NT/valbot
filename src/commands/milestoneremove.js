@@ -1,28 +1,38 @@
-const { Command } = require("../structures")
-const { CommandOptions } = require("../structures")
-const { log, getMemberObject, getRoleObject, notify } = require("../utils/utils")
+const { Command } = require('../structures')
+const { CommandOptions } = require('../structures')
+const {
+	log,
+	getMemberObject,
+	getRoleObject,
+	notify
+} = require('../utils/utils')
+
+const { AUTH_ADMIN } = require('../config/config.js').AUTH
 
 class MilestoneRemove extends Command {
 	/**
 	 * Constructs help command
 	 * @param {ValClient} client
 	 */
-  constructor(client) {
+	constructor(client) {
 		const options = new CommandOptions({
 			name: `milestoneremove`,
 			cooldown: 1000,
 			nOfParams: 1,
-			requiredRole: 'admin',
 			description: `بتشيل مايلستوون معينة`,
 			exampleUsage: `<level>`,
 			extraParams: false,
-			optionalParams: 0
+			optionalParams: 0,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_ADMIN
+			}
 		})
 
 		super(client, options)
-  }
+	}
 
-  async _run(context) {
+	async _run(context) {
 		const { message, member, params, channel } = context
 
 		const levelRegex = /(\d+)/i
@@ -33,23 +43,25 @@ class MilestoneRemove extends Command {
 			max: 1
 		}
 
-		if(params.length === 0) return message.reply(this.getAllMilestones())
+		if (params.length === 0) return message.reply(this.getAllMilestones())
 
 		const level = params[0].match(levelRegex)[0]
 
-		if(!level)
-		return message.reply('لازم تحدد الـ level اللي عايز تشيل منه الـ milestone')
+		if (!level)
+			return message.reply(
+				'لازم تحدد الـ level اللي عايز تشيل منه الـ milestone'
+			)
 
-		try{
-				message.reply('ايه اسم الـ achievement؟')
+		try {
+			message.reply('ايه اسم الـ achievement؟')
 
-				const name = (await channel.awaitMessages(filter, awaitOptions)).first().content
+			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
+				.content
 
-				LevelsController.removeMilestone(level, name)
+			LevelsController.removeMilestone(level, name)
 
-				message.reply('شيلت الـ milestone دي')
-		}
-		catch(err){
+			message.reply('شيلت الـ milestone دي')
+		} catch (err) {
 			log(this.client, err, 'error')
 		}
 	}

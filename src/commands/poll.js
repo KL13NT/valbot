@@ -7,6 +7,8 @@ const {
 	GENERIC_CONTROLLED_COMMAND_CANCEL
 } = require('../config/events.json')
 
+const { AUTH_MOD } = require('../config/config.js').AUTH
+
 class Poll extends Command {
   constructor(client) {
 
@@ -14,10 +16,13 @@ class Poll extends Command {
 			name: `poll`,
 			cooldown: 10 * 60 * 1000,
 			nOfParams: 0,
-			requiredRole: 'mod',
 			description: `بتعمل استفتاء جديد, خاصة بالمسؤولين فقط`,
 			exampleUsage: `poll`,
-			extraParams: false
+			extraParams: false,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_MOD
+			}
 		})
 
 		super(client, options)

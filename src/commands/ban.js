@@ -5,15 +5,19 @@ const { log, getMemberObject, notify, createEmbed } = require('../utils/utils')
 class Ban extends Command {
   constructor (client){
     const commandOptions = new CommandOptions({
-      name: `ban`,
+			name: `ban`,
 			cooldown: 1000,
 			nOfParams: 2,
 			requiredRole: 'mod',
 			description: `بتطرد ميمبر من السيرفر, مبيقدرش يخش تاني`,
 			exampleUsage: `<user_mention> <reason>`,
 			extraParams: true,
-			optionalParams: 0
-    })
+			optionalParams: 0,
+			auth: {
+				method: 'PERMISSION',
+				required: 'BAN_MEMBERS'
+			}
+		})
     super(client, commandOptions)
 	}
 

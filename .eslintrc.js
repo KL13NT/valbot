@@ -1,98 +1,82 @@
 module.exports = {
-	'env': {
-		'browser': false,
-		'commonjs': true,
-		'es6': true,
-		'node': true
+	env: {
+		browser: false,
+		commonjs: true,
+		es6: true,
+		node: true
 	},
-	"extends": [
-		"eslint:recommended"
-	],
-	"globals": {
-		"LevelsController": "readonly",
-		"MongoController": "readonly",
-		"RedisController": "readonly",
-		"QueueController": "readonly",
-		"ConversationController": "readonly",
+	extends: ['eslint:recommended'],
+	globals: {
+		LevelsController: 'readonly',
+		MongoController: 'readonly',
+		RedisController: 'readonly',
+		QueueController: 'readonly',
+		ConversationController: 'readonly'
 	},
-	'parser': 'babel-eslint',
-	'parserOptions': {
-		'ecmaVersion': 10,
-		'ecmaFeatures': {
-			'jsx': false,
-			'modules': true,
-			'experimentalObjectRestSpread': true
+	parser: 'babel-eslint',
+	parserOptions: {
+		ecmaVersion: 10,
+		ecmaFeatures: {
+			jsx: false,
+			modules: true,
+			experimentalObjectRestSpread: true
 		}
 	},
-	'plugins': [
-	],
-	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
-		'linebreak-style': [
-			'error',
-			'windows'
-		],
-		'quotes': [
-			'error',
-			'single'
-		],
-		'semi': [
-			'error',
-			'never'
-		],
+	plugins: [],
+	rules: {
+		indent: ['error', 'tab'],
+		'linebreak-style': ['error', 'windows'],
+		quotes: ['error', 'single'],
+		semi: ['error', 'never'],
 		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-unused-vars': [
 			'error',
 			{
-				'varsIgnorePattern': 'Fragment'
+				varsIgnorePattern: 'Fragment'
 			}
 		],
 		'quote-props': [
-			"error",
+			'error',
 			'consistent-as-needed',
 			{
-				'keywords': true
+				keywords: true
 			}
 		],
-		'object-curly-spacing': [
-			'error',
-			'always'
-		],
-		'array-bracket-spacing': [
-			'error',
-			'always'
-		],
+		'object-curly-spacing': ['error', 'always'],
+		'array-bracket-spacing': ['error', 'always'],
 		'no-whitespace-before-property': 2,
 		'space-unary-ops': [
-        2, {
-          "words": true,
-          "nonwords": false,
-          "overrides": {
-						"new": true,
-						"=": true
-          }
-    }],
-		"prefer-destructuring": ["error", {
-      "array": true,
-      "object": true
-			}, {
-      "enforceForRenamedProperties": false
-		}],
-		"prefer-const": ["error", {
-			"destructuring": "any",
-			"ignoreReadBeforeAssign": false
-    }],
-		"space-before-function-paren": ["error", "always"],
-		"comma-dangle": ["error", "never"],
-		'react/prop-types': 0,
-		'arrow-spacing': ['error', { "before": true, "after": true }],
-		'block-spacing': [
 			2,
-			'always'
+			{
+				words: true,
+				nonwords: false,
+				overrides: {
+					new: true,
+					'=': true
+				}
+			}
 		],
+		'prefer-destructuring': [
+			'error',
+			{
+				array: true,
+				object: true
+			},
+			{
+				enforceForRenamedProperties: false
+			}
+		],
+		'prefer-const': [
+			'error',
+			{
+				destructuring: 'any',
+				ignoreReadBeforeAssign: false
+			}
+		],
+		'comma-dangle': ['error', 'never'],
+		'react/prop-types': 0,
+		'arrow-spacing': ['error', { before: true, after: true }],
+		'block-spacing': [2, 'always'],
 		'no-unused-vars': 1
-	},
-};
+	}
+}

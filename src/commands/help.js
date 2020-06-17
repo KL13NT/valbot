@@ -1,26 +1,31 @@
-const { Command } = require("../structures")
-const { CommandOptions } = require("../structures")
+const { Command } = require('../structures')
+const { CommandOptions } = require('../structures')
+
+const { AUTH_EVERYONE } = require('../config/config.js').AUTH
 
 class Help extends Command {
 	/**
 	 * Constructs help command
 	 * @param {ValClient} client
 	 */
-  constructor(client) {
+	constructor(client) {
 		const options = new CommandOptions({
 			name: 'help',
 			cooldown: 0,
 			nOfParams: 0,
 			extraParams: true,
-			requiredRole: 'everyone',
 			description: `لو محتاج مساعدة`,
-			exampleUsage: `\`val! help\` او \`val! help command\``
+			exampleUsage: `\`val! help\` او \`val! help command\``,
+			auth: {
+				method: 'ROLE',
+				required: AUTH_EVERYONE
+			}
 		})
 
 		super(client, options)
-  }
+	}
 
-  async _run(context) {
+	async _run(context) {
 		const { message, params, channel } = context
 		const lines = [
 			`اهلاً اهلاً. شوف القايمة دي, متقسمه لعناوين حسب اللي انت ممكن تحتاجه`,
@@ -35,10 +40,7 @@ class Help extends Command {
 		]
 
 		message.reply(lines.join('\n'))
-
-
 	}
-
 }
 
 module.exports = Help

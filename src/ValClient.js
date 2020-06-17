@@ -96,12 +96,8 @@ class ValClient extends Client {
 	 */
 	setupConfig (){
 		const config = {
-			CUSTOM_PRESENCES: require('./config/custom-presences.json'),
-			IMPORTANT_CHANNELS_ID: require('./config/important-channels.json'),
-			IMPORTANT_ROLES: require('./config/important-roles.json'),
 			MUTED_MEMBERS: {},
-			WARNED_MEMBERS: {},
-			IMPORTANT_CHANNELS: {}
+			WARNED_MEMBERS: {}
 		}
 
 		this.config = config

@@ -176,7 +176,9 @@ async function notify (client, notification, embed, channel = 'notifications'){
 		if(client.ready){
 			//REFACTORME: have better logic for important config stuff
 			const isDevelopment = process.env.MODE === 'DEVELOPMENT'
-			const notificationsChannel = client.config.IMPORTANT_CHANNELS[isDevelopment? 'test': channel]
+			const notificationsChannel = getChannelObject(client,
+				isDevelopment ? 'test' : channel
+			)
 			notificationsChannel.send(notification, { embed })
 		}
 		else {
