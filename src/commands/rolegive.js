@@ -6,6 +6,7 @@ const {
 	getRoleObject,
 	notify
 } = require('../utils/utils')
+const { createRoleEmbed } = require('../utils/EmbedUtils')
 
 class RoleGive extends Command {
 	/**
@@ -31,7 +32,7 @@ class RoleGive extends Command {
 	}
 
 	async _run(context) {
-		const { message, params, channel } = context
+		const { message, params, member, channel } = context
 		const roleNameRegex = /\S+/i
 		const roleIDRegex = /\d+/i
 		const mentionRegex = /<@!(\d+)>/
@@ -47,17 +48,24 @@ class RoleGive extends Command {
 		const targetMemberID = params[0].match(mentionRegex)[1]
 
 		const role = getRoleObject(this.client, roleID)
-		const member = getMemberObject(this.client, targetMemberID)
+		const targetMember = getMemberObject(this.client, targetMemberID)
 
-		member.roles
+		const embed = createRoleEmbed({
+			title: 'Member Role Added',
+			member: targetMemberID,
+			moderator: member.id,
+			channel: channel.id,
+			role: role.id
+		})
+
+		targetMember.roles
 			.add(role)
 			.then(() => {
-				notify(this.client, `<@!${targetMemberID}>, جالك روول ${role.name}`)
+				notify(this.client, '', embed)
 				message.reply(`اديت الميمبر ده روول ${role.name}`)
 			})
 			.catch(err => {
-				console.log(err)
-				message.reply(err.message)
+				log(this.client, err, 'error')
 			})
 	}
 }

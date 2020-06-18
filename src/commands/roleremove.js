@@ -6,6 +6,7 @@ const {
 	getRoleObject,
 	notify
 } = require('../utils/utils')
+const { createRoleEmbed } = require('../utils/EmbedUtils')
 
 class RoleRemove extends Command {
 	/**
@@ -31,7 +32,7 @@ class RoleRemove extends Command {
 	}
 
 	async _run(context) {
-		const { message, params, channel } = context
+		const { message, params, channel, member } = context
 		const roleNameRegex = /\w+/i
 		const roleIDRegex = /\d+/i
 		const mentionRegex = /<@!(\d+)>/
@@ -47,20 +48,24 @@ class RoleRemove extends Command {
 		const targetMemberID = params[0].match(mentionRegex)[1]
 
 		const role = getRoleObject(this.client, roleID)
-		const member = getMemberObject(this.client, targetMemberID)
+		const targetMember = getMemberObject(this.client, targetMemberID)
 
-		member.roles
+		const embed = createRoleEmbed({
+			title: 'Member Role Removed',
+			member: targetMemberID,
+			moderator: member.id,
+			channel: channel.id,
+			role: role.id
+		})
+
+		targetMember.roles
 			.remove(role)
 			.then(() => {
-				notify(
-					this.client,
-					`<@!${targetMemberID}>, اتسحب منك روول ${role.name}`
-				)
+				notify(this.client, '', embed)
 				message.reply(`شيلت روول ${role.name} من الميمبر ده`)
 			})
 			.catch(err => {
-				console.log(err)
-				message.reply(err.message)
+				log(this.client, err, 'error')
 			})
 	}
 }

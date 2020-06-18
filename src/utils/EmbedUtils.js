@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-const { createEmbed } = require('../utils/utils')
+const { createEmbed, getRoleObject } = require('../utils/utils')
 
 /**
  * @typedef EmbedOptions
@@ -29,6 +29,28 @@ module.exports = class EmbedUtils {
 					inline: true
 				},
 				{ name: '**Reason**', value: reason }
+			]
+		})
+	}
+
+	static createRoleEmbed({ title, member, moderator, channel, role }) {
+		return createEmbed({
+			title: title,
+			fields: [
+				{
+					name: '**User**',
+					value: ` <@${member}>`,
+					inline: true
+				},
+				{ name: '**User ID**', value: `${member}`, inline: true },
+				{ name: '**Moderator**', value: `<@${moderator}>` },
+				{ name: '**Location**', value: `<#${channel}>`, inline: true },
+				{ name: '**Role**', value: `<@&${role}>` },
+				{
+					name: '**Date / Time**',
+					value: `${new Date().toUTCString()}`,
+					inline: true
+				}
 			]
 		})
 	}

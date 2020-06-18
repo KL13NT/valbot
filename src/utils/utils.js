@@ -157,12 +157,7 @@ function log(client, notification, alertLevel) {
 			botStatusChannel.send(fullNotification)
 		} else {
 			if (typeof client.controllers.queue !== 'undefined')
-				client.controllers.queue.enqueue(
-					log,
-					client,
-					notification,
-					alertLevel
-				)
+				client.controllers.queue.enqueue(log, client, notification, alertLevel)
 		}
 	} else console.log(`[${alertLevel}]`, notification)
 }
@@ -177,10 +172,12 @@ async function notify(client, notification, embed, channelID) {
 	// REFACTORME: refactor this mess into classes
 	try {
 		if (client.ready) {
-			const { CHANNEL_TEST } = client.config.CHANNELS
+			const { CHANNEL_TEST, CHANNEL_NOTIFICATIONS } = client.config.CHANNELS
 			const notificationsChannel = getChannelObject(
 				client,
-				process.env.MODE === 'DEVELOPMENT' ? CHANNEL_TEST : channelID
+				process.env.MODE === 'DEVELOPMENT'
+					? CHANNEL_TEST
+					: channelID || CHANNEL_NOTIFICATIONS
 			)
 
 			return notificationsChannel.send(notification, { embed })
