@@ -21,8 +21,7 @@ class MessageListener extends Listener {
 			author.id !== DEV_CLIENT_ID &&
 			type !== 'dm'
 		) {
-			if (this.client.controllers.toxicity.ready && isToxic)
-				return this.client.controllers.toxicity.handleToxic(message)
+			if (isToxic) return this.client.controllers.toxicity.handleToxic(message)
 
 			if (content.startsWith(this.client.prefix))
 				this.client.emit('command', message)

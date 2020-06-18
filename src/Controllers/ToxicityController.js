@@ -20,7 +20,7 @@ class ToxicityController extends Controller {
 			'toxicity'
 		]
 
-		this.threshold = 0.8
+		this.threshold = 0.7
 		this.ready = false
 
 		if (process.env.mode !== 'DEVELOPMENT')
@@ -36,15 +36,15 @@ class ToxicityController extends Controller {
 	}
 
 	async classify(message) {
-		if (process.env.mode === 'DEVELOPMENT' || !this.ready) return false
+		if (!this.ready) return false
 
 		const { content: sentence } = message
 		const predictions = await this.classifier.classify([sentence])
 
 		return predictions.reduce((prediction, curr) =>
-			curr.results[0].match === true && curr.results[0].probabilities[1] > 0.9
+			curr.results[0].match === true && curr.results[0].probabilities[1] > 0.95
 				? true
-				: prediction
+				: false
 		)
 	}
 
