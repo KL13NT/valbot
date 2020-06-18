@@ -12,7 +12,12 @@ const {
 	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
-const { generateEvent, log, getRoleObject } = require('../utils/utils')
+const {
+	generateEvent,
+	log,
+	getRoleObject,
+	createEmbed
+} = require('../utils/utils')
 
 class Command {
 	/**
@@ -158,29 +163,54 @@ class Command {
 	 * @param {GuildMessage} message message to reply to
 	 */
 	help(message) {
-		const { name, nOfParams, exampleUsage, description, auth } = this.options
-
-		const requiredRolePermission = this.getCommandRequired(auth)
-
-		const replies = [
-			`**معلومات عن ${name}**\n`,
-			`**الاستعمال**\n\`${this.client.prefix} ${this.options.name} ${exampleUsage}\``,
-			`**الوظيفة**\n\`${description}\``,
-			`**بتاخد كام باراميتير**\n\`${nOfParams}\``,
-			`**اقل permission او role مسموح بيه** \n\`${requiredRolePermission}\``
-		]
-
-		message.reply(replies.join('\n'))
-	}
-
-	getCommandRequired({ method, required }) {
+		const { member } = message
+		const {
+			name,
+			nOfParams,
+			exampleUsage,
+			description,
+			auth,
+			category
+		} = this.options
+		const { required, devOnly } = auth
 		const { AUTH } = this.client.config
 
-		if (method === 'ROLE') {
-			if (required === 'AUTH_DEV')
-				return getRoleObject(this.client, process.env.ROLE_DEVELOPER).name
-			else return getRoleObject(this.client, AUTH[required]).name
-		} else return required
+		const title = `**معلومات عن ${name}**\n`
+		const fields = [
+			{
+				name: '**الاستعمال**',
+				value: `\`${this.client.prefix} ${this.options.name} ${exampleUsage}\``
+			},
+			{
+				name: '**الوصف/الوظيفة**',
+				value: `${description}`
+			},
+			{
+				name: '**عدد الباراميترز**',
+				value: `${nOfParams}`
+			},
+			{
+				name: '**اقل role مسموح بيه**',
+				value: getRoleObject(
+					this.client,
+					devOnly ? process.env.ROLE_DEVELOPER : AUTH[required]
+				).name
+			},
+			{
+				name: '**الفئة**',
+				value: `${category}`
+			}
+		]
+
+		const embed = createEmbed({ title, fields })
+		member.createDM().then(dm => {
+			dm.send(embed)
+			message.reply('بعتلك رسالة جادة جداً').then(sent => {
+				setTimeout(() => {
+					sent.delete()
+				}, 5 * 1000)
+			})
+		})
 	}
 }
 

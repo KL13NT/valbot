@@ -15,6 +15,7 @@ class MilestoneGet extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `milestoneget`,
+			category: 'Management',
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتجيبلكوا الـ milestone اللي عايزنها في level معين. ممكن مديهاش level فا تجيبلكوا كل ال milestones`,

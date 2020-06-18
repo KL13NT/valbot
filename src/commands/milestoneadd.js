@@ -15,6 +15,7 @@ class MilestoneAdd extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `milestoneadd`,
+			category: 'Management',
 			cooldown: 1000,
 			nOfParams: 2,
 			requiredRole: 'admin',

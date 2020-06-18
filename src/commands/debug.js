@@ -11,6 +11,7 @@ class Debug extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `debug`,
+			category: 'Development',
 			cooldown: 1000,
 			nOfParams: 1,
 			requiredRole: 'dev',

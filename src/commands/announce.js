@@ -17,6 +17,7 @@ class Announce extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `announce`,
+			category: 'Management',
 			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: `بتعمل اعلان بالشكل اللي تحبه. ممكن كمان تستغل الـ webhook.`,

@@ -15,6 +15,7 @@ class MilestoneRemove extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `milestoneremove`,
+			category: 'Management',
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتشيل مايلستوون معينة`,

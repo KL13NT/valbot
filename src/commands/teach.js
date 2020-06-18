@@ -10,6 +10,7 @@ class Teach extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `teach`,
+			category: 'Management',
 			cooldown: 1000,
 			nOfParams: 0,
 			description: `بتعلم البوت يرد على حاجة`,

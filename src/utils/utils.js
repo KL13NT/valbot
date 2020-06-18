@@ -156,8 +156,8 @@ function log(client, notification, alertLevel) {
 			console.log(`[${alertLevel}] ${message}`)
 			botStatusChannel.send(fullNotification)
 		} else {
-			if (typeof this.client.controllers.queue !== 'undefined')
-				this.client.controllers.queue.enqueue(
+			if (typeof client.controllers.queue !== 'undefined')
+				client.controllers.queue.enqueue(
 					log,
 					client,
 					notification,
@@ -185,7 +185,7 @@ async function notify(client, notification, embed, channelID) {
 
 			return notificationsChannel.send(notification, { embed })
 		} else {
-			this.client.controllers.queue.enqueue(notify, client, notification)
+			client.controllers.queue.enqueue(notify, client, notification)
 		}
 	} catch (err) {
 		log(client, err, 'error')

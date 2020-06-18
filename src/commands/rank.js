@@ -6,6 +6,7 @@ class Rank extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
 			name: `rank`,
+			category: 'Support',
 			cooldown: 1000,
 			nOfParams: 0,
 			description: `بتشوف مستوى شخص ما`,

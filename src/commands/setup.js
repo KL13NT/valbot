@@ -16,6 +16,7 @@ class Setup extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `setup`,
+			category: 'Development',
 			cooldown: 1000,
 			nOfParams: 0,
 			description: `بتعمل setup للبوت. مينفعش تعمل cancel.`,

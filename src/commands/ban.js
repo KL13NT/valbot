@@ -5,6 +5,7 @@ class Ban extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
 			name: `ban`,
+			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتطرد ميمبر من السيرفر, مبيقدرش يخش تاني`,

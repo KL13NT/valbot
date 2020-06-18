@@ -15,6 +15,7 @@ class RoleGive extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `rolegive`,
+			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتدي لميمبر روول معين`,

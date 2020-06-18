@@ -15,6 +15,7 @@ class RoleRemove extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `roleremove`,
+			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتشيل روول من ميمبر`,

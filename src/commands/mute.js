@@ -5,6 +5,7 @@ class Mute extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
 			name: `mute`,
+			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتمنع الشخص انه يتكلم فويس او تيكست لمدة 5 دقايق`,

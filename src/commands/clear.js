@@ -10,6 +10,7 @@ class Clear extends Command {
 	constructor(client) {
 		const options = new CommandOptions({
 			name: `clear`,
+			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتمسح رسايل بعدد n`,

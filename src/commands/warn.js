@@ -5,6 +5,7 @@ class Warn extends Command {
 	constructor(client) {
 		const commandOptions = new CommandOptions({
 			name: `warn`,
+			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتحذر ميمبر على حاجة عملها`,
