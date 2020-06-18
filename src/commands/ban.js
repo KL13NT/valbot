@@ -12,8 +12,8 @@ class Ban extends Command {
 			extraParams: true,
 			optionalParams: 0,
 			auth: {
-				method: 'PERMISSION',
-				required: 'BAN_MEMBERS'
+				method: 'ROLE',
+				required: 'AUTH_MOD'
 			}
 		})
 		super(client, commandOptions)

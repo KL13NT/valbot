@@ -62,41 +62,38 @@ class Command {
 	isAllowed(context) {
 		if (context.member.hasPermission('ADMINISTRATOR')) return true
 
-		if (this.options.auth.method === 'ROLE') {
-			if (this.options.auth.role === 'AUTH_DEV')
-				return this.isDevCommand(context)
-			else return this.isAllowedRoles(context)
-		} else return this.isAllowedPermissions(context)
+		if (this.options.auth.devOnly) return this.isDevCommand(context)
+		else return this.isAllowedRoles(context)
 	}
 
-	isDevCommand(context) {
-		const { member } = context
-
-		if (member.roles.cache.has(process.env.ROLE_DEVELOPER)) {
-			return true
-		}
+	isDevCommand({ member }) {
+		return member.roles.cache.has(process.env.ROLE_DEVELOPER)
 	}
 
 	isAllowedRoles({ member }) {
 		const { required } = this.options.auth
+
 		const AUTH_ROLES = this.client.config.AUTH
 		const allRoles = Object.values(AUTH_ROLES)
 
+		const requiredRole = AUTH_ROLES[required]
+		const indexOfRequiredRole = allRoles.indexOf(requiredRole)
+
 		return member.roles.cache.some(role => {
 			const indexOfMemberRole = allRoles.indexOf(role.id)
-			const indexOfRequiredRole = allRoles.indexOf(required)
 
 			if (
-				role.id === required ||
+				role.id === requiredRole ||
 				(indexOfMemberRole > -1 && indexOfMemberRole <= indexOfRequiredRole)
 			)
 				return true
 		})
 	}
 
-	isAllowedPermissions({ member }) {
-		return member.permissions.has(this.options.auth.required)
-	}
+	// isAllowedPermissions({ member }) {
+	// 	console.log(this.options)
+	// 	return member.hasPermission(this.options.auth.required)
+	// }
 
 	enforceCooldown(context) {
 		const { cooldown } = this.options

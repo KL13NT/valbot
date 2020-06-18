@@ -19,7 +19,8 @@ class Debug extends Command {
 			extraParams: false,
 			auth: {
 				method: 'ROLE',
-				required: 'AUTH_DEV'
+				required: 'AUTH_DEV',
+				devOnly: true
 			}
 		})
 

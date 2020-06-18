@@ -16,8 +16,8 @@ class Clear extends Command {
 			exampleUsage: `5`,
 			extraParams: false,
 			auth: {
-				method: 'PERMISSION',
-				required: 'DELETE_MESSAGES'
+				method: 'ROLE',
+				required: 'AUTH_MOD'
 			}
 		})
 
@@ -25,9 +25,7 @@ class Clear extends Command {
 	}
 
 	async _run(context) {
-		const {
-			CHANNEL_MOD_LOGS
-		} = this.client.config.CHANNELS
+		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS
 		const { message, member, params, channel } = context
 		const numbersRegex = /\d+/
 
