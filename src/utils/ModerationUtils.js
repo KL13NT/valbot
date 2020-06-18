@@ -34,7 +34,7 @@ module.exports = class ModerationUtils {
 			await targetMember.roles.add(ROLE_MUTED)
 
 			setTimeout(() => {
-				this.unmute(client, {
+				ModerationUtils.unmute(client, {
 					member,
 					moderator,
 					channel,
@@ -95,9 +95,9 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.roles.add(ROLE_WARNED)
-			notify(this.client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, '', embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
-			log(this.client, err, 'error')
+			log(client, err, 'error')
 		}
 	}
 
@@ -122,9 +122,9 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.roles.remove(ROLE_WARNED)
-			notify(this.client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, '', embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
-			log(this.client, err, 'error')
+			log(client, err, 'error')
 		}
 	}
 
@@ -149,9 +149,9 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.roles.remove(ROLE_MUTED)
-			notify(this.client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, '', embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
-			log(this.client, err, 'error')
+			log(client, err, 'error')
 		}
 	}
 
@@ -160,7 +160,7 @@ module.exports = class ModerationUtils {
 	 * @param {Discord.Client} client
 	 * @param {Discord.Snowflake} member
 	 */
-	static async isWarned(client, member) {
+	static isWarned(client, member) {
 		const { ROLE_WARNED } = client.config.ROLES
 		const targetMember = getMemberObject(client, member)
 
@@ -172,7 +172,7 @@ module.exports = class ModerationUtils {
 	 * @param {Discord.Client} client
 	 * @param {Discord.Snowflake} member
 	 */
-	static async isMuted(client, member) {
+	static isMuted(client, member) {
 		const { ROLE_MUTED } = client.config.ROLES
 		const targetMember = getMemberObject(client, member)
 

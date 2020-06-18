@@ -11,7 +11,7 @@ class MessageListener extends Listener {
 	async onMessage(message) {
 		const { content, author, type, mentions } = message
 
-		const isToxic = await this.client.ToxicityFilter.classify(message)
+		const isToxic = await this.client.controllers.toxicity.classify(message)
 		const isClientMentioned =
 			mentions.members &&
 			mentions.members.some(m => m.id === CLIENT_ID || m.id === DEV_CLIENT_ID)

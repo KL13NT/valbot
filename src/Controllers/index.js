@@ -4,5 +4,6 @@ module.exports = [
 	require('./MongoController'),
 	require('./LevelsController'),
 	require('./ConversationController'),
-	require('./IntervalsController')
+	require('./IntervalsController'),
+	require('./ToxicityController')
 ]

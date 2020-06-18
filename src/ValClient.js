@@ -4,10 +4,8 @@ const fs = require('fs')
 const path = require('path')
 const Loaders = require('./loaders')
 const Listeners = require('./listeners')
-const ToxicityFilter = require('./utils/InsultFiltering')
 
 const { log } = require('./utils/utils')
-
 
 /**
  * @param { ClientOptions	} options DiscordClientOptions
@@ -15,11 +13,11 @@ const { log } = require('./utils/utils')
  */
 
 class ValClient extends Client {
-	constructor (options = {}, prefix) {
+	constructor(options = {}, prefix) {
 		super(options)
 
 		this.ready = false
-		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT'? 'vd!': 'v!'
+		this.prefix = prefix || process.env.MODE === 'DEVELOPMENT' ? 'vd!' : 'v!'
 		this.commands = {}
 		this.controllers = {}
 		this.config = {}
@@ -30,40 +28,47 @@ class ValClient extends Client {
 		this.initLoaders = this.initLoaders.bind(this)
 		this.initConfig = this.initConfig.bind(this)
 		this.initListeners = this.initListeners.bind(this)
-
 	}
 
-	async init (token = process.env.AUTH_TOKEN) {
-		try{
+	async init(token = process.env.AUTH_TOKEN) {
+		try {
 			this.login(token)
 
 			await this.initLoaders()
 			await this.initConfig()
 			await this.initListeners()
 
-			console.log(fs.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8').toString())
-
+			console.log(
+				fs
+					.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8')
+					.toString()
+			)
+		} catch (err) {
+			log(
+				this,
+				`Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying ${err.message}`,
+				'error'
+			)
 		}
-		catch(err){
-			log(this, `Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying ${err.message}`, 'error')
-		}
-
 	}
 
-	async setPresence (){
+	async setPresence() {
 		const presence = {
-			message: `${this.prefix} help`, type: 'PLAYING'
+			message: `${this.prefix} help`,
+			type: 'PLAYING'
 		}
 
 		log(this, `Current presence: ${presence.type} ${presence.message}`, 'info')
 
-		this.user.setActivity(presence.message, { type: presence.type }).catch(err => log(this, err.message, 'error'))
+		this.user
+			.setActivity(presence.message, { type: presence.type })
+			.catch(err => log(this, err.message, 'error'))
 	}
 
 	/**
 	 * Initialises client loaders. Doesn't handle exceptions on purpose.
 	 */
-	async initLoaders () {
+	async initLoaders() {
 		log(this, 'Loaders loading', 'info')
 
 		for (const loader in Loaders) {
@@ -76,7 +81,7 @@ class ValClient extends Client {
 	/**
 	 * Initialises client listeners. Doesn't handle exceptions on purpose.
 	 */
-	async initListeners (){
+	async initListeners() {
 		log(this, 'Listeners loading', 'info')
 
 		for (const listener in Listeners) {
@@ -86,8 +91,8 @@ class ValClient extends Client {
 		log(this, 'All listeners loaded successfully', 'info')
 	}
 
-	async initConfig(){
-		try{
+	async initConfig() {
+		try {
 			if (this.controllers.mongo.ready && this.controllers.redis.ready) {
 				const response = await this.controllers.mongo.db
 					.collection('config')
@@ -95,8 +100,12 @@ class ValClient extends Client {
 						GUILD_ID: process.env.GUILD_ID
 					})
 
-				if(!response)
-					return log(this, `The bot is not setup. Commands won't work. Call ${this.prefix} setup`, 'warn')
+				if (!response)
+					return log(
+						this,
+						`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
+						'warn'
+					)
 
 				this.ready = true
 				this.config = response || {}
