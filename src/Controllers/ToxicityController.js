@@ -1,8 +1,8 @@
 const toxicity = require('@tensorflow-models/toxicity')
 
-const { NOTIFY_UNMUTED, WARN_BAD_LANGUAGE } = require('../config/events.json')
-const { notify, log } = require('../utils/utils')
 const { Controller } = require('../structures')
+const { warn, mute, isWarned } = require('../utils/ModerationUtils')
+const { log } = require('../utils/utils')
 
 class ToxicityController extends Controller {
 	constructor(client) {
@@ -32,13 +32,14 @@ class ToxicityController extends Controller {
 			})
 
 		this.classify = this.classify.bind(this)
+		this.handleToxic = this.handleToxic.bind(this)
 	}
 
 	async classify(message) {
 		if (process.env.mode === 'DEVELOPMENT' || !this.ready) return false
 
 		const { content: sentence } = message
-		const predictions = await this.classifier.classify([ sentence ])
+		const predictions = await this.classifier.classify([sentence])
 
 		return predictions.reduce((prediction, curr) =>
 			curr.results[0].match === true && curr.results[0].probabilities[1] > 0.9
@@ -47,35 +48,32 @@ class ToxicityController extends Controller {
 		)
 	}
 
-	/**
-	 * The working interval for muted members
-	 */
-	async mutedChecker() {
-		setInterval(() => {
-			const { IMPORTANT_ROLES } = process
-			const newTime = new Date().getTime()
+	async handleToxic(message) {
+		const { CLIENT_ID } = process.env
+		const { author, channel } = message
+		const reason = 'Used toxic language'
 
-			for (const mutedId in process.mutedMembers) {
-				try {
-					if (newTime - this.mutedMembers[mutedId].time >= 1000 * 60 * 15) {
-						const guild = this.guilds.find(guild => guild.name === 'VALARIUM')
+		if (isWarned(this.client, author.id)) {
+			await message.reply('دي تاني مرة تقل ادبك. ادي اخرتها. mute.')
+			await mute(this.client, {
+				member: author.id,
+				moderator: CLIENT_ID,
+				channel: channel.id,
+				reason
+			})
 
-						if (guild.available) {
-							const member = guild.members.find(member => member.id === mutedId)
+			message.delete({ reason })
+		} else {
+			await message.reply('متبقوش توكسيك. ده تحذير, المره الجاية mute.')
+			await warn(this.client, {
+				member: author.id,
+				moderator: CLIENT_ID,
+				channel: channel.id,
+				reason
+			})
 
-							if (member) {
-								member.removeRole(IMPORTANT_ROLES.muted)
-								delete this.mutedMembers[mutedId]
-
-								notify(`<@${mutedId}> ${NOTIFY_UNMUTED}`)
-							}
-						}
-					}
-				} catch (err) {
-					// Logger.file('info', err)
-				}
-			}
-		}, 1000 * 60) // every 1 minute
+			message.delete({ reason })
+		}
 	}
 }
 

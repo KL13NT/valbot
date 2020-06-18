@@ -121,7 +121,7 @@ module.exports = class ModerationUtils {
 		})
 
 		try {
-			targetMember.roles.remove(ROLE_WARNED)
+			await targetMember.roles.remove(ROLE_WARNED)
 			notify(this.client, '', embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(this.client, err, 'error')
@@ -148,7 +148,7 @@ module.exports = class ModerationUtils {
 		})
 
 		try {
-			targetMember.roles.remove(ROLE_MUTED)
+			await targetMember.roles.remove(ROLE_MUTED)
 			notify(this.client, '', embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(this.client, err, 'error')

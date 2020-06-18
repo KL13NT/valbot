@@ -18,7 +18,7 @@
 	"GENERIC_CONTROLLED_COMMAND_CANCEL": "لغيت الكوماند, جايين تبهدلوني ع الفاضي و الله",
 	"GENERIC_COMMAND_GRACEFUL_ERROR": "مش هينفع كده, في حاجة انت عملتها غلط, جرب تاني",
 	"NOTIFY_UNMUTED": "تقدر تتكلم دلوقتي. متعملهاش تاني بقى عشان مزعلش منك",
-	"WARN_BAD_LANGUAGE": "لو سمحت متستخدمش لغة بذيئة. ده تحذير. لو جالك 3 تحذيرات هيتعملك mute",
+	"WARN_BAD_LANGUAGE": "لو سمحت متستخدمش لغة بذيئة. ده تحذير. هعملك mute المره الجاية",
 	"GENERIC_COMMAND_NOT_UNDERSTOOD": "في حاجة انا مش فاهمها في اللي انت كتبته. جرب تاني او قول للديف لو تعتقد ان دي حاجة لازم تشتغل وانت عاملها صح",
 	"ROLE_ADDED": "You have received a new role by reacting in Valarium: ",
 	"ROLE_REMOVED": "You have removed a role by reacting in Valarium: "

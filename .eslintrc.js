@@ -6,13 +6,6 @@ module.exports = {
 		node: true
 	},
 	extends: ['eslint:recommended'],
-	globals: {
-		LevelsController: 'readonly',
-		MongoController: 'readonly',
-		RedisController: 'readonly',
-		QueueController: 'readonly',
-		ConversationController: 'readonly'
-	},
 	parser: 'babel-eslint',
 	parserOptions: {
 		ecmaVersion: 10,
@@ -42,7 +35,6 @@ module.exports = {
 			}
 		],
 		'object-curly-spacing': ['error', 'always'],
-		'array-bracket-spacing': ['error', 'always'],
 		'no-whitespace-before-property': 2,
 		'space-unary-ops': [
 			2,
