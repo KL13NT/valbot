@@ -32,6 +32,7 @@ class RoleGive extends Command {
 	}
 
 	async _run(context) {
+		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS
 		const { message, params, member, channel } = context
 		const roleNameRegex = /\S+/i
 		const roleIDRegex = /\d+/i
@@ -61,7 +62,7 @@ class RoleGive extends Command {
 		targetMember.roles
 			.add(role)
 			.then(() => {
-				notify(this.client, '', embed)
+				notify(this.client, `<@${targetMemberID}>`, embed, CHANNEL_MOD_LOGS)
 				message.reply(`اديت الميمبر ده روول ${role.name}`)
 			})
 			.catch(err => {

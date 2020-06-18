@@ -42,7 +42,7 @@ module.exports = class ModerationUtils {
 				})
 			}, 5 * 60 * 1000)
 
-			notify(client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(client, err, 'error')
 		}
@@ -68,7 +68,7 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.ban({ reason })
-			notify(client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(client, err, 'error')
 		}
@@ -95,7 +95,7 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.roles.add(ROLE_WARNED)
-			notify(client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(client, err, 'error')
 		}
@@ -122,7 +122,7 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.roles.remove(ROLE_WARNED)
-			notify(client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(client, err, 'error')
 		}
@@ -149,7 +149,7 @@ module.exports = class ModerationUtils {
 
 		try {
 			await targetMember.roles.remove(ROLE_MUTED)
-			notify(client, '', embed, CHANNEL_MOD_LOGS)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
 		} catch (err) {
 			log(client, err, 'error')
 		}

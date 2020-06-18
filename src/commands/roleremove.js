@@ -32,6 +32,7 @@ class RoleRemove extends Command {
 	}
 
 	async _run(context) {
+		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS
 		const { message, params, channel, member } = context
 		const roleNameRegex = /\w+/i
 		const roleIDRegex = /\d+/i
@@ -61,7 +62,7 @@ class RoleRemove extends Command {
 		targetMember.roles
 			.remove(role)
 			.then(() => {
-				notify(this.client, '', embed)
+				notify(this.client, `<@${targetMemberID}>`, embed, CHANNEL_MOD_LOGS)
 				message.reply(`شيلت روول ${role.name} من الميمبر ده`)
 			})
 			.catch(err => {
