@@ -3,7 +3,8 @@ module.exports = {
 		browser: false,
 		commonjs: true,
 		es6: true,
-		node: true
+		node: true,
+		jest: true
 	},
 	extends: ['eslint:recommended'],
 	parser: 'babel-eslint',

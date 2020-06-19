@@ -2,13 +2,17 @@ const { CLIENT_ID } = process.env
 
 const Discord = require('discord.js')
 
-const { Controller, Level } = require('../structures')
-const { log, calculateUniqueWords, notify, getMemberObject, getRoleObject } = require('../utils/utils')
-
-
+const { Controller } = require('../structures')
+const {
+	log,
+	calculateUniqueWords,
+	notify,
+	getMemberObject,
+	getRoleObject
+} = require('../utils/utils')
 
 class LevelsController extends Controller {
-	constructor (client){
+	constructor(client) {
 		super(client, {
 			name: 'levels'
 		})
@@ -31,89 +35,91 @@ class LevelsController extends Controller {
 		this.init()
 	}
 
-	async init (){
+	async init() {
+		const { redis, mongo, intervals, queue } = this.client.controllers
 		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
-		if(this.client.controllers.mongo.ready && this.client.controllers.redis.ready && this.client.ValGuild.available){
-			const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values())
+		if (mongo.ready && redis.ready && this.client.ValGuild.available) {
+			const voiceStates = Array.from(
+				this.client.ValGuild.voiceStates.cache.values()
+			)
 
 			voiceStates.forEach(({ deaf, mute, member, channel }) => {
-				if(channel.id !== '571721579214667786' && !member.user.bot && !deaf && !mute){
+				if (
+					channel.id !== '571721579214667786' &&
+					!member.user.bot &&
+					!deaf &&
+					!mute
+				) {
 					this.activeVoice.push(member.id)
 				}
 			})
 
-			this.client.controllers.mongo.getLevels().then(async levels => {
+			mongo.getLevels().then(async levels => {
 				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
-					this.client.controllers.redis.set(`TEXT:${id}`, (Number(text) || 1))
-					this.client.controllers.redis.set(`TEXT:XP:${id}`, (Number(textXP) || 1))
-					this.client.controllers.redis.set(`VOICE:${id}`, (Number(voice) || 1))
-					this.client.controllers.redis.set(`VOICE:XP:${id}`, (Number(voiceXP) || 1))
-					this.client.controllers.redis.set(`LEVEL:${id}`, (Number(level) || 1))
+					redis.set(`TEXT:${id}`, Number(text) || 1)
+					redis.set(`TEXT:XP:${id}`, Number(textXP) || 1)
+					redis.set(`VOICE:${id}`, Number(voice) || 1)
+					redis.set(`VOICE:XP:${id}`, Number(voiceXP) || 1)
+					redis.set(`LEVEL:${id}`, Number(level) || 1)
 				})
 
-				this.client.controllers.intervals.setInterval(
+				intervals.setInterval(
 					1000 * 60,
 					{ name: 'voiceIncrement' },
 					this.voiceIncrement
 				)
 			})
 
-			this.client.controllers.mongo.getMilestones().then(found => {
+			mongo.getMilestones().then(found => {
 				found.forEach(level => {
 					this.milestones[level.level] = level.milestones
 				})
 			})
-		}
-		else this.client.controllers.queue.enqueue(this.init)
+		} else queue.enqueue(this.init)
 	}
 	/**
 	 *
 	 * @param {Message} message
 	 */
-	async message (message) {
+	async message(message) {
+		const { redis } = this.client.controllers
 		const { author, content } = message
 		const { id, bot } = author
 
-		if(id === CLIENT_ID || bot) return
+		if (id === CLIENT_ID || bot) return
 
-		try{
-			const textXP = Number(await this.client.controllers.redis.get(`TEXT:XP:${id}`))
-			const text = Number(await this.client.controllers.redis.get(`TEXT:${id}`))
+		try {
+			const textXP = Number(await redis.get(`TEXT:XP:${id}`))
+			const text = Number(await redis.get(`TEXT:${id}`))
 
-			const level = Number(await this.client.controllers.redis.get(`LEVEL:${id}`))
-			const exp = Number(await this.client.controllers.redis.get(`EXP:${id}`))
+			const level = Number(await redis.get(`LEVEL:${id}`))
+			const exp = Number(await redis.get(`EXP:${id}`))
 
 			const gainedWords = Math.ceil(calculateUniqueWords(content) * 0.4)
 
-			if(exp){
-				const nextText = Math.floor(((textXP + gainedWords) / 6) - 60)
-				const textIncrBy = nextText - text <= 0? 1: nextText - text
+			if (exp) {
+				const nextText = Math.floor((textXP + gainedWords) / 6 - 60)
+				const textIncrBy = nextText - text <= 0 ? 1 : nextText - text
 
-				const nextLevel = Math.floor(((exp + gainedWords) / 6) - 60)
-				const levelIncrBy = nextLevel - level <= 0? 1: nextLevel - level
+				const nextLevel = Math.floor((exp + gainedWords) / 6 - 60)
+				const levelIncrBy = nextLevel - level <= 0 ? 1 : nextLevel - level
 
-				if(exp + gainedWords >= ((60 * Number(level) * 0.1) + 60)){
-
-					this.client.controllers.redis.incrby(`LEVEL:${id}`, levelIncrBy)
-					this.client.controllers.redis.set(`EXP:${id}`, 1)
+				if (exp + gainedWords >= 60 * Number(level) * 0.1 + 60) {
+					redis.incrby(`LEVEL:${id}`, levelIncrBy)
+					redis.set(`EXP:${id}`, 1)
 
 					this.levelUp(message)
 				}
 
-				if(textXP + gainedWords >= ((60 * Number(text) * 0.1) + 60)) {
-					this.client.controllers.redis.incrby(`TEXT:${id}`, textIncrBy)
-					this.client.controllers.redis.set(`TEXT:EXP:${id}`, 1)
+				if (textXP + gainedWords >= 60 * Number(text) * 0.1 + 60) {
+					redis.incrby(`TEXT:${id}`, textIncrBy)
+					redis.set(`TEXT:EXP:${id}`, 1)
+				} else {
+					redis.incrby(`EXP:${id}`, gainedWords)
+					redis.incrby(`TEXT:XP:${id}`, gainedWords)
 				}
-				else {
-					this.client.controllers.redis.incrby(`EXP:${id}`, gainedWords)
-					this.client.controllers.redis.incrby(`TEXT:XP:${id}`, gainedWords)
-				}
-			}
-
-			else this.initUser(id)
-
-		}
-		catch(err){
+			} else this.initUser(id)
+		} catch (err) {
 			log(this.client, err, 'error')
 		}
 		// message.reply('Hello')
@@ -150,140 +156,136 @@ class LevelsController extends Controller {
 		 */
 
 		/**
-			* Implementation notes
-			* The database doesn't need to know about actual activity
-			* And should only be used to store
-			* Perhaps a key-value (this.client.controllers.redis?) store should be used for local operations
-			* And then flushed to the mongo instance
-			*/
+		 * Implementation notes
+		 * The database doesn't need to know about actual activity
+		 * And should only be used to store
+		 * Perhaps a key-value (redis?) store should be used for local operations
+		 * And then flushed to the mongo instance
+		 */
 	}
 
-	async voiceIncrement (){
+	async voiceIncrement() {
+		const { redis } = this.client.controllers
+
 		this.activeVoice.forEach(async id => {
-			try{
+			try {
+				const voiceXP = Number(await redis.get(`VOICE:XP:${id}`))
+				const voice = Number(await redis.get(`VOICE:${id}`))
 
-
-				const voiceXP = Number(await this.client.controllers.redis.get(`VOICE:XP:${id}`))
-				const voice = Number(await this.client.controllers.redis.get(`VOICE:${id}`))
-
-				const level = Number(await this.client.controllers.redis.get(`LEVEL:${id}`))
-				const exp = Number(await this.client.controllers.redis.get(`EXP:${id}`))
+				const level = Number(await redis.get(`LEVEL:${id}`))
+				const exp = Number(await redis.get(`EXP:${id}`))
 
 				const XP_PER_MINUTE = 4
 
-				if(exp){
-					const nextVoice = Math.floor(((voiceXP + XP_PER_MINUTE) / 6) - 60)
-					const voiceIncrBy = nextVoice - voice <= 0? 1: nextVoice - voice
+				if (exp) {
+					const nextVoice = Math.floor((voiceXP + XP_PER_MINUTE) / 6 - 60)
+					const voiceIncrBy = nextVoice - voice <= 0 ? 1 : nextVoice - voice
 
-					const nextLevel = Math.floor(((exp + XP_PER_MINUTE) / 6) - 60)
-					const levelIncrBy = nextLevel - voice <= 0? 1: nextLevel - voice
+					const nextLevel = Math.floor((exp + XP_PER_MINUTE) / 6 - 60)
+					const levelIncrBy = nextLevel - voice <= 0 ? 1 : nextLevel - voice
 
-					if(exp + XP_PER_MINUTE >= ((60 * Number(level) * 0.1) + 60)){
-						this.client.controllers.redis.incrby(`LEVEL:${id}`, levelIncrBy)
-						this.client.controllers.redis.set(`EXP:${id}`, 1)
+					if (exp + XP_PER_MINUTE >= 60 * Number(level) * 0.1 + 60) {
+						redis.incrby(`LEVEL:${id}`, levelIncrBy)
+						redis.set(`EXP:${id}`, 1)
 
 						this.levelUp(id)
 					}
 
-					if(voiceXP + XP_PER_MINUTE >= ((60 * Number(voice) * 0.1) + 60)) {
-						this.client.controllers.redis.incrby(`VOICE:${id}`, voiceIncrBy)
-						this.client.controllers.redis.set(`VOICE:XP:${id}`, 1)
-
+					if (voiceXP + XP_PER_MINUTE >= 60 * Number(voice) * 0.1 + 60) {
+						redis.incrby(`VOICE:${id}`, voiceIncrBy)
+						redis.set(`VOICE:XP:${id}`, 1)
+					} else {
+						redis.incrby(`EXP:${id}`, XP_PER_MINUTE)
+						redis.incrby(`VOICE:XP:${id}`, XP_PER_MINUTE)
 					}
-					else {
-						this.client.controllers.redis.incrby(`EXP:${id}`, XP_PER_MINUTE)
-						this.client.controllers.redis.incrby(`VOICE:XP:${id}`, XP_PER_MINUTE)
-					}
-				}
-				else this.initUser(id)
-
-			}
-			catch(err){
+				} else this.initUser(id)
+			} catch (err) {
 				log(this.client, err, 'error')
 			}
 		})
 	}
 
-	async initUser (id){
-		this.client.controllers.redis.set(`EXP:${id}`, 1)
-		this.client.controllers.redis.set(`LEVEL:${id}`, 1)
-		this.client.controllers.redis.set(`TEXT:XP:${id}`, 1)
-		this.client.controllers.redis.set(`TEXT:${id}`, 1)
-		this.client.controllers.redis.set(`VOICE:XP:${id}`, 1)
-		this.client.controllers.redis.set(`VOICE:${id}`, 1)
+	async initUser(id) {
+		const { redis } = this.client.controllers
+
+		redis.set(`EXP:${id}`, 1)
+		redis.set(`LEVEL:${id}`, 1)
+		redis.set(`TEXT:XP:${id}`, 1)
+		redis.set(`TEXT:${id}`, 1)
+		redis.set(`VOICE:XP:${id}`, 1)
+		redis.set(`VOICE:${id}`, 1)
 
 		this.levelUp(id)
 	}
 
-	trackUser (id){
+	trackUser(id) {
 		const index = this.activeVoice.indexOf(id)
 
-		if(index === -1) this.activeVoice.push(id)
+		if (index === -1) this.activeVoice.push(id)
 	}
 
-	untrackUser (id){
+	untrackUser(id) {
 		const index = this.activeVoice.indexOf(id)
 
-		if(index !== -1) this.activeVoice.splice(index, 1)
+		if (index !== -1) this.activeVoice.splice(index, 1)
 	}
 
-	async levelUp (messageOrId){
-		const id = typeof messageOrId === 'string'? messageOrId: messageOrId.member.user.id
+	async levelUp(messageOrId) {
+		const { redis, mongo } = this.client.controllers
 
-		const exp = Number(await this.client.controllers.redis.get(`EXP:${id}`))
-		const level = Number(await this.client.controllers.redis.get(`LEVEL:${id}`))
+		const id =
+			typeof messageOrId === 'string' ? messageOrId : messageOrId.member.user.id
 
-		const voiceXP = Number(await this.client.controllers.redis.get(`VOICE:XP:${id}`))
-		const voice = Number(await this.client.controllers.redis.get(`VOICE:${id}`))
+		const exp = Number(await redis.get(`EXP:${id}`))
+		const level = Number(await redis.get(`LEVEL:${id}`))
 
-		const textXP = Number(await this.client.controllers.redis.get(`TEXT:XP:${id}`))
-		const text = Number(await this.client.controllers.redis.get(`TEXT:${id}`))
+		const voiceXP = Number(await redis.get(`VOICE:XP:${id}`))
+		const voice = Number(await redis.get(`VOICE:${id}`))
 
-		this.client.controllers.mongo.syncLevels(id, { exp, text, voice, level, textXP, voiceXP })
+		const textXP = Number(await redis.get(`TEXT:XP:${id}`))
+		const text = Number(await redis.get(`TEXT:${id}`))
+
+		mongo.syncLevels(id, {
+			exp,
+			text,
+			voice,
+			level,
+			textXP,
+			voiceXP
+		})
 
 		this.enforceMilestone(level, id)
 		this.levelUpMessage(id, level)
 	}
 
-	async enforceMilestone (userLevel, id){
+	async enforceMilestone(userLevel, id) {
 		const level = this.milestones[userLevel]
 
-		if(level){
+		if (level) {
 			const member = getMemberObject(this.client, id)
 
 			level.forEach(async milestone => {
-				try{
+				try {
 					const role = getRoleObject(this.client, milestone.roleID)
 
-
 					const embed = new Discord.MessageEmbed()
-						.setColor('#ffcc5c')
-						.setTitle(`Achievement Unlocked - ${milestone.name}`)
-						.setDescription(`GG! You unlocked the ${milestone.name} achievement\nYou just received the ${role.name} role!`)
-						.addFields(
-							{ name: 'Achievement name', value: milestone.name },
-							{ name: 'Achievement description', value: milestone.description }
-						)
-						.setTimestamp()
-						.setFooter('To get all available milestones ask an admin')
 
 					member.roles.add(milestone.roleID)
 					notify(this.client, `<@${id}>`, embed)
-				}
-				catch(err){
+				} catch (err) {
 					log(this.client, err, 'error')
 				}
 			})
 		}
 	}
 
-	async levelUpMessage (id, level){
+	async levelUpMessage(id, level) {
 		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`
 
 		notify(this.client, notification)
 	}
 
-	addMilestone (level, name, description,  roleID){
+	addMilestone(level, name, description, roleID) {
 		const milestone = this.milestones[level]
 		const newMilestone = {
 			name,
@@ -291,14 +293,14 @@ class LevelsController extends Controller {
 			description
 		}
 
-		if(milestone){
-			if(milestone.find(mile => mile.roleID === roleID || mile.name === name)) return
+		if (milestone) {
+			if (milestone.find(mile => mile.roleID === roleID || mile.name === name))
+				return
 			else {
 				milestone.push(newMilestone)
 			}
-		}
-		else {
-			this.milestones[level] = [ newMilestone ]
+		} else {
+			this.milestones[level] = [newMilestone]
 		}
 
 		this.client.controllers.mongo.db.collection('milestones').updateOne(
@@ -307,35 +309,39 @@ class LevelsController extends Controller {
 			},
 			{
 				$push: { milestones: newMilestone }
-			}, {
+			},
+			{
 				upsert: true
-			})
+			}
+		)
 	}
 
-	getMilestone (level){
+	getMilestone(level) {
 		return this.milestones[level]
 	}
 
-	async removeMilestone (level, name){
+	async removeMilestone(level, name) {
 		const milestone = this.milestones[level]
 
-		if(milestone){
+		if (milestone) {
 			const ach = milestone.findIndex(ach => ach.name === name)
 
 			delete this.milestones[level][ach]
 
-			if(Object.keys(this.milestones[level]).length === 0) {
+			if (Object.keys(this.milestones[level]).length === 0) {
 				delete this.milestones[level]
-				this.client.controllers.mongo.db.collection('milestones').deleteOne({ level })
-			}
-
-			else this.client.controllers.mongo.db
-				.collection('milestones')
-				.updateOne({
-					level
-				}, {
-					$pull: { milestones : { name: name } }
-				})
+				this.client.controllers.mongo.db
+					.collection('milestones')
+					.deleteOne({ level })
+			} else
+				this.client.controllers.mongo.db.collection('milestones').updateOne(
+					{
+						level
+					},
+					{
+						$pull: { milestones: { name: name } }
+					}
+				)
 		}
 	}
 }
