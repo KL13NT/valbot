@@ -4,9 +4,14 @@
  * @returns {GuildChannel}
  */
 function getChannelObject(client, channelId) {
+	const { CHANNEL_TEST } = client.config.CHANNELS
+	const { MODE } = process.env
+
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM')
-		.channels.cache.find(ch => ch.id === channelId)
+		.channels.cache.find(ch =>
+			MODE === 'DEVELOPMENT' ? ch.id === CHANNEL_TEST : ch.id === channelId
+		)
 }
 
 /**

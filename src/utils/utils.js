@@ -1,57 +1,40 @@
-const { MessageEmbed } = require('discord.js')
-const { ERROR_COMMANDS_REQUIRE_2_PARAMS } = require('../config/events.json')
-
-/**
- * @typedef {object} EmbedOptions
- * @property {GuildMember} member
- * @property {object} embedOptions
- * @property {object[]} fields
- * @property {object[]} attachments
- * @property {GuildChannel[]} channels
- * @property {function} callback
- */
-
-function dmMember(member, content) {
-	member.createDM().then(dm => dm.send(content))
-}
+const { getChannelObject } = require('./DiscordObjectUtils')
 
 /**
  *
- * @param {*} client
- * @param {*} notification
- * @param {*} alertLevel
+ * @param {Discord.Client} client
+ * @param {string|Error} notification
+ * @param {string} alertLevel
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Description
  */
-function log(client, notification, alertLevel) {
-	const statusEmoji =
-		alertLevel === 'info'
-			? ':grey_question:'
-			: alertLevel === 'warn'
-			? ':warning:'
-			: ':x:'
-	const shouldMention = alertLevel === 'error' || alertLevel === 'warn'
-	const message =
-		typeof notification === 'object'
-			? `${notification.toString()}`
-			: notification
+async function log(client, notification, alertLevel) {
+	console.log(`[${alertLevel}]`, notification) // need console regardless
 
-	if (process.env.MODE === 'PRODUCTION') {
-		if (client.ready) {
-			const { CHANNEL_BOT_STATUS } = client.config.CHANNELS
-			const botStatusChannel = getChannelObject(client, CHANNEL_BOT_STATUS)
-			const fullNotification = `${statusEmoji} ${message} ${
-				shouldMention ? '<@&639855023970451457>' : ''
-			}`
+	if (process.env.MODE !== 'PRODUCTION') return
+	if (!client.ready) return client.controllers.queue.enqueue(log, ...arguments)
 
-			console.log(`[${alertLevel}] ${message}`)
-			botStatusChannel.send(fullNotification)
-		} else {
-			if (typeof client.controllers.queue !== 'undefined')
-				client.controllers.queue.enqueue(log, client, notification, alertLevel)
-		}
-	} else console.log(`[${alertLevel}]`, notification)
+	const { CHANNEL_BOT_STATUS } = client.config.CHANNELS
+
+	const channel = getChannelObject(client, CHANNEL_BOT_STATUS)
+	const message = getMessage(String(notification), alertLevel) // @see
+
+	channel.send(message)
 }
 
-function logError(client, error) {}
+function getAlertStatus(alertLevel) {
+	if (alertLevel === 'info') return ':grey_question:'
+	if (alertLevel === 'warn') return ':warning:'
+	if (alertLevel === 'error') return ':x:'
+}
+
+function getMessage(message, alertLevel) {
+	const statusEmoji = getAlertStatus(alertLevel)
+	const notification = `[${statusEmoji}] ${message}`
+
+	if (alertLevel === 'error' || alertLevel === 'warn')
+		return `${notification} <@&639855023970451457>`
+	else return notification
+}
 
 /**
  *
@@ -60,23 +43,14 @@ function logError(client, error) {}
  * @param {*} alertLevel
  */
 async function notify(client, notification, embed, channelID) {
-	try {
-		if (client.ready) {
-			const { CHANNEL_TEST, CHANNEL_NOTIFICATIONS } = client.config.CHANNELS
-			const notificationsChannel = getChannelObject(
-				client,
-				process.env.MODE === 'DEVELOPMENT'
-					? CHANNEL_TEST
-					: channelID || CHANNEL_NOTIFICATIONS
-			)
+	if (!client.ready)
+		return client.controllers.queue.enqueue(notify, ...arguments)
 
-			return notificationsChannel.send(notification, { embed })
-		} else {
-			client.controllers.queue.enqueue(notify, client, notification)
-		}
-	} catch (err) {
-		log(client, err, 'error')
-	}
+	const { CHANNEL_NOTIFICATIONS } = client.config.CHANNELS
+
+	const channel = getChannelObject(client, channelID || CHANNEL_NOTIFICATIONS)
+
+	return channel.send(notification, { embed })
 }
 
 /**
@@ -97,7 +71,6 @@ function calculateUniqueWords(messageContent) {
 }
 
 module.exports = {
-	dmMember,
 	log,
 	notify,
 	calculateUniqueWords
