@@ -16,7 +16,7 @@ function getChannelObject(client, channelId) {
 
 /**
  * @param {ValClient} client
- * @param {string} roleId|rolename
+ * @param {string} roleId name or id
  */
 function getRoleObject(client, roleID) {
 	return client.guilds.cache
@@ -25,15 +25,6 @@ function getRoleObject(client, roleID) {
 			if (/\d+/.test(roleID)) return role.id === roleID
 			else return role.name === roleID
 		})
-}
-
-/**
- *
- * @param {TextChannel} channel
- * @param {string} messageId
- */
-async function getMessageObject(channel, messageId) {
-	return (await channel.messages.fetch(messageId)) || null
 }
 
 /**
@@ -49,6 +40,5 @@ function getMemberObject(client, userId) {
 module.exports = {
 	getMemberObject,
 	getChannelObject,
-	getMessageObject,
 	getRoleObject
 }
