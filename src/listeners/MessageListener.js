@@ -9,26 +9,26 @@ class MessageListener extends Listener {
 	}
 
 	async onMessage(message) {
+		const { prefix, controllers } = this.client
+		const { conversation, levels, toxicity } = controllers
 		const { content, author, type, mentions } = message
-
-		const isToxic = await this.client.controllers.toxicity.classify(message)
-		const isClientMentioned =
-			mentions.members &&
-			mentions.members.some(m => m.id === CLIENT_ID || m.id === DEV_CLIENT_ID)
 
 		if (
 			author.id !== CLIENT_ID &&
 			author.id !== DEV_CLIENT_ID &&
 			type !== 'dm'
 		) {
-			if (isToxic) return this.client.controllers.toxicity.handleToxic(message)
+			const isToxic = await toxicity.classify(message)
+			const isClientMentioned =
+				mentions.members &&
+				mentions.members.some(m => m.id === CLIENT_ID || m.id === DEV_CLIENT_ID)
 
-			if (content.startsWith(this.client.prefix))
-				this.client.emit('command', message)
-			else if (isClientMentioned)
-				this.client.controllers.conversation.converse(message, true)
+			if (isToxic) return toxicity.handleToxic(message)
 
-			this.client.controllers.levels.message(message)
+			if (content.startsWith(prefix)) this.client.emit('command', message)
+			else if (isClientMentioned) conversation.converse(message, true)
+
+			levels.message(message)
 		}
 	}
 }
