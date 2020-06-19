@@ -1,11 +1,23 @@
 CLIENT_ID=
 
+DEV_CLIENT_ID=
+
 CLIENT_SECRET=
 
 AUTH_TOKEN=
 
 PERMISSIONS_INTEGER=8
 
+# Refers to localhost in development
 DB_HOST=
 
+DB_NAME=
+
 MODE=
+
+GUILD_ID=
+
+# Not needed in development
+REDIS_URL=
+
+ROLE_DEVELOPER=

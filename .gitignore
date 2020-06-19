@@ -122,4 +122,4 @@ server/
 .vscode/
 static/
 data/
-dump.rdb
+*.rdb
