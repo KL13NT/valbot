@@ -1,11 +1,10 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
+const { log, notify } = require('../utils/utils')
 const {
-	log,
-	getMemberObject,
 	getRoleObject,
-	notify
-} = require('../utils/utils')
+	getMemberObject
+} = require('../utils/DiscordObjectUtils')
 const { createRoleEmbed } = require('../utils/EmbedUtils')
 
 class RoleRemove extends Command {

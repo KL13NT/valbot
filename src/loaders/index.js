@@ -1,5 +1,4 @@
 module.exports = {
 	ControllersLoader: require('./ControllersLoader'),
-	CommandsLoader: require('./CommandsLoader'),
-	ReactionRolesLoader: require('./ReactionRolesLoader')
+	CommandsLoader: require('./CommandsLoader')
 }

@@ -4,6 +4,5 @@ module.exports = {
 	CommandOptions: require('./CommandOptions'),
 	Loader: require('./Loader'),
 	Listener: require('./Listener'),
-	Controller: require('./Controller'),
-	Level: require('./Level')
+	Controller: require('./Controller')
 }

@@ -1,6 +1,7 @@
 const { Command, CommandOptions } = require(`../structures`)
 const { generateRankCard } = require('../utils/svg')
-const { log, getMemberObject } = require('../utils/utils')
+const { log } = require('../utils/utils')
+const { getMemberObject } = require('../utils/DiscordObjectUtils')
 
 class Rank extends Command {
 	constructor(client) {

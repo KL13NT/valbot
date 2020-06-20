@@ -1,13 +1,7 @@
-const { promisify } = require('util')
-
-const redis = require('redis')
-
 const { Controller } = require('../structures')
-const { log } = require('../utils/utils')
-
 
 class IntervalsController extends Controller {
-	constructor (client){
+	constructor(client) {
 		super(client, {
 			name: 'intervals'
 		})
@@ -19,21 +13,21 @@ class IntervalsController extends Controller {
 		this.exists = this.exists.bind(this)
 	}
 
-	setInterval (time, intervalOptions, callback){
+	setInterval(time, intervalOptions, callback) {
 		const { name } = intervalOptions
 
-		if(this.intervals[name]) this.clearInterval(name)
+		if (this.intervals[name]) this.clearInterval(name)
 
 		this.intervals[name] = setInterval(callback, time)
 	}
 
-	clearInterval (name){
+	clearInterval(name) {
 		clearInterval(this.intervals[name])
 		delete this.intervals[name]
 	}
 
-	exists (name){
-		return this.intervals[name]? true: false
+	exists(name) {
+		return this.intervals[name] ? true : false
 	}
 }
 

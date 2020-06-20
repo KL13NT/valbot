@@ -1,19 +1,14 @@
-const path = require('path')
-
-const { CLIENT_ID } = process.env
 const { Listener } = require('../structures')
-const { getChannelObject, log } = require('../utils/utils')
+const { log } = require('../utils/utils')
 
 class ClientReadyListener extends Listener {
-	constructor (client) {
-		super(client, [
-			'ready'
-		])
+	constructor(client) {
+		super(client, ['ready'])
 
 		this.onReady = this.onReady.bind(this)
 	}
 
-	async onReady (){
+	async onReady() {
 		this.client.setPresence()
 
 		this.client.ValGuild = this.client.guilds.cache.first()

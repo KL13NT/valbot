@@ -12,12 +12,10 @@ const {
 	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
-const {
-	generateEvent,
-	log,
-	getRoleObject,
-	createEmbed
-} = require('../utils/utils')
+const { log } = require('../utils/utils')
+const { createEventMessage } = require('../utils/EventUtils')
+const { getRoleObject } = require('../utils/DiscordObjectUtils')
+const { createEmbed } = require('../utils/EmbedUtils')
 
 class Command {
 	/**
@@ -128,10 +126,16 @@ class Command {
 			(params.length > nOfParams && !extraParams)
 		)
 			return message.reply(
-				generateEvent(this.client, ERROR_INSUFFICIENT_PARAMS_PASSED, {
-					_PREFIX: this.client.prefix,
-					COMMAND_NAME: this.options.name
-				})
+				createEventMessage(ERROR_INSUFFICIENT_PARAMS_PASSED, [
+					{
+						name: '_PREFIX',
+						value: this.client.prefix
+					},
+					{
+						name: 'COMMAND_NAME',
+						value: this.options.name
+					}
+				])
 			)
 		else return true
 	}

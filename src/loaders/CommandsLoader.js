@@ -6,21 +6,19 @@ const { log } = require('../utils/utils')
 /**
  * Loads commands based on commands/index
  */
-class CommandsLoader extends Loader{
+class CommandsLoader extends Loader {
 	/**
 	 *
 	 * @param {ValClient} client used to attach loaded commands
 	 */
-	constructor (client) {
+	constructor(client) {
 		super(client)
 	}
 
-	load () {
+	load() {
 		Commands.forEach(async command => {
-
 			const newCommand = new command(this.client)
 			this.client.commands[newCommand.options.name] = newCommand
-
 		})
 
 		log(this.client, 'Commands loaded successfully', 'info')

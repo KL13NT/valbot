@@ -1,18 +1,15 @@
-const { Listener, CommandContext } = require('../structures')
-const { CLIENT_ID: BotID } = process.env
+const { Listener } = require('../structures')
 const { log } = require('../utils/utils')
 
 class NewGuildMemberListener extends Listener {
-	constructor (client) {
-		super(client, [
-			'guildMemberAdd'
-		])
+	constructor(client) {
+		super(client, ['guildMemberAdd'])
 
 		this.onGuildMemberAdd = this.onGuildMemberAdd.bind(this)
 	}
 
-	async onGuildMemberAdd (member) {
-		try{
+	async onGuildMemberAdd(member) {
+		try {
 			const dm = await member.createDM()
 			dm.send(`
 			اهلاً بيكوا في فالاريوم! سعداء بيكم معانا جداً! :sparkler: :partying_face:
@@ -21,13 +18,14 @@ class NewGuildMemberListener extends Listener {
 			لو حابين تتعرفوا على الـ bot تقدروا تكتبوا \`${this.client.prefix} help\` في اي تشانل ف السيرفر
 			اهلاً بيكم مره تانية, و لو في اي حاجة نقدر نساعدكوا فيها متترددوش! اعتبرونا بيتكم التاني :star_struck:
 			`)
-
-		}
-		catch(err){
-			log(this.client, 'Something went wrong while greeting the new member, could yall do it for me?', 'error')
+		} catch (err) {
+			log(
+				this.client,
+				'Something went wrong while greeting the new member, could yall do it for me?',
+				'error'
+			)
 		}
 	}
-
 }
 
 module.exports = NewGuildMemberListener

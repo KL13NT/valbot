@@ -1,11 +1,8 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const {
-	log,
-	getMemberObject,
-	getRoleObject,
-	notify
-} = require('../utils/utils')
+const { log, notify } = require('../utils/utils')
+
+const { getRoleObject } = require('../utils/DiscordObjectUtils')
 
 class MilestoneGet extends Command {
 	/**

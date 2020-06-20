@@ -1,11 +1,6 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const {
-	log,
-	getMemberObject,
-	getRoleObject,
-	notify
-} = require('../utils/utils')
+const { log } = require('../utils/utils')
 
 class MilestoneRemove extends Command {
 	/**

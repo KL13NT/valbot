@@ -1,12 +1,5 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const {
-	log,
-	getMemberObject,
-	getRoleObject,
-	notify,
-	awaitMessages
-} = require('../utils/utils')
 
 class Setup extends Command {
 	/**
@@ -80,7 +73,7 @@ class Setup extends Command {
 			if (!config[collection]) config[collection] = {}
 
 			channel.send(path)
-			config[collection][value] = await awaitMessages(
+			config[collection][value] = await channel.awaitMessages(
 				channel,
 				filter,
 				awaitOptions

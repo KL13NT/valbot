@@ -19,7 +19,13 @@ module.exports = {
 	plugins: [],
 	rules: {
 		'linebreak-style': ['error', 'windows'],
-		quotes: ['error', 'single'],
+		quotes: [
+			'error',
+			'single',
+			{
+				avoidEscape: true
+			}
+		],
 		semi: ['error', 'never'],
 		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-unused-vars': [
