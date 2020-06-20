@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
-const { log, getMemberObject, notify } = require('../utils/utils')
-const { createModerationEmbed } = require('./EmbedUtils')
+const { log, notify } = require('./utils')
+const { getMemberObject } = require('./DiscordObjectUtils')
+const { createUserModerationEmbed } = require('./EmbedUtils')
 
 /**
  * @typedef ModerationOptions
@@ -22,7 +23,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createModerationEmbed({
+		const embed = createUserModerationEmbed({
 			title: 'Muted Member',
 			member,
 			moderator,
@@ -58,7 +59,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createModerationEmbed({
+		const embed = createUserModerationEmbed({
 			title: 'Banned Member',
 			member,
 			moderator,
@@ -85,7 +86,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createModerationEmbed({
+		const embed = createUserModerationEmbed({
 			title: 'Warned Member',
 			member,
 			moderator,
@@ -93,12 +94,8 @@ module.exports = class ModerationUtils {
 			reason
 		})
 
-		try {
-			await targetMember.roles.add(ROLE_WARNED)
-			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
-		} catch (err) {
-			log(client, err, 'error')
-		}
+		await targetMember.roles.add(ROLE_WARNED)
+		notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
 	}
 
 	/**
@@ -112,7 +109,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createModerationEmbed({
+		const embed = createUserModerationEmbed({
 			title: 'Forgave Member',
 			member,
 			moderator,
@@ -139,7 +136,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createModerationEmbed({
+		const embed = createUserModerationEmbed({
 			title: 'Unmuted Member',
 			member,
 			moderator,
