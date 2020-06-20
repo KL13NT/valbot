@@ -18,7 +18,7 @@ module.exports = {
 	},
 	plugins: [],
 	rules: {
-		'linebreak-style': ['error', 'windows'],
+		'linebreak-style': ['error', 'unix'],
 		quotes: [
 			'error',
 			'single',
