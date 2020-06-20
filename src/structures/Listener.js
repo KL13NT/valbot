@@ -1,4 +1,3 @@
-
 /**
  * Base Listener
  * @param {ValClient} client The active ValClient instance
@@ -13,16 +12,15 @@
  * }
  */
 
-
-module.exports = class Listener{
-	constructor (client, events = []) {
+module.exports = class Listener {
+	constructor(client, events = []) {
 		this.client = client
 		this.events = events
 	}
 
-	_init (){}
+	_init() {}
 
-	init () {
+	init() {
 		this._init()
 		this.events.forEach(event => {
 			this.client.on(event, this[`on${capitalise(event)}`])
@@ -30,4 +28,4 @@ module.exports = class Listener{
 	}
 }
 
-const capitalise = (event) => `${event[0].toUpperCase()}${event.substr(1)}`
+const capitalise = event => `${event[0].toUpperCase()}${event.substr(1)}`

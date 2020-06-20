@@ -5,9 +5,8 @@ const redis = require('redis')
 const { Controller } = require('../structures')
 const { log } = require('../utils/utils')
 
-
 class RedisController extends Controller {
-	constructor (client){
+	constructor(client) {
 		super(client, {
 			name: 'redis'
 		})
@@ -28,7 +27,7 @@ class RedisController extends Controller {
 		this.redis.on('error', this.errorListener)
 	}
 
-	errorListener (err){
+	errorListener(err) {
 		const message = `Something went wrong when initialising Redis, ${err.message}, <@238009405176676352>`
 
 		log(this.client, message, 'error')
@@ -36,7 +35,7 @@ class RedisController extends Controller {
 		delete this.client.controllers.redis
 	}
 
-	readyListener (){
+	readyListener() {
 		log(this.client, 'Redis controller ready', 'info')
 		this.client.emit('queueExecute', 'Redis controller ready')
 
@@ -45,25 +44,25 @@ class RedisController extends Controller {
 		this.redis.removeListener('ready', this.readyListener)
 	}
 
-	set (key, value){
-		if(this.ready) this.redis.set(key, value, (err, ok) => {
-			if(err) log(this.client, err, 'error')
-		})
+	set(key, value) {
+		if (this.ready)
+			this.redis.set(key, value, (err, ok) => {
+				if (err) log(this.client, err, 'error')
+			})
 	}
 
-	get (key){
-		if(this.ready) {
+	get(key) {
+		if (this.ready) {
 			return this.getAsync(key)
-		}
-		else throw Error ('Redis not ready yet')
+		} else throw Error('Redis not ready yet')
 	}
 
-	incr (key){
-		if(this.ready && this.redis.exists(key)) this.redis.incr(key)
+	incr(key) {
+		if (this.ready && this.redis.exists(key)) this.redis.incr(key)
 	}
 
-	incrby (key, by){
-		if(this.ready && this.redis.exists(key)) this.redis.incrby(key, by)
+	incrby(key, by) {
+		if (this.ready && this.redis.exists(key)) this.redis.incrby(key, by)
 	}
 }
 

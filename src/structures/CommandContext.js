@@ -15,13 +15,13 @@ const { ERROR_CONTEXT_PARAMS_MALFORMED } = require('../config/events.json')
  * @prop {array} params Params the command's _run is expecting
  */
 
-class CommandContext{
+class CommandContext {
 	/**
 	 * @param {ValClient} client The current ValClient instance
- 	 * @param {GuildMessage} message Message object
+	 * @param {GuildMessage} message Message object
 	 */
-	constructor (client, message) {
-		if(client && message.author && message.member){
+	constructor(client, message) {
+		if (client && message.author && message.member) {
 			this.client = client
 			this.message = message
 			this.author = message.author
@@ -30,9 +30,7 @@ class CommandContext{
 			this.guild = message.guild
 			this.params = []
 			this.message.content = this.message.content.replace(/\s+/g, ' ')
-		}
-
-		else throw Error(ERROR_CONTEXT_PARAMS_MALFORMED)
+		} else throw Error(ERROR_CONTEXT_PARAMS_MALFORMED)
 	}
 }
 

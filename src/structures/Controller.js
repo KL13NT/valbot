@@ -1,5 +1,5 @@
 class Controller {
-	constructor (client, options){
+	constructor(client, options) {
 		this.client = client
 		this.options = options
 	}

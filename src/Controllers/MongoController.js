@@ -8,16 +8,13 @@ const { log } = require('../utils/utils')
  * @global
  */
 class MongoController extends Controller {
-	constructor (client){
+	constructor(client) {
 		super(client, {
 			name: 'mongo'
 		})
 		this.ready = false
 
-		this.mongo = new MongoClient(
-			process.env.DB_HOST,
-			{ useNewUrlParser: true }
-		)
+		this.mongo = new MongoClient(process.env.DB_HOST, { useNewUrlParser: true })
 
 		this.init = this.init.bind(this)
 		this.syncLevels = this.syncLevels.bind(this)
@@ -30,65 +27,62 @@ class MongoController extends Controller {
 		this.init()
 	}
 
-	async init (){
-		try{
+	async init() {
+		try {
 			await this.mongo.connect()
 			this.db = this.mongo.db(process.env.DB_NAME)
 
-			if(typeof this.db !== 'undefined'){
+			if (typeof this.db !== 'undefined') {
 				this.ready = true
 
 				this.client.emit('queueExecute', 'Mongo controller ready')
 			}
-		}
-		catch(err){
+		} catch (err) {
 			const message = `Something went wrong when initialising Mongo, ${err.message}, <@238009405176676352>`
 
 			log(this.client, message, 'error')
 		}
 	}
 
-	async syncLevels (id, { exp, text, voice, level, textXP, voiceXP }){
-		if(this.ready){
-			await this.db
-				.collection('levels')
-				.updateOne(
-					{ id },
-					{
-						$set: { exp, text, voice, level, textXP, voiceXP }
-					}, {
-						upsert: true
-					})
-		}
-		else this.client.controllers.queue.enqueue(this.syncLevels, id, { exp, text, voice })
+	async syncLevels(id, { exp, text, voice, level, textXP, voiceXP }) {
+		if (this.ready) {
+			await this.db.collection('levels').updateOne(
+				{ id },
+				{
+					$set: { exp, text, voice, level, textXP, voiceXP }
+				},
+				{
+					upsert: true
+				}
+			)
+		} else
+			this.client.controllers.queue.enqueue(this.syncLevels, id, {
+				exp,
+				text,
+				voice
+			})
 	}
 
-	async getLevel (id){
-		if(this.ready){
-			return this.db
-				.collection('levels')
-				.findOne({ id })
-		}
-	}
-
-	async getLevels (){
-		if(this.ready){
-			return this.db
-				.collection('levels')
-				.find({})
+	async getLevel(id) {
+		if (this.ready) {
+			return this.db.collection('levels').findOne({ id })
 		}
 	}
 
-	async getMilestones (){
-		if(this.ready){
-			return this.db
-				.collection('milestones')
-				.find({})
+	async getLevels() {
+		if (this.ready) {
+			return this.db.collection('levels').find({})
 		}
 	}
 
-	async getResponses (){
-		if(this.ready){
+	async getMilestones() {
+		if (this.ready) {
+			return this.db.collection('milestones').find({})
+		}
+	}
+
+	async getResponses() {
+		if (this.ready) {
 			return this.db.collection('responses').find({})
 		}
 	}
@@ -97,20 +91,27 @@ class MongoController extends Controller {
 	 * Stores new responses, teaches bot
 	 * @param {*} param0 reponse
 	 */
-	async saveResponse ({ invoker, reply }){
-		if(this.ready){
-			return this.db.collection('responses').updateOne({
-				invoker
-			}, {
-				$set: {
-					invoker,
-					reply
+	async saveResponse({ invoker, reply }) {
+		if (this.ready) {
+			return this.db.collection('responses').updateOne(
+				{
+					invoker
+				},
+				{
+					$set: {
+						invoker,
+						reply
+					}
+				},
+				{
+					upsert: true
 				}
-			}, {
-				upsert: true
+			)
+		} else
+			this.client.controllers.queue.enqueue(this.saveResponse, {
+				invoker,
+				reply
 			})
-		}
-		else this.client.controllers.queue.enqueue(this.saveResponse, { invoker, reply } )
 	}
 }
 

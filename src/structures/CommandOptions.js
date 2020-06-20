@@ -10,13 +10,12 @@
  * @method {boolean} verifySchema
  */
 
-
 class CommandOptions {
 	/**
 	 *
 	 * @param {object} options
 	 */
-	constructor (options){
+	constructor(options) {
 		Object.assign(this, options)
 	}
 
@@ -24,18 +23,16 @@ class CommandOptions {
 	 * Verifies the passed options object matches schema
 	 * @returns boolean
 	 */
-	verifySchema (){
+	verifySchema() {
 		const schema = require('../config/command-options-schema.json')
 
-		for(const key in this){
-			if(key === 'extraParams' || key === 'optionalParams') continue
-			else if(typeof this[key] !== schema[key]) return false
+		for (const key in this) {
+			if (key === 'extraParams' || key === 'optionalParams') continue
+			else if (typeof this[key] !== schema[key]) return false
 		}
 
 		return true
 	}
-
 }
-
 
 module.exports = CommandOptions

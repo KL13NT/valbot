@@ -2,7 +2,7 @@ const { Controller } = require('../structures')
 const { log } = require('../utils/utils')
 
 class ReactionRolesController extends Controller {
-	constructor (client){
+	constructor(client) {
 		super(client, {
 			name: 'reactionroles'
 		})
@@ -14,10 +14,12 @@ class ReactionRolesController extends Controller {
 		this.init()
 	}
 
-	async init (){
-		try{
-			if(this.client.controllers.mongo.ready){
-				const responses = await this.client.controllers.mongo.db.collection('reactionroles').find({})
+	async init() {
+		try {
+			if (this.client.controllers.mongo.ready) {
+				const responses = await this.client.controllers.mongo.db
+					.collection('reactionroles')
+					.find({})
 
 				responses.forEach(({ invoker, reply }) => {
 					this.responses[invoker] = {
@@ -25,12 +27,10 @@ class ReactionRolesController extends Controller {
 						reply
 					}
 				})
-			}
-			else {
+			} else {
 				this.client.controllers.queue.enqueue(this.init)
 			}
-		}
-		catch(err){
+		} catch (err) {
 			log(this.client, err, 'error')
 		}
 	}

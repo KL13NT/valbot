@@ -48,10 +48,11 @@ class Teach extends Command {
 			channel
 				.awaitMessages(collectorFilter, collectorOptions)
 				.then(messages => {
-					this.client.controllers.conversation.teach({
-						invoker,
-						reply: messages.first().content
-					})
+					this.client.controllers.conversation
+						.teach({
+							invoker,
+							reply: messages.first().content
+						})
 						.then(res => {
 							message.reply(
 								`تمام, هبقى ارد على "${invoker}" بـ "${

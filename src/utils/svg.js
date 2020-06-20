@@ -3,7 +3,7 @@ const path = require('path')
 const nodeHtmlToImage = require('node-html-to-image')
 const fetch = require('node-fetch')
 
-async function generateRankCard (userInfo, levelInfo) {
+async function generateRankCard(userInfo, levelInfo) {
 	const { avatar_url, displayName, USER_ID } = userInfo
 	const { exp, levelEXP, level, text, voice } = levelInfo
 
@@ -15,7 +15,6 @@ async function generateRankCard (userInfo, levelInfo) {
 	const avatarRes = await fetch(avatar_url)
 	const buffer = await avatarRes.buffer()
 	const avatar = imagetoURI(buffer)
-
 
 	const content = {
 		CANVAS_BACKGROUND: background,
@@ -46,12 +45,12 @@ async function generateRankCard (userInfo, levelInfo) {
 				</html>`,
 		content,
 		puppeteerArgs: {
-			args: [ '--no-sandbox', '--disable-setuid-sandbox' ]
+			args: ['--no-sandbox', '--disable-setuid-sandbox']
 		}
 	})
 }
 
-function imagetoURI (loc) {
+function imagetoURI(loc) {
 	const image =
 		typeof loc === 'string'
 			? fs.readFileSync(path.resolve(__dirname, loc))

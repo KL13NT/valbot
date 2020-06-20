@@ -161,11 +161,7 @@ function createEmbed({ fields, attachments, ...embedOptions }) {
 
 	if (fields)
 		fields.forEach(field =>
-			embed.addField(
-				field.name,
-				field.value,
-				field.inline
-			)
+			embed.addField(field.name, field.value, field.inline)
 		)
 
 	if (attachments)
