@@ -1,8 +1,6 @@
 const {
 	getAlertStatus,
 	getMessage,
-	log,
-	notify,
 	calculateUniqueWords
 } = require('../../src/utils/general')
 

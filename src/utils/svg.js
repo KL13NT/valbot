@@ -3,20 +3,55 @@ const path = require('path')
 const nodeHtmlToImage = require('node-html-to-image')
 const fetch = require('node-fetch')
 
-async function generateRankCard(userInfo, levelInfo) {
+const FRAME = path.resolve(__dirname, '../media/Frame 1.svg')
+const BACKGROUND = '../media/bg.jpg'
+const MIC = '../media/mic.png'
+const AVATAR = '../media/botlogo.png'
+
+/**
+ *
+ * @param {File} image
+ * @returns {string} base64
+ */
+const imagetoURI = image => {
+	const base64Image = new Buffer.from(image).toString('base64')
+	const dataURI = 'data:image/jpeg;base64,' + base64Image
+
+	return dataURI
+}
+
+/**
+ *
+ * @param {string} url
+ * @returns {Buffer} image object
+ */
+const getImageFromURL = async url => {
+	return imagetoURI(
+		process.env.MODE !== 'PRODUCTION'
+			? new Buffer.from(fs.readFileSync(path.resolve(__dirname, url)))
+			: await (await fetch(url)).buffer()
+	)
+}
+
+/**
+ *
+ * @param {object} param0
+ * @param {object} param0.levelInfo from redis & mongo
+ * @param {object} param0.userInfo id, displayName, avatar_url
+ * @returns {object} content object for puppeteer
+ */
+const getContentObject = async ({ userInfo, levelInfo }) => {
 	const { avatar_url, displayName, USER_ID } = userInfo
 	const { exp, levelEXP, level, text, voice } = levelInfo
 
-	const background = imagetoURI('../media/bg.jpg')
-	const mic = imagetoURI('../media/mic.png')
-	const framePath = path.resolve(__dirname, '../media/Frame 1.svg')
-	const template = fs.readFileSync(framePath, 'utf-8')
+	const background = await getImageFromURL(BACKGROUND)
+	const mic = await getImageFromURL(MIC)
 
-	const avatarRes = await fetch(avatar_url)
-	const buffer = await avatarRes.buffer()
-	const avatar = imagetoURI(buffer)
+	const avatar = await getImageFromURL(
+		process.env.MODE !== 'PRODUCTION' ? AVATAR : avatar_url
+	)
 
-	const content = {
+	return {
 		CANVAS_BACKGROUND: background,
 		USER_AVATAR: avatar, //User.avatarURL()
 		ICON_MIC: mic,
@@ -28,6 +63,16 @@ async function generateRankCard(userInfo, levelInfo) {
 		VOICE_LEVEL: voice,
 		TEXT_LEVEL: text
 	}
+}
+
+/**
+ * Returns card image after rendering it in puppeteer
+ * @param {object} userInfo
+ * @param {object} levelInfo
+ */
+async function generateRankCard(userInfo, levelInfo) {
+	const template = fs.readFileSync(FRAME, 'utf-8')
+	const content = await getContentObject({ userInfo, levelInfo })
 
 	return nodeHtmlToImage({
 		html: `<html>
@@ -49,30 +94,6 @@ async function generateRankCard(userInfo, levelInfo) {
 		}
 	})
 }
-
-function imagetoURI(loc) {
-	const image =
-		typeof loc === 'string'
-			? fs.readFileSync(path.resolve(__dirname, loc))
-			: loc
-	const base64Image = new Buffer.from(image).toString('base64')
-	const dataURI = 'data:image/jpeg;base64,' + base64Image
-
-	return dataURI
-}
-
-// generateRankCard(
-// 	{
-// 		avatar_url: 'https://cdn.discordapp.com/avatars/403853007243968512/91603ecac4c86a22029146111e921ece.png?size=1024',
-// 		displayName: 'Sovereign',
-// 		displayID: '4984',
-// 		exp: {
-// 			voice: 20,
-// 			text: 9,
-// 			expToNextLevel: 95
-// 		}
-// 	}
-// )
 
 module.exports = {
 	generateRankCard
