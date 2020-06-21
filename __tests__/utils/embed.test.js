@@ -5,7 +5,7 @@ const {
 	createClearEmbed,
 	createLevelupEmbed,
 	createUserModerationEmbed
-} = require('../src/utils/EmbedUtils')
+} = require('../../src/utils/embed')
 
 describe('Embed specific utils tests', () => {
 	const member = '12897361929875'

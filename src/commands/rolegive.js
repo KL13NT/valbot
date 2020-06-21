@@ -1,12 +1,8 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const { log, notify } = require('../utils/utils')
-const {
-	getRoleObject,
-	getMemberObject
-} = require('../utils/DiscordObjectUtils')
-const { createRoleEmbed } = require('../utils/EmbedUtils')
-
+const { log, notify } = require('../utils/general')
+const { getRoleObject, getMemberObject } = require('../utils/object')
+const { createRoleEmbed } = require('../utils/embed')
 class RoleGive extends Command {
 	/**
 	 * Constructs help command

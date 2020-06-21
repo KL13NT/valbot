@@ -1,11 +1,11 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 class MilestoneRemove extends Command {
 	/**
 	 * Constructs help command
-	 * @param {ValClient} client
+	 * @param {V../utilsnt
 	 */
 	constructor(client) {
 		const options = new CommandOptions({

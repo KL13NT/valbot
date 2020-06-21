@@ -1,5 +1,5 @@
 const { Controller } = require('../structures')
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 class ConversationController extends Controller {
 	constructor(client) {

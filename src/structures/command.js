@@ -12,10 +12,10 @@ const {
 	ERROR_INSUFFICIENT_PARAMS_PASSED
 } = require('../config/events.json')
 
-const { log } = require('../utils/utils')
-const { createEventMessage } = require('../utils/EventUtils')
-const { getRoleObject } = require('../utils/DiscordObjectUtils')
-const { createEmbed } = require('../utils/EmbedUtils')
+const { log } = require('../utils/general')
+const { createEventMessage } = require('../utils/event')
+const { getRoleObject } = require('../utils/object')
+const { createEmbed } = require('../utils/embed')
 
 class Command {
 	/**

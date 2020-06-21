@@ -1,5 +1,5 @@
 const { Listener } = require('../structures')
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 class QueueExecuteListener extends Listener {
 	constructor(client) {

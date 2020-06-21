@@ -1,7 +1,7 @@
 const { Loader } = require('../structures')
 const Controllers = require('../Controllers')
 
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 /**
  * Loads Controllers based on Controllers/index

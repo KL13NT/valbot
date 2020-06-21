@@ -1,8 +1,8 @@
 const toxicity = require('@tensorflow-models/toxicity')
 
 const { Controller } = require('../structures')
-const { warn, mute, isWarned } = require('../utils/ModerationUtils')
-const { log } = require('../utils/utils')
+const { warn, mute, isWarned } = require('../utils/moderation')
+const { log } = require('../utils/general')
 
 class ToxicityController extends Controller {
 	constructor(client) {

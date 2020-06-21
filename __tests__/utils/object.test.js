@@ -2,7 +2,7 @@ const {
 	getMemberObject,
 	getChannelObject,
 	getRoleObject
-} = require('../src/utils/DiscordObjectUtils')
+} = require('../../src/utils/object')
 
 const {
 	availableChannel,
@@ -11,7 +11,7 @@ const {
 	client,
 	role,
 	devChannel
-} = require('../__mocks__/objects')
+} = require('../../__mocks__/objects')
 
 describe('getChannelObject test suites in development', () => {
 	beforeAll(() => {

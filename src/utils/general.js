@@ -1,4 +1,21 @@
-const { getChannelObject } = require('./DiscordObjectUtils')
+const { getChannelObject } = require('./object')
+
+const getAlertStatus = alertLevel => {
+	if (alertLevel === 'info') return ':grey_question:'
+	if (alertLevel === 'warn') return ':warning:'
+	if (alertLevel === 'error') return ':x:'
+	else throw Error('Alert level not recognised')
+}
+
+const getMessage = (message, alertLevel) => {
+	const statusEmoji = getAlertStatus(alertLevel)
+	const notification = `${statusEmoji} ${message}`
+
+	if (alertLevel === 'error' || alertLevel === 'warn')
+		return `${notification} <@${process.env.ROLE_DEVELOPER}>`
+	else if (alertLevel === 'info' || !alertLevel) return notification
+	else throw Error('Alert level not recognised')
+}
 
 /**
  *
@@ -19,21 +36,6 @@ async function log(client, notification, alertLevel) {
 	const message = getMessage(String(notification), alertLevel) // @see
 
 	channel.send(message)
-}
-
-function getAlertStatus(alertLevel) {
-	if (alertLevel === 'info') return ':grey_question:'
-	if (alertLevel === 'warn') return ':warning:'
-	if (alertLevel === 'error') return ':x:'
-}
-
-function getMessage(message, alertLevel) {
-	const statusEmoji = getAlertStatus(alertLevel)
-	const notification = `[${statusEmoji}] ${message}`
-
-	if (alertLevel === 'error' || alertLevel === 'warn')
-		return `${notification} <@&639855023970451457>`
-	else return notification
 }
 
 /**
@@ -71,6 +73,8 @@ function calculateUniqueWords(messageContent) {
 }
 
 module.exports = {
+	getAlertStatus,
+	getMessage,
 	log,
 	notify,
 	calculateUniqueWords

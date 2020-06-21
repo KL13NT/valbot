@@ -3,7 +3,7 @@ const { promisify } = require('util')
 const redis = require('redis')
 
 const { Controller } = require('../structures')
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 class RedisController extends Controller {
 	constructor(client) {

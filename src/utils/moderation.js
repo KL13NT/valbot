@@ -1,7 +1,6 @@
 const Discord = require('discord.js')
-const { log, notify } = require('./utils')
-const { getMemberObject } = require('./DiscordObjectUtils')
-const { createUserModerationEmbed } = require('./EmbedUtils')
+const { log, getMemberObject, notify } = require('./general')
+const { createModerationEmbed } = require('./embed')
 
 /**
  * @typedef ModerationOptions
@@ -23,7 +22,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createUserModerationEmbed({
+		const embed = createModerationEmbed({
 			title: 'Muted Member',
 			member,
 			moderator,
@@ -59,7 +58,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createUserModerationEmbed({
+		const embed = createModerationEmbed({
 			title: 'Banned Member',
 			member,
 			moderator,
@@ -86,7 +85,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createUserModerationEmbed({
+		const embed = createModerationEmbed({
 			title: 'Warned Member',
 			member,
 			moderator,
@@ -94,8 +93,12 @@ module.exports = class ModerationUtils {
 			reason
 		})
 
-		await targetMember.roles.add(ROLE_WARNED)
-		notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+		try {
+			await targetMember.roles.add(ROLE_WARNED)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+		} catch (err) {
+			log(client, err, 'error')
+		}
 	}
 
 	/**
@@ -109,7 +112,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createUserModerationEmbed({
+		const embed = createModerationEmbed({
 			title: 'Forgave Member',
 			member,
 			moderator,
@@ -136,7 +139,7 @@ module.exports = class ModerationUtils {
 
 		const targetMember = getMemberObject(client, member)
 
-		const embed = createUserModerationEmbed({
+		const embed = createModerationEmbed({
 			title: 'Unmuted Member',
 			member,
 			moderator,

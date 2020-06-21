@@ -3,13 +3,6 @@ const { CLIENT_ID } = process.env
 const Discord = require('discord.js')
 
 const { Controller } = require('../structures')
-const {
-	log,
-	calculateUniqueWords,
-	notify,
-	getMemberObject,
-	getRoleObject
-} = require('../utils/utils')
 
 class SpamController extends Controller {
 	constructor(client) {

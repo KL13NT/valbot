@@ -1,5 +1,5 @@
 const { Listener } = require('../structures')
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 class ClientReadyListener extends Listener {
 	constructor(client) {

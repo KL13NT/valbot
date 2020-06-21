@@ -1,5 +1,5 @@
 const { Command, CommandOptions } = require(`../structures`)
-const { mute, unmute, isMuted } = require('../utils/ModerationUtils')
+const { mute, unmute, isMuted } = require('../utils/moderation')
 
 class Mute extends Command {
 	constructor(client) {

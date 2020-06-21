@@ -1,6 +1,6 @@
 const { Command, CommandOptions } = require(`../structures`)
-const { warn, isWarned } = require('../utils/ModerationUtils')
-const { log } = require('../utils/utils')
+const { warn, isWarned } = require('../utils/moderation')
+const { log } = require('../utils/general')
 
 class Warn extends Command {
 	constructor(client) {

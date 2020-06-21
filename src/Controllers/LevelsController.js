@@ -3,11 +3,8 @@ const { CLIENT_ID } = process.env
 const Discord = require('discord.js')
 
 const { Controller } = require('../structures')
-const { log, calculateUniqueWords, notify } = require('../utils/utils')
-const {
-	getRoleObject,
-	getMemberObject
-} = require('../utils/DiscordObjectUtils')
+const { log, calculateUniqueWords, notify } = require('../utils/general')
+const { getRoleObject, getMemberObject } = require('../utils/object')
 
 class LevelsController extends Controller {
 	constructor(client) {

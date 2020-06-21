@@ -1,7 +1,7 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
 
-const { createEmbed } = require('../utils/EmbedUtils')
+const { createEmbed } = require('../utils/embed')
 
 class Help extends Command {
 	/**

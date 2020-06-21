@@ -1,7 +1,7 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
 
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 class Debug extends Command {
 	/**

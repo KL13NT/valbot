@@ -2,12 +2,9 @@ const Discord = require('discord.js')
 
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const { log, notify } = require('../utils/utils')
+const { log, notify } = require('../utils/general')
 
-const {
-	getChannelObject,
-	getRoleObject
-} = require('../utils/DiscordObjectUtils')
+const { getChannelObject, getRoleObject } = require('../utils/object')
 
 class Announce extends Command {
 	/**

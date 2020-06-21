@@ -1,7 +1,7 @@
 const { Command } = require('../structures')
 const { CommandOptions } = require('../structures')
-const { log, notify } = require('../utils/utils')
-const { createClearEmbed } = require('../utils/EmbedUtils')
+const { log, notify } = require('../utils/general')
+const { createClearEmbed } = require('../utils/embed')
 
 class Clear extends Command {
 	/**

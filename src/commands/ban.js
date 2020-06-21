@@ -1,5 +1,5 @@
 const { Command, CommandOptions } = require(`../structures`)
-const { ban } = require('../utils/ModerationUtils')
+const { ban } = require('../utils/moderation')
 
 class Ban extends Command {
 	constructor(client) {

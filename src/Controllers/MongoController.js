@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb')
 const { DATABASE_INIT_FAILED } = require('../config/events.json')
 
 const { Controller } = require('../structures')
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 /**
  * @global

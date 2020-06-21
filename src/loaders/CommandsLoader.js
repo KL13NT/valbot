@@ -1,7 +1,7 @@
 const { Loader } = require('../structures')
 const Commands = require('../commands')
 
-const { log } = require('../utils/utils')
+const { log } = require('../utils/general')
 
 /**
  * Loads commands based on commands/index

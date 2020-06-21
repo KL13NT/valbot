@@ -5,7 +5,7 @@ const path = require('path')
 const Loaders = require('./loaders')
 const Listeners = require('./listeners')
 
-const { log } = require('./utils/utils')
+const { log } = require('./utils/general')
 
 /**
  * @param { ClientOptions	} options DiscordClientOptions
