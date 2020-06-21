@@ -30,7 +30,8 @@ class Warn extends Command {
 		const id = mention.match(mentionRegex)[1]
 		const reason = reasonWords.join(' ')
 
-		if (isWarned(id)) return message.reply('الميمبر ده متحذر قبل كده')
+		if (isWarned(this.client, id))
+			return message.reply('الميمبر ده متحذر قبل كده')
 
 		warn(this.client, {
 			member: id,
