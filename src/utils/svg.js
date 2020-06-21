@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const nodeHtmlToImage = require('node-html-to-image')
-const fetch = require('node-fetch')
 
 const FRAME = path.resolve(__dirname, '../media/Frame 1.svg')
 const BACKGROUND = '../media/bg.jpg'
@@ -10,10 +9,10 @@ const AVATAR = '../media/botlogo.png'
 
 /**
  *
- * @param {File} image
+ * @param {Buffer} image
  * @returns {string} base64
  */
-const imagetoURI = image => {
+const imageToURI = image => {
 	const base64Image = new Buffer.from(image).toString('base64')
 	const dataURI = 'data:image/jpeg;base64,' + base64Image
 
@@ -21,16 +20,23 @@ const imagetoURI = image => {
 }
 
 /**
- *
+ * Gets local images
  * @param {string} url
  * @returns {Buffer} image object
  */
-const getImageFromURL = async url => {
-	return imagetoURI(
-		process.env.MODE !== 'PRODUCTION'
-			? new Buffer.from(fs.readFileSync(path.resolve(__dirname, url)))
-			: await (await fetch(url)).buffer()
-	)
+const getLocalImageFromURL = url => {
+	const file = fs.readFileSync(path.resolve(__dirname, url))
+	return new Buffer.from(file)
+}
+
+/**
+ * Gets remote images
+ * @param {string} url
+ * @returns {Buffer} image object
+ */
+const getRemoteImageFromURL = async url => {
+	const resolved = await global.fetch(url)
+	return await resolved.buffer()
 }
 
 /**
@@ -41,21 +47,24 @@ const getImageFromURL = async url => {
  * @returns {object} content object for puppeteer
  */
 const getContentObject = async ({ userInfo, levelInfo }) => {
-	const { avatar_url, displayName, USER_ID } = userInfo
+	const { avatar_url, displayName } = userInfo
 	const { exp, levelEXP, level, text, voice } = levelInfo
 
-	const background = await getImageFromURL(BACKGROUND)
-	const mic = await getImageFromURL(MIC)
+	const bgBuffer = await getLocalImageFromURL(BACKGROUND)
+	const micBuffer = await getLocalImageFromURL(MIC)
+	const avatarBuffer =
+		process.env.MODE !== 'PRODUCTION'
+			? getLocalImageFromURL(AVATAR)
+			: await getRemoteImageFromURL(avatar_url)
 
-	const avatar = await getImageFromURL(
-		process.env.MODE !== 'PRODUCTION' ? AVATAR : avatar_url
-	)
+	const background = imageToURI(bgBuffer)
+	const mic = imageToURI(micBuffer)
+	const avatar = imageToURI(avatarBuffer)
 
 	return {
 		CANVAS_BACKGROUND: background,
 		USER_AVATAR: avatar, //User.avatarURL()
 		ICON_MIC: mic,
-		USER_ID,
 		CURRENT_LEVEL: level,
 		USER_NAME: displayName,
 		CURRENT_EXP: exp,
@@ -96,5 +105,9 @@ async function generateRankCard(userInfo, levelInfo) {
 }
 
 module.exports = {
+	imageToURI,
+	getLocalImageFromURL,
+	getRemoteImageFromURL,
+	getContentObject,
 	generateRankCard
 }
