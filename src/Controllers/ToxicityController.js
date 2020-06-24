@@ -1,14 +1,14 @@
-const toxicity = require('@tensorflow-models/toxicity')
+const toxicity = require('@tensorflow-models/toxicity');
 
-const { Controller } = require('../structures')
-const { warn, mute, isWarned } = require('../utils/moderation')
-const { log } = require('../utils/general')
+const { Controller } = require('../structures');
+const { warn, mute, isWarned } = require('../utils/moderation');
+const { log } = require('../utils/general');
 
-class ToxicityController extends Controller {
+export default class ToxicityController extends Controller {
 	constructor(client) {
 		super(client, {
 			name: 'toxicity'
-		})
+		});
 
 		this.labels = [
 			'identity_attack',
@@ -18,63 +18,61 @@ class ToxicityController extends Controller {
 			'obscene',
 			'sexual_explicit',
 			'toxicity'
-		]
+		];
 
-		this.threshold = 0.7
-		this.ready = false
+		this.threshold = 0.7;
+		this.ready = false;
 
 		if (process.env.mode !== 'DEVELOPMENT')
 			toxicity.load(this.threshold, this.labels).then(model => {
-				this.classifier = model
-				this.ready = true
+				this.classifier = model;
+				this.ready = true;
 
-				log(client, 'ToxicityController loaded successfully', 'info')
-			})
+				log(client, 'ToxicityController loaded successfully', 'info');
+			});
 
-		this.classify = this.classify.bind(this)
-		this.handleToxic = this.handleToxic.bind(this)
+		this.classify = this.classify.bind(this);
+		this.handleToxic = this.handleToxic.bind(this);
 	}
 
 	async classify(message) {
-		if (!this.ready) return false
+		if (!this.ready) return false;
 
-		const { content: sentence } = message
-		const predictions = await this.classifier.classify([sentence])
+		const { content: sentence } = message;
+		const predictions = await this.classifier.classify([sentence]);
 
 		return predictions.reduce((prediction, curr) =>
 			curr.results[0].match === true && curr.results[0].probabilities[1] > 0.95
 				? true
 				: false
-		)
+		);
 	}
 
 	async handleToxic(message) {
-		const { CLIENT_ID } = process.env
-		const { author, channel } = message
-		const reason = 'Used toxic language'
+		const { CLIENT_ID } = process.env;
+		const { author, channel } = message;
+		const reason = 'Used toxic language';
 
 		if (isWarned(this.client, author.id)) {
-			await message.reply('دي تاني مرة تقل ادبك. ادي اخرتها. mute.')
+			await message.reply('دي تاني مرة تقل ادبك. ادي اخرتها. mute.');
 			await mute(this.client, {
 				member: author.id,
 				moderator: CLIENT_ID,
 				channel: channel.id,
 				reason
-			})
+			});
 
-			message.delete({ reason })
+			message.delete({ reason });
 		} else {
-			await message.reply('متبقوش توكسيك. ده تحذير, المره الجاية mute.')
+			await message.reply('متبقوش توكسيك. ده تحذير, المره الجاية mute.');
 			await warn(this.client, {
 				member: author.id,
 				moderator: CLIENT_ID,
 				channel: channel.id,
 				reason
-			})
+			});
 
-			message.delete({ reason })
+			message.delete({ reason });
 		}
 	}
 }
-
-module.exports = ToxicityController

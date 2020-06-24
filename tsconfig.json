@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"typeRoots": ["./node_modules/@types"],
+		"incremental": true,
+		"target": "es2018",
+		"module": "commonjs",
+		"lib": ["DOM"],
+		"checkJs": false,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "./",
+		"rootDir": "./",
+		"removeComments": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"skipLibCheck": true
+	},
+	"include": ["./src/**/*"],
+	"exclude": []
+}

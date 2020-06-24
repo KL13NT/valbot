@@ -26,7 +26,7 @@ module.exports = {
 				avoidEscape: true
 			}
 		],
-		semi: ['error', 'never'],
+		semi: ['error', 'always'],
 		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-unused-vars': [
 			'error',
@@ -77,4 +77,4 @@ module.exports = {
 		'block-spacing': [2, 'always'],
 		'no-unused-vars': 1
 	}
-}
+};

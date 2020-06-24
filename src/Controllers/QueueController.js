@@ -1,34 +1,32 @@
-const { Controller } = require('../structures')
+const { Controller } = require('../structures');
 
 /**
  * @global
  */
-class QueueController extends Controller {
+export default class QueueController extends Controller {
 	constructor(client) {
 		super(client, {
 			name: 'queue'
-		})
+		});
 
-		this.ready = false
-		this.calls = []
+		this.ready = false;
+		this.calls = [];
 
-		this.enqueue = this.enqueue.bind(this)
-		this.executeAll = this.executeAll.bind(this)
+		this.enqueue = this.enqueue.bind(this);
+		this.executeAll = this.executeAll.bind(this);
 	}
 
 	enqueue(func, ...args) {
 		this.calls.push({
 			func,
 			args
-		})
+		});
 	}
 
 	executeAll() {
 		for (let i = this.calls.length - 1; i >= 0; i--) {
-			this.calls[i].func.apply(this, this.calls[i].args)
-			this.calls.pop()
+			this.calls[i].func.apply(this, this.calls[i].args);
+			this.calls.pop();
 		}
 	}
 }
-
-module.exports = QueueController
