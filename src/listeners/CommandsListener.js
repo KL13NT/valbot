@@ -1,6 +1,4 @@
-const path = require('path')
-
-const { Listener, CommandContext } = require('../structures')
+const { Listener } = require('../structures')
 const {
 	GENERIC_COMMAND_NOT_UNDERSTOOD,
 	ERROR_COMMAND_DOES_NOT_EXIST

@@ -15,6 +15,11 @@
 	"ERROR_DATABASE_REACTIONROLESADD_FAILED": "Failed to add message to watched list",
 	"ERROR_DATABASE_GET_COLLECTION_FAILED": "Failed to get collection",
 	"ERROR_DATABASE_CREATE_COLLECTION_FAILED": "Failed to create collection",
+
+
+
+
+
 	"GENERIC_CONTROLLED_COMMAND_CANCEL": "لغيت الكوماند, جايين تبهدلوني ع الفاضي و الله",
 	"GENERIC_COMMAND_GRACEFUL_ERROR": "مش هينفع كده, في حاجة انت عملتها غلط, جرب تاني",
 	"NOTIFY_UNMUTED": "تقدر تتكلم دلوقتي. متعملهاش تاني بقى عشان مزعلش منك",

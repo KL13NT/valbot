@@ -40,7 +40,7 @@ class ValClient extends Client {
 
 			console.log(
 				fs
-					.readFileSync(path.resolve(__dirname, './text/bigtitle.txt'), 'utf8')
+					.readFileSync(path.resolve(__dirname, './media/bigtitle.txt'), 'utf8')
 					.toString()
 			)
 		} catch (err) {

@@ -1,4 +1,3 @@
-const { ERROR_CONTEXT_PARAMS_MALFORMED } = require('../config/events.json')
 /**
  * @typedef {object} AuthLevels
  * @property {number} 0 Developers
@@ -21,16 +20,14 @@ class CommandContext {
 	 * @param {GuildMessage} message Message object
 	 */
 	constructor(client, message) {
-		if (client && message.author && message.member) {
-			this.client = client
-			this.message = message
-			this.author = message.author
-			this.member = message.member
-			this.channel = message.channel
-			this.guild = message.guild
-			this.params = []
-			this.message.content = this.message.content.replace(/\s+/g, ' ')
-		} else throw Error(ERROR_CONTEXT_PARAMS_MALFORMED)
+		this.client = client
+		this.message = message
+		this.author = message.author
+		this.member = message.member
+		this.channel = message.channel
+		this.guild = message.guild
+		this.params = []
+		this.message.content = this.message.content.replace(/\s+/g, ' ')
 	}
 }
 
