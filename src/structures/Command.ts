@@ -16,14 +16,14 @@ import { log } from '../utils/general';
 import { createEventMessage } from '../utils/event';
 import { getRoleObject } from '../utils/object';
 import { createEmbed } from '../utils/embed';
-import { CommandOptions } from '../types/interfaces';
+import { CommandOptions, ICommand } from '../types/interfaces';
 import { Message, Role } from 'discord.js';
 
-export default abstract class Command {
+export default class Command implements ICommand {
 	private client: ValClient;
-	private options: CommandOptions;
 	private ready: boolean;
 	private cooldownTimer: NodeJS.Timeout;
+	public options: CommandOptions;
 
 	constructor(client: ValClient, options: CommandOptions) {
 		this.client = client;
@@ -144,7 +144,7 @@ export default abstract class Command {
 	 * Responsible for running commands.
 	 * @abstract
 	 */
-	abstract async _run(context: CommandContext): Promise<void>;
+	_run = (context: CommandContext): void => {};
 
 	/**
 	 * cancels an ongoing command
@@ -214,5 +214,3 @@ export default abstract class Command {
 		});
 	};
 }
-
-module.exports = Command;

@@ -9,8 +9,7 @@ export default abstract class Loader {
 
 	/**
 	 * Defines load behaviour for this listener
-	 * @async
 	 * @virtual
 	 */
-	abstract load(): Promise<void>;
+	abstract load(): void;
 }

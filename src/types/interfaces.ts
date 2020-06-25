@@ -1,7 +1,8 @@
 import { ActivityType } from 'discord.js';
+import ValClient from '../ValClient';
+import CommandContext from '../structures/CommandContext';
 
 export type ListenerHandler = () => void;
-export type LoaderLoad = () => Promise<void>;
 
 export interface AuthClientConfig {
 	[index: string]: string;
@@ -58,4 +59,8 @@ export interface CommandOptions {
 	extraParams: boolean;
 	optionalParams: number;
 	auth: CommandAuthOptions;
+}
+
+export interface ICommand {
+	_run(context: CommandContext): Promise<void> | void;
 }
