@@ -8,7 +8,7 @@ import loaders from './loaders';
 import listeners from './listeners';
 
 import { log } from './utils/general';
-import { ClientConfig } from './types/interfaces';
+import { ClientConfig, IController } from './types/interfaces';
 import { Presence } from './types/interfaces';
 import Controller from './structures/Controller';
 import Command from './structures/Command';
@@ -23,7 +23,7 @@ export default class ValClient extends Client {
 	ready: boolean;
 	config: ClientConfig;
 	commands: Map<string, Command>;
-	controllers: Map<string, Controller>;
+	controllers: Map<string, IController>;
 	ValGuild: Guild;
 
 	constructor(options: ClientOptions) {

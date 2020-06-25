@@ -1,7 +1,6 @@
 import Loader from '../structures/Loader';
 import * as Controllers from '../Controllers';
 import ValClient from '../ValClient';
-import Controller from '../structures/Controller';
 
 const { log } = require('../utils/general');
 

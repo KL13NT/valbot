@@ -1,26 +1,27 @@
-const { Controller } = require('../structures');
+import Controller from '../structures/Controller';
+import ValClient from '../ValClient';
+import MongoController from './MongoController';
+import { QueueController } from '.';
 const { log } = require('../utils/general');
 
 export default class ConversationController extends Controller {
-	constructor(client) {
+	private ready: boolean = false;
+	private responses: object = {};
+
+	constructor(client: ValClient) {
 		super(client, {
 			name: 'conversation'
 		});
-		this.ready = false;
-		this.responses = {};
-
-		this.init = this.init.bind(this);
-		this.converse = this.converse.bind(this);
-		this.teach = this.teach.bind(this);
-		this.getAllResponses = this.getAllResponses.bind(this);
 
 		this.init();
 	}
 
-	async init() {
+	init = async (): Promise<void> => {
 		try {
-			if (this.client.controllers.mongo.ready) {
-				const responses = await this.client.controllers.mongo.getResponses();
+			const mongo = <MongoController>this.client.controllers.get('mongo');
+			const queue = <QueueController>this.client.controllers.get('queue');
+			if (mongo.ready) {
+				const responses = await mongo.getResponses();
 
 				responses.forEach(({ invoker, reply }) => {
 					this.responses[invoker] = {
@@ -29,14 +30,14 @@ export default class ConversationController extends Controller {
 					};
 				});
 			} else {
-				this.client.controllers.queue.enqueue(this.init);
+				queue.enqueue(this.init);
 			}
 		} catch (err) {
 			const message = `Something went wrong when initialising ConversationController, ${err.message}`;
 
 			log(this.client, message, 'error');
 		}
-	}
+	};
 
 	async converse(message, isClientMentioned) {
 		const response = Object.values(this.responses).find(response =>

@@ -1,5 +1,10 @@
 import { ActivityType } from 'discord.js';
 import CommandContext from '../structures/CommandContext';
+import {
+	ConversationController,
+	IntervalsController,
+	QueueController
+} from '../Controllers';
 
 export type ListenerHandler = (...args: any[]) => void;
 
@@ -62,4 +67,14 @@ export interface CommandOptions {
 
 export interface ICommand {
 	_run(context: CommandContext): Promise<void> | void;
+}
+
+export type IController =
+	| ConversationController
+	| IntervalsController
+	| QueueController;
+
+export interface QueueCall {
+	func: Function;
+	args: any[];
 }
