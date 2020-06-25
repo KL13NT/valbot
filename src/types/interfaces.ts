@@ -1,4 +1,12 @@
-import { ActivityType, Snowflake } from 'discord.js';
+import {
+	ActivityType,
+	Snowflake,
+	Role,
+	EmbedField,
+	MessageAttachment,
+	FileOptions,
+	MessageEmbed
+} from 'discord.js';
 import CommandContext from '../structures/CommandContext';
 import {
 	ConversationController,
@@ -113,4 +121,34 @@ export interface IntervalOptions {
 	name: string;
 	time: number;
 	callback: Function;
+}
+
+export interface ModerationEmbedOptions {
+	title: string;
+	reason: string;
+	date?: Date;
+	member: Snowflake;
+	moderator: Snowflake;
+	channel: Snowflake;
+}
+
+export interface RoleEmbedOptions {
+	title: string;
+	date?: Date;
+	role: Snowflake;
+	member: Snowflake;
+	moderator: Snowflake;
+	channel: Snowflake;
+}
+
+export interface ClearEmbedOptions {
+	date?: Date;
+	moderator: Snowflake;
+	channel: Snowflake;
+	count: number;
+}
+
+export interface LevelupEmbedOptions {
+	milestone: Milestone;
+	role: Role;
 }
