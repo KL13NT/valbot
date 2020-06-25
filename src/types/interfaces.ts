@@ -1,22 +1,18 @@
 import { ActivityType } from 'discord.js';
-import {
-	MongoController,
-	RedisController,
-	ConversationController,
-	LevelsController,
-	IntervalsController,
-	QueueController,
-	ToxicityController
-} from '../Controllers';
 
-interface AuthClientConfig {
+export type ListenerHandler = () => void;
+export type LoaderLoad = () => Promise<void>;
+
+export interface AuthClientConfig {
+	[index: string]: string;
 	AUTH_ADMIN: string;
 	AUTH_MOD: string;
 	AUTH_VERIFIED: string;
 	AUTH_EVERYONE: string;
 }
 
-interface ChannelsClientConfig {
+export interface ChannelsClientConfig {
+	[index: string]: string;
 	CHANNEL_NOTIFICATIONS: string;
 	CHANNEL_RULES: string;
 	CHANNEL_POLLS: string;
@@ -25,7 +21,8 @@ interface ChannelsClientConfig {
 	CHANNEL_MOD_LOGS: string;
 }
 
-interface RolesClientConfig {
+export interface RolesClientConfig {
+	[index: string]: string;
 	ROLE_MUTED: string;
 	ROLE_WARNED: string;
 }
@@ -36,17 +33,29 @@ export interface ClientConfig {
 	ROLES: RolesClientConfig;
 }
 
-export type Presence = {
+export interface Presence {
 	message: string;
 	type: ActivityType;
-};
+}
 
-export type ClientControllers = {
-	queue: QueueController;
-	redis: RedisController;
-	mongo: MongoController;
-	levels: LevelsController;
-	conversation: ConversationController;
-	intervals: IntervalsController;
-	toxicity: ToxicityController;
-};
+export interface ControllerOptions {
+	name: string;
+}
+
+export interface CommandAuthOptions {
+	method: string;
+	required: string;
+	devOnly?: boolean;
+}
+
+export interface CommandOptions {
+	name: string;
+	category: string;
+	cooldown: number;
+	nOfParams: number;
+	description: string;
+	exampleUsage: string;
+	extraParams: boolean;
+	optionalParams: number;
+	auth: CommandAuthOptions;
+}

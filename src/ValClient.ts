@@ -8,20 +8,22 @@ import loaders from './loaders';
 import listeners from './listeners';
 
 import { log } from './utils/general';
-import { ClientConfig, ClientControllers } from './types/interfaces';
+import { ClientConfig } from './types/interfaces';
 import { Presence } from './types/interfaces';
+import Controller from './structures/Controller';
+import Command from './structures/Command';
 
 /**
  * @param { ClientOptions	} options DiscordClientOptions
  * @param { String } prefix The prefix used for all commands
  */
 
-export class ValClient extends Client {
+export default class ValClient extends Client {
 	readonly prefix: string;
 	ready: boolean;
-	commands: object;
-	controllers: ClientControllers;
 	config: ClientConfig;
+	commands: Map<string, Command>;
+	controllers: Map<string, Controller>;
 	ValGuild: Guild;
 
 	constructor(options: ClientOptions) {
@@ -29,7 +31,7 @@ export class ValClient extends Client {
 
 		this.ready = false;
 		this.prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
-		this.commands = {};
+		this.controllers = new Map<string, Controller>();
 	}
 
 	init = (token = AUTH_TOKEN) => {
@@ -62,9 +64,10 @@ export class ValClient extends Client {
 
 		log(this, `Current presence: ${presence.type} ${presence.message}`, 'info');
 
-		this.user
-			.setActivity(presence.message, { type: presence.type })
-			.catch(err => log(this, err.message, 'error'));
+		if (this.user)
+			this.user
+				.setActivity(presence.message, { type: presence.type })
+				.catch(err => log(this, err.message, 'error'));
 	};
 
 	/**

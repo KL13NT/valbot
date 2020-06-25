@@ -1,11 +1,11 @@
-const fs = require('fs')
-const path = require('path')
-const nodeHtmlToImage = require('node-html-to-image')
+const fs = require('fs');
+const path = require('path');
+const nodeHtmlToImage = require('node-html-to-image');
 
-const FRAME = path.resolve(__dirname, '../media/Frame 1.svg')
-const BACKGROUND = '../media/bg.jpg'
-const MIC = '../media/mic.png'
-const AVATAR = '../media/botlogo.png'
+const FRAME = path.resolve(__dirname, '../media/Frame 1.svg');
+const BACKGROUND = '../media/bg.jpg';
+const MIC = '../media/mic.png';
+const AVATAR = '../media/botlogo.png';
 
 /**
  *
@@ -13,11 +13,11 @@ const AVATAR = '../media/botlogo.png'
  * @returns {string} base64
  */
 const imageToURI = image => {
-	const base64Image = new Buffer.from(image).toString('base64')
-	const dataURI = 'data:image/jpeg;base64,' + base64Image
+	const base64Image = new Buffer.from(image).toString('base64');
+	const dataURI = 'data:image/jpeg;base64,' + base64Image;
 
-	return dataURI
-}
+	return dataURI;
+};
 
 /**
  * Gets local images
@@ -25,9 +25,9 @@ const imageToURI = image => {
  * @returns {Buffer} image object
  */
 const getLocalImageFromURL = url => {
-	const file = fs.readFileSync(path.resolve(__dirname, url))
-	return new Buffer.from(file)
-}
+	const file = fs.readFileSync(path.resolve(__dirname, url));
+	return new Buffer.from(file);
+};
 
 /**
  * Gets remote images
@@ -35,9 +35,9 @@ const getLocalImageFromURL = url => {
  * @returns {Buffer} image object
  */
 const getRemoteImageFromURL = async url => {
-	const resolved = await global.fetch(url)
-	return await resolved.buffer()
-}
+	const resolved = await global.fetch(url);
+	return await resolved.buffer();
+};
 
 /**
  *
@@ -47,19 +47,19 @@ const getRemoteImageFromURL = async url => {
  * @returns {object} content object for puppeteer
  */
 const getContentObject = async ({ userInfo, levelInfo }) => {
-	const { avatar_url, displayName } = userInfo
-	const { exp, levelEXP, level, text, voice } = levelInfo
+	const { avatar_url, displayName } = userInfo;
+	const { exp, levelEXP, level, text, voice } = levelInfo;
 
-	const bgBuffer = await getLocalImageFromURL(BACKGROUND)
-	const micBuffer = await getLocalImageFromURL(MIC)
+	const bgBuffer = await getLocalImageFromURL(BACKGROUND);
+	const micBuffer = await getLocalImageFromURL(MIC);
 	const avatarBuffer =
 		process.env.MODE !== 'PRODUCTION'
 			? getLocalImageFromURL(AVATAR)
-			: await getRemoteImageFromURL(avatar_url)
+			: await getRemoteImageFromURL(avatar_url);
 
-	const background = imageToURI(bgBuffer)
-	const mic = imageToURI(micBuffer)
-	const avatar = imageToURI(avatarBuffer)
+	const background = imageToURI(bgBuffer);
+	const mic = imageToURI(micBuffer);
+	const avatar = imageToURI(avatarBuffer);
 
 	return {
 		CANVAS_BACKGROUND: background,
@@ -71,8 +71,8 @@ const getContentObject = async ({ userInfo, levelInfo }) => {
 		LEVEL_EXP: levelEXP,
 		VOICE_LEVEL: voice,
 		TEXT_LEVEL: text
-	}
-}
+	};
+};
 
 /**
  * Returns card image after rendering it in puppeteer
@@ -80,8 +80,8 @@ const getContentObject = async ({ userInfo, levelInfo }) => {
  * @param {object} levelInfo
  */
 async function generateRankCard(userInfo, levelInfo) {
-	const template = fs.readFileSync(FRAME, 'utf-8')
-	const content = await getContentObject({ userInfo, levelInfo })
+	const template = fs.readFileSync(FRAME, 'utf-8');
+	const content = await getContentObject({ userInfo, levelInfo });
 
 	return nodeHtmlToImage({
 		html: `<html>
@@ -101,7 +101,7 @@ async function generateRankCard(userInfo, levelInfo) {
 		puppeteerArgs: {
 			args: ['--no-sandbox', '--disable-setuid-sandbox']
 		}
-	})
+	});
 }
 
 module.exports = {
@@ -110,4 +110,4 @@ module.exports = {
 	getRemoteImageFromURL,
 	getContentObject,
 	generateRankCard
-}
+};

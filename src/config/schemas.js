@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi')
+const Joi = require('@hapi/joi');
 
 const ReactionRoleSchema = Joi.object({
 	roleID: Joi.string().alphanum().min(3).max(30).required(),
@@ -18,4 +18,4 @@ const ReactionRoleSchema = Joi.object({
 })
 	.with('username', 'birth_year')
 	.xor('password', 'access_token')
-	.with('password', 'repeat_password')
+	.with('password', 'repeat_password');

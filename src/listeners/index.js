@@ -6,4 +6,4 @@ module.exports = {
 	// ReactionRolesListener: require('./ReactionRolesListener'),
 	CommandsListener: require('./CommandsListener'),
 	QueueExecuteListener: require('./QueueExecuteListener')
-}
+};

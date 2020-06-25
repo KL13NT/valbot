@@ -1,6 +1,6 @@
-const Discord = require('discord.js')
-const { log, getMemberObject, notify } = require('./general')
-const { createModerationEmbed } = require('./embed')
+const Discord = require('discord.js');
+const { log, getMemberObject, notify } = require('./general');
+const { createModerationEmbed } = require('./embed');
 
 /**
  * @typedef ModerationOptions
@@ -17,10 +17,10 @@ module.exports = class ModerationUtils {
 	 * @param {ModerationOptions} options
 	 */
 	static async mute(client, { member, moderator, channel, reason }) {
-		const { ROLE_MUTED } = client.config.ROLES
-		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS
+		const { ROLE_MUTED } = client.config.ROLES;
+		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
 
-		const targetMember = getMemberObject(client, member)
+		const targetMember = getMemberObject(client, member);
 
 		const embed = createModerationEmbed({
 			title: 'Muted Member',
@@ -28,10 +28,10 @@ module.exports = class ModerationUtils {
 			moderator,
 			channel,
 			reason
-		})
+		});
 
 		try {
-			await targetMember.roles.add(ROLE_MUTED)
+			await targetMember.roles.add(ROLE_MUTED);
 
 			setTimeout(() => {
 				ModerationUtils.unmute(client, {
@@ -39,12 +39,12 @@ module.exports = class ModerationUtils {
 					moderator,
 					channel,
 					reason: 'Mute time expired'
-				})
-			}, 5 * 60 * 1000)
+				});
+			}, 5 * 60 * 1000);
 
-			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS);
 		} catch (err) {
-			log(client, err, 'error')
+			log(client, err, 'error');
 		}
 	}
 
@@ -54,9 +54,9 @@ module.exports = class ModerationUtils {
 	 * @param {ModerationOptions} param1
 	 */
 	static async ban(client, { member, moderator, channel, reason }) {
-		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS
+		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
 
-		const targetMember = getMemberObject(client, member)
+		const targetMember = getMemberObject(client, member);
 
 		const embed = createModerationEmbed({
 			title: 'Banned Member',
@@ -64,13 +64,13 @@ module.exports = class ModerationUtils {
 			moderator,
 			channel,
 			reason
-		})
+		});
 
 		try {
-			await targetMember.ban({ reason })
-			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+			await targetMember.ban({ reason });
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS);
 		} catch (err) {
-			log(client, err, 'error')
+			log(client, err, 'error');
 		}
 	}
 
@@ -80,10 +80,10 @@ module.exports = class ModerationUtils {
 	 * @param {ModerationOptions} param1
 	 */
 	static async warn(client, { member, moderator, channel, reason }) {
-		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS
-		const { ROLE_WARNED } = client.config.ROLES
+		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
+		const { ROLE_WARNED } = client.config.ROLES;
 
-		const targetMember = getMemberObject(client, member)
+		const targetMember = getMemberObject(client, member);
 
 		const embed = createModerationEmbed({
 			title: 'Warned Member',
@@ -91,13 +91,13 @@ module.exports = class ModerationUtils {
 			moderator,
 			channel,
 			reason
-		})
+		});
 
 		try {
-			await targetMember.roles.add(ROLE_WARNED)
-			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+			await targetMember.roles.add(ROLE_WARNED);
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS);
 		} catch (err) {
-			log(client, err, 'error')
+			log(client, err, 'error');
 		}
 	}
 
@@ -107,10 +107,10 @@ module.exports = class ModerationUtils {
 	 * @param {ModerationOptions} param1
 	 */
 	static async unwarn(client, { member, moderator, channel, reason }) {
-		const { ROLE_WARNED } = client.config.ROLES
-		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS
+		const { ROLE_WARNED } = client.config.ROLES;
+		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
 
-		const targetMember = getMemberObject(client, member)
+		const targetMember = getMemberObject(client, member);
 
 		const embed = createModerationEmbed({
 			title: 'Forgave Member',
@@ -118,13 +118,13 @@ module.exports = class ModerationUtils {
 			moderator,
 			channel,
 			reason
-		})
+		});
 
 		try {
-			await targetMember.roles.remove(ROLE_WARNED)
-			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+			await targetMember.roles.remove(ROLE_WARNED);
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS);
 		} catch (err) {
-			log(client, err, 'error')
+			log(client, err, 'error');
 		}
 	}
 
@@ -134,10 +134,10 @@ module.exports = class ModerationUtils {
 	 * @param {ModerationOptions} param1
 	 */
 	static async unmute(client, { member, moderator, channel, reason }) {
-		const { ROLE_MUTED } = client.config.ROLES
-		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS
+		const { ROLE_MUTED } = client.config.ROLES;
+		const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
 
-		const targetMember = getMemberObject(client, member)
+		const targetMember = getMemberObject(client, member);
 
 		const embed = createModerationEmbed({
 			title: 'Unmuted Member',
@@ -145,13 +145,13 @@ module.exports = class ModerationUtils {
 			moderator,
 			channel,
 			reason
-		})
+		});
 
 		try {
-			await targetMember.roles.remove(ROLE_MUTED)
-			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS)
+			await targetMember.roles.remove(ROLE_MUTED);
+			notify(client, `<@${member}>`, embed, CHANNEL_MOD_LOGS);
 		} catch (err) {
-			log(client, err, 'error')
+			log(client, err, 'error');
 		}
 	}
 
@@ -161,10 +161,10 @@ module.exports = class ModerationUtils {
 	 * @param {Discord.Snowflake} member
 	 */
 	static isWarned(client, member) {
-		const { ROLE_WARNED } = client.config.ROLES
-		const targetMember = getMemberObject(client, member)
+		const { ROLE_WARNED } = client.config.ROLES;
+		const targetMember = getMemberObject(client, member);
 
-		return targetMember.roles.cache.find(role => role.id === ROLE_WARNED)
+		return targetMember.roles.cache.find(role => role.id === ROLE_WARNED);
 	}
 
 	/**
@@ -173,9 +173,9 @@ module.exports = class ModerationUtils {
 	 * @param {Discord.Snowflake} member
 	 */
 	static isMuted(client, member) {
-		const { ROLE_MUTED } = client.config.ROLES
-		const targetMember = getMemberObject(client, member)
+		const { ROLE_MUTED } = client.config.ROLES;
+		const targetMember = getMemberObject(client, member);
 
-		return targetMember.roles.cache.find(role => role.id === ROLE_MUTED)
+		return targetMember.roles.cache.find(role => role.id === ROLE_MUTED);
 	}
-}
+};

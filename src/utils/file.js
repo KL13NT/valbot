@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 
 /**
  * By default all methods require a __dirname as the last argument to resolve a path. This is to abstract away the use of `path.resolve`. You can also set a default through the constructor. All operations are sync by default & may throw fs errors when they occur. Handle these exceptions yourself. Uses utf-8
@@ -20,9 +20,9 @@ class FileUtils {
 	 */
 	static dirExists(dirPath, dirname) {
 		return fs.stat(this.FSResolve(dirname, dirPath), (err, stat) => {
-			if (stat) return true
-			return false
-		})
+			if (stat) return true;
+			return false;
+		});
 	}
 
 	/**
@@ -33,7 +33,7 @@ class FileUtils {
 	 */
 
 	static fileExists(filePath, dirname) {
-		return this.FSExists(this.FSResolve(dirname, filePath))
+		return this.FSExists(this.FSResolve(dirname, filePath));
 	}
 
 	/**
@@ -42,7 +42,7 @@ class FileUtils {
 	 * @param {string} [dirname] Node's __dirname, can be assigned through the constructor
 	 */
 	static createDir(dirPath, dirname) {
-		fs.mkdirSync(this.FSResolve(dirname, dirPath))
+		fs.mkdirSync(this.FSResolve(dirname, dirPath));
 	}
 
 	/**
@@ -55,8 +55,8 @@ class FileUtils {
 
 	static create(filePath, content = '', dirname) {
 		if (this.fileExists(dirname, filePath))
-			throw Error('File already exists, maybe use append instead?')
-		else this.FSReplace(path.resolve(dirname, filePath), content, 'utf-8')
+			throw Error('File already exists, maybe use append instead?');
+		else this.FSReplace(path.resolve(dirname, filePath), content, 'utf-8');
 	}
 
 	/**
@@ -69,8 +69,8 @@ class FileUtils {
 
 	static replace(filePath, content, dirname) {
 		if (this.fileExists(filePath, dirname))
-			this.FSReplace(path.resolve(dirname, filePath), content, 'utf-8')
-		else this.create(filePath, content, dirname)
+			this.FSReplace(path.resolve(dirname, filePath), content, 'utf-8');
+		else this.create(filePath, content, dirname);
 	}
 
 	/**
@@ -81,8 +81,8 @@ class FileUtils {
 	 */
 	static append(filePath, content, dirname) {
 		if (this.fileExists(filePath, dirname))
-			this.FSAppend(path.resolve(dirname, filePath), content, 'utf-8')
-		else throw Error('File does not exist, maybe use create instead?')
+			this.FSAppend(path.resolve(dirname, filePath), content, 'utf-8');
+		else throw Error('File does not exist, maybe use create instead?');
 	}
 
 	/**
@@ -92,7 +92,7 @@ class FileUtils {
 	 * @returns contents of file
 	 */
 	static read(filePath, dirname) {
-		return this.FSRead(path.resolve(dirname, filePath), 'utf-8')
+		return this.FSRead(path.resolve(dirname, filePath), 'utf-8');
 	}
 
 	/**
@@ -102,8 +102,8 @@ class FileUtils {
 	 * @returns an array of file names in the current folder or `false` in case of error
 	 */
 	static readDir(folderPath, dirname) {
-		return [...this.FSReadDir(path.resolve(dirname, folderPath))]
+		return [...this.FSReadDir(path.resolve(dirname, folderPath))];
 	}
 }
 
-module.exports = FileUtils
+module.exports = FileUtils;

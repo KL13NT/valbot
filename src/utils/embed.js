@@ -1,4 +1,4 @@
-const { MessageEmbed, Snowflake } = require('discord.js')
+const { MessageEmbed, Snowflake } = require('discord.js');
 
 /**
  * @typedef ModerationEmbedOptions
@@ -41,11 +41,11 @@ function createUserModerationEmbed({
 	reason,
 	date
 }) {
-	if (!title) throw Error('A title is required')
-	if (!member) throw Error('A member ID is required')
-	if (!moderator) throw Error('A moderator ID is required')
-	if (!channel) throw Error('A channel ID is required')
-	if (!reason) throw Error('A reason is required')
+	if (!title) throw Error('A title is required');
+	if (!member) throw Error('A member ID is required');
+	if (!moderator) throw Error('A moderator ID is required');
+	if (!channel) throw Error('A channel ID is required');
+	if (!reason) throw Error('A reason is required');
 
 	return createEmbed({
 		title: title,
@@ -65,7 +65,7 @@ function createUserModerationEmbed({
 				inline: true
 			}
 		]
-	})
+	});
 }
 
 /**
@@ -74,11 +74,11 @@ function createUserModerationEmbed({
  * @returns {MessageEmbed} embed
  */
 function createRoleEmbed({ title, member, moderator, channel, role, date }) {
-	if (!title) throw Error('A title is required')
-	if (!member) throw Error('A member ID is required')
-	if (!moderator) throw Error('A moderator ID is required')
-	if (!channel) throw Error('A channel ID is required')
-	if (!role) throw Error('A role ID is required')
+	if (!title) throw Error('A title is required');
+	if (!member) throw Error('A member ID is required');
+	if (!moderator) throw Error('A moderator ID is required');
+	if (!channel) throw Error('A channel ID is required');
+	if (!role) throw Error('A role ID is required');
 
 	return createEmbed({
 		title: title,
@@ -98,7 +98,7 @@ function createRoleEmbed({ title, member, moderator, channel, role, date }) {
 				inline: true
 			}
 		]
-	})
+	});
 }
 
 /**
@@ -108,8 +108,8 @@ function createRoleEmbed({ title, member, moderator, channel, role, date }) {
  * @param {Discord.Role} param0.role
  */
 function createLevelupEmbed({ milestone, role }) {
-	if (!milestone) throw Error('A milestone is required')
-	if (!role) throw Error('A role is required')
+	if (!milestone) throw Error('A milestone is required');
+	if (!role) throw Error('A role is required');
 
 	return createEmbed({
 		title: `Achievement Unlocked - ${milestone.name}`,
@@ -120,7 +120,7 @@ function createLevelupEmbed({ milestone, role }) {
 			{ name: 'Achievement name', value: milestone.name },
 			{ name: 'Achievement description', value: milestone.description }
 		]
-	})
+	});
 }
 
 /**
@@ -128,9 +128,9 @@ function createLevelupEmbed({ milestone, role }) {
  * @param {ClearEmbedOptions} param0
  */
 function createClearEmbed({ moderator, channel, count, date }) {
-	if (!moderator) throw Error('A moderator ID is required')
-	if (!channel) throw Error('A channel ID is required')
-	if (!count) throw Error('A count is required')
+	if (!moderator) throw Error('A moderator ID is required');
+	if (!channel) throw Error('A channel ID is required');
+	if (!count) throw Error('A count is required');
 
 	return createEmbed({
 		title: 'Message Purge',
@@ -148,7 +148,7 @@ function createClearEmbed({ moderator, channel, count, date }) {
 				inline: true
 			}
 		]
-	})
+	});
 }
 
 /**
@@ -157,17 +157,17 @@ function createClearEmbed({ moderator, channel, count, date }) {
  * @returns {MessageEmbed} embed
  */
 function createEmbed({ fields, attachments, ...embedOptions }) {
-	const embed = new MessageEmbed(embedOptions).setColor('#ffcc5c')
+	const embed = new MessageEmbed(embedOptions).setColor('#ffcc5c');
 
 	if (fields)
 		fields.forEach(field =>
 			embed.addField(field.name, field.value, field.inline)
-		)
+		);
 
 	if (attachments)
-		attachments.forEach(attachment => embed.attachFile(attachment.path))
+		attachments.forEach(attachment => embed.attachFile(attachment.path));
 
-	return embed
+	return embed;
 }
 
 module.exports = {
@@ -176,4 +176,4 @@ module.exports = {
 	createClearEmbed,
 	createLevelupEmbed,
 	createUserModerationEmbed
-}
+};

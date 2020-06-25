@@ -1,7 +1,7 @@
-const { Loader } = require('../structures')
-const Controllers = require('../Controllers')
+const { Loader } = require('../structures');
+const Controllers = require('../Controllers');
 
-const { log } = require('../utils/general')
+const { log } = require('../utils/general');
 
 /**
  * Loads Controllers based on Controllers/index
@@ -12,19 +12,19 @@ class ControllersLoader extends Loader {
 	 * @param {ValClient} client used to attach loaded Controllers
 	 */
 	constructor(client) {
-		super(client)
+		super(client);
 	}
 
 	load() {
 		Controllers.forEach(controller => {
-			const controllerInstance = new controller(this.client)
+			const controllerInstance = new controller(this.client);
 			this.client.controllers[
 				controllerInstance.options.name
-			] = controllerInstance
+			] = controllerInstance;
 
-			log(this.client, `${controller.name} loaded`, 'info')
-		})
+			log(this.client, `${controller.name} loaded`, 'info');
+		});
 	}
 }
 
-module.exports = ControllersLoader
+module.exports = ControllersLoader;

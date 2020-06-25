@@ -1,4 +1,4 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 /**
  * @typedef EventVariable
  * @property {string} name
@@ -17,10 +17,10 @@ const Discord = require('discord.js')
  */
 function createEventMessage({ template, variables }) {
 	return variables.reduce((result, variable) => {
-		return result.replace(new RegExp(`{{${variable.name}}}`), variable.value)
-	}, template)
+		return result.replace(new RegExp(`{{${variable.name}}}`), variable.value);
+	}, template);
 }
 
 module.exports = {
 	createEventMessage
-}
+};
