@@ -1,4 +1,4 @@
-import { ActivityType, Snowflake, Role } from 'discord.js';
+import { ActivityType, Snowflake, Role, MessageEmbed } from 'discord.js';
 import CommandContext from '../structures/CommandContext';
 import {
 	ConversationController,
@@ -9,6 +9,7 @@ import {
 	RedisController,
 	ToxicityController
 } from '../Controllers';
+import ValClient from '../ValClient';
 
 export type ListenerHandler = (...args: any[]) => void;
 
@@ -22,6 +23,8 @@ export type IController =
 	| IntervalsController
 	| RedisController
 	| ToxicityController;
+
+export type AlertLevel = 'info' | 'warn' | 'error';
 
 export interface AuthClientConfig {
 	[index: string]: string;
@@ -155,4 +158,17 @@ export interface EventVariable {
 export interface EventOptions {
 	variables: EventVariable[];
 	template: Template;
+}
+
+export interface NotificationOptions {
+	client: ValClient;
+	notification: string;
+	embed: MessageEmbed;
+	channel?: Snowflake;
+}
+
+export interface LogOptions {
+	client: ValClient;
+	notification: string | Error;
+	alertLevel: AlertLevel;
 }
