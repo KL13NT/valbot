@@ -1,14 +1,17 @@
-const { Listener } = require('../structures');
+import Listener from '../structures/Listener';
+import ValClient from '../ValClient';
+import { GuildMember } from 'discord.js';
+
 const { log } = require('../utils/general');
 
-class NewGuildMemberListener extends Listener {
-	constructor(client) {
-		super(client, ['guildMemberAdd']);
+export default class NewGuildMemberListener extends Listener {
+	constructor(client: ValClient) {
+		super(client);
 
-		this.onGuildMemberAdd = this.onGuildMemberAdd.bind(this);
+		this.events.set('guildMemberAdd', this.onGuildMemberAdd);
 	}
 
-	async onGuildMemberAdd(member) {
+	onGuildMemberAdd = async (member: GuildMember): Promise<void> => {
 		try {
 			const dm = await member.createDM();
 			dm.send(`
@@ -25,7 +28,5 @@ class NewGuildMemberListener extends Listener {
 				'error'
 			);
 		}
-	}
+	};
 }
-
-module.exports = NewGuildMemberListener;
