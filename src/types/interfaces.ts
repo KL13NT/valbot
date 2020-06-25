@@ -94,15 +94,14 @@ export interface Level {
 	level: number;
 	textXP: number;
 	voiceXP: number;
+	id: Snowflake;
 }
 
 export interface Milestone {
 	level: number;
-	milestone: {
-		name: string;
-		description: string;
-		roleID: Snowflake;
-	};
+	name: string;
+	description: string;
+	roleID: Snowflake;
 }
 
 export interface Response {

@@ -1,83 +1,91 @@
 const { CLIENT_ID } = process.env;
 
-const Discord = require('discord.js');
+import Controller from '../structures/Controller';
+import ValClient from '../ValClient';
+import { Snowflake, Message, GuildMember, Role } from 'discord.js';
+import { Milestone, Level } from '../types/interfaces';
+import {
+	QueueController,
+	RedisController,
+	MongoController,
+	IntervalsController
+} from '.';
 
-const { Controller } = require('../structures');
 const { log, calculateUniqueWords, notify } = require('../utils/general');
 const { getRoleObject, getMemberObject } = require('../utils/object');
+const { createLevelupEmbed } = require('../utils/embed');
 
 export default class LevelsController extends Controller {
-	constructor(client) {
+	ready: boolean = false;
+	activeVoice: Snowflake[] = [];
+	milestones: Map<number, Milestone[]> = new Map<number, Milestone[]>();
+
+	constructor(client: ValClient) {
 		super(client, {
 			name: 'levels'
 		});
 
-		this.message = this.message.bind(this);
-		this.voiceIncrement = this.voiceIncrement.bind(this);
-		this.levelUpMessage = this.levelUpMessage.bind(this);
-		this.levelUp = this.levelUp.bind(this);
-		this.trackUser = this.trackUser.bind(this);
-		this.untrackUser = this.untrackUser.bind(this);
-		this.initUser = this.initUser.bind(this);
-		this.addMilestone = this.addMilestone.bind(this);
-		this.removeMilestone = this.removeMilestone.bind(this);
-		this.enforceMilestone = this.enforceMilestone.bind(this);
-
-		this.init = this.init.bind(this);
-		this.activeVoice = [];
-		this.milestones = {};
-
 		this.init();
 	}
 
-	async init() {
-		const { redis, mongo, intervals, queue } = this.client.controllers;
+	init = () => {
+		const { controllers, ValGuild } = this.client;
+		const redis = <RedisController>controllers.get('redis');
+		const mongo = <MongoController>controllers.get('mongo');
+		const intervals = <IntervalsController>controllers.get('intervals');
+		const queue = <QueueController>controllers.get('queue');
+
 		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
-		if (mongo.ready && redis.ready && this.client.ValGuild.available) {
-			const voiceStates = Array.from(
-				this.client.ValGuild.voiceStates.cache.values()
-			);
+		if (!mongo.ready || !redis.ready || !ValGuild.available)
+			return queue.enqueue(this.init);
 
-			voiceStates.forEach(({ deaf, mute, member, channel }) => {
-				if (
-					channel.id !== '571721579214667786' &&
-					!member.user.bot &&
-					!deaf &&
-					!mute
-				) {
-					this.activeVoice.push(member.id);
-				}
+		const voiceStates = Array.from(
+			this.client.ValGuild.voiceStates.cache.values()
+		);
+
+		voiceStates.forEach(({ deaf, mute, member, channel }) => {
+			if (
+				//TODO: move this to config
+				channel.id === '571721579214667786' ||
+				member.user.bot ||
+				deaf ||
+				mute
+			)
+				return;
+
+			this.activeVoice.push(member.id);
+		});
+
+		mongo.getLevels().then(async levels => {
+			levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
+				// (value || 1) to handle old mongo documents that didn't have some props
+				redis.set(`TEXT:${id}`, Number(text) || 1);
+				redis.set(`TEXT:XP:${id}`, Number(textXP) || 1);
+				redis.set(`VOICE:${id}`, Number(voice) || 1);
+				redis.set(`VOICE:XP:${id}`, Number(voiceXP) || 1);
+				redis.set(`LEVEL:${id}`, Number(level) || 1);
 			});
 
-			mongo.getLevels().then(async levels => {
-				levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
-					redis.set(`TEXT:${id}`, Number(text) || 1);
-					redis.set(`TEXT:XP:${id}`, Number(textXP) || 1);
-					redis.set(`VOICE:${id}`, Number(voice) || 1);
-					redis.set(`VOICE:XP:${id}`, Number(voiceXP) || 1);
-					redis.set(`LEVEL:${id}`, Number(level) || 1);
-				});
-
-				intervals.setInterval({
-					time: 1000 * 60,
-					name: 'voiceIncrement',
-					callback: this.voiceIncrement
-				});
+			intervals.setInterval({
+				time: 1000 * 60,
+				name: 'voiceIncrement',
+				callback: this.voiceIncrement
 			});
+		});
 
-			mongo.getMilestones().then(found => {
-				found.forEach(level => {
-					this.milestones[level.level] = level.milestones;
-				});
+		mongo.getMilestones().then(milestones => {
+			milestones.forEach(milestone => {
+				if (!this.milestones.has(milestone.level))
+					this.milestones.set(milestone.level, []);
+
+				this.milestones.get(milestone.level).push(milestone);
 			});
-		} else queue.enqueue(this.init);
-	}
-	/**
-	 *
-	 * @param {Message} message
-	 */
-	async message(message) {
-		const { redis } = this.client.controllers;
+		});
+	};
+
+	message = async (message: Message) => {
+		const redis = <RedisController>this.client.controllers.get('redis');
+
 		const { author, content } = message;
 		const { id, bot } = author;
 
@@ -117,50 +125,10 @@ export default class LevelsController extends Controller {
 		} catch (err) {
 			log(this.client, err, 'error');
 		}
-		// message.reply('Hello')
+	};
 
-		/**
-		 * The way this algorithm will work
-		 * It'll take a message and extract needed data from it
-		 * It'll then check currently available ValClient.levels for the user
-		 * 	If user is found it'll increment
-		 * 		If user is at a point where they should level up
-		 * 			Reply to their message and increase their level
-		 *  If user is not found
-		 * 		A DB query creates a new document and loads it locally
-		 *
-		 * All of this needs a listener for messages
-		 * This will utilise MessageListener with an added condition
-		 * and will apply needed logic
-		 */
-
-		/**
-		 * The way the voice algorithm will work
-		 * Users join and leave voice channels
-		 * On user join event
-		 * 	Add user to currently active users (lcoal)
-		 * 	If user is found it'll increment
-		 * 		If user is at a point where they should level up
-		 * 			Reply to their message and increase their level
-		 *  If user is not found
-		 * 		A DB query creates a new document and loads it locally
-		 *
-		 * All of this needs a listener for voice
-		 * A new VoiceListener will be created that will report
-		 * whenever a user joins or leaves voice chat
-		 */
-
-		/**
-		 * Implementation notes
-		 * The database doesn't need to know about actual activity
-		 * And should only be used to store
-		 * Perhaps a key-value (redis?) store should be used for local operations
-		 * And then flushed to the mongo instance
-		 */
-	}
-
-	async voiceIncrement() {
-		const { redis } = this.client.controllers;
+	voiceIncrement = async () => {
+		const redis = <RedisController>this.client.controllers.get('redis');
 
 		this.activeVoice.forEach(async id => {
 			try {
@@ -198,10 +166,10 @@ export default class LevelsController extends Controller {
 				log(this.client, err, 'error');
 			}
 		});
-	}
+	};
 
-	async initUser(id) {
-		const { redis } = this.client.controllers;
+	initUser = async (id: Snowflake) => {
+		const redis = <RedisController>this.client.controllers.get('redis');
 
 		redis.set(`EXP:${id}`, 1);
 		redis.set(`LEVEL:${id}`, 1);
@@ -211,27 +179,27 @@ export default class LevelsController extends Controller {
 		redis.set(`VOICE:${id}`, 1);
 
 		this.levelUp(id);
-	}
+	};
 
-	trackUser(id) {
+	trackUser(id: Snowflake) {
 		const index = this.activeVoice.indexOf(id);
 
 		if (index === -1) this.activeVoice.push(id);
 	}
 
-	untrackUser(id) {
+	untrackUser(id: Snowflake) {
 		const index = this.activeVoice.indexOf(id);
 
 		if (index !== -1) this.activeVoice.splice(index, 1);
 	}
 
-	async levelUp(messageOrId) {
-		const { redis, mongo } = this.client.controllers;
+	levelUp = async (messageOrId: Message | Snowflake) => {
+		const { controllers } = this.client;
+		const redis = <RedisController>controllers.get('redis');
+		const mongo = <MongoController>controllers.get('mongo');
 
 		const id =
-			typeof messageOrId === 'string'
-				? messageOrId
-				: messageOrId.member.user.id;
+			typeof messageOrId === 'string' ? messageOrId : messageOrId.member.id;
 
 		const exp = Number(await redis.get(`EXP:${id}`));
 		const level = Number(await redis.get(`LEVEL:${id}`));
@@ -243,6 +211,7 @@ export default class LevelsController extends Controller {
 		const text = Number(await redis.get(`TEXT:${id}`));
 
 		mongo.syncLevels(id, {
+			id,
 			exp,
 			text,
 			voice,
@@ -253,21 +222,19 @@ export default class LevelsController extends Controller {
 
 		this.enforceMilestone(level, id);
 		this.levelUpMessage(id, level);
-	}
+	};
 
-	async enforceMilestone(userLevel, id) {
-		const level = this.milestones[userLevel];
+	async enforceMilestone(userLevel: number, id: Snowflake) {
+		if (this.milestones.has(userLevel)) {
+			const milestones = this.milestones.get(userLevel);
+			const member: GuildMember = getMemberObject(this.client, id);
 
-		if (level) {
-			const member = getMemberObject(this.client, id);
-
-			level.forEach(async milestone => {
+			milestones.forEach(async milestone => {
 				try {
-					const role = getRoleObject(this.client, milestone.roleID);
+					const role: Role = getRoleObject(this.client, milestone.roleID);
+					const embed = createLevelupEmbed({ milestone, role });
 
-					const embed = new Discord.MessageEmbed();
-
-					member.roles.add(milestone.roleID);
+					member.roles.add(role.id);
 					notify(this.client, `<@${id}>`, embed);
 				} catch (err) {
 					log(this.client, err, 'error');
@@ -276,18 +243,25 @@ export default class LevelsController extends Controller {
 		}
 	}
 
-	async levelUpMessage(id, level) {
+	async levelUpMessage(id: Snowflake, level: number) {
 		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
 
 		notify(this.client, notification);
 	}
 
-	addMilestone(level, name, description, roleID) {
-		const milestone = this.milestones[level];
+	addMilestone(
+		level: number,
+		name: string,
+		description: string,
+		roleID: Snowflake
+	) {
+		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const milestone = this.milestones.get(level);
 		const newMilestone = {
 			name,
 			roleID,
-			description
+			description,
+			level
 		};
 
 		if (milestone) {
@@ -297,10 +271,10 @@ export default class LevelsController extends Controller {
 				milestone.push(newMilestone);
 			}
 		} else {
-			this.milestones[level] = [newMilestone];
+			this.milestones.set(level, [newMilestone]);
 		}
 
-		this.client.controllers.mongo.db.collection('milestones').updateOne(
+		mongo.db.collection('milestones').updateOne(
 			{
 				level
 			},
@@ -313,25 +287,24 @@ export default class LevelsController extends Controller {
 		);
 	}
 
-	getMilestone(level) {
-		return this.milestones[level];
+	getMilestone(level: number) {
+		return this.milestones.get(level);
 	}
 
-	async removeMilestone(level, name) {
-		const milestone = this.milestones[level];
+	async removeMilestone(level: number, name: string) {
+		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const milestone = this.milestones.get(level);
 
 		if (milestone) {
 			const ach = milestone.findIndex(ach => ach.name === name);
 
-			delete this.milestones[level][ach];
+			delete this.milestones.get(level)[ach];
 
-			if (Object.keys(this.milestones[level]).length === 0) {
-				delete this.milestones[level];
-				this.client.controllers.mongo.db
-					.collection('milestones')
-					.deleteOne({ level });
+			if (Object.keys(milestone).length === 0) {
+				this.milestones.delete(level);
+				mongo.db.collection('milestones').deleteOne({ level });
 			} else
-				this.client.controllers.mongo.db.collection('milestones').updateOne(
+				mongo.db.collection('milestones').updateOne(
 					{
 						level
 					},
