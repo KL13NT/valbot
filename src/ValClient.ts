@@ -1,17 +1,21 @@
 const { AUTH_TOKEN, MODE } = process.env;
 
-import { Client, ClientOptions, Guild, ActivityType } from 'discord.js';
+import { Client, ClientOptions, Guild } from 'discord.js';
 
 import * as fs from 'fs';
 import * as path from 'path';
-import loaders from './loaders';
-import listeners from './listeners';
+import * as loaders from './loaders';
+import * as listeners from './listeners';
 
 import { log } from './utils/general';
 import { ClientConfig, IController } from './types/interfaces';
 import { Presence } from './types/interfaces';
-import Controller from './structures/Controller';
 import Command from './structures/Command';
+import {
+	MongoController,
+	RedisController,
+	QueueController
+} from './Controllers';
 
 /**
  * @param { ClientOptions	} options DiscordClientOptions
@@ -76,9 +80,9 @@ export default class ValClient extends Client {
 	initLoaders = () => {
 		log(this, 'Loaders loading', 'info');
 
-		for (const loader in loaders) {
-			new loaders[loader](this).load();
-		}
+		Object.values(loaders).forEach(loader => {
+			new loader(this).load();
+		});
 
 		log(this, 'All loaders loaded successfully', 'info');
 	};
@@ -89,17 +93,21 @@ export default class ValClient extends Client {
 	initListeners = () => {
 		log(this, 'Listeners loading', 'info');
 
-		for (const listener in listeners) {
-			new listeners[listener](this).init();
-		}
+		Object.values(listeners).forEach(listener => {
+			new listener(this).init();
+		});
 
 		log(this, 'All listeners loaded successfully', 'info');
 	};
 
 	initConfig = async () => {
 		try {
-			if (this.controllers.mongo.ready && this.controllers.redis.ready) {
-				const response: ClientConfig = await this.controllers.mongo.db
+			const mongo = <MongoController>this.controllers.get('mongo');
+			const redis = <RedisController>this.controllers.get('redis');
+			const queue = <QueueController>this.controllers.get('queue');
+
+			if (mongo.ready && redis.ready) {
+				const response: ClientConfig = await mongo.db
 					.collection('config')
 					.findOne({
 						GUILD_ID: process.env.GUILD_ID
@@ -115,7 +123,7 @@ export default class ValClient extends Client {
 				this.ready = true;
 				this.config = response;
 			} else {
-				this.controllers.queue.enqueue(this.initConfig);
+				queue.enqueue({ func: this.initConfig, args: [] });
 			}
 		} catch (err) {
 			const message = `Something went wrong when initialising ConfigController, ${err.message}`;

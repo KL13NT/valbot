@@ -5,6 +5,6 @@ export default class QueueController extends Controller {
     ready: boolean;
     calls: QueueCall[];
     constructor(client: ValClient);
-    enqueue: (func: Function, ...args: any[]) => void;
+    enqueue: (call: QueueCall) => void;
     executeAll: () => void;
 }

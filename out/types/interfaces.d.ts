@@ -59,7 +59,7 @@ export interface ICommand {
     _run(context: CommandContext): Promise<void> | void;
 }
 export interface QueueCall {
-    func: Function;
+    func: (...args: any[]) => any;
     args: any[];
 }
 export interface Level {
@@ -84,7 +84,7 @@ export interface Response {
 export interface IntervalOptions {
     name: string;
     time: number;
-    callback: Function;
+    callback: () => void;
 }
 export interface ModerationEmbedOptions {
     title: string;
@@ -123,11 +123,39 @@ export interface EventOptions {
 export interface NotificationOptions {
     client: ValClient;
     notification: string;
-    embed: MessageEmbed;
+    embed?: MessageEmbed;
     channel?: Snowflake;
 }
 export interface LogOptions {
     client: ValClient;
     notification: string | Error;
     alertLevel: AlertLevel;
+}
+export interface UserModerationOptions {
+    member: Snowflake;
+    moderator: Snowflake;
+    channel: Snowflake;
+    reason: string;
+}
+export interface UserInfo {
+    avatar_url: string;
+    displayName: string;
+}
+export interface SVGContentLevelInfo extends Level {
+    levelEXP: number;
+}
+export interface SVGContentOptions {
+    levelInfo: SVGContentLevelInfo;
+    userInfo: UserInfo;
+}
+export interface SVGContent {
+    CANVAS_BACKGROUND: string;
+    USER_AVATAR: string;
+    ICON_MIC: string;
+    USER_NAME: string;
+    CURRENT_LEVEL: number;
+    CURRENT_EXP: number;
+    LEVEL_EXP: number;
+    VOICE_LEVEL: number;
+    TEXT_LEVEL: number;
 }

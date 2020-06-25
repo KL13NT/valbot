@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const { CLIENT_ID } = process.env;
 const toxicity_1 = __importDefault(require("@tensorflow-models/toxicity"));
 const Controller_1 = __importDefault(require("../structures/Controller"));
-const { warn, mute, isWarned } = require('../utils/moderation');
-const { log } = require('../utils/general');
+const moderation_1 = require("../utils/moderation");
+const general_1 = require("../utils/general");
 class ToxicityController extends Controller_1.default {
     constructor(client) {
         super(client, {
@@ -25,14 +25,14 @@ class ToxicityController extends Controller_1.default {
             return predictions.reduce((result, curr) => curr.results[0].match === true &&
                 curr.results[0].probabilities[1] > this.confidence
                 ? true
-                : false, false);
+                : result, false);
         };
         this.handleToxic = async (message) => {
             const { author, channel } = message;
             const reason = 'Used toxic language';
-            if (isWarned(this.client, author.id)) {
+            if (moderation_1.isWarned(this.client, author.id)) {
                 await message.reply('دي تاني مرة تقل ادبك. ادي اخرتها. mute.');
-                await mute(this.client, {
+                await moderation_1.mute(this.client, {
                     member: author.id,
                     moderator: CLIENT_ID,
                     channel: channel.id,
@@ -42,7 +42,7 @@ class ToxicityController extends Controller_1.default {
             }
             else {
                 await message.reply('متبقوش توكسيك. ده تحذير, المره الجاية mute.');
-                await warn(this.client, {
+                await moderation_1.warn(this.client, {
                     member: author.id,
                     moderator: CLIENT_ID,
                     channel: channel.id,
@@ -64,7 +64,7 @@ class ToxicityController extends Controller_1.default {
             toxicity_1.default.load(this.threshold, this.labels).then(model => {
                 this.classifier = model;
                 this.ready = true;
-                log(client, 'ToxicityController loaded successfully', 'info');
+                general_1.log(client, 'ToxicityController loaded successfully', 'info');
             });
     }
 }

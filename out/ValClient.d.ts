@@ -13,5 +13,5 @@ export default class ValClient extends Client {
     setPresence: () => void;
     initLoaders: () => void;
     initListeners: () => void;
-    initConfig: () => Promise<any>;
+    initConfig: () => Promise<void>;
 }

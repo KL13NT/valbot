@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Listener_1 = __importDefault(require("../structures/Listener"));
-const { log } = require('../utils/general');
+const general_1 = require("../utils/general");
 class NewGuildMemberListener extends Listener_1.default {
     constructor(client) {
         super(client);
@@ -20,7 +20,7 @@ class NewGuildMemberListener extends Listener_1.default {
 			`);
             }
             catch (err) {
-                log(this.client, 'Something went wrong while greeting the new member, could yall do it for me?', 'error');
+                general_1.log(this.client, 'Something went wrong while greeting the new member, could yall do it for me?', 'error');
             }
         };
         this.events.set('guildMemberAdd', this.onGuildMemberAdd);

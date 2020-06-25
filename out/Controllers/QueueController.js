@@ -9,15 +9,12 @@ class QueueController extends Controller_1.default {
         super(client, {
             name: 'queue'
         });
-        this.enqueue = (func, ...args) => {
-            this.calls.push({
-                func,
-                args
-            });
+        this.enqueue = (call) => {
+            this.calls.push(call);
         };
         this.executeAll = () => {
             for (let i = this.calls.length - 1; i >= 0; i--) {
-                this.calls[i].func.apply(this, this.calls[i].args);
+                this.calls[i].func.call(this, ...this.calls[i].args);
                 this.calls.pop();
             }
         };

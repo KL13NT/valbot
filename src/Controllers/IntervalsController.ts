@@ -4,7 +4,7 @@ import { IntervalOptions } from '../types/interfaces';
 
 export default class IntervalsController extends Controller {
 	ready = false;
-	intervals: Map<string, number>;
+	intervals: Map<string, NodeJS.Timeout>;
 
 	constructor(client: ValClient) {
 		super(client, {
@@ -12,7 +12,7 @@ export default class IntervalsController extends Controller {
 		});
 
 		this.ready = true;
-		this.intervals = new Map<string, number>();
+		this.intervals = new Map<string, NodeJS.Timeout>();
 	}
 
 	setInterval(intervalOptions: IntervalOptions) {

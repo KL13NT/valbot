@@ -28,7 +28,7 @@ export function log(
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
 	if (MODE !== 'PRODUCTION') return;
-	if (!client.ready) return queue.enqueue(log, ...arguments);
+	if (!client.ready) return queue.enqueue({ func: log, args: [...arguments] });
 
 	const { CHANNEL_BOT_STATUS } = client.config.CHANNELS;
 
@@ -45,7 +45,8 @@ export function notify(options: NotificationOptions) {
 	const { client, notification, embed, channel } = options;
 	const queue = <QueueController>client.controllers.get('queue');
 
-	if (!client.ready) return queue.enqueue(notify, ...arguments);
+	if (!client.ready)
+		return queue.enqueue({ func: notify, args: [...arguments] });
 
 	const { CHANNEL_NOTIFICATIONS } = client.config.CHANNELS;
 

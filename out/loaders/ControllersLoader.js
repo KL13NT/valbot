@@ -12,7 +12,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Loader_1 = __importDefault(require("../structures/Loader"));
 const Controllers = __importStar(require("../Controllers"));
-const { log } = require('../utils/general');
+const general_1 = require("../utils/general");
 class ControllersLoader extends Loader_1.default {
     constructor(client) {
         super(client);
@@ -20,7 +20,7 @@ class ControllersLoader extends Loader_1.default {
             Object.values(Controllers).forEach(controller => {
                 const controllerInstance = new controller(this.client);
                 this.client.controllers.set(controllerInstance.options.name, controllerInstance);
-                log(this.client, `${controller.options.name} loaded`, 'info');
+                general_1.log(this.client, `${controllerInstance.options.name} loaded`, 'info');
             });
         };
     }

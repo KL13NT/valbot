@@ -3,7 +3,7 @@ import Controller from '../structures/Controller';
 import { Response } from '../types/interfaces';
 import { Message } from 'discord.js';
 export default class ConversationController extends Controller {
-    private ready;
+    ready: boolean;
     private responses;
     constructor(client: ValClient);
     init: () => Promise<void>;

@@ -1,6 +1,7 @@
 import Listener from '../structures/Listener';
 import ValClient from '../ValClient';
-import { Message, VoiceState } from 'discord.js';
+import { VoiceState } from 'discord.js';
+import { LevelsController } from '../Controllers';
 
 export default class VoiceListener extends Listener {
 	constructor(client: ValClient) {
@@ -14,7 +15,7 @@ export default class VoiceListener extends Listener {
 
 		if (member.user.bot) return;
 
-		const levels = this.client.controllers.get('levels');
+		const levels = <LevelsController>this.client.controllers.get('levels');
 
 		if (this.shouldTrack(newState)) levels.trackUser(id);
 		else levels.untrackUser(id);

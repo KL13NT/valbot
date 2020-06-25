@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const { CLIENT_ID } = process.env;
 const Controller_1 = __importDefault(require("../structures/Controller"));
-const { log, calculateUniqueWords, notify } = require('../utils/general');
-const { getRoleObject, getMemberObject } = require('../utils/object');
-const { createLevelupEmbed } = require('../utils/embed');
+const general_1 = require("../utils/general");
+const object_1 = require("../utils/object");
+const embed_1 = require("../utils/embed");
 class LevelsController extends Controller_1.default {
     constructor(client) {
         super(client, {
@@ -23,7 +23,7 @@ class LevelsController extends Controller_1.default {
             const intervals = controllers.get('intervals');
             const queue = controllers.get('queue');
             if (!mongo.ready || !redis.ready || !ValGuild.available)
-                return queue.enqueue(this.init);
+                return queue.enqueue({ func: this.init, args: [] });
             const voiceStates = Array.from(this.client.ValGuild.voiceStates.cache.values());
             voiceStates.forEach(({ deaf, mute, member, channel }) => {
                 if (channel.id === '571721579214667786' ||
@@ -66,7 +66,7 @@ class LevelsController extends Controller_1.default {
                 const text = Number(await redis.get(`TEXT:${id}`));
                 const level = Number(await redis.get(`LEVEL:${id}`));
                 const exp = Number(await redis.get(`EXP:${id}`));
-                const gainedWords = Math.ceil(calculateUniqueWords(content) * 0.4);
+                const gainedWords = Math.ceil(general_1.calculateUniqueWords(content) * 0.4);
                 if (exp) {
                     const nextText = Math.floor((textXP + gainedWords) / 6 - 60);
                     const textIncrBy = nextText - text <= 0 ? 1 : nextText - text;
@@ -90,7 +90,7 @@ class LevelsController extends Controller_1.default {
                     this.initUser(id);
             }
             catch (err) {
-                log(this.client, err, 'error');
+                general_1.log(this.client, err, 'error');
             }
         };
         this.voiceIncrement = async () => {
@@ -125,7 +125,7 @@ class LevelsController extends Controller_1.default {
                         this.initUser(id);
                 }
                 catch (err) {
-                    log(this.client, err, 'error');
+                    general_1.log(this.client, err, 'error');
                 }
             });
         };
@@ -177,23 +177,27 @@ class LevelsController extends Controller_1.default {
     async enforceMilestone(userLevel, id) {
         if (this.milestones.has(userLevel)) {
             const milestones = this.milestones.get(userLevel);
-            const member = getMemberObject(this.client, id);
+            const member = object_1.getMemberObject(this.client, id);
             milestones.forEach(async (milestone) => {
                 try {
-                    const role = getRoleObject(this.client, milestone.roleID);
-                    const embed = createLevelupEmbed({ milestone, role });
+                    const role = object_1.getRoleObject(this.client, milestone.roleID);
+                    const embed = embed_1.createLevelupEmbed({ milestone, role });
                     member.roles.add(role.id);
-                    notify(this.client, `<@${id}>`, embed);
+                    general_1.notify({
+                        client: this.client,
+                        notification: `<@${id}>`,
+                        embed
+                    });
                 }
                 catch (err) {
-                    log(this.client, err, 'error');
+                    general_1.log(this.client, err, 'error');
                 }
             });
         }
     }
     async levelUpMessage(id, level) {
         const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
-        notify(this.client, notification);
+        general_1.notify({ client: this.client, notification });
     }
     addMilestone(level, name, description, roleID) {
         const mongo = this.client.controllers.get('mongo');

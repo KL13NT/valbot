@@ -130,16 +130,16 @@
         "signature": "b7c36a65503108ae0fe13616bccba6b193d3276c594cfb13fba316db7834347f"
       },
       "./src/types/interfaces.ts": {
-        "version": "c28ec1bb69eb717e3d76f3b285f18ae77e4326790a4d421250b12b69da29fe19",
-        "signature": "c07d3524292aaf31f1685908a361ff043d97bea93c7d22826c0ef95bf1064f7d"
+        "version": "613ab269668a5694df423f5e4cc1c0c977cd888e0d8446957e8c9acb6130220b",
+        "signature": "5144d33628e824205f253777752c64f61349ddafb822512f97e805d354a04c6e"
       },
       "./src/structures/controller.ts": {
         "version": "44c0d0f1c36ef7152a2a6cc3e9e5ae61f642d887b53a658fe344b8bf9c67189c",
         "signature": "0e1dcef574fc2fb6b65de7325cbaf3b060776c02b15d7fca17a95fcc50376fe7"
       },
       "./src/controllers/queuecontroller.ts": {
-        "version": "efd7d26a0e4e704b1bb7b24d286cb294855d30758635de5aa9108d7adfa5ed22",
-        "signature": "eff154b8404f0f09cb9b41939b3aabe7f91c160e6b79c3196aca7098bea3c018"
+        "version": "70cc50ea3d7fc47509f1e14508fe8aa30bd20cca75555ddc3fc1f189220b27e6",
+        "signature": "b5958f0c532812db8841e20876bc64ed8e8bdecc8c14593834bc418e2c26ecdd"
       },
       "./node_modules/@types/node/globals.d.ts": {
         "version": "fae548bb4dd54b5562ba24f95ec6577da578f3d87b6c952bb9d6ebe29237abd0",
@@ -345,8 +345,16 @@
         "version": "b128fd444f56cba7f4fe7da0fe12c70782711ad6860a469fcb41e15df44dd600",
         "signature": "b128fd444f56cba7f4fe7da0fe12c70782711ad6860a469fcb41e15df44dd600"
       },
+      "./src/utils/object.ts": {
+        "version": "f329907682d501fb4dbadd5162b1bf5a402ef529ace0821cbc92734db25688ab",
+        "signature": "fa9af15622bed63295a9ee849631b0a405fef0e679b97e9af89678e049efa424"
+      },
+      "./src/utils/general.ts": {
+        "version": "24372dbb643dbf66969e0e83e746caf62cde12f5941fe8d9f69eea17e46114a5",
+        "signature": "46527d773139e69222d4a1a67a54a3b3afb959074f40e93dca307bbe16743c1f"
+      },
       "./src/controllers/rediscontroller.ts": {
-        "version": "5a4df6372ed45583f6cbb80135ad47f1a66af5a83664ef79306ed7318a1c2417",
+        "version": "7f722efda8d7d2c2e2272d378c638a28d355546a48a77341ae5e11603ff61f27",
         "signature": "15f1872e1f9730f94295a92781df6e535c09bbaedc71a1337e1ddaed183d368f"
       },
       "./node_modules/@types/bson/index.d.ts": {
@@ -358,20 +366,24 @@
         "signature": "f85c02e9a1c2d6b22824f79580ecf02677c008e124c4ae4cd3b03886f2d8714c"
       },
       "./src/controllers/mongocontroller.ts": {
-        "version": "6268c11613873de35d8abd8a63efecefe5988c2f0adb1343f5c5b2e1ecf54386",
+        "version": "237354ac5160c00fc58ca7121116a1ddf50cd6304a00813870632c17f818fd41",
         "signature": "3628ec02d4b2fc6b4a0d8cceaeec399c717269cbc75df5ac38ee768c8cd546e4"
       },
+      "./src/utils/embed.ts": {
+        "version": "00af71fe883f42eea7af57a093a8c1d6131814b99714ec4cafc04dab25802288",
+        "signature": "eade687015cfa66128b0d7bdb0154c5f372e13d60710627150865d2f435edd63"
+      },
       "./src/controllers/levelscontroller.ts": {
-        "version": "74f190abc8a4033d9a8f2f5c04354dbd9780c7e5cf3e63748624954bed28385b",
+        "version": "5736e3cf95c8ffa27a9898132c435b91e9feed3d34e6eb1c7232ca33ff75d668",
         "signature": "fce13af2e8df7903ccfaab04123d3ed6d67ec096ac4cd311d8266b6eb2fdd0f2"
       },
       "./src/controllers/conversationcontroller.ts": {
-        "version": "422a95c066085f608d93c17d88a65959cfff7b67c766662eefdfb4a8304c841d",
-        "signature": "fc663a572161e60568f8aede9b473ce1e894fc8f423faefa10d1936dafc56131"
+        "version": "f2652d3494a8bf037db01bc3cd8476505aa76250ba6bf9b76ee96262d03905d7",
+        "signature": "6afe8e15e05dd2b3ba7481d990d2ee91c79bc6a8dec93976cbf1770c1d414423"
       },
       "./src/controllers/intervalscontroller.ts": {
-        "version": "b78520d825980c9c29816d462675aaa7fac40c27646188f18816a9939e948e2d",
-        "signature": "19f44d977b0fcb691156a182c1f6ef5a3b11e960f683a640459539b90a33cd52"
+        "version": "cafc098ac44e91528d29c11a6ba73ae8a5f37d2694928779c4e01e68c54012b6",
+        "signature": "dd988ce4f8b5559195d82ff592f27ca95f29277270c4057b9b2ba5049b9ac86a"
       },
       "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts": {
         "version": "a75f88891289130820d898adf8f7c9783a02ef418bbf131c80d3e8267143bcc4",
@@ -900,8 +912,12 @@
         "version": "0670b0e02ac9a14c5ea8d14cd4a83c19e64f92183737b9c8a17a7b996b6b7605",
         "signature": "0670b0e02ac9a14c5ea8d14cd4a83c19e64f92183737b9c8a17a7b996b6b7605"
       },
+      "./src/utils/moderation.ts": {
+        "version": "f87400f6d4f936952630085061cd41368347fe0e21b71021094c2d4675219cf3",
+        "signature": "5b178f12eaa0ea4a6569a59f204d6a5a778006a35f221e1993dfb764f427f643"
+      },
       "./src/controllers/toxicitycontroller.ts": {
-        "version": "608883d3e172d9ea0091b8d2f7765bc13b40c1dca2e9676d9bd3454e05865e92",
+        "version": "9d7bda08d282a718accfc2eb0e415c9117a31bc70f9f325b43636b47f2c8072b",
         "signature": "40fad2713c2e512266ad4074534c408d8004cfd60f7009789589d8e23c349cca"
       },
       "./src/controllers/index.ts": {
@@ -909,27 +925,11 @@
         "signature": "4f5f61a391e22d318b5157bf13a3609d74990957692d5c65ce9e344688f4cf18"
       },
       "./src/loaders/controllersloader.ts": {
-        "version": "8ca38a89173eaed2634ce0d2f8f581159c59897b903ec34ec0c7a0414ab33645",
+        "version": "48ec63aceb693cb416ac427a9f15cc71bc0e351e854cd492e9f7beb2bfa0ff00",
         "signature": "eb442863722ed98a48d03ca41eeaf7c96eb3a9808c0319716ccf726d5f4507f0"
       },
-      "./src/utils/general.ts": {
-        "version": "9e7e174d45c8ab5635e6735ff56fc6c51d261f24bfed58619721a865d2a606f7",
-        "signature": "869a913134b7afbe91605fa4c08193c8e4d3bc7320d662da38279d466347c7d3"
-      },
-      "./src/utils/event.ts": {
-        "version": "19014d801d059103737a3e840e05e20752770ad63e8eb412edd8b7b75d679d4c",
-        "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6"
-      },
-      "./src/utils/embed.ts": {
-        "version": "00af71fe883f42eea7af57a093a8c1d6131814b99714ec4cafc04dab25802288",
-        "signature": "eade687015cfa66128b0d7bdb0154c5f372e13d60710627150865d2f435edd63"
-      },
-      "./src/structures/command.ts": {
-        "version": "4f3a79cd481beaeba363d723567204e2ecf105f8526c17296833743f1b3e74b1",
-        "signature": "4655d0bd554322d8e934a211324f1207726b3362761b32b9a84e9114e0ff4c55"
-      },
       "./src/loaders/commandsloader.ts": {
-        "version": "8de3dc89311d968ac444d011188a499af121ebfa61d8175d1371536bf9ae498f",
+        "version": "5a5b5718a4310611bb287afac60dcba248588b636a47967fccbd7c298528dfe7",
         "signature": "4c9cf0a2f0864bd04eaf016ee4075c64edb78a611a252156eb2c7cece877dd98"
       },
       "./src/loaders/index.ts": {
@@ -941,48 +941,63 @@
         "signature": "794c9d78def228c3cefde216881397e249a4ff80c9ac9c92f2d4cca2841bb2cf"
       },
       "./src/listeners/clientreadylistener.ts": {
-        "version": "ae8cc7cf1063d2a68e4756e99f0713aa5b7687b9fb1186b0e19a7820cd0ae644",
+        "version": "68d77b9d4a6029ed6befa739170a04e07e6b25772cd4e18fc3a3df7efda87f50",
         "signature": "b1b31068501bb74e2f21c42772ae91e108aad72ad34872f8f1615da4f46b3693"
       },
       "./src/listeners/messagelistener.ts": {
-        "version": "fef6916e8a568bad0fa5f1bb4ec775560f265d66dc350824030d9e508733058a",
+        "version": "90eec30a727b1295a6b4d31a2b4d4025ff6288937099959fd84379c681f5cc73",
         "signature": "b1b83a8a2eee6f2d2ef774c7fd7a1afd4c4558313650ade3632c47881c5895d9"
       },
       "./src/listeners/voicelistener.ts": {
-        "version": "179484b1f40b64720f4033dc3ed22975e32374a79668af2f2ef42bf7d212faae",
+        "version": "426940b5613fef8018886df5f9e352b0df6cd63b3c18bd142f83ac6afb175f40",
         "signature": "d951fdb586501cb5bb8e44ad72befc2f5713fe698060f083cd4a6dfb770d2666"
       },
       "./src/listeners/newguildmemberlistener.ts": {
-        "version": "c3f38ba7931b1ed1e7c19ac9de5e1698833afcf513a7c3808a1432391477ea57",
+        "version": "49687dc70b7f0037cdff5bb7eb083a6c92963d8116b3e4bc4dadaf3afb58c0eb",
         "signature": "fdc49ae02edf431a6c4552b9b1066daf6a4cd06aba20eeda89c76f2a21a94f12"
       },
+      "./src/config/events.json": {
+        "version": "d601707ea1a48d16748f9fc3e90ab806ecafffd671a814ba4a2bfed314a8798e"
+      },
       "./src/listeners/commandslistener.ts": {
-        "version": "354e44ab05ada5dba21dbff7e8d2b20455a133eace56c439fc8526fb44364d28",
+        "version": "82de990d39983475e54a7185dbae63bc7011347bd6cc8f693e52846b1f8a2f37",
         "signature": "d4b940091b1c24604b3735f2039997e7761c6cb38f8f1569993cdd0f7e091980"
       },
       "./src/listeners/queueexecutelistener.ts": {
-        "version": "5e8aa03a91c1adc644c280ef207fee72d1363795f359b3163c2c199691cab382",
+        "version": "8bbc8c92dcfd9de17eecaabffdcdd0ea085ced4b3039a89e49dc3fb823779c22",
         "signature": "344b2efe28339c5c5b209ed78a961fde13bc07782cba4b3166f16f61e4833d85"
       },
       "./src/listeners/index.ts": {
         "version": "053d7cd53a1e5767cda02adbf31db07f4c0a4aa342d4cf3a0c3ca71c746a51b6",
         "signature": "749e0c65c2feaa6c1824499c6119230641ff29e10eed1b94e1d101cde473b2b3"
       },
+      "./src/utils/event.ts": {
+        "version": "3516ca36477980213c58b72a118e17519d8f90886108458b9d6aa9ff23c8b43a",
+        "signature": "872c77eecc0f181d79083ca43c2b5f37b0fe81afb2cb7fc71d3009b0ea4f1c10"
+      },
+      "./src/structures/command.ts": {
+        "version": "4249dcc13b5bf90e08bb2099142b04483ccae6cfa322879457509225a2726a24",
+        "signature": "8f08eb93505682dfdaa6cbdd33d404733270f3e0cb83241be42ad1b82ac484d1"
+      },
       "./src/valclient.ts": {
-        "version": "10d64c56b91896aadf301129e8243c2cf8dd0b156e22209d82cf311eea0b741d",
-        "signature": "32c54fe150038c411a1ff77bacd05d2da2cbc2d7239a18bde7acd735ce0ac1c9"
+        "version": "b3570b93a310fcd75537a833f84ef6dcb82e6ac8ca4421a25468772638c5e4cc",
+        "signature": "0bfdbe5c3f806b0d2c3283fe330192cac6efdc27e238f0b7f45553b84b7e56af"
       },
       "./src/environment.d.ts": {
         "version": "a7a10160a94eebd3a2147178d6a262f9111b32943e5583f8da3ea5035170c50c",
         "signature": "a7a10160a94eebd3a2147178d6a262f9111b32943e5583f8da3ea5035170c50c"
       },
       "./src/structures/index.ts": {
-        "version": "e815e7abb982fbdcc498e8d777b47a4679b2aa4e540d87eb77a00562ea096482",
+        "version": "8566d8587d10aa4cb407541bf1cda01b52d28ecbf6e219774a4c46633d9a9e9e",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       "./src/types/types.ts": {
         "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "./src/utils/svg.ts": {
+        "version": "c3d6a9f90d3d0bb81b44a8cf587daca68409aff84b6b34d327651078172352cd",
+        "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6"
       },
       "./node_modules/@babel/types/lib/index.d.ts": {
         "version": "9eac0dd4de5669db2b8321dffa400b997f7b21181118efc7a2c1743d93d4be57",
@@ -1123,6 +1138,7 @@
       "outDir": "./out",
       "rootDir": "./src",
       "removeComments": true,
+      "resolveJsonModule": true,
       "strict": true,
       "noImplicitAny": true,
       "strictNullChecks": false,
@@ -1771,11 +1787,31 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "./src/utils/object.ts": [
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/valclient.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/utils/general.ts": [
+        "./src/types/interfaces.ts",
+        "./src/controllers/index.ts",
+        "./src/valclient.ts",
+        "./src/utils/object.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./src/controllers/rediscontroller.ts": [
         "./src/structures/controller.ts",
         "./src/valclient.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/redis/ts3.1/index.d.ts",
+        "./src/utils/general.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
@@ -1804,6 +1840,15 @@
         "./node_modules/@types/mongodb/index.d.ts",
         "./src/types/interfaces.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/utils/general.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/utils/embed.ts": [
+        "./src/types/interfaces.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -1815,6 +1860,9 @@
         "./node_modules/discord.js/typings/index.d.ts",
         "./src/types/interfaces.ts",
         "./src/controllers/index.ts",
+        "./src/utils/general.ts",
+        "./src/utils/object.ts",
+        "./src/utils/embed.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -1827,6 +1875,7 @@
         "./src/structures/controller.ts",
         "./src/types/interfaces.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/utils/general.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -2977,11 +3026,25 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "./src/utils/moderation.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/types/interfaces.ts",
+        "./src/utils/general.ts",
+        "./src/utils/object.ts",
+        "./src/utils/embed.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./src/controllers/toxicitycontroller.ts": [
         "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts",
         "./src/structures/controller.ts",
         "./src/valclient.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/utils/moderation.ts",
+        "./src/utils/general.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3004,42 +3067,7 @@
         "./src/structures/loader.ts",
         "./src/controllers/index.ts",
         "./src/valclient.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/utils/general.ts": [
-        "./src/types/interfaces.ts",
-        "./src/controllers/index.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/utils/event.ts": [
-        "./src/types/interfaces.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/utils/embed.ts": [
-        "./src/types/interfaces.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/structures/command.ts": [
-        "./src/structures/commandcontext.ts",
-        "./src/valclient.ts",
         "./src/utils/general.ts",
-        "./src/utils/event.ts",
-        "./src/utils/embed.ts",
-        "./src/types/interfaces.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3048,7 +3076,7 @@
       "./src/loaders/commandsloader.ts": [
         "./src/structures/loader.ts",
         "./src/valclient.ts",
-        "./src/structures/command.ts",
+        "./src/utils/general.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3073,6 +3101,7 @@
       "./src/listeners/clientreadylistener.ts": [
         "./src/valclient.ts",
         "./src/structures/listener.ts",
+        "./src/utils/general.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3082,6 +3111,7 @@
         "./src/structures/listener.ts",
         "./src/valclient.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/controllers/index.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3091,6 +3121,7 @@
         "./src/structures/listener.ts",
         "./src/valclient.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/controllers/index.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3100,6 +3131,13 @@
         "./src/structures/listener.ts",
         "./src/valclient.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/utils/general.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/config/events.json": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3109,6 +3147,7 @@
         "./src/structures/listener.ts",
         "./src/valclient.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/config/events.json",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3117,6 +3156,8 @@
       "./src/listeners/queueexecutelistener.ts": [
         "./src/structures/listener.ts",
         "./src/valclient.ts",
+        "./src/utils/general.ts",
+        "./src/controllers/index.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3134,6 +3175,27 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "./src/utils/event.ts": [
+        "./src/types/interfaces.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/structures/command.ts": [
+        "./src/structures/commandcontext.ts",
+        "./src/valclient.ts",
+        "./src/config/events.json",
+        "./src/utils/event.ts",
+        "./src/utils/object.ts",
+        "./src/utils/embed.ts",
+        "./src/types/interfaces.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./src/valclient.ts": [
         "./node_modules/discord.js/typings/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
@@ -3142,8 +3204,8 @@
         "./src/listeners/index.ts",
         "./src/utils/general.ts",
         "./src/types/interfaces.ts",
-        "./src/structures/controller.ts",
         "./src/structures/command.ts",
+        "./src/controllers/index.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
@@ -3162,6 +3224,14 @@
       ],
       "./src/types/types.ts": [
         "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/utils/svg.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/path.d.ts",
+        "./src/types/interfaces.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
@@ -3561,11 +3631,27 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.5/util.d.ts"
       ],
+      "./src/structures/loader.ts": [
+        "./src/valclient.ts"
+      ],
+      "./src/structures/commandcontext.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts"
+      ],
       "./src/types/interfaces.ts": [
         "./src/controllers/index.ts",
         "./node_modules/discord.js/typings/index.d.ts",
         "./src/structures/commandcontext.ts",
         "./src/valclient.ts"
+      ],
+      "./src/structures/controller.ts": [
+        "./src/valclient.ts",
+        "./src/types/interfaces.ts"
+      ],
+      "./src/controllers/queuecontroller.ts": [
+        "./src/types/interfaces.ts",
+        "./src/valclient.ts",
+        "./src/structures/controller.ts"
       ],
       "./node_modules/@types/node/globals.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -3657,6 +3743,12 @@
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/url.d.ts",
         "./node_modules/@types/node/fs/promises.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/node/fs/promises.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
@@ -3898,7 +3990,47 @@
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "./node_modules/@types/node/ts3.2/fs.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.2/util.d.ts": [
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.2/globals.d.ts": [
+        "./node_modules/@types/node/globals.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.2/base.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/ts3.2/globals.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.5/globals.global.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./node_modules/@types/node/ts3.5/wasi.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.5/base.d.ts": [
+        "./node_modules/@types/node/ts3.2/base.d.ts",
+        "./node_modules/@types/node/ts3.5/globals.global.d.ts",
+        "./node_modules/@types/node/ts3.5/wasi.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3918,16 +4050,1295 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "./node_modules/@types/redis/ts3.1/index.d.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/stream.d.ts",
+        "./node_modules/@types/node/ts3.5/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/utils/object.ts": [
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/valclient.ts"
+      ],
+      "./src/utils/general.ts": [
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/types/interfaces.ts",
+        "./src/valclient.ts"
+      ],
+      "./src/controllers/rediscontroller.ts": [
+        "./node_modules/@types/redis/ts3.1/index.d.ts",
+        "./src/valclient.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./node_modules/@types/bson/index.d.ts": [
+        "./node_modules/@types/node/ts3.5/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/mongodb/index.d.ts": [
+        "./node_modules/@types/bson/index.d.ts",
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/stream.d.ts",
+        "./node_modules/@types/node/tls.d.ts",
+        "./node_modules/@types/node/ts3.5/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/controllers/mongocontroller.ts": [
+        "./node_modules/@types/mongodb/index.d.ts",
+        "./src/valclient.ts",
+        "./src/types/interfaces.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./src/utils/embed.ts": [
+        "./src/types/interfaces.ts",
+        "./node_modules/discord.js/typings/index.d.ts"
+      ],
+      "./src/controllers/levelscontroller.ts": [
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/types/interfaces.ts",
+        "./src/valclient.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./src/controllers/conversationcontroller.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/types/interfaces.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./src/controllers/intervalscontroller.ts": [
+        "./src/valclient.ts",
+        "./src/types/interfaces.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/environment.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/tape.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/environment.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tape.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/flags.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/flags_webgl.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./node_modules/@types/webgl2/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.5/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.5/util.d.ts"
       ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_types.d.ts": [
+        "./node_modules/@types/webgl2/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_types.d.ts",
+        "./node_modules/@types/webgl2/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/shader_compiler.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_math.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/shader_compiler.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/texture_manager.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/backend_webgl.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/flags_webgl.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_math.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/texture_manager.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/backend_cpu.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/square.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/non_max_suppression_v5.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/all_kernels.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/square.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/non_max_suppression_v5.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/square.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/frompixels.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/non_max_suppression_v5.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/all_kernels.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/square.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/frompixels.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/non_max_suppression_v5.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_browser.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_node.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/axis_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/backend_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/axis_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/indexed_db.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/local_storage.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/browser_files.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/http.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/io_utils.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/passthrough.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/weights_loader.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/model_management.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/io/io.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/io/indexed_db.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/local_storage.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/browser_files.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/http.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/io_utils.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/passthrough.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/weights_loader.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/model_management.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/confusion_matrix.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/math.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/confusion_matrix.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/browser.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/slice_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/tensor_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/test_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/version.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_util.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
+        "./node_modules/@types/webgl2/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/canvas_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/webgl.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/backend_webgl.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/canvas_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_math.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/model_types.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/square_grad.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/all_gradients.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/square_grad.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/square.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/boolean_mask.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/complex_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_split.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/conv.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/matmul.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/reverse.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/pool.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/slice.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/unary_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/reduction_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/compare.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/binary_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/relu_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/logical_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/array_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/tensor_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/transpose.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/softmax.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/lrn.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/norm.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/segment_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/lstm.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/moving_average.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/strided_slice.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/topk.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/scatter_nd.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/spectral_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/sparse_to_dense.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/gather_nd.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/diag.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/dropout.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/signal_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/in_top_k.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/operation.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/linalg_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/image_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/ops/ops.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/all_gradients.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/square.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/boolean_mask.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/complex_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_split.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/matmul.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/reverse.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/pool.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/slice.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/unary_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/reduction_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/compare.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/binary_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/relu_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/logical_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/array_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/tensor_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/transpose.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/softmax.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/lrn.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/norm.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/segment_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/lstm.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/moving_average.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/strided_slice.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/topk.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/scatter_nd.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/spectral_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/sparse_to_dense.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/gather_nd.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/diag.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/dropout.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/signal_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/in_top_k.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/operation.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/linalg_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/image_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_ops.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer_constructors.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/train.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer_constructors.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/globals.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/gradients.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/browser_util.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/flags.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/backend_webgl.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/backend_cpu.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/all_kernels.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/all_kernels.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_browser.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_node.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/io/io.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/math.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/browser.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/slice_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/test_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/version.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/webgl.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/model_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/lstm.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/train.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/globals.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/gradients.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/environment.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/browser_util.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/tensor_array.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/tensor_array.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/graph_model.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/execution_context.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/tensor_array.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/types.d.ts": [
+        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/compiled_api.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/execution_context.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/custom_op/register.d.ts": [
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/types.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/version.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow/tfjs-converter/dist/src/index.d.ts": [
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/graph_model.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/custom_op/register.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/types.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/version.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/trie.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/index.d.ts": [
+        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/trie.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/version.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/index.d.ts": [
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/index.d.ts",
+        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
+        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/index.d.ts",
+        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/version.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow-models/toxicity/dist/version.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts": [
+        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/index.d.ts",
+        "./node_modules/@tensorflow/tfjs-converter/dist/src/index.d.ts",
+        "./node_modules/@tensorflow-models/toxicity/dist/version.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/utils/moderation.ts": [
+        "./src/valclient.ts",
+        "./src/types/interfaces.ts",
+        "./node_modules/discord.js/typings/index.d.ts"
+      ],
+      "./src/controllers/toxicitycontroller.ts": [
+        "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts",
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./src/controllers/index.ts": [
+        "./src/controllers/queuecontroller.ts",
+        "./src/controllers/rediscontroller.ts",
+        "./src/controllers/mongocontroller.ts",
+        "./src/controllers/levelscontroller.ts",
+        "./src/controllers/conversationcontroller.ts",
+        "./src/controllers/intervalscontroller.ts",
+        "./src/controllers/toxicitycontroller.ts"
+      ],
+      "./src/loaders/controllersloader.ts": [
+        "./src/valclient.ts",
+        "./src/structures/loader.ts"
+      ],
+      "./src/loaders/commandsloader.ts": [
+        "./src/valclient.ts",
+        "./src/structures/loader.ts"
+      ],
+      "./src/loaders/index.ts": [
+        "./src/loaders/controllersloader.ts",
+        "./src/loaders/commandsloader.ts"
+      ],
+      "./src/structures/listener.ts": [
+        "./src/valclient.ts",
+        "./src/types/interfaces.ts"
+      ],
+      "./src/listeners/clientreadylistener.ts": [
+        "./src/valclient.ts",
+        "./src/structures/listener.ts"
+      ],
+      "./src/listeners/messagelistener.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/listener.ts"
+      ],
+      "./src/listeners/voicelistener.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/listener.ts"
+      ],
+      "./src/listeners/newguildmemberlistener.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/listener.ts"
+      ],
+      "./src/listeners/commandslistener.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/listener.ts"
+      ],
+      "./src/listeners/queueexecutelistener.ts": [
+        "./src/valclient.ts",
+        "./src/structures/listener.ts"
+      ],
+      "./src/listeners/index.ts": [
+        "./src/listeners/clientreadylistener.ts",
+        "./src/listeners/messagelistener.ts",
+        "./src/listeners/voicelistener.ts",
+        "./src/listeners/newguildmemberlistener.ts",
+        "./src/listeners/commandslistener.ts",
+        "./src/listeners/queueexecutelistener.ts"
+      ],
+      "./src/utils/event.ts": [
+        "./src/types/interfaces.ts"
+      ],
+      "./src/structures/command.ts": [
+        "./src/types/interfaces.ts",
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/commandcontext.ts"
+      ],
       "./src/valclient.ts": [
         "./src/types/interfaces.ts",
         "./src/structures/command.ts",
         "./node_modules/discord.js/typings/index.d.ts"
+      ],
+      "./src/environment.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "./node_modules/@babel/types/lib/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -3980,6 +5391,12 @@
         "./node_modules/@types/node/ts3.5/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.5/util.d.ts"
+      ],
+      "./node_modules/@types/eslint-visitor-keys/index.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "./node_modules/@types/istanbul-lib-coverage/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -4068,6 +5485,12 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.5/util.d.ts"
       ],
+      "./node_modules/@types/json-schema/index.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./node_modules/@types/mime-types/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.5/fs.d.ts",
@@ -4125,1345 +5548,6 @@
         "./node_modules/@types/node/ts3.5/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.5/util.d.ts"
-      ],
-      "./src/structures/loader.ts": [
-        "./src/valclient.ts"
-      ],
-      "./src/loaders/commandsloader.ts": [
-        "./src/valclient.ts",
-        "./src/structures/loader.ts"
-      ],
-      "./src/loaders/index.ts": [
-        "./src/loaders/controllersloader.ts",
-        "./src/loaders/commandsloader.ts"
-      ],
-      "./src/listeners/queueexecutelistener.ts": [
-        "./src/valclient.ts",
-        "./src/structures/listener.ts"
-      ],
-      "./src/listeners/index.ts": [
-        "./src/listeners/clientreadylistener.ts",
-        "./src/listeners/messagelistener.ts",
-        "./src/listeners/voicelistener.ts",
-        "./src/listeners/newguildmemberlistener.ts",
-        "./src/listeners/commandslistener.ts",
-        "./src/listeners/queueexecutelistener.ts"
-      ],
-      "./src/listeners/commandslistener.ts": [
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/structures/listener.ts"
-      ],
-      "./src/listeners/newguildmemberlistener.ts": [
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/structures/listener.ts"
-      ],
-      "./src/listeners/voicelistener.ts": [
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/structures/listener.ts"
-      ],
-      "./src/listeners/messagelistener.ts": [
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/structures/listener.ts"
-      ],
-      "./src/listeners/clientreadylistener.ts": [
-        "./src/valclient.ts",
-        "./src/structures/listener.ts"
-      ],
-      "./src/structures/listener.ts": [
-        "./src/valclient.ts",
-        "./src/types/interfaces.ts"
-      ],
-      "./src/structures/command.ts": [
-        "./src/types/interfaces.ts",
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/structures/commandcontext.ts"
-      ],
-      "./src/loaders/controllersloader.ts": [
-        "./src/valclient.ts",
-        "./src/structures/loader.ts"
-      ],
-      "./src/controllers/toxicitycontroller.ts": [
-        "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts",
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/controllers/index.ts": [
-        "./src/controllers/queuecontroller.ts",
-        "./src/controllers/rediscontroller.ts",
-        "./src/controllers/mongocontroller.ts",
-        "./src/controllers/levelscontroller.ts",
-        "./src/controllers/conversationcontroller.ts",
-        "./src/controllers/intervalscontroller.ts",
-        "./src/controllers/toxicitycontroller.ts"
-      ],
-      "./src/utils/general.ts": [
-        "./src/types/interfaces.ts"
-      ],
-      "./src/controllers/conversationcontroller.ts": [
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/types/interfaces.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/controllers/levelscontroller.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/types/interfaces.ts",
-        "./src/valclient.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/utils/embed.ts": [
-        "./src/types/interfaces.ts",
-        "./node_modules/discord.js/typings/index.d.ts"
-      ],
-      "./src/controllers/intervalscontroller.ts": [
-        "./src/valclient.ts",
-        "./src/types/interfaces.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/controllers/mongocontroller.ts": [
-        "./node_modules/@types/mongodb/index.d.ts",
-        "./src/valclient.ts",
-        "./src/types/interfaces.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/controllers/queuecontroller.ts": [
-        "./src/types/interfaces.ts",
-        "./src/valclient.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/structures/controller.ts": [
-        "./src/valclient.ts",
-        "./src/types/interfaces.ts"
-      ],
-      "./src/controllers/rediscontroller.ts": [
-        "./node_modules/@types/redis/ts3.1/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/structures/commandcontext.ts": [
-        "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.2/base.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts",
-        "./node_modules/@types/node/ts3.2/globals.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.5/base.d.ts": [
-        "./node_modules/@types/node/ts3.2/base.d.ts",
-        "./node_modules/@types/node/ts3.5/globals.global.d.ts",
-        "./node_modules/@types/node/ts3.5/wasi.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/mongodb/index.d.ts": [
-        "./node_modules/@types/bson/index.d.ts",
-        "./node_modules/@types/node/events.d.ts",
-        "./node_modules/@types/node/stream.d.ts",
-        "./node_modules/@types/node/tls.d.ts",
-        "./node_modules/@types/node/ts3.5/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/bson/index.d.ts": [
-        "./node_modules/@types/node/ts3.5/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/redis/ts3.1/index.d.ts": [
-        "./node_modules/@types/node/events.d.ts",
-        "./node_modules/@types/node/stream.d.ts",
-        "./node_modules/@types/node/ts3.5/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/json-schema/index.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/eslint-visitor-keys/index.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/environment.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts": [
-        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/index.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/index.d.ts",
-        "./node_modules/@tensorflow-models/toxicity/dist/version.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow-models/toxicity/dist/version.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/index.d.ts": [
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/index.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
-        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/index.d.ts",
-        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/version.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/version.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/index.d.ts": [
-        "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/trie.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/tokenizer/trie.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/index.d.ts": [
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/graph_model.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/custom_op/register.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/version.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/version.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/custom_op/register.d.ts": [
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/operations/types.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/compiled_api.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/execution_context.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/execution_context.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/tensor_array.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/graph_model.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/data/types.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
-        "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/tensor_array.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-converter/dist/src/executor/tensor_array.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/index.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/flags.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/backend_webgl.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/backend_cpu.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/all_kernels.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/all_kernels.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_browser.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_node.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/io.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/math.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/browser.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/slice_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/test_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/version.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/webgl.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/model_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/lstm.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/train.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/globals.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/gradients.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/environment.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/browser_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/browser_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/gradients.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/globals.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/train.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer_constructors.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer_constructors.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/all_gradients.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/square.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/boolean_mask.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/complex_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_split.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/matmul.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/reverse.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/pool.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/slice.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/unary_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/reduction_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/compare.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/binary_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/relu_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/logical_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/array_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/tensor_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/transpose.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/softmax.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/lrn.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/norm.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/segment_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/lstm.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/moving_average.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/strided_slice.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/topk.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/scatter_nd.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/spectral_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/sparse_to_dense.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/gather_nd.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/diag.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/dropout.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/signal_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/in_top_k.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/operation.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/linalg_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/image_ops.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_ops.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/image_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/linalg_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/loss_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/operation.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/in_top_k.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/signal_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/dropout.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/diag.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/gather_nd.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/sparse_to_dense.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/spectral_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/scatter_nd.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/topk.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/strided_slice.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/moving_average.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/lstm.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/segment_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/norm.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/lrn.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/softmax.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/transpose.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/tensor_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/array_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/logical_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/relu_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/binary_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/compare.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/reduction_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/unary_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/slice.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/pool.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/reverse.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/matmul.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/conv.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_split.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/complex_ops.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/boolean_mask.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/batchnorm.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/square.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/all_gradients.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/square_grad.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/square_grad.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/rmsprop_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/momentum_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/sgd_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adamax_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adam_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adagrad_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/adadelta_optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/optimizers/optimizer.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/model_types.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/webgl.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/backend_webgl.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/canvas_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_math.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/canvas_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
-        "./node_modules/@types/webgl2/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/version.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/test_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/tensor_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/serialization.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/slice_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/browser.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/math.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/confusion_matrix.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/confusion_matrix.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/io.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/indexed_db.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/local_storage.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/browser_files.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/http.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/io_utils.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/passthrough.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/weights_loader.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/model_management.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/model_management.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/weights_loader.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/passthrough.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/io_utils.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/http.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/browser_files.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/local_storage.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/indexed_db.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/router_registry.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/backend_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/axis_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/concat_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/broadcast_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/axis_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_node.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform_browser.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/all_kernels.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/square.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/frompixels.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/non_max_suppression_v5.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/non_max_suppression_v5.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/frompixels.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/square.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/all_kernels.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/square.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/non_max_suppression_v5.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/non_max_suppression_v5.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/square.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/cpu/backend_cpu.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/backend_webgl.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/flags_webgl.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_math.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/texture_manager.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/texture_manager.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_math.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/shader_compiler.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/tex_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/shader_compiler.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/gpgpu_context.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_types.d.ts",
-        "./node_modules/@types/webgl2/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/webgl_types.d.ts": [
-        "./node_modules/@types/webgl2/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/webgl/flags_webgl.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/flags.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/engine.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/environment.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tape.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/tape.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/tensor_types.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/kernel_registry.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/environment.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/platforms/platform.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/io/types.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/backends/backend.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/fused_util.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
-        "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts": [
-        "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.5/globals.global.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.2/globals.d.ts": [
-        "./node_modules/@types/node/globals.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.2/util.d.ts": [
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.2/fs.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/node/fs/promises.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -5497,476 +5581,6 @@
       "c:/users/nabil/appdata/local/yarn/data/global/node_modules/typescript/lib/lib.esnext.bigint.d.ts",
       "./node_modules/@discordjs/collection/dist/index.d.ts",
       "./node_modules/discord.js/typings/index.d.ts",
-      "./src/structures/loader.ts",
-      [
-        "./src/loaders/commandsloader.ts",
-        [
-          {
-            "file": "./src/loaders/commandsloader.ts",
-            "start": 69,
-            "length": 13,
-            "code": 7016,
-            "category": 1,
-            "messageText": "Could not find a declaration file for module '../commands'. 'D:/Workspace/Maintaining/valbot/src/commands/index.js' implicitly has an 'any' type."
-          },
-          {
-            "file": "./src/loaders/commandsloader.ts",
-            "start": 122,
-            "length": 44,
-            "messageText": "'Command' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          }
-        ]
-      ],
-      "./src/loaders/index.ts",
-      [
-        "./src/valclient.ts",
-        [
-          {
-            "file": "./src/valclient.ts",
-            "start": 82,
-            "length": 12,
-            "messageText": "'ActivityType' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 180,
-            "length": 7,
-            "messageText": "Module '\"D:/Workspace/Maintaining/valbot/src/loaders/index\"' has no default export.",
-            "category": 1,
-            "code": 1192
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 213,
-            "length": 9,
-            "messageText": "Module '\"D:/Workspace/Maintaining/valbot/src/listeners/index\"' has no default export.",
-            "category": 1,
-            "code": 1192
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 394,
-            "length": 49,
-            "messageText": "'Controller' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 1312,
-            "length": 122,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 1576,
-            "length": 64,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 1762,
-            "length": 20,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 1906,
-            "length": 25,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2023,
-            "length": 41,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2191,
-            "length": 27,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2318,
-            "length": 43,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2429,
-            "length": 5,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'mongo' does not exist on type 'Map<string, IController>'."
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2461,
-            "length": 5,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'redis' does not exist on type 'Map<string, IController>'."
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2534,
-            "length": 5,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'mongo' does not exist on type 'Map<string, IController>'."
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2687,
-            "length": 84,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 2865,
-            "length": 5,
-            "code": 2339,
-            "category": 1,
-            "messageText": "Property 'queue' does not exist on type 'Map<string, IController>'."
-          },
-          {
-            "file": "./src/valclient.ts",
-            "start": 3028,
-            "length": 16,
-            "messageText": "Expected 1 arguments, but got 3.",
-            "category": 1,
-            "code": 2554
-          }
-        ]
-      ],
-      [
-        "./src/listeners/queueexecutelistener.ts",
-        [
-          {
-            "file": "./src/listeners/queueexecutelistener.ts",
-            "start": 405,
-            "length": 10,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'executeAll' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'executeAll' does not exist on type 'ConversationController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          }
-        ]
-      ],
-      "./src/listeners/index.ts",
-      "./src/listeners/commandslistener.ts",
-      "./src/listeners/newguildmemberlistener.ts",
-      [
-        "./src/listeners/voicelistener.ts",
-        [
-          {
-            "file": "./src/listeners/voicelistener.ts",
-            "start": 94,
-            "length": 7,
-            "messageText": "'Message' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          },
-          {
-            "file": "./src/listeners/voicelistener.ts",
-            "start": 547,
-            "length": 9,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'trackUser' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'trackUser' does not exist on type 'ConversationController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          },
-          {
-            "file": "./src/listeners/voicelistener.ts",
-            "start": 576,
-            "length": 11,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'untrackUser' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'untrackUser' does not exist on type 'ConversationController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          }
-        ]
-      ],
-      [
-        "./src/listeners/messagelistener.ts",
-        [
-          {
-            "file": "./src/listeners/messagelistener.ts",
-            "start": 708,
-            "length": 8,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'classify' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'classify' does not exist on type 'ConversationController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          },
-          {
-            "file": "./src/listeners/messagelistener.ts",
-            "start": 887,
-            "length": 11,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'handleToxic' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'handleToxic' does not exist on type 'ConversationController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          },
-          {
-            "file": "./src/listeners/messagelistener.ts",
-            "start": 1025,
-            "length": 8,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'converse' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'converse' does not exist on type 'QueueController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          },
-          {
-            "file": "./src/listeners/messagelistener.ts",
-            "start": 1060,
-            "length": 7,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'message' does not exist on type 'IController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'message' does not exist on type 'ConversationController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          }
-        ]
-      ],
-      "./src/listeners/clientreadylistener.ts",
-      "./src/structures/listener.ts",
-      [
-        "./src/structures/command.ts",
-        [
-          {
-            "file": "./src/structures/command.ts",
-            "start": 137,
-            "length": 28,
-            "messageText": "'GENERIC_SOMETHING_WENT_WRONG' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          },
-          {
-            "file": "./src/structures/command.ts",
-            "start": 335,
-            "length": 23,
-            "messageText": "Cannot find module '../config/events.json'. Consider using '--resolveJsonModule' to import module with '.json' extension",
-            "category": 1,
-            "code": 2732
-          },
-          {
-            "file": "./src/structures/command.ts",
-            "start": 361,
-            "length": 39,
-            "messageText": "'log' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          },
-          {
-            "file": "./src/structures/command.ts",
-            "start": 410,
-            "length": 18,
-            "messageText": "Module '\"../../../../../Workspace/Maintaining/valbot/src/utils/event\"' has no exported member 'createEventMessage'.",
-            "category": 1,
-            "code": 2305
-          },
-          {
-            "file": "./src/structures/command.ts",
-            "start": 484,
-            "length": 17,
-            "code": 7016,
-            "category": 1,
-            "messageText": "Could not find a declaration file for module '../utils/object'. 'D:/Workspace/Maintaining/valbot/src/utils/object.js' implicitly has an 'any' type."
-          },
-          {
-            "file": "./src/structures/command.ts",
-            "start": 3353,
-            "length": 7,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          },
-          {
-            "file": "./src/structures/command.ts",
-            "start": 3923,
-            "length": 7,
-            "messageText": "'context' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          }
-        ]
-      ],
-      [
-        "./src/loaders/controllersloader.ts",
-        [
-          {
-            "file": "./src/loaders/controllersloader.ts",
-            "start": 603,
-            "length": 7,
-            "code": 2339,
-            "category": 1,
-            "messageText": {
-              "messageText": "Property 'options' does not exist on type 'typeof QueueController | typeof RedisController | typeof MongoController | typeof LevelsController | typeof ConversationController | typeof IntervalsController | typeof ToxicityController'.",
-              "category": 1,
-              "code": 2339,
-              "next": [
-                {
-                  "messageText": "Property 'options' does not exist on type 'typeof QueueController'.",
-                  "category": 1,
-                  "code": 2339
-                }
-              ]
-            }
-          }
-        ]
-      ],
-      [
-        "./src/controllers/toxicitycontroller.ts",
-        [
-          {
-            "file": "./src/controllers/toxicitycontroller.ts",
-            "start": 1224,
-            "length": 6,
-            "messageText": "'result' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          }
-        ]
-      ],
-      "./src/controllers/index.ts",
-      "./src/utils/general.ts",
-      [
-        "./src/controllers/conversationcontroller.ts",
-        [
-          {
-            "file": "./src/controllers/conversationcontroller.ts",
-            "start": 382,
-            "length": 5,
-            "messageText": "'ready' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          }
-        ]
-      ],
-      [
-        "./src/controllers/levelscontroller.ts",
-        [
-          {
-            "file": "./src/controllers/levelscontroller.ts",
-            "start": 213,
-            "length": 5,
-            "messageText": "'Level' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          }
-        ]
-      ],
-      "./src/types/interfaces.ts",
-      "./src/utils/embed.ts",
-      "./src/utils/event.ts",
-      "./src/controllers/intervalscontroller.ts",
-      "./src/controllers/mongocontroller.ts",
-      "./src/controllers/queuecontroller.ts",
-      "./src/structures/controller.ts",
-      "./src/controllers/rediscontroller.ts",
-      "./src/structures/commandcontext.ts",
       "./node_modules/@types/node/globals.d.ts",
       "./node_modules/@types/node/async_hooks.d.ts",
       "./node_modules/@types/node/buffer.d.ts",
@@ -6152,6 +5766,7 @@
       "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/index.d.ts",
       "./node_modules/@tensorflow-models/toxicity/dist/version.d.ts",
       "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts",
+      "./src/config/events.json",
       "./src/environment.d.ts",
       "./src/structures/index.ts",
       "./src/types/types.ts",
@@ -6184,7 +5799,61 @@
       "./node_modules/@types/stack-utils/index.d.ts",
       "./node_modules/@types/webgl-ext/index.d.ts",
       "./node_modules/@types/yargs/index.d.ts",
-      "./node_modules/@types/yargs-parser/index.d.ts"
+      "./node_modules/@types/yargs-parser/index.d.ts",
+      "./src/controllers/intervalscontroller.ts",
+      "./src/controllers/index.ts",
+      "./src/controllers/conversationcontroller.ts",
+      "./src/controllers/levelscontroller.ts",
+      "./src/controllers/mongocontroller.ts",
+      "./src/controllers/rediscontroller.ts",
+      "./src/utils/object.ts",
+      "./src/controllers/queuecontroller.ts",
+      "./src/structures/controller.ts",
+      "./src/types/interfaces.ts",
+      "./src/structures/commandcontext.ts",
+      "./src/structures/loader.ts",
+      "./src/utils/general.ts",
+      "./src/utils/embed.ts",
+      "./src/utils/moderation.ts",
+      "./src/controllers/toxicitycontroller.ts",
+      "./src/loaders/controllersloader.ts",
+      "./src/loaders/commandsloader.ts",
+      "./src/loaders/index.ts",
+      "./src/structures/listener.ts",
+      "./src/listeners/clientreadylistener.ts",
+      "./src/listeners/messagelistener.ts",
+      "./src/listeners/voicelistener.ts",
+      "./src/listeners/newguildmemberlistener.ts",
+      "./src/listeners/commandslistener.ts",
+      "./src/listeners/queueexecutelistener.ts",
+      "./src/listeners/index.ts",
+      "./src/utils/event.ts",
+      "./src/structures/command.ts",
+      "./src/valclient.ts",
+      [
+        "./src/utils/svg.ts",
+        [
+          {
+            "file": "./src/utils/svg.ts",
+            "start": 74,
+            "length": 20,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'node-html-to-image'. 'D:/Workspace/Maintaining/valbot/node_modules/node-html-to-image/src/index.js' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "messageText": "Try `npm install @types/node-html-to-image` if it exists or add a new declaration (.d.ts) file containing `declare module 'node-html-to-image';`",
+                  "category": 1,
+                  "code": 7035
+                }
+              ]
+            }
+          }
+        ]
+      ]
     ]
   },
   "version": "3.6.4"

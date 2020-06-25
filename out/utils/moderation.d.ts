@@ -1,0 +1,10 @@
+import ValClient from '../ValClient';
+import { Snowflake } from 'discord.js';
+import { UserModerationOptions } from '../types/interfaces';
+export declare function mute(client: ValClient, options: UserModerationOptions): Promise<void>;
+export declare function ban(client: ValClient, options: UserModerationOptions): Promise<void>;
+export declare function warn(client: ValClient, options: UserModerationOptions): Promise<void>;
+export declare function unwarn(client: ValClient, options: UserModerationOptions): Promise<void>;
+export declare function unmute(client: ValClient, options: UserModerationOptions): Promise<void>;
+export declare function isWarned(client: ValClient, member: Snowflake): boolean;
+export declare function isMuted(client: ValClient, member: string): boolean;

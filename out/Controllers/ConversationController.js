@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Controller_1 = __importDefault(require("../structures/Controller"));
-const { log } = require('../utils/general');
+const general_1 = require("../utils/general");
 class ConversationController extends Controller_1.default {
     constructor(client) {
         super(client, {
@@ -24,14 +24,14 @@ class ConversationController extends Controller_1.default {
                             reply
                         };
                     });
+                    this.ready = true;
                 }
                 else {
-                    queue.enqueue(this.init);
+                    queue.enqueue({ func: this.init, args: [] });
                 }
             }
             catch (err) {
-                const message = `Something went wrong when initialising ConversationController, ${err.message}`;
-                log(this.client, message, 'error');
+                general_1.log(this.client, err, 'error');
             }
         };
         this.converse = async (message, isClientMentioned) => {
@@ -51,7 +51,7 @@ class ConversationController extends Controller_1.default {
         if (mongo.ready)
             mongo.saveResponse(response);
         else
-            queue.enqueue(this.teach, response);
+            queue.enqueue({ func: this.teach, args: [response] });
     }
     getAllResponses() {
         return this.responses;

@@ -19,7 +19,9 @@ class Command {
             message.content = message.content.replace(/\s+/g, ' ');
             const split = message.content.split(' ');
             const params = split.slice(2);
-            if (this.enforceParams(params, message) === true) {
+            if (params[0] === 'help')
+                return this.help(message);
+            if (this.enforceParams(params) === true) {
                 const context = new CommandContext_1.default(this.client, message);
                 context.params = params;
                 if (this.isAllowed(context))
@@ -27,6 +29,20 @@ class Command {
                 else
                     message.reply(events_json_1.ERROR_COMMAND_NOT_ALLOWED);
             }
+            else
+                message.reply(event_1.createEventMessage({
+                    template: events_json_1.ERROR_INSUFFICIENT_PARAMS_PASSED,
+                    variables: [
+                        {
+                            name: '_PREFIX',
+                            value: this.client.prefix
+                        },
+                        {
+                            name: 'COMMAND_NAME',
+                            value: this.options.name
+                        }
+                    ]
+                }));
         };
         this.isAllowed = (context) => {
             const { member } = context;
@@ -69,26 +85,14 @@ class Command {
                 }, cooldown);
             }
         };
-        this.enforceParams = (params, message) => {
+        this.enforceParams = (params) => {
             const { nOfParams, extraParams, optionalParams } = this.options;
-            if (params[0] === 'help')
-                this.help(message);
-            else if (params.length < nOfParams - optionalParams ||
+            if (params.length < nOfParams - optionalParams ||
                 (params.length > nOfParams && !extraParams))
-                message.reply(event_1.createEventMessage(events_json_1.ERROR_INSUFFICIENT_PARAMS_PASSED, [
-                    {
-                        name: '_PREFIX',
-                        value: this.client.prefix
-                    },
-                    {
-                        name: 'COMMAND_NAME',
-                        value: this.options.name
-                    }
-                ]));
+                return false;
             else
                 return true;
         };
-        this._run = (context) => { };
         this.stop = (context, isGraceful, error) => {
             if (!isGraceful)
                 context.message.reply(error || events_json_1.ERROR_GENERIC_SOMETHING_WENT_WRONG);

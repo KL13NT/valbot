@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const { ROLE_DEVELOPER, MODE } = process.env;
-const { getChannelObject } = require('./object');
+const object_1 = require("./object");
 function createAlertMessage(message, alertLevel) {
     const notification = `[${alertLevel}] ${message}`;
     if (alertLevel === 'info')
@@ -10,15 +10,15 @@ function createAlertMessage(message, alertLevel) {
         return `${notification} <@${ROLE_DEVELOPER}>`;
 }
 exports.createAlertMessage = createAlertMessage;
-function log({ client, notification, alertLevel }) {
+function log(client, notification, alertLevel) {
     const queue = client.controllers.get('queue');
     console.log(`[${alertLevel}]`, notification);
     if (MODE !== 'PRODUCTION')
         return;
     if (!client.ready)
-        return queue.enqueue(log, ...arguments);
+        return queue.enqueue({ func: log, args: [...arguments] });
     const { CHANNEL_BOT_STATUS } = client.config.CHANNELS;
-    const channel = getChannelObject(client, CHANNEL_BOT_STATUS);
+    const channel = object_1.getChannelObject(client, CHANNEL_BOT_STATUS);
     const message = createAlertMessage(String(notification), alertLevel);
     channel.send(message);
 }
@@ -27,9 +27,9 @@ function notify(options) {
     const { client, notification, embed, channel } = options;
     const queue = client.controllers.get('queue');
     if (!client.ready)
-        return queue.enqueue(notify, ...arguments);
+        return queue.enqueue({ func: notify, args: [...arguments] });
     const { CHANNEL_NOTIFICATIONS } = client.config.CHANNELS;
-    const target = getChannelObject(client, channel || CHANNEL_NOTIFICATIONS);
+    const target = (object_1.getChannelObject(client, channel || CHANNEL_NOTIFICATIONS));
     return target.send(notification, { embed });
 }
 exports.notify = notify;

@@ -6,16 +6,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const { AUTH_TOKEN, MODE } = process.env;
 const discord_js_1 = require("discord.js");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const loaders_1 = __importDefault(require("./loaders"));
-const listeners_1 = __importDefault(require("./listeners"));
+const loaders = __importStar(require("./loaders"));
+const listeners = __importStar(require("./listeners"));
 const general_1 = require("./utils/general");
 class ValClient extends discord_js_1.Client {
     constructor(options) {
@@ -47,22 +44,25 @@ class ValClient extends discord_js_1.Client {
         };
         this.initLoaders = () => {
             general_1.log(this, 'Loaders loading', 'info');
-            for (const loader in loaders_1.default) {
-                new loaders_1.default[loader](this).load();
-            }
+            Object.values(loaders).forEach(loader => {
+                new loader(this).load();
+            });
             general_1.log(this, 'All loaders loaded successfully', 'info');
         };
         this.initListeners = () => {
             general_1.log(this, 'Listeners loading', 'info');
-            for (const listener in listeners_1.default) {
-                new listeners_1.default[listener](this).init();
-            }
+            Object.values(listeners).forEach(listener => {
+                new listener(this).init();
+            });
             general_1.log(this, 'All listeners loaded successfully', 'info');
         };
         this.initConfig = async () => {
             try {
-                if (this.controllers.mongo.ready && this.controllers.redis.ready) {
-                    const response = await this.controllers.mongo.db
+                const mongo = this.controllers.get('mongo');
+                const redis = this.controllers.get('redis');
+                const queue = this.controllers.get('queue');
+                if (mongo.ready && redis.ready) {
+                    const response = await mongo.db
                         .collection('config')
                         .findOne({
                         GUILD_ID: process.env.GUILD_ID
@@ -73,7 +73,7 @@ class ValClient extends discord_js_1.Client {
                     this.config = response;
                 }
                 else {
-                    this.controllers.queue.enqueue(this.initConfig);
+                    queue.enqueue({ func: this.initConfig, args: [] });
                 }
             }
             catch (err) {

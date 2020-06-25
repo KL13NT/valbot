@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const { DB_HOST, DB_NAME } = process.env;
 const Controller_1 = __importDefault(require("../structures/Controller"));
 const mongodb_1 = require("mongodb");
-const { log } = require('../utils/general');
+const general_1 = require("../utils/general");
 class MongoController extends Controller_1.default {
     constructor(client) {
         super(client, {
@@ -23,8 +23,7 @@ class MongoController extends Controller_1.default {
                 }
             }
             catch (err) {
-                const message = `Something went wrong when initialising Mongo, ${err.message}, <@238009405176676352>`;
-                log(this.client, message, 'error');
+                general_1.log(this.client, err, 'error');
             }
         };
         this.syncLevels = async (id, levelToSync) => {

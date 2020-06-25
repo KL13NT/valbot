@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Controller_1 = __importDefault(require("../structures/Controller"));
 const util_1 = require("util");
 const redis_1 = __importDefault(require("redis"));
-const { log } = require('../utils/general');
+const general_1 = require("../utils/general");
 class RedisController extends Controller_1.default {
     constructor(client) {
         super(client, {
@@ -18,13 +18,12 @@ class RedisController extends Controller_1.default {
         this.incrAsync = util_1.promisify(this.redis.incr).bind(this.redis);
         this.incrbyAsync = util_1.promisify(this.redis.incrby).bind(this.redis);
         this.errorListener = (err) => {
-            const message = `Something went wrong when initialising Redis, ${err.message}, <@238009405176676352>`;
-            log(this.client, message, 'error');
+            general_1.log(this.client, err, 'error');
             this.redis.removeAllListeners();
             this.ready = false;
         };
         this.readyListener = () => {
-            log(this.client, 'Redis controller ready', 'info');
+            general_1.log(this.client, 'Redis ready', 'info');
             this.client.emit('queueExecute', 'Redis controller ready');
             this.ready = true;
             this.redis.removeListener('ready', this.readyListener);

@@ -5,6 +5,4 @@ function createEventMessage({ template, variables }) {
         return result.replace(new RegExp(`{{${variable.name}}}`), variable.value);
     }, template);
 }
-module.exports = {
-    createEventMessage
-};
+exports.createEventMessage = createEventMessage;

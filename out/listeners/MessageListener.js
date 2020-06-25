@@ -13,7 +13,7 @@ class MessageListener extends Listener_1.default {
                 return;
             const { prefix, controllers } = this.client;
             const { content, mentions } = message;
-            const conversation = controllers.get('conversation');
+            const conversation = (controllers.get('conversation'));
             const levels = controllers.get('levels');
             const toxicity = controllers.get('toxicity');
             const isToxic = await toxicity.classify(message);

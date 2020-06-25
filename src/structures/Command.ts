@@ -46,13 +46,30 @@ export default abstract class Command {
 		const split = message.content.split(' ');
 		const params = split.slice(2);
 
-		if (this.enforceParams(params, message) === true) {
+		if (params[0] === 'help') return this.help(message);
+
+		if (this.enforceParams(params) === true) {
 			const context = new CommandContext(this.client, message);
 			context.params = params;
 
 			if (this.isAllowed(context)) this.enforceCooldown(context);
 			else message.reply(ERROR_COMMAND_NOT_ALLOWED);
-		}
+		} else
+			message.reply(
+				createEventMessage({
+					template: ERROR_INSUFFICIENT_PARAMS_PASSED,
+					variables: [
+						{
+							name: '_PREFIX',
+							value: this.client.prefix
+						},
+						{
+							name: 'COMMAND_NAME',
+							value: this.options.name
+						}
+					]
+				})
+			);
 	};
 
 	/**
@@ -115,29 +132,14 @@ export default abstract class Command {
 	};
 
 	//REFACTORME: return type more specific
-	private enforceParams = (params: string[], message: Message): boolean => {
+	private enforceParams = (params: string[]): boolean => {
 		const { nOfParams, extraParams, optionalParams } = this.options;
 
-		if (params[0] === 'help') this.help(message);
-		else if (
+		if (
 			params.length < nOfParams - optionalParams ||
 			(params.length > nOfParams && !extraParams)
 		)
-			message.reply(
-				createEventMessage({
-					template: ERROR_INSUFFICIENT_PARAMS_PASSED,
-					variables: [
-						{
-							name: '_PREFIX',
-							value: this.client.prefix
-						},
-						{
-							name: 'COMMAND_NAME',
-							value: this.options.name
-						}
-					]
-				})
-			);
+			return false;
 		else return true;
 	};
 
