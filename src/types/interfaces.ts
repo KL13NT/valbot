@@ -1,12 +1,4 @@
-import {
-	ActivityType,
-	Snowflake,
-	Role,
-	EmbedField,
-	MessageAttachment,
-	FileOptions,
-	MessageEmbed
-} from 'discord.js';
+import { ActivityType, Snowflake, Role } from 'discord.js';
 import CommandContext from '../structures/CommandContext';
 import {
 	ConversationController,
@@ -19,6 +11,17 @@ import {
 } from '../Controllers';
 
 export type ListenerHandler = (...args: any[]) => void;
+
+export type Template = string;
+
+export type IController =
+	| ConversationController
+	| QueueController
+	| MongoController
+	| LevelsController
+	| IntervalsController
+	| RedisController
+	| ToxicityController;
 
 export interface AuthClientConfig {
 	[index: string]: string;
@@ -81,15 +84,6 @@ export interface ICommand {
 	_run(context: CommandContext): Promise<void> | void;
 }
 
-export type IController =
-	| ConversationController
-	| QueueController
-	| MongoController
-	| LevelsController
-	| IntervalsController
-	| RedisController
-	| ToxicityController;
-
 export interface QueueCall {
 	func: Function;
 	args: any[];
@@ -151,4 +145,14 @@ export interface ClearEmbedOptions {
 export interface LevelupEmbedOptions {
 	milestone: Milestone;
 	role: Role;
+}
+
+export interface EventVariable {
+	name: string;
+	value: string;
+}
+
+export interface EventOptions {
+	variables: EventVariable[];
+	template: Template;
 }
