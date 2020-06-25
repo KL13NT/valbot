@@ -1,8 +1,7 @@
 import { ActivityType } from 'discord.js';
-import ValClient from '../ValClient';
 import CommandContext from '../structures/CommandContext';
 
-export type ListenerHandler = () => void;
+export type ListenerHandler = (...args: any[]) => void;
 
 export interface AuthClientConfig {
 	[index: string]: string;

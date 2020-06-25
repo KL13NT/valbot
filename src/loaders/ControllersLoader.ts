@@ -8,7 +8,7 @@ const { log } = require('../utils/general');
 /**
  * Loads Controllers based on Controllers/index
  */
-class ControllersLoader extends Loader {
+export default class ControllersLoader extends Loader {
 	constructor(client: ValClient) {
 		super(client);
 	}
@@ -25,5 +25,3 @@ class ControllersLoader extends Loader {
 		});
 	};
 }
-
-module.exports = ControllersLoader;

@@ -5,9 +5,8 @@ export default class Listener {
 	client: ValClient;
 	events: Map<string, ListenerHandler>;
 
-	constructor(client: ValClient, events: Map<string, ListenerHandler>) {
+	constructor(client: ValClient) {
 		this.client = client;
-		this.events = events;
 	}
 
 	init = (): void => {
