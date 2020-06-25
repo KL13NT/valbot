@@ -1,11 +1,21 @@
-const toxicity = require('@tensorflow-models/toxicity');
+const { CLIENT_ID } = process.env;
 
-const { Controller } = require('../structures');
+import toxicity, { ToxicityClassifier } from '@tensorflow-models/toxicity';
+import Controller from '../structures/Controller';
+import ValClient from '../ValClient';
+import { Message } from 'discord.js';
+
 const { warn, mute, isWarned } = require('../utils/moderation');
 const { log } = require('../utils/general');
 
 export default class ToxicityController extends Controller {
-	constructor(client) {
+	ready: boolean = false;
+	labels: string[] = [];
+	threshold: number = 0.7;
+	confidence: number = 0.95;
+	classifier: ToxicityClassifier;
+
+	constructor(client: ValClient) {
 		super(client, {
 			name: 'toxicity'
 		});
@@ -20,36 +30,32 @@ export default class ToxicityController extends Controller {
 			'toxicity'
 		];
 
-		this.threshold = 0.7;
-		this.ready = false;
-
-		if (process.env.mode !== 'DEVELOPMENT')
+		if (process.env.MODE !== 'DEVELOPMENT')
 			toxicity.load(this.threshold, this.labels).then(model => {
 				this.classifier = model;
 				this.ready = true;
 
 				log(client, 'ToxicityController loaded successfully', 'info');
 			});
-
-		this.classify = this.classify.bind(this);
-		this.handleToxic = this.handleToxic.bind(this);
 	}
 
-	async classify(message) {
+	classify = async (message: Message) => {
 		if (!this.ready) return false;
 
 		const { content: sentence } = message;
 		const predictions = await this.classifier.classify([sentence]);
 
-		return predictions.reduce((prediction, curr) =>
-			curr.results[0].match === true && curr.results[0].probabilities[1] > 0.95
-				? true
-				: false
+		return predictions.reduce(
+			(result, curr) =>
+				curr.results[0].match === true &&
+				curr.results[0].probabilities[1] > this.confidence
+					? true
+					: false,
+			false
 		);
-	}
+	};
 
-	async handleToxic(message) {
-		const { CLIENT_ID } = process.env;
+	handleToxic = async (message: Message) => {
 		const { author, channel } = message;
 		const reason = 'Used toxic language';
 
@@ -74,5 +80,5 @@ export default class ToxicityController extends Controller {
 
 			message.delete({ reason });
 		}
-	}
+	};
 }

@@ -59,11 +59,11 @@ export default class LevelsController extends Controller {
 		mongo.getLevels().then(async levels => {
 			levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
 				// (value || 1) to handle old mongo documents that didn't have some props
-				redis.set(`TEXT:${id}`, Number(text) || 1);
-				redis.set(`TEXT:XP:${id}`, Number(textXP) || 1);
-				redis.set(`VOICE:${id}`, Number(voice) || 1);
-				redis.set(`VOICE:XP:${id}`, Number(voiceXP) || 1);
-				redis.set(`LEVEL:${id}`, Number(level) || 1);
+				redis.set(`TEXT:${id}`, String(text || 1));
+				redis.set(`TEXT:XP:${id}`, String(textXP || 1));
+				redis.set(`VOICE:${id}`, String(voice || 1));
+				redis.set(`VOICE:XP:${id}`, String(voiceXP || 1));
+				redis.set(`LEVEL:${id}`, String(level || 1));
 			});
 
 			intervals.setInterval({
@@ -109,14 +109,14 @@ export default class LevelsController extends Controller {
 
 				if (exp + gainedWords >= 60 * Number(level) * 0.1 + 60) {
 					redis.incrby(`LEVEL:${id}`, levelIncrBy);
-					redis.set(`EXP:${id}`, 1);
+					redis.set(`EXP:${id}`, String(1));
 
 					this.levelUp(message);
 				}
 
 				if (textXP + gainedWords >= 60 * Number(text) * 0.1 + 60) {
 					redis.incrby(`TEXT:${id}`, textIncrBy);
-					redis.set(`TEXT:EXP:${id}`, 1);
+					redis.set(`TEXT:EXP:${id}`, String(1));
 				} else {
 					redis.incrby(`EXP:${id}`, gainedWords);
 					redis.incrby(`TEXT:XP:${id}`, gainedWords);
@@ -149,14 +149,14 @@ export default class LevelsController extends Controller {
 
 					if (exp + XP_PER_MINUTE >= 60 * Number(level) * 0.1 + 60) {
 						redis.incrby(`LEVEL:${id}`, levelIncrBy);
-						redis.set(`EXP:${id}`, 1);
+						redis.set(`EXP:${id}`, String(1));
 
 						this.levelUp(id);
 					}
 
 					if (voiceXP + XP_PER_MINUTE >= 60 * Number(voice) * 0.1 + 60) {
 						redis.incrby(`VOICE:${id}`, voiceIncrBy);
-						redis.set(`VOICE:XP:${id}`, 1);
+						redis.set(`VOICE:XP:${id}`, String(1));
 					} else {
 						redis.incrby(`EXP:${id}`, XP_PER_MINUTE);
 						redis.incrby(`VOICE:XP:${id}`, XP_PER_MINUTE);
@@ -171,12 +171,12 @@ export default class LevelsController extends Controller {
 	initUser = async (id: Snowflake) => {
 		const redis = <RedisController>this.client.controllers.get('redis');
 
-		redis.set(`EXP:${id}`, 1);
-		redis.set(`LEVEL:${id}`, 1);
-		redis.set(`TEXT:XP:${id}`, 1);
-		redis.set(`TEXT:${id}`, 1);
-		redis.set(`VOICE:XP:${id}`, 1);
-		redis.set(`VOICE:${id}`, 1);
+		redis.set(`EXP:${id}`, String(1));
+		redis.set(`LEVEL:${id}`, String(1));
+		redis.set(`TEXT:XP:${id}`, String(1));
+		redis.set(`TEXT:${id}`, String(1));
+		redis.set(`VOICE:XP:${id}`, String(1));
+		redis.set(`VOICE:${id}`, String(1));
 
 		this.levelUp(id);
 	};
