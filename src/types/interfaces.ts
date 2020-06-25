@@ -3,7 +3,11 @@ import CommandContext from '../structures/CommandContext';
 import {
 	ConversationController,
 	IntervalsController,
-	QueueController
+	QueueController,
+	MongoController,
+	LevelsController,
+	RedisController,
+	ToxicityController
 } from '../Controllers';
 
 export type ListenerHandler = (...args: any[]) => void;
@@ -71,8 +75,12 @@ export interface ICommand {
 
 export type IController =
 	| ConversationController
+	| QueueController
+	| MongoController
+	| LevelsController
 	| IntervalsController
-	| QueueController;
+	| RedisController
+	| ToxicityController;
 
 export interface QueueCall {
 	func: Function;

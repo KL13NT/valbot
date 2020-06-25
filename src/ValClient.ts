@@ -31,7 +31,7 @@ export default class ValClient extends Client {
 
 		this.ready = false;
 		this.prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
-		this.controllers = new Map<string, Controller>();
+		this.controllers = new Map<string, IController>();
 	}
 
 	init = (token = AUTH_TOKEN) => {
