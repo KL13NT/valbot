@@ -1,41 +1,38 @@
-const { MongoClient } = require('mongodb');
+const { DB_HOST, DB_NAME } = process.env;
 
-const { Controller } = require('../structures');
+import ValClient from '../ValClient';
+import Controller from '../structures/Controller';
+
+import { MongoClient, Db } from 'mongodb';
+import { Level, Milestone, Response } from '../types/interfaces';
+import { Snowflake } from 'discord.js';
+
 const { log } = require('../utils/general');
 
-/**
- * @global
- */
 export default class MongoController extends Controller {
-	constructor(client) {
+	ready: boolean = false;
+	mongo: MongoClient;
+	db: Db;
+
+	constructor(client: ValClient) {
 		super(client, {
 			name: 'mongo'
 		});
-		this.ready = false;
 
-		this.mongo = new MongoClient(process.env.DB_HOST, {
+		this.mongo = new MongoClient(DB_HOST, {
 			useNewUrlParser: true
 		});
-
-		this.init = this.init.bind(this);
-		this.syncLevels = this.syncLevels.bind(this);
-		this.getLevel = this.getLevel.bind(this);
-		this.getLevels = this.getLevels.bind(this);
-		this.getMilestones = this.getMilestones.bind(this);
-		this.getResponses = this.getResponses.bind(this);
-		this.syncLevels = this.syncLevels.bind(this);
 
 		this.init();
 	}
 
-	async init() {
+	init = async () => {
 		try {
 			await this.mongo.connect();
-			this.db = this.mongo.db(process.env.DB_NAME);
+			this.db = this.mongo.db(DB_NAME);
 
 			if (typeof this.db !== 'undefined') {
 				this.ready = true;
-
 				this.client.emit('queueExecute', 'Mongo controller ready');
 			}
 		} catch (err) {
@@ -43,75 +40,55 @@ export default class MongoController extends Controller {
 
 			log(this.client, message, 'error');
 		}
-	}
+	};
 
-	async syncLevels(id, { exp, text, voice, level, textXP, voiceXP }) {
-		if (this.ready) {
-			await this.db.collection('levels').updateOne(
-				{ id },
-				{
-					$set: { exp, text, voice, level, textXP, voiceXP }
-				},
-				{
-					upsert: true
-				}
-			);
-		} else
-			this.client.controllers.queue.enqueue(this.syncLevels, id, {
-				exp,
-				text,
-				voice
-			});
-	}
+	syncLevels = async (id: Snowflake, levelToSync: Level) => {
+		const { exp, text, voice, level, textXP, voiceXP } = levelToSync;
 
-	async getLevel(id) {
-		if (this.ready) {
-			return this.db.collection('levels').findOne({ id });
-		}
-	}
+		await this.db.collection('levels').updateOne(
+			{ id },
+			{
+				$set: { exp, text, voice, level, textXP, voiceXP }
+			},
+			{
+				upsert: true
+			}
+		);
+	};
 
-	async getLevels() {
-		if (this.ready) {
-			return this.db.collection('levels').find({});
-		}
-	}
+	getLevel = async (id: Snowflake): Promise<Level> => {
+		return this.db.collection('levels').findOne({ id });
+	};
 
-	async getMilestones() {
-		if (this.ready) {
-			return this.db.collection('milestones').find({});
-		}
-	}
+	getLevels = async (): Promise<Level[]> => {
+		return this.db.collection('levels').find({}).toArray();
+	};
 
-	async getResponses() {
-		if (this.ready) {
-			return this.db.collection('responses').find({});
-		}
-	}
+	getMilestones = async (): Promise<Milestone[]> => {
+		return this.db.collection('milestones').find({}).toArray();
+	};
+
+	getResponses = async (): Promise<Response[]> => {
+		return this.db.collection('responses').find({}).toArray();
+	};
 
 	/**
 	 * Stores new responses, teaches bot
-	 * @param {*} param0 reponse
 	 */
-	async saveResponse({ invoker, reply }) {
-		if (this.ready) {
-			return this.db.collection('responses').updateOne(
-				{
-					invoker
-				},
-				{
-					$set: {
-						invoker,
-						reply
-					}
-				},
-				{
-					upsert: true
+	saveResponse = async ({ invoker, reply }: Response) => {
+		return this.db.collection('responses').updateOne(
+			{
+				invoker
+			},
+			{
+				$set: {
+					invoker,
+					reply
 				}
-			);
-		} else
-			this.client.controllers.queue.enqueue(this.saveResponse, {
-				invoker,
-				reply
-			});
-	}
+			},
+			{
+				upsert: true
+			}
+		);
+	};
 }

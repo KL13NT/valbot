@@ -23,6 +23,7 @@
 		"@babel/plugin-transform-runtime": "^7.5.5",
 		"@babel/preset-env": "^7.3.4",
 		"@types/jest": "^26.0.0",
+		"@types/mongodb": "^3.5.25",
 		"@types/node": "^14.0.14",
 		"babel": "^6.23.0",
 		"babel-cli": "^6.26.0",

@@ -1,4 +1,4 @@
-import { ActivityType } from 'discord.js';
+import { ActivityType, Snowflake } from 'discord.js';
 import CommandContext from '../structures/CommandContext';
 import {
 	ConversationController,
@@ -77,4 +77,27 @@ export type IController =
 export interface QueueCall {
 	func: Function;
 	args: any[];
+}
+
+export interface Level {
+	exp: number;
+	text: number;
+	voice: number;
+	level: number;
+	textXP: number;
+	voiceXP: number;
+}
+
+export interface Milestone {
+	level: number;
+	milestone: {
+		name: string;
+		description: string;
+		roleID: Snowflake;
+	};
+}
+
+export interface Response {
+	invoker: string;
+	reply: string;
 }

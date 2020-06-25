@@ -1,7 +1,7 @@
-import Controller from '../structures/Controller';
 import ValClient from '../ValClient';
 import MongoController from './MongoController';
 import { QueueController } from '.';
+import Controller from '../structures/Controller';
 const { log } = require('../utils/general');
 
 export default class ConversationController extends Controller {
