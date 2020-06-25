@@ -109,3 +109,9 @@ export interface Response {
 	invoker: string;
 	reply: string;
 }
+
+export interface IntervalOptions {
+	name: string;
+	time: number;
+	callback: Function;
+}

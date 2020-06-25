@@ -1,32 +1,34 @@
-const { Controller } = require('../structures');
+import Controller from '../structures/Controller';
+import ValClient from '../ValClient';
+import { IntervalOptions } from '../types/interfaces';
 
 export default class IntervalsController extends Controller {
-	constructor(client) {
+	ready: boolean = false;
+	intervals: Map<string, number>;
+
+	constructor(client: ValClient) {
 		super(client, {
 			name: 'intervals'
 		});
+
 		this.ready = true;
-		this.intervals = {};
-
-		this.setInterval = this.setInterval.bind(this);
-		this.clearInterval = this.clearInterval.bind(this);
-		this.exists = this.exists.bind(this);
+		this.intervals = new Map<string, number>();
 	}
 
-	setInterval(time, intervalOptions, callback) {
-		const { name } = intervalOptions;
+	setInterval(intervalOptions: IntervalOptions) {
+		const { name, time, callback } = intervalOptions;
 
-		if (this.intervals[name]) this.clearInterval(name);
+		if (this.exists(name)) this.clearInterval(name);
 
-		this.intervals[name] = setInterval(callback, time);
+		this.intervals.set(name, setInterval(callback, time));
 	}
 
-	clearInterval(name) {
-		clearInterval(this.intervals[name]);
-		delete this.intervals[name];
+	clearInterval(name: string) {
+		clearInterval(this.intervals.get(name));
+		this.intervals.delete(name);
 	}
 
-	exists(name) {
-		return this.intervals[name] ? true : false;
+	exists(name: string) {
+		return this.intervals.has(name);
 	}
 }

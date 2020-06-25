@@ -58,11 +58,11 @@ export default class LevelsController extends Controller {
 					redis.set(`LEVEL:${id}`, Number(level) || 1);
 				});
 
-				intervals.setInterval(
-					1000 * 60,
-					{ name: 'voiceIncrement' },
-					this.voiceIncrement
-				);
+				intervals.setInterval({
+					time: 1000 * 60,
+					name: 'voiceIncrement',
+					callback: this.voiceIncrement
+				});
 			});
 
 			mongo.getMilestones().then(found => {
