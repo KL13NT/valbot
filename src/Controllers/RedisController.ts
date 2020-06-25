@@ -5,10 +5,10 @@ import { promisify } from 'util';
 
 import redis, { RedisClient } from 'redis';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 export default class RedisController extends Controller {
-	ready: boolean = false;
+	ready = false;
 	redis: RedisClient;
 
 	constructor(client: ValClient) {
@@ -29,15 +29,14 @@ export default class RedisController extends Controller {
 	private incrbyAsync = promisify(this.redis.incrby).bind(this.redis);
 
 	errorListener = (err: Error) => {
-		const message = `Something went wrong when initialising Redis, ${err.message}, <@238009405176676352>`;
+		log(this.client, err, 'error');
 
-		log(this.client, message, 'error');
 		this.redis.removeAllListeners();
 		this.ready = false;
 	};
 
 	readyListener = () => {
-		log(this.client, 'Redis controller ready', 'info');
+		log(this.client, 'Redis ready', 'info');
 		this.client.emit('queueExecute', 'Redis controller ready');
 
 		this.ready = true;

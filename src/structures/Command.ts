@@ -4,7 +4,6 @@ import CommandContext from './CommandContext';
 import ValClient from '../ValClient';
 
 import {
-	GENERIC_SOMETHING_WENT_WRONG,
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
 	ERROR_GENERIC_SOMETHING_WENT_WRONG,
 	ERROR_COMMAND_NOT_ALLOWED,
@@ -12,14 +11,13 @@ import {
 	ERROR_INSUFFICIENT_PARAMS_PASSED
 } from '../config/events.json';
 
-import { log } from '../utils/general';
 import { createEventMessage } from '../utils/event';
 import { getRoleObject } from '../utils/object';
 import { createEmbed } from '../utils/embed';
-import { CommandOptions, ICommand } from '../types/interfaces';
+import { CommandOptions } from '../types/interfaces';
 import { Message, Role } from 'discord.js';
 
-export default class Command implements ICommand {
+export default abstract class Command {
 	private client: ValClient;
 	private ready: boolean;
 	private cooldownTimer: NodeJS.Timeout;
@@ -126,16 +124,19 @@ export default class Command implements ICommand {
 			(params.length > nOfParams && !extraParams)
 		)
 			message.reply(
-				createEventMessage(ERROR_INSUFFICIENT_PARAMS_PASSED, [
-					{
-						name: '_PREFIX',
-						value: this.client.prefix
-					},
-					{
-						name: 'COMMAND_NAME',
-						value: this.options.name
-					}
-				])
+				createEventMessage({
+					template: ERROR_INSUFFICIENT_PARAMS_PASSED,
+					variables: [
+						{
+							name: '_PREFIX',
+							value: this.client.prefix
+						},
+						{
+							name: 'COMMAND_NAME',
+							value: this.options.name
+						}
+					]
+				})
 			);
 		else return true;
 	};
@@ -144,7 +145,7 @@ export default class Command implements ICommand {
 	 * Responsible for running commands.
 	 * @abstract
 	 */
-	_run = (context: CommandContext): void => {};
+	abstract _run(context: CommandContext): void;
 
 	/**
 	 * cancels an ongoing command

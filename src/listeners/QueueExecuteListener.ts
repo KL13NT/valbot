@@ -1,7 +1,7 @@
 import Listener from '../structures/Listener';
 import ValClient from '../ValClient';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 export default class QueueExecuteListener extends Listener {
 	constructor(client: ValClient) {

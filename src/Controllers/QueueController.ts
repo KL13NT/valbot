@@ -18,16 +18,13 @@ export default class QueueController extends Controller {
 		this.calls = [];
 	}
 
-	enqueue = (func: Function, ...args: any[]) => {
-		this.calls.push({
-			func,
-			args
-		});
+	enqueue = (call: QueueCall) => {
+		this.calls.push(call);
 	};
 
 	executeAll = () => {
 		for (let i = this.calls.length - 1; i >= 0; i--) {
-			this.calls[i].func.apply(this, this.calls[i].args);
+			this.calls[i].func.call(this, ...this.calls[i].args);
 			this.calls.pop();
 		}
 	};

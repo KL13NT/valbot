@@ -2,7 +2,7 @@ import Loader from '../structures/Loader';
 import * as Controllers from '../Controllers';
 import ValClient from '../ValClient';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 /**
  * Loads Controllers based on Controllers/index

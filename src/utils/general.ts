@@ -1,14 +1,11 @@
 const { ROLE_DEVELOPER, MODE } = process.env;
 
-import ValClient from '../ValClient';
-import {
-	AlertLevel,
-	NotificationOptions,
-	LogOptions
-} from '../types/interfaces';
+import { AlertLevel, NotificationOptions } from '../types/interfaces';
 import { QueueController } from '../Controllers';
+import ValClient from '../ValClient';
 
-const { getChannelObject } = require('./object');
+import { getChannelObject } from './object';
+import { TextChannel } from 'discord.js';
 
 export function createAlertMessage(message: string, alertLevel: AlertLevel) {
 	const notification = `[${alertLevel}] ${message}`;
@@ -21,7 +18,11 @@ export function createAlertMessage(message: string, alertLevel: AlertLevel) {
  * Logs events to client and console
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Description
  */
-export function log({ client, notification, alertLevel }: LogOptions) {
+export function log(
+	client: ValClient,
+	notification: string | Error,
+	alertLevel: AlertLevel
+) {
 	const queue = <QueueController>client.controllers.get('queue');
 
 	console.log(`[${alertLevel}]`, notification); // need console regardless
@@ -31,7 +32,7 @@ export function log({ client, notification, alertLevel }: LogOptions) {
 
 	const { CHANNEL_BOT_STATUS } = client.config.CHANNELS;
 
-	const channel = getChannelObject(client, CHANNEL_BOT_STATUS);
+	const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
 	const message = createAlertMessage(String(notification), alertLevel); // @see
 
 	channel.send(message);
@@ -48,7 +49,9 @@ export function notify(options: NotificationOptions) {
 
 	const { CHANNEL_NOTIFICATIONS } = client.config.CHANNELS;
 
-	const target = getChannelObject(client, channel || CHANNEL_NOTIFICATIONS);
+	const target = <TextChannel>(
+		getChannelObject(client, channel || CHANNEL_NOTIFICATIONS)
+	);
 
 	return target.send(notification, { embed });
 }

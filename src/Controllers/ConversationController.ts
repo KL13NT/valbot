@@ -5,10 +5,10 @@ import Controller from '../structures/Controller';
 import { Response } from '../types/interfaces';
 import { Message } from 'discord.js';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 export default class ConversationController extends Controller {
-	private ready: boolean = false;
+	public ready = false;
 	private responses: {
 		[index: string]: Response;
 	} = {};
@@ -25,6 +25,7 @@ export default class ConversationController extends Controller {
 		try {
 			const mongo = <MongoController>this.client.controllers.get('mongo');
 			const queue = <QueueController>this.client.controllers.get('queue');
+
 			if (mongo.ready) {
 				const responses = await mongo.getResponses();
 
@@ -34,14 +35,13 @@ export default class ConversationController extends Controller {
 						reply
 					};
 				});
+
+				this.ready = true;
 			} else {
-				queue.enqueue(this.init);
+				queue.enqueue({ func: this.init, args: [] });
 			}
 		} catch (err) {
-			//TODO: move to events
-			const message = `Something went wrong when initialising ConversationController, ${err.message}`;
-
-			log(this.client, message, 'error');
+			log(this.client, err, 'error');
 		}
 	};
 
@@ -66,7 +66,7 @@ export default class ConversationController extends Controller {
 		this.responses[response.invoker] = response;
 
 		if (mongo.ready) mongo.saveResponse(response);
-		else queue.enqueue(this.teach, response);
+		else queue.enqueue({ func: this.teach, args: [response] });
 	}
 
 	getAllResponses() {

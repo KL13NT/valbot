@@ -2,7 +2,7 @@ import Listener from '../structures/Listener';
 import ValClient from '../ValClient';
 import { GuildMember } from 'discord.js';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 export default class NewGuildMemberListener extends Listener {
 	constructor(client: ValClient) {

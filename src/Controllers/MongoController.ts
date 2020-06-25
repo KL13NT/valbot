@@ -7,10 +7,10 @@ import { MongoClient, Db } from 'mongodb';
 import { Level, Milestone, Response } from '../types/interfaces';
 import { Snowflake } from 'discord.js';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 export default class MongoController extends Controller {
-	ready: boolean = false;
+	ready = false;
 	mongo: MongoClient;
 	db: Db;
 
@@ -36,9 +36,7 @@ export default class MongoController extends Controller {
 				this.client.emit('queueExecute', 'Mongo controller ready');
 			}
 		} catch (err) {
-			const message = `Something went wrong when initialising Mongo, ${err.message}, <@238009405176676352>`;
-
-			log(this.client, message, 'error');
+			log(this.client, err, 'error');
 		}
 	};
 

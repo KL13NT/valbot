@@ -6,8 +6,8 @@ module.exports = {
 		node: true,
 		jest: true
 	},
-	extends: ['eslint:recommended'],
-	parser: 'babel-eslint',
+	extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		ecmaVersion: 10,
 		ecmaFeatures: {
@@ -16,8 +16,10 @@ module.exports = {
 			experimentalObjectRestSpread: true
 		}
 	},
-	plugins: [],
+	plugins: ['@typescript-eslint'],
 	rules: {
+		'prefer-rest-params': 0,
+		'@typescript-eslint/explicit-module-boundary-types': 0,
 		'linebreak-style': ['error', 'unix'],
 		quotes: [
 			'error',

@@ -12,6 +12,7 @@
 		"outDir": "./out",
 		"rootDir": "./src",
 		"removeComments": true,
+		"resolveJsonModule": true,
 		"strict": true,
 		"noImplicitAny": true,
 		"strictNullChecks": false,

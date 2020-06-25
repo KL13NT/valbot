@@ -3,7 +3,7 @@ const { CLIENT_ID } = process.env;
 import Controller from '../structures/Controller';
 import ValClient from '../ValClient';
 import { Snowflake, Message, GuildMember, Role } from 'discord.js';
-import { Milestone, Level } from '../types/interfaces';
+import { Milestone } from '../types/interfaces';
 import {
 	QueueController,
 	RedisController,
@@ -11,12 +11,12 @@ import {
 	IntervalsController
 } from '.';
 
-const { log, calculateUniqueWords, notify } = require('../utils/general');
-const { getRoleObject, getMemberObject } = require('../utils/object');
-const { createLevelupEmbed } = require('../utils/embed');
+import { log, calculateUniqueWords, notify } from '../utils/general';
+import { getRoleObject, getMemberObject } from '../utils/object';
+import { createLevelupEmbed } from '../utils/embed';
 
 export default class LevelsController extends Controller {
-	ready: boolean = false;
+	ready = false;
 	activeVoice: Snowflake[] = [];
 	milestones: Map<number, Milestone[]> = new Map<number, Milestone[]>();
 
@@ -37,7 +37,7 @@ export default class LevelsController extends Controller {
 
 		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
 		if (!mongo.ready || !redis.ready || !ValGuild.available)
-			return queue.enqueue(this.init);
+			return queue.enqueue({ func: this.init, args: [] });
 
 		const voiceStates = Array.from(
 			this.client.ValGuild.voiceStates.cache.values()
@@ -235,7 +235,11 @@ export default class LevelsController extends Controller {
 					const embed = createLevelupEmbed({ milestone, role });
 
 					member.roles.add(role.id);
-					notify(this.client, `<@${id}>`, embed);
+					notify({
+						client: this.client,
+						notification: `<@${id}>`,
+						embed
+					});
 				} catch (err) {
 					log(this.client, err, 'error');
 				}
@@ -246,7 +250,7 @@ export default class LevelsController extends Controller {
 	async levelUpMessage(id: Snowflake, level: number) {
 		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
 
-		notify(this.client, notification);
+		notify({ client: this.client, notification });
 	}
 
 	addMilestone(

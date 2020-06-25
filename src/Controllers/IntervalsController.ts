@@ -3,7 +3,7 @@ import ValClient from '../ValClient';
 import { IntervalOptions } from '../types/interfaces';
 
 export default class IntervalsController extends Controller {
-	ready: boolean = false;
+	ready = false;
 	intervals: Map<string, number>;
 
 	constructor(client: ValClient) {

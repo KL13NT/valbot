@@ -3,7 +3,7 @@ import * as commands from '../commands';
 import ValClient from '../ValClient';
 import Command from '../structures/Command';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 /**
  * Loads commands based on commands/index

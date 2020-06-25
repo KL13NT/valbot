@@ -1,11 +1,13 @@
+const { MODE } = process.env;
+
+import { Snowflake } from 'discord.js';
+import ValClient from '../ValClient';
+
 /**
- * @param {ValClient} client
- * @param {string} channelId
- * @returns {GuildChannel}
+ * Returns a GuildChannel object
  */
-function getChannelObject(client, channelId) {
+export function getChannelObject(client: ValClient, channelId: Snowflake) {
 	const { CHANNEL_TEST } = client.config.CHANNELS;
-	const { MODE } = process.env;
 
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM')
@@ -15,10 +17,9 @@ function getChannelObject(client, channelId) {
 }
 
 /**
- * @param {ValClient} client
- * @param {string} roleId name or id
+ * Returns a Role object
  */
-function getRoleObject(client, roleID) {
+export function getRoleObject(client: ValClient, roleID: Snowflake) {
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM')
 		.roles.cache.find(role => {
@@ -28,17 +29,10 @@ function getRoleObject(client, roleID) {
 }
 
 /**
- * @param {ValClient} client
- * @param {string} channelId
+ * Returns a GuildMember object
  */
-function getMemberObject(client, userId) {
+export function getMemberObject(client: ValClient, userId: Snowflake) {
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM')
 		.members.cache.find(member => member.id === userId);
 }
-
-module.exports = {
-	getMemberObject,
-	getChannelObject,
-	getRoleObject
-};

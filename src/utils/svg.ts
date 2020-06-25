@@ -1,6 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const nodeHtmlToImage = require('node-html-to-image');
+import fs from 'fs';
+import path from 'path';
+import nodeHtmlToImage from 'node-html-to-image';
+import {
+	SVGContentOptions,
+	SVGContent,
+	SVGContentLevelInfo,
+	UserInfo
+} from '../types/interfaces';
 
 const FRAME = path.resolve(__dirname, '../media/Frame 1.svg');
 const BACKGROUND = '../media/bg.jpg';
@@ -8,50 +14,43 @@ const MIC = '../media/mic.png';
 const AVATAR = '../media/botlogo.png';
 
 /**
- *
- * @param {Buffer} image
- * @returns {string} base64
+ * Converts images into Base64 URIs
  */
-const imageToURI = image => {
-	const base64Image = new Buffer.from(image).toString('base64');
+const imageToURI = (image: Buffer) => {
+	const base64Image = Buffer.from(image).toString('base64');
 	const dataURI = 'data:image/jpeg;base64,' + base64Image;
 
 	return dataURI;
 };
 
 /**
- * Gets local images
- * @param {string} url
- * @returns {Buffer} image object
+ * Fetches local images
  */
-const getLocalImageFromURL = url => {
+const getLocalImageFromURL = (url: string) => {
 	const file = fs.readFileSync(path.resolve(__dirname, url));
-	return new Buffer.from(file);
+	return Buffer.from(file);
 };
 
 /**
- * Gets remote images
- * @param {string} url
- * @returns {Buffer} image object
+ * Fetches remote images
  */
-const getRemoteImageFromURL = async url => {
+const getRemoteImageFromURL = async (url: string) => {
 	const resolved = await global.fetch(url);
-	return await resolved.buffer();
+	return Buffer.from(await resolved.arrayBuffer());
 };
 
 /**
- *
- * @param {object} param0
- * @param {object} param0.levelInfo from redis & mongo
- * @param {object} param0.userInfo id, displayName, avatar_url
- * @returns {object} content object for puppeteer
+ * Creates SVG content object
  */
-const getContentObject = async ({ userInfo, levelInfo }) => {
+const getContentObject = async ({
+	userInfo,
+	levelInfo
+}: SVGContentOptions): Promise<SVGContent> => {
 	const { avatar_url, displayName } = userInfo;
 	const { exp, levelEXP, level, text, voice } = levelInfo;
 
-	const bgBuffer = await getLocalImageFromURL(BACKGROUND);
-	const micBuffer = await getLocalImageFromURL(MIC);
+	const bgBuffer = getLocalImageFromURL(BACKGROUND);
+	const micBuffer = getLocalImageFromURL(MIC);
 	const avatarBuffer =
 		process.env.MODE !== 'PRODUCTION'
 			? getLocalImageFromURL(AVATAR)
@@ -76,10 +75,11 @@ const getContentObject = async ({ userInfo, levelInfo }) => {
 
 /**
  * Returns card image after rendering it in puppeteer
- * @param {object} userInfo
- * @param {object} levelInfo
  */
-async function generateRankCard(userInfo, levelInfo) {
+async function generateRankCard(
+	userInfo: UserInfo,
+	levelInfo: SVGContentLevelInfo
+) {
 	const template = fs.readFileSync(FRAME, 'utf-8');
 	const content = await getContentObject({ userInfo, levelInfo });
 
@@ -104,7 +104,9 @@ async function generateRankCard(userInfo, levelInfo) {
 	});
 }
 
-module.exports = {
+//TODO: Add node-html-to-image types
+
+module.exports = {	
 	imageToURI,
 	getLocalImageFromURL,
 	getRemoteImageFromURL,

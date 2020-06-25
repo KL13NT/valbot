@@ -2,10 +2,10 @@ import Listener from '../structures/Listener';
 import ValClient from '../ValClient';
 import { Message } from 'discord.js';
 
-const {
+import {
 	GENERIC_COMMAND_NOT_UNDERSTOOD,
 	ERROR_COMMAND_DOES_NOT_EXIST
-} = require('../config/events.json');
+} from '../config/events.json';
 
 export default class CommandsListener extends Listener {
 	constructor(client: ValClient) {

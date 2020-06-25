@@ -5,4 +5,4 @@ module.exports = {
 	Loader: require('./Loader'),
 	Listener: require('./Listener'),
 	Controller: require('./Controller')
-}
+};

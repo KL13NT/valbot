@@ -5,14 +5,14 @@ import Controller from '../structures/Controller';
 import ValClient from '../ValClient';
 import { Message } from 'discord.js';
 
-const { warn, mute, isWarned } = require('../utils/moderation');
-const { log } = require('../utils/general');
+import { warn, mute, isWarned } from '../utils/moderation';
+import { log } from '../utils/general';
 
 export default class ToxicityController extends Controller {
-	ready: boolean = false;
+	ready = false;
 	labels: string[] = [];
-	threshold: number = 0.7;
-	confidence: number = 0.95;
+	threshold = 0.7;
+	confidence = 0.95;
 	classifier: ToxicityClassifier;
 
 	constructor(client: ValClient) {
@@ -50,7 +50,7 @@ export default class ToxicityController extends Controller {
 				curr.results[0].match === true &&
 				curr.results[0].probabilities[1] > this.confidence
 					? true
-					: false,
+					: result,
 			false
 		);
 	};

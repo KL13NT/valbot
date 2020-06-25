@@ -88,7 +88,9 @@ export interface ICommand {
 }
 
 export interface QueueCall {
-	func: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	func: (...args: any[]) => any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	args: any[];
 }
 
@@ -117,7 +119,7 @@ export interface Response {
 export interface IntervalOptions {
 	name: string;
 	time: number;
-	callback: Function;
+	callback: () => void;
 }
 
 export interface ModerationEmbedOptions {
@@ -163,7 +165,7 @@ export interface EventOptions {
 export interface NotificationOptions {
 	client: ValClient;
 	notification: string;
-	embed: MessageEmbed;
+	embed?: MessageEmbed;
 	channel?: Snowflake;
 }
 
@@ -171,4 +173,37 @@ export interface LogOptions {
 	client: ValClient;
 	notification: string | Error;
 	alertLevel: AlertLevel;
+}
+
+export interface UserModerationOptions {
+	member: Snowflake;
+	moderator: Snowflake;
+	channel: Snowflake;
+	reason: string;
+}
+
+export interface UserInfo {
+	avatar_url: string;
+	displayName: string;
+}
+
+export interface SVGContentLevelInfo extends Level {
+	levelEXP: number;
+}
+
+export interface SVGContentOptions {
+	levelInfo: SVGContentLevelInfo;
+	userInfo: UserInfo;
+}
+
+export interface SVGContent {
+	CANVAS_BACKGROUND: string;
+	USER_AVATAR: string;
+	ICON_MIC: string;
+	USER_NAME: string;
+	CURRENT_LEVEL: number;
+	CURRENT_EXP: number;
+	LEVEL_EXP: number;
+	VOICE_LEVEL: number;
+	TEXT_LEVEL: number;
 }

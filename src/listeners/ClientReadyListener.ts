@@ -1,7 +1,7 @@
 import ValClient from '../ValClient';
 import Listener from '../structures/Listener';
 
-const { log } = require('../utils/general');
+import { log } from '../utils/general';
 
 export default class ClientReadyListener extends Listener {
 	constructor(client: ValClient) {
