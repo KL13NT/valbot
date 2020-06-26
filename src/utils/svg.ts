@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import nodeHtmlToImage from 'node-html-to-image';
+import { nodeHtmlToImage } from 'node-html-to-image';
 import {
 	SVGContentOptions,
 	SVGContent,
@@ -16,7 +16,7 @@ const AVATAR = '../media/botlogo.png';
 /**
  * Converts images into Base64 URIs
  */
-const imageToURI = (image: Buffer) => {
+export const imageToURI = (image: Buffer) => {
 	const base64Image = Buffer.from(image).toString('base64');
 	const dataURI = 'data:image/jpeg;base64,' + base64Image;
 
@@ -26,7 +26,7 @@ const imageToURI = (image: Buffer) => {
 /**
  * Fetches local images
  */
-const getLocalImageFromURL = (url: string) => {
+export const getLocalImageFromURL = (url: string) => {
 	const file = fs.readFileSync(path.resolve(__dirname, url));
 	return Buffer.from(file);
 };
@@ -34,7 +34,7 @@ const getLocalImageFromURL = (url: string) => {
 /**
  * Fetches remote images
  */
-const getRemoteImageFromURL = async (url: string) => {
+export const getRemoteImageFromURL = async (url: string) => {
 	const resolved = await global.fetch(url);
 	return Buffer.from(await resolved.arrayBuffer());
 };
@@ -42,7 +42,7 @@ const getRemoteImageFromURL = async (url: string) => {
 /**
  * Creates SVG content object
  */
-const getContentObject = async ({
+export const getContentObject = async ({
 	userInfo,
 	levelInfo
 }: SVGContentOptions): Promise<SVGContent> => {
@@ -76,7 +76,7 @@ const getContentObject = async ({
 /**
  * Returns card image after rendering it in puppeteer
  */
-async function generateRankCard(
+export async function generateRankCard(
 	userInfo: UserInfo,
 	levelInfo: SVGContentLevelInfo
 ) {
@@ -103,13 +103,3 @@ async function generateRankCard(
 		}
 	});
 }
-
-//TODO: Add node-html-to-image types
-
-module.exports = {	
-	imageToURI,
-	getLocalImageFromURL,
-	getRemoteImageFromURL,
-	getContentObject,
-	generateRankCard
-};

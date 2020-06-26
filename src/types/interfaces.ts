@@ -11,7 +11,7 @@ import {
 } from '../Controllers';
 import ValClient from '../ValClient';
 
-export type ListenerHandler = (...args: any[]) => void;
+export type ListenerHandler = (...args: any[]) => void; // eslint-disable-line
 
 export type Template = string;
 
