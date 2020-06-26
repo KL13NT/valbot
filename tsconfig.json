@@ -9,7 +9,7 @@
 		"declaration": true,
 		"declarationMap": false,
 		"sourceMap": false,
-		"outDir": "./out",
+		"outDir": "./prod",
 		"rootDir": "./src",
 		"removeComments": true,
 		"resolveJsonModule": true,

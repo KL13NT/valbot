@@ -15,7 +15,7 @@ import {
 	MongoController,
 	RedisController,
 	QueueController
-} from './Controllers';
+} from './controllers';
 
 /**
  * @param { ClientOptions	} options DiscordClientOptions

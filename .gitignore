@@ -119,7 +119,11 @@ typings/
 # next.js build output
 .next
 server/
+
 .vscode/
 static/
 data/
+prod/
+out/
+
 *.rdb

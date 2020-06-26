@@ -1,6 +1,6 @@
 # ValariumBot
 
-A bot for the Valarium community discord server.
+A bot for the Valarium community discord server. Run `tsc` in the root project directory to compile it first.
 
 ## Table of Contents
 
@@ -28,7 +28,7 @@ I'm Nabil Tharwat, a Frontend Engineer based in Egypt. Feel free to contact me a
 
 ## Motivation
 
-Creating this bot was in the first place a primary goal for the Valarium community, because we needed customisation. A lot of it. And we need low-level customisation that market bots can't deliver. So, me being a ninja-expert nodejs developer with no experience at all (lol?) I decided to challenge myself and craft this myself.
+Creating this bot was in the first place a primary necessity for the Valarium community, because we needed customisation. A lot of it. And we need low-level customisation that market bots can't deliver. So, me being a ninja-expert nodejs developer with no experience at all (lol?) I decided to challenge myself and craft this myself.
 
 ## Lifecycle
 
