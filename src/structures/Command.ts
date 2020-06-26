@@ -18,10 +18,10 @@ import { CommandOptions } from '../types/interfaces';
 import { Message, Role } from 'discord.js';
 
 export default abstract class Command {
-	private client: ValClient;
-	private ready: boolean;
-	private cooldownTimer: NodeJS.Timeout;
-	public options: CommandOptions;
+	client: ValClient;
+	ready: boolean;
+	cooldownTimer: NodeJS.Timeout;
+	options: CommandOptions;
 
 	constructor(client: ValClient, options: CommandOptions) {
 		this.client = client;
