@@ -187,7 +187,11 @@ export interface UserInfo {
 	displayName: string;
 }
 
-export interface SVGContentLevelInfo extends Level {
+export interface SVGContentLevelInfo {
+	exp: number;
+	text: number;
+	voice: number;
+	level: number;
 	levelEXP: number;
 }
 
