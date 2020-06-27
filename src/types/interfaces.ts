@@ -164,7 +164,7 @@ export interface EventOptions {
 
 export interface NotificationOptions {
 	client: ValClient;
-	notification: string;
+	notification?: string;
 	embed?: MessageEmbed;
 	channel?: Snowflake;
 }

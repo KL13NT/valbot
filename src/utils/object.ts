@@ -9,7 +9,10 @@ import { Snowflake, TextChannel } from 'discord.js';
 /**
  * Returns a text channel
  */
-export function getChannelObject(client: ValClient, channelId: Snowflake) {
+export function getChannelObject(
+	client: ValClient,
+	channelId: Snowflake
+): TextChannel | undefined {
 	const { CHANNEL_TEST } = client.config.CHANNELS;
 
 	return <TextChannel>(

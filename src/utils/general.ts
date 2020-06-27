@@ -18,7 +18,7 @@ export function createAlertMessage(message: string, alertLevel: AlertLevel) {
  * Logs events to client and console
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Description
  */
-export function log(
+export async function log(
 	client: ValClient,
 	notification: string | Error,
 	alertLevel: AlertLevel
@@ -35,13 +35,13 @@ export function log(
 	const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
 	const message = createAlertMessage(String(notification), alertLevel); // @see
 
-	channel.send(message);
+	await channel.send(message);
 }
 
 /**
  * Sends notification to specified channel or to notifications channel
  */
-export function notify(options: NotificationOptions) {
+export async function notify(options: NotificationOptions) {
 	const { client, notification, embed, channel } = options;
 	const queue = <QueueController>client.controllers.get('queue');
 
@@ -50,11 +50,11 @@ export function notify(options: NotificationOptions) {
 
 	const { CHANNEL_NOTIFICATIONS } = client.config.CHANNELS;
 
-	const target = <TextChannel>(
-		getChannelObject(client, channel || CHANNEL_NOTIFICATIONS)
-	);
+	const target = getChannelObject(client, channel || CHANNEL_NOTIFICATIONS);
 
-	return target.send(notification, { embed });
+	if (!target) throw Error('Channel unavailable');
+
+	await target.send({ content: notification, embed });
 }
 
 /**

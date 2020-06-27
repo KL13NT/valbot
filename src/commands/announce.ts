@@ -1,14 +1,11 @@
-import ERR0007 from '../config/errors';
-
 import ValClient from '../ValClient';
 
-import { WebhookClient, Message, TextChannel } from 'discord.js';
+import { Message } from 'discord.js';
 
 import { Command, CommandContext } from '../structures';
-import { log, notify } from '../utils/general';
+import { log } from '../utils/general';
 import {
 	getChannelObject,
-	getRoleObject,
 	getChannelFromMention,
 	localToBuffer
 } from '../utils/object';
