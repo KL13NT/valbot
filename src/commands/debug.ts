@@ -1,47 +1,44 @@
-const { Command } = require('../structures');
-const { CommandOptions } = require('../structures');
+import ValClient from '../ValClient';
 
-const { log } = require('../utils/general');
+import { Command, CommandContext } from '../structures';
+import { log } from '../utils/general';
+import { IntervalsController } from '../Controllers';
 
-class Debug extends Command {
-	/**
-	 * Constructs help command
-	 * @param {ValClient} client
-	 */
-	constructor(client) {
-		const options = new CommandOptions({
+export default class Debug extends Command {
+	constructor(client: ValClient) {
+		super(client, {
 			name: `debug`,
 			category: 'Development',
 			cooldown: 1000,
 			nOfParams: 1,
-			requiredRole: 'dev',
 			description: `بتوريك الاداء بتاع البوت و معلومات عن البروسيس بتاعه`,
 			exampleUsage: `<"on"|"off">`,
 			extraParams: false,
+			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
 				required: 'AUTH_DEV',
 				devOnly: true
 			}
 		});
-
-		super(client, options);
 	}
 
-	async _run(context) {
+	_run = async (context: CommandContext) => {
 		const { CHANNEL_BOT_STATUS } = this.client.config.CHANNELS;
-		const { AUTH_DEV } = this.client.config.ROLES;
-
 		const { message, params } = context;
 
+		const intervals = <IntervalsController>(
+			this.client.controllers.get('intervals')
+		);
+
 		if (params[0] === 'on') {
-			if (this.client.controllers.intervals.exists('debug'))
+			if (intervals.exists('debug'))
 				return message.reply('انا مشغل الdebugger اصلا يبشا');
 
 			message.reply(`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`);
 
 			log(this.client, 'Logging every 2000ms', 'warn');
-			this.client.controllers.intervals.setInterval({
+			intervals.setInterval({
 				time: 2000,
 				name: 'debug',
 				callback: () => {
@@ -49,17 +46,17 @@ class Debug extends Command {
 				}
 			});
 		} else if (params[0] === 'off') {
-			if (!this.client.controllers.intervals.exists('debug'))
+			if (!intervals.exists('debug'))
 				return message.reply('انا مش مشغل الdebugger اصلا يبشا');
 
 			message.reply(`قفلت الـ debugger خلاص`);
 
 			log(this.client, 'Logger disabled', 'warn');
-			this.client.controllers.intervals.clearInterval('debug');
+			intervals.clearInterval('debug');
 		} else return message.reply('اول باراميتر المفروض يبقى on او off');
-	}
+	};
 
-	usageToString() {
+	usageToString = () => {
 		const { heapTotal, heapUsed } = process.memoryUsage();
 		const { argv } = process;
 
@@ -69,7 +66,5 @@ class Debug extends Command {
 		Total heap: used ${heapUsed / 1024 / 1024} / ${heapTotal / 1024 / 1024}
 		Process arguments: ${argv.join(', ')}
 		`;
-	}
+	};
 }
-
-module.exports = Debug;

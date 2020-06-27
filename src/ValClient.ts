@@ -26,8 +26,8 @@ export default class ValClient extends Client {
 	readonly prefix: string;
 	ready: boolean;
 	config: ClientConfig;
-	commands: Map<string, Command>;
-	controllers: Map<string, IController>;
+	commands: Map<string, Command> = new Map<string, Command>();
+	controllers: Map<string, IController> = new Map<string, IController>();
 	ValGuild: Guild;
 
 	constructor(options: ClientOptions) {

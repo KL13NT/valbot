@@ -1,32 +1,30 @@
-const { Command } = require('../structures')
-const { CommandOptions } = require('../structures')
+import { Command, CommandContext } from '../structures';
+import { createEmbed } from '../utils/embed';
+import ValClient from '../ValClient';
 
-const { createEmbed } = require('../utils/embed')
-
-class Help extends Command {
+export default class Help extends Command {
 	/**
 	 * Constructs help command
 	 * @param {ValClient} client
 	 */
-	constructor(client) {
-		const options = new CommandOptions({
+	constructor(client: ValClient) {
+		super(client, {
 			name: 'help',
 			category: 'Support',
 			cooldown: 0,
 			nOfParams: 0,
 			extraParams: true,
+			optionalParams: 0,
 			description: `لو محتاج مساعدة`,
 			exampleUsage: `\`val! help\` او \`val! help command\``,
 			auth: {
 				method: 'ROLE',
 				required: 'AUTH_EVERYONE'
 			}
-		})
-
-		super(client, options)
+		});
 	}
 
-	async _run({ message, member }) {
+	_run = async ({ message, member }: CommandContext) => {
 		const embed = createEmbed({
 			title: 'Help',
 			description: `اهلاً اهلاً. شوف القايمة دي, متقسمه لعناوين حسب اللي انت ممكن تحتاجه`,
@@ -48,31 +46,30 @@ class Help extends Command {
 					value: `\u200b`
 				}
 			]
-		})
+		});
 
-		const commands = {}
+		// create an object of category: [...commandNames] for easier joining to strings
+		const commands: { [index: string]: string[] } = {};
 
-		Object.values(this.client.commands).forEach(command => {
-			const { category, name } = command.options
+		for (const command in this.client.commands) {
+			const { category, name } = this.client.commands.get(command).options;
 
-			if (!commands[category]) commands[category] = []
-			commands[category].push(name)
-		})
+			if (!commands[category]) commands[category] = [];
+			commands[category].push(name);
+		}
 
 		Object.keys(commands).forEach(cat => {
-			const categoryCommands = `\`${commands[cat].join('`\n`')}\``
-			embed.addField(cat, categoryCommands, true)
-		})
+			const categoryCommands = `\`${commands[cat].join('`\n`')}\``;
+			embed.addField(cat, categoryCommands, true);
+		});
 
-		member.createDM().then(dm => {
-			dm.send(embed)
-			message.reply('بعتلك رسالة جادة جداً').then(sent => {
-				setTimeout(() => {
-					sent.delete()
-				}, 5 * 1000)
-			})
-		})
-	}
+		const dm = await member.createDM();
+		await dm.send(embed);
+
+		const sent = await message.reply('بعتلك رسالة جادة جداً');
+
+		setTimeout(() => {
+			sent.delete();
+		}, 5 * 1000);
+	};
 }
-
-module.exports = Help
