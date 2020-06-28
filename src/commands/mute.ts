@@ -25,14 +25,18 @@ export default class Mute extends Command {
 		const [mention, ...reasonWords] = params;
 		const mentionRegex = /<@!(\d+)>/;
 
-		if (!mentionRegex.test(mention))
-			return await message.reply('لازم تعمل منشن للـ member');
+		if (!mentionRegex.test(mention)) {
+			await message.reply('لازم تعمل منشن للـ member');
+			return;
+		}
 
 		const id = mention.match(mentionRegex)[1];
 		const reason = reasonWords.join(' ');
 
-		if (isMuted(this.client, id))
-			return await message.reply('معمولهم mute اصلاً');
+		if (isMuted(this.client, id)) {
+			await message.reply('معمولهم mute اصلاً');
+			return;
+		}
 
 		await mute(this.client, {
 			member: id,

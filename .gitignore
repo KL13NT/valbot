@@ -125,5 +125,6 @@ static/
 data/
 prod/
 out/
+*.tsbuildinfo
 
 *.rdb

@@ -34,10 +34,10 @@ export default class Rank extends Command {
 				? userMention.replace(/<|>|!|@/g, '')
 				: ctxMember.user.id;
 
-			if (id === process.env.CLIENT_ID || id === process.env.CLIENT_DEV_ID)
-				return await message.reply(
-					'متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D'
-				);
+			if (id === process.env.CLIENT_ID || id === process.env.CLIENT_DEV_ID) {
+				await message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
+				return;
+			}
 
 			const member = getMemberObject(this.client, id);
 

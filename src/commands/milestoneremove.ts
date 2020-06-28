@@ -37,13 +37,15 @@ export default class MilestoneRemove extends Command {
 
 		const level = Number(params[0].match(levelRegex)[0]);
 
-		if (isNaN(level))
-			return message.reply(
-				'لازم تحدد الـ level اللي عايز تشيل منه الـ milestone'
-			);
-
 		try {
-			message.reply('ايه اسم الـ achievement؟');
+			if (isNaN(level)) {
+				await message.reply(
+					'لازم تحدد الـ level اللي عايز تشيل منه الـ milestone'
+				);
+				return;
+			}
+
+			await message.reply('ايه اسم الـ achievement؟');
 
 			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
 				.content;

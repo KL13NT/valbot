@@ -253,7 +253,7 @@ export default class LevelsController extends Controller {
 		notify({ client: this.client, notification });
 	}
 
-	addMilestone(
+	async addMilestone(
 		level: number,
 		name: string,
 		description: string,
@@ -278,7 +278,7 @@ export default class LevelsController extends Controller {
 			this.milestones.set(level, [newMilestone]);
 		}
 
-		mongo.db.collection('milestones').updateOne(
+		await mongo.db.collection('milestones').updateOne(
 			{
 				level
 			},

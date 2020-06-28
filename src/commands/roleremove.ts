@@ -30,40 +30,44 @@ export default class RoleRemove extends Command {
 		const roleIDRegex = /\d+/i;
 		const mentionRegex = /<@!(\d+)>/;
 
-		if (!roleNameRegex.test(params[1]) && !roleIDRegex.test(params[1]))
-			return message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
+		try {
+			if (!roleNameRegex.test(params[1]) && !roleIDRegex.test(params[1])) {
+				await message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
+				return;
+			}
 
-		if (!mentionRegex.test(params[0]))
-			return message.reply('لازم تعمل منشن للميمبر اللي عايز تديله الروول ده');
+			if (!mentionRegex.test(params[0])) {
+				await message.reply('لازم تعمل منشن للميمبر اللي عايز تديله الروول ده');
+				return;
+			}
 
-		const roleID =
-			params[1].match(roleNameRegex)[0] || params[1].match(roleIDRegex)[0];
-		const targetMemberID = params[0].match(mentionRegex)[1];
+			const roleID =
+				params[1].match(roleNameRegex)[0] || params[1].match(roleIDRegex)[0];
+			const targetMemberID = params[0].match(mentionRegex)[1];
 
-		const role = getRoleObject(this.client, roleID);
-		const targetMember = getMemberObject(this.client, targetMemberID);
+			const role = getRoleObject(this.client, roleID);
+			const targetMember = getMemberObject(this.client, targetMemberID);
 
-		const embed = createRoleEmbed({
-			title: 'Member Role Removed',
-			member: targetMemberID,
-			moderator: member.id,
-			channel: channel.id,
-			role: role.id
-		});
+			const embed = createRoleEmbed({
+				title: 'Member Role Removed',
+				member: targetMemberID,
+				moderator: member.id,
+				channel: channel.id,
+				role: role.id
+			});
 
-		targetMember.roles
-			.remove(role)
-			.then(() => {
+			await Promise.all([
+				targetMember.roles.remove(role),
 				notify({
 					client: this.client,
 					notification: `<@${targetMemberID}>`,
 					embed,
 					channel: CHANNEL_MOD_LOGS
-				});
-				message.reply(`شيلت روول ${role.name} من الميمبر ده`);
-			})
-			.catch(err => {
-				log(this.client, err, 'error');
-			});
+				}),
+				message.reply(`شيلت روول ${role.name} من الميمبر ده`)
+			]);
+		} catch (err) {
+			log(this.client, err, 'error');
+		}
 	};
 }

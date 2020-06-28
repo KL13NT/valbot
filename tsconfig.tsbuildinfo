@@ -374,8 +374,8 @@
         "signature": "eade687015cfa66128b0d7bdb0154c5f372e13d60710627150865d2f435edd63"
       },
       "./src/controllers/levelscontroller.ts": {
-        "version": "5736e3cf95c8ffa27a9898132c435b91e9feed3d34e6eb1c7232ca33ff75d668",
-        "signature": "fce13af2e8df7903ccfaab04123d3ed6d67ec096ac4cd311d8266b6eb2fdd0f2"
+        "version": "56596bd642066dfb04b93d69eab35d23cb0d556fdb5016a243cd96a72d36317c",
+        "signature": "e2479675c3023a37c0de2955c6804b33b488bb95785604fc413e68f7314cd479"
       },
       "./src/controllers/conversationcontroller.ts": {
         "version": "f2652d3494a8bf037db01bc3cd8476505aa76250ba6bf9b76ee96262d03905d7",
@@ -1000,56 +1000,60 @@
         "signature": "26f4ac3da9e32ccf56e1dc96f11abf5c462c2ef6945e7fc001aa6bc6654d9ceb"
       },
       "./src/commands/debug.ts": {
-        "version": "c9dc30eaf19c1e2d72d71c933c63451487b1fc12526df61068d19a4d3c5de7e1",
-        "signature": "bca441b9feebbdcfc647fee0b019eae77b18c63009566ea358946ad4018c4ea1"
+        "version": "8b70afb7b357955ecbf759567422385d3889b97e795f8cfb7c8661d8bccc556f",
+        "signature": "d0f0b6c0d0c89b5fc38401d3fbddb87bcf3b2b318f82095e8ccd6e68c964a97d"
       },
       "./src/commands/help.ts": {
         "version": "b371977074d1fedf8ad13a636f30d315a95f2a2c435fc8cd7f5d503f27ed5cb3",
         "signature": "a879882e13451867818f40945e755b17f066f5394100ca7cdb17ebee7f248075"
       },
-      "./src/commands/milestoneadd.ts": {
-        "version": "aaeb0332acf2574cb012e2e3346421a5434ef939a0532ce7fd4b5f4a4dd48bbb",
-        "signature": "fd9984661304843fb1e9e58cf8eca250e93bde280d1d631dc94a3af958dfa836"
-      },
-      "./src/commands/milestoneget.ts": {
-        "version": "9493658552d7f2ce04ea5b53f6421e3784474f2d450d2bba31e445df2444f675",
-        "signature": "fe09481f6f381e25ceb28f3888db8d7d8713c772550c81fbcd55afd28fa9ba11"
-      },
-      "./src/commands/milestoneremove.ts": {
-        "version": "b99d94408ceae1ae8e13b1b7e476043ab40e779be8cdaaa00cc87d8f45e6d594",
-        "signature": "2c633f2b132a634aee0a09a2f92fd33de4c8baef4fce1f782e07a0bf4cd4d971"
-      },
-      "./src/commands/mute.ts": {
-        "version": "f1e193e23b5e1a12d898b0f33380614800e4746f8326d348ad005512bd249656",
-        "signature": "3c1b03a6bb66596ad2847612162695c712522dcbf74361ee9daea02ebf82f66f"
+      "./src/commands/setup.ts": {
+        "version": "93e94468bdc26fb70fcb4c65d910a8a1a492be35b73d46bb6d8368d2b466fe88",
+        "signature": "050134672d56dc2a1d749c91eaf34f150fcd870f3cf28aab169f6addaa1e1d53"
       },
       "./src/utils/svg.ts": {
         "version": "2d7d0822ac3e27dfb252a5dd5366743dcc9cb69e7e74c50027f712a7a77b439d",
         "signature": "17797d5151b8da2e3767240af36cfe49611e3f220c842c2f3d88aa70c4ee378c"
       },
       "./src/commands/rank.ts": {
-        "version": "f9e3ca5851a66aafc76864105e31797a001776e7653b9c376ae4f87e666ccfd4",
-        "signature": "f21545febcbf5fd8e4568c749a29c31826f5f85d388e3186d689705fb1753c36"
-      },
-      "./src/commands/rolegive.ts": {
-        "version": "55ef7f5c420a6f5ae1e34410a997c7925ec90d95b3af8e494434572e826fcaa4",
-        "signature": "546a96dcb74f82bef9a0517fa5ec71f659317a7de0932d88a15aeba87fcf64eb"
-      },
-      "./src/commands/roleremove.ts": {
-        "version": "74c82782b5c2d79ebbd0d608be592e1cad219bbdca7886d548d4ea302294ac2b",
-        "signature": "6713311b7a823de1d86a99e99fe09924f08b6bb9d84f4b3f2f31d9e73eaef76c"
-      },
-      "./src/commands/setup.ts": {
-        "version": "93e94468bdc26fb70fcb4c65d910a8a1a492be35b73d46bb6d8368d2b466fe88",
-        "signature": "050134672d56dc2a1d749c91eaf34f150fcd870f3cf28aab169f6addaa1e1d53"
+        "version": "89e1174b08ca43cd025ee94f27265c341264dfcdf1f5eacde441d5b7227265ea",
+        "signature": "9cabd5e54b83b75e8303b4ef26f1322580262ed28bdd314d5a92dd5bec8eabee"
       },
       "./src/commands/teach.ts": {
         "version": "497c04eb98fbfffe62c78360b77f52bf0dcb1f895785c6bae6f6479309ebeaa6",
         "signature": "324ef068ae83cae2ae6c33c22524ea8e93c7713173ef15d9b6a4a8ffebea5814"
       },
+      "./src/commands/rolegive.ts": {
+        "version": "4d26b70749142d713eb030f8706ad1a2e648777dc676d165ef5ca49b530e537b",
+        "signature": "1f210e3114b6c5541290605a938b07a497e9549a8dae33fef672df73ad463300"
+      },
+      "./src/commands/roleremove.ts": {
+        "version": "5d6f49e53f23a3134f9af0ef7fa1abbdf91fd4c4a39d5dace41f9fd287d06a2e",
+        "signature": "7f2acbfe6fefdda3fd9e52b7738a6f310d6184c6d7ee74598e0e98b689de95f1"
+      },
+      "./src/commands/milestoneget.ts": {
+        "version": "b3f4de4ffa72bdb22ceb74a28d92099d7191906bb30f39e875b657023def749b",
+        "signature": "7294602293aaa86a071a09d5347e8be43250a675024f32f5b70b8328a9692c7d"
+      },
+      "./src/commands/milestoneadd.ts": {
+        "version": "7dc8b197b4c8e90b5e8bd4325144a5d778d4fbbd15d700fd788f8ce6a160a817",
+        "signature": "c5e926e6b1708fbbd0376e213d0c5123967e5f208e262c7eff9e4efc9ad8b5b3"
+      },
+      "./src/commands/milestoneremove.ts": {
+        "version": "11e36a8a224c4d5f8031df28b088f1bf6c7b48b8137413d16c118f44f5571fbf",
+        "signature": "f30050d26e8e32bf4c8abd9ca193cd4cdc172d6c3071de7d203690e96dd7fd7a"
+      },
+      "./src/commands/mute.ts": {
+        "version": "a0388ccc8502a9179a37e89bfdffdd91674b3c960e6984cf9b63cfecffeed042",
+        "signature": "ce75f6ee0e7402ad5bfc0a8ea6ef5e11c26a0b4179806707f538752b23eea859"
+      },
       "./src/commands/warn.ts": {
         "version": "d095d00437b089146cb74fd433b6126ca069f3cae479b3c242763d39c08bb35b",
         "signature": "3864a3b82335cdb72893c607731a63fe5d795d12de3fcd82ad6767a0089f9901"
+      },
+      "./src/commands/index.ts": {
+        "version": "2d1f2927451ee8fecc5186aa672c74d5279dd45e89354d83fe799f32bb1e2413",
+        "signature": "83374712064f38189fe995a8ba1f9e2af7e3e24b2ad698e4fdc64e73ab218f5a"
       },
       "./src/config/errors.ts": {
         "version": "ec2dd0cae979126c8ff3ecb189f01b4467c93f8a78d54cf90ccb55e72fa5f1c2",
@@ -3351,44 +3355,12 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "./src/commands/milestoneadd.ts": [
+      "./src/commands/setup.ts": [
         "./src/valclient.ts",
         "./src/structures/index.ts",
-        "./src/utils/general.ts",
-        "./src/utils/object.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/types/interfaces.ts",
         "./src/controllers/index.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/commands/milestoneget.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts",
-        "./src/utils/general.ts",
-        "./src/utils/object.ts",
-        "./src/controllers/index.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/commands/milestoneremove.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts",
-        "./src/utils/general.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/controllers/index.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/commands/mute.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts",
-        "./src/utils/moderation.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3410,6 +3382,17 @@
         "./src/utils/object.ts",
         "./src/valclient.ts",
         "./src/controllers/index.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/commands/teach.ts": [
+        "./src/valclient.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/structures/index.ts",
+        "./src/controllers/index.ts",
+        "./src/utils/general.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3437,23 +3420,44 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "./src/commands/setup.ts": [
+      "./src/commands/milestoneget.ts": [
         "./src/valclient.ts",
         "./src/structures/index.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/types/interfaces.ts",
+        "./src/utils/general.ts",
+        "./src/utils/object.ts",
         "./src/controllers/index.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "./src/commands/teach.ts": [
+      "./src/commands/milestoneadd.ts": [
         "./src/valclient.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
         "./src/structures/index.ts",
-        "./src/controllers/index.ts",
         "./src/utils/general.ts",
+        "./src/utils/object.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/controllers/index.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/commands/milestoneremove.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts",
+        "./src/utils/general.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/controllers/index.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/commands/mute.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts",
+        "./src/utils/moderation.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -3464,6 +3468,27 @@
         "./src/utils/moderation.ts",
         "./src/utils/general.ts",
         "./src/valclient.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/commands/index.ts": [
+        "./src/commands/setup.ts",
+        "./src/commands/clear.ts",
+        "./src/commands/help.ts",
+        "./src/commands/rank.ts",
+        "./src/commands/teach.ts",
+        "./src/commands/rolegive.ts",
+        "./src/commands/roleremove.ts",
+        "./src/commands/debug.ts",
+        "./src/commands/milestoneget.ts",
+        "./src/commands/milestoneadd.ts",
+        "./src/commands/milestoneremove.ts",
+        "./src/commands/announce.ts",
+        "./src/commands/mute.ts",
+        "./src/commands/ban.ts",
+        "./src/commands/warn.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
@@ -5614,6 +5639,131 @@
         "./src/structures/command.ts",
         "./node_modules/discord.js/typings/index.d.ts"
       ],
+      "./src/structures/index.ts": [
+        "./src/structures/command.ts",
+        "./src/structures/commandcontext.ts",
+        "./src/structures/loader.ts",
+        "./src/structures/listener.ts",
+        "./src/structures/controller.ts"
+      ],
+      "./src/commands/announce.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/ban.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/clear.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/debug.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/help.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/setup.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
+        "./src/types/interfaces.ts"
+      ],
+      "./src/utils/svg.ts": [
+        "./src/types/interfaces.ts"
+      ],
+      "./src/commands/rank.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/teach.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/rolegive.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/roleremove.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/milestoneget.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/milestoneadd.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/milestoneremove.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/mute.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/warn.ts": [
+        "./src/valclient.ts",
+        "./src/structures/index.ts"
+      ],
+      "./src/commands/index.ts": [
+        "./src/commands/setup.ts",
+        "./src/commands/clear.ts",
+        "./src/commands/help.ts",
+        "./src/commands/rank.ts",
+        "./src/commands/teach.ts",
+        "./src/commands/rolegive.ts",
+        "./src/commands/roleremove.ts",
+        "./src/commands/debug.ts",
+        "./src/commands/milestoneget.ts",
+        "./src/commands/milestoneadd.ts",
+        "./src/commands/milestoneremove.ts",
+        "./src/commands/announce.ts",
+        "./src/commands/mute.ts",
+        "./src/commands/ban.ts",
+        "./src/commands/warn.ts"
+      ],
+      "./node_modules/@types/puppeteer/errors.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/puppeteer/devicedescriptors.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./node_modules/@types/puppeteer/index.d.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/child_process.d.ts",
+        "./node_modules/@types/puppeteer/errors.d.ts",
+        "./node_modules/@types/puppeteer/devicedescriptors.d.ts",
+        "./node_modules/@types/node/ts3.5/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/types/declarations.d.ts": [
+        "./node_modules/@types/puppeteer/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "./src/types/environment.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "./node_modules/@babel/types/lib/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.5/fs.d.ts",
@@ -5822,122 +5972,6 @@
         "./node_modules/@types/node/ts3.5/fs.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/@types/node/ts3.5/util.d.ts"
-      ],
-      "./src/commands/setup.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts",
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/types/interfaces.ts"
-      ],
-      "./src/utils/svg.ts": [
-        "./src/types/interfaces.ts"
-      ],
-      "./src/commands/rank.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/structures/index.ts": [
-        "./src/structures/command.ts",
-        "./src/structures/commandcontext.ts",
-        "./src/structures/loader.ts",
-        "./src/structures/listener.ts",
-        "./src/structures/controller.ts"
-      ],
-      "./src/commands/warn.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/teach.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/roleremove.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/rolegive.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/mute.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/milestoneremove.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts",
-        "./node_modules/discord.js/typings/index.d.ts"
-      ],
-      "./src/commands/milestoneget.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/milestoneadd.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts",
-        "./node_modules/discord.js/typings/index.d.ts"
-      ],
-      "./src/commands/help.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/debug.ts": [
-        "./node_modules/discord.js/typings/index.d.ts",
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/clear.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/ban.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./src/commands/announce.ts": [
-        "./src/valclient.ts",
-        "./src/structures/index.ts"
-      ],
-      "./node_modules/@types/puppeteer/errors.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/puppeteer/index.d.ts": [
-        "./node_modules/@types/node/events.d.ts",
-        "./node_modules/@types/node/child_process.d.ts",
-        "./node_modules/@types/puppeteer/errors.d.ts",
-        "./node_modules/@types/puppeteer/devicedescriptors.d.ts",
-        "./node_modules/@types/node/ts3.5/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/types/declarations.d.ts": [
-        "./node_modules/@types/puppeteer/index.d.ts",
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./node_modules/@types/puppeteer/devicedescriptors.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "./src/types/environment.d.ts": [
-        "./node_modules/@types/node/fs.d.ts",
-        "./node_modules/@types/node/ts3.2/fs.d.ts",
-        "./node_modules/@types/node/util.d.ts",
-        "./node_modules/@types/node/ts3.2/util.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -5969,142 +6003,13 @@
       "c:/users/nabil/appdata/local/yarn/data/global/node_modules/typescript/lib/lib.es2018.regexp.d.ts",
       "c:/users/nabil/appdata/local/yarn/data/global/node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "c:/users/nabil/appdata/local/yarn/data/global/node_modules/typescript/lib/lib.esnext.bigint.d.ts",
-      "./src/structures/command.ts",
-      "./src/structures/index.ts",
-      "./src/commands/warn.ts",
-      "./src/commands/teach.ts",
-      [
-        "./src/commands/roleremove.ts",
-        [
-          {
-            "file": "./src/commands/roleremove.ts",
-            "start": 668,
-            "length": 36,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      [
-        "./src/commands/rolegive.ts",
-        [
-          {
-            "file": "./src/commands/rolegive.ts",
-            "start": 666,
-            "length": 36,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      [
-        "./src/commands/mute.ts",
-        [
-          {
-            "file": "./src/commands/mute.ts",
-            "start": 561,
-            "length": 65,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      [
-        "./src/commands/milestoneremove.ts",
-        [
-          {
-            "file": "./src/commands/milestoneremove.ts",
-            "start": 619,
-            "length": 36,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      [
-        "./src/commands/milestoneget.ts",
-        [
-          {
-            "file": "./src/commands/milestoneget.ts",
-            "start": 110,
-            "length": 6,
-            "messageText": "'notify' is declared but its value is never read.",
-            "category": 1,
-            "code": 6133,
-            "reportsUnnecessary": true
-          },
-          {
-            "file": "./src/commands/milestoneget.ts",
-            "start": 709,
-            "length": 36,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      [
-        "./src/commands/milestoneadd.ts",
-        [
-          {
-            "file": "./src/commands/milestoneadd.ts",
-            "start": 716,
-            "length": 36,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      "./src/commands/help.ts",
-      [
-        "./src/commands/debug.ts",
-        [
-          {
-            "file": "./src/commands/debug.ts",
-            "start": 618,
-            "length": 36,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      "./src/commands/clear.ts",
-      "./src/commands/ban.ts",
-      "./src/commands/announce.ts",
-      "./src/utils/event.ts",
-      "./src/structures/listener.ts",
-      "./src/utils/moderation.ts",
-      "./src/controllers/intervalscontroller.ts",
-      "./src/controllers/conversationcontroller.ts",
-      "./src/controllers/levelscontroller.ts",
-      "./src/utils/embed.ts",
-      "./src/controllers/mongocontroller.ts",
-      "./src/utils/general.ts",
-      "./src/listeners/queueexecutelistener.ts",
-      "./src/listeners/newguildmemberlistener.ts",
-      "./src/listeners/clientreadylistener.ts",
-      "./src/loaders/commandsloader.ts",
-      "./src/loaders/controllersloader.ts",
-      "./src/controllers/toxicitycontroller.ts",
-      "./src/controllers/rediscontroller.ts",
-      "./src/controllers/queuecontroller.ts",
-      "./src/structures/controller.ts",
-      "./src/utils/object.ts",
-      "./src/config/errors.ts",
-      "./node_modules/@types/puppeteer/errors.d.ts",
-      "./node_modules/@types/puppeteer/index.d.ts",
-      "./node_modules/@types/puppeteer/devicedescriptors.d.ts",
-      "./src/types/environment.d.ts",
       "./node_modules/@discordjs/collection/dist/index.d.ts",
       "./node_modules/discord.js/typings/index.d.ts",
       "./src/structures/loader.ts",
       "./src/structures/commandcontext.ts",
+      "./src/types/interfaces.ts",
+      "./src/structures/controller.ts",
+      "./src/controllers/queuecontroller.ts",
       "./node_modules/@types/node/globals.d.ts",
       "./node_modules/@types/node/async_hooks.d.ts",
       "./node_modules/@types/node/buffer.d.ts",
@@ -6156,8 +6061,16 @@
       "./node_modules/@types/node/assert.d.ts",
       "./node_modules/@types/node/ts3.5/index.d.ts",
       "./node_modules/@types/redis/ts3.1/index.d.ts",
+      "./src/utils/object.ts",
+      "./src/utils/general.ts",
+      "./src/controllers/rediscontroller.ts",
       "./node_modules/@types/bson/index.d.ts",
       "./node_modules/@types/mongodb/index.d.ts",
+      "./src/controllers/mongocontroller.ts",
+      "./src/utils/embed.ts",
+      "./src/controllers/levelscontroller.ts",
+      "./src/controllers/conversationcontroller.ts",
+      "./src/controllers/intervalscontroller.ts",
       "./node_modules/@tensorflow/tfjs-core/dist/ops/conv_util.d.ts",
       "./node_modules/@tensorflow/tfjs-core/dist/types.d.ts",
       "./node_modules/@tensorflow/tfjs-core/dist/tensor.d.ts",
@@ -6290,13 +6203,41 @@
       "./node_modules/@tensorflow-models/universal-sentence-encoder/dist/index.d.ts",
       "./node_modules/@tensorflow-models/toxicity/dist/version.d.ts",
       "./node_modules/@tensorflow-models/toxicity/dist/index.d.ts",
+      "./src/utils/moderation.ts",
+      "./src/controllers/toxicitycontroller.ts",
       "./src/controllers/index.ts",
+      "./src/loaders/controllersloader.ts",
+      "./src/loaders/commandsloader.ts",
       "./src/loaders/index.ts",
+      "./src/structures/listener.ts",
+      "./src/listeners/clientreadylistener.ts",
       "./src/listeners/messagelistener.ts",
       "./src/listeners/voicelistener.ts",
+      "./src/listeners/newguildmemberlistener.ts",
       "./src/config/events.json",
       "./src/listeners/commandslistener.ts",
+      "./src/listeners/queueexecutelistener.ts",
       "./src/listeners/index.ts",
+      "./src/utils/event.ts",
+      "./src/structures/command.ts",
+      "./src/valclient.ts",
+      "./src/structures/index.ts",
+      "./src/commands/announce.ts",
+      "./src/commands/ban.ts",
+      "./src/commands/clear.ts",
+      "./src/commands/debug.ts",
+      "./src/commands/help.ts",
+      "./src/commands/setup.ts",
+      "./src/utils/svg.ts",
+      "./src/commands/teach.ts",
+      "./src/commands/milestoneadd.ts",
+      "./src/commands/warn.ts",
+      "./src/config/errors.ts",
+      "./node_modules/@types/puppeteer/errors.d.ts",
+      "./node_modules/@types/puppeteer/devicedescriptors.d.ts",
+      "./node_modules/@types/puppeteer/index.d.ts",
+      "./src/types/declarations.d.ts",
+      "./src/types/environment.d.ts",
       "./src/types/types.ts",
       "./node_modules/@babel/types/lib/index.d.ts",
       "./node_modules/@types/babel__generator/index.d.ts",
@@ -6328,24 +6269,13 @@
       "./node_modules/@types/webgl-ext/index.d.ts",
       "./node_modules/@types/yargs/index.d.ts",
       "./node_modules/@types/yargs-parser/index.d.ts",
-      "./src/types/interfaces.ts",
-      "./src/valclient.ts",
-      "./src/utils/svg.ts",
-      [
-        "./src/commands/rank.ts",
-        [
-          {
-            "file": "./src/commands/rank.ts",
-            "start": 704,
-            "length": 67,
-            "messageText": "Not all code paths return a value.",
-            "category": 1,
-            "code": 7030
-          }
-        ]
-      ],
-      "./src/commands/setup.ts",
-      "./src/types/declarations.d.ts"
+      "./src/commands/rank.ts",
+      "./src/commands/index.ts",
+      "./src/commands/rolegive.ts",
+      "./src/commands/roleremove.ts",
+      "./src/commands/milestoneget.ts",
+      "./src/commands/milestoneremove.ts",
+      "./src/commands/mute.ts"
     ]
   },
   "version": "3.6.4"

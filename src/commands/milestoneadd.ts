@@ -45,41 +45,49 @@ export default class MilestoneAdd extends Command {
 		const roleIDNameMatch =
 			params[1].match(roleIDRegex) || params[1].match(roleNameRegex);
 
-		if (isNaN(level))
-			return message.reply(
-				'لازم تحدد الـ level اللي عايز تعمل عليه الـ milestone'
-			);
-
-		if (!roleIDNameMatch)
-			return message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
-
 		try {
+			if (isNaN(level)) {
+				await message.reply(
+					'لازم تحدد الـ level اللي عايز تعمل عليه الـ milestone'
+				);
+				return;
+			}
+
+			if (!roleIDNameMatch) {
+				await message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
+				return;
+			}
+
 			const roleIDName = roleIDNameMatch[1];
 			const role = getRoleObject(this.client, roleIDName);
 
-			if (typeof role !== 'object')
-				return message.reply('لازم ال role يكون موجود في السيرفر');
+			if (typeof role !== 'object') {
+				await message.reply('لازم ال role يكون موجود في السيرفر');
+				return;
+			}
 
-			message.reply('ايه اسم الـ achievement؟');
+			await message.reply('ايه اسم الـ achievement؟');
 
 			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
 				.content;
 
-			if (!nameRegex.test(name))
-				return message.reply(
+			if (!nameRegex.test(name)) {
+				await message.reply(
 					'الاسم لازم يبقى مابين 1 و 40 حرف, و يبقى فيه حروف و مسافات و ارقام فقط و يكون انجلش'
 				);
+				return;
+			}
 
-			message.reply('ايه وصف الـ achievement؟');
+			await message.reply('ايه وصف الـ achievement؟');
 
 			const description = (
 				await channel.awaitMessages(filter, awaitOptions)
 			).first().content;
 
-			if (!descriptionRegex.test(description))
-				return message.reply(
-					'الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش'
-				);
+			if (!descriptionRegex.test(description)) {
+				message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش');
+				return;
+			}
 
 			levels.addMilestone(level, name, description, role.id);
 
