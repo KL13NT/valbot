@@ -24,36 +24,65 @@ export default class Debug extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
-		const { CHANNEL_BOT_STATUS } = this.client.config.CHANNELS;
 		const { message, params } = context;
 
+		try {
+			if (params[0] !== 'on' && params[0] !== 'off') {
+				await message.reply('اول باراميتر المفروض يبقى on او off');
+				return;
+			}
+
+			if (params[0] === 'on') {
+				await this.start(context);
+				return;
+			}
+
+			await this.stop(context);
+		} catch (err) {
+			log(this.client, err, 'error');
+		}
+	};
+
+	start = async ({ message }: CommandContext) => {
 		const intervals = <IntervalsController>(
 			this.client.controllers.get('intervals')
 		);
 
-		if (params[0] === 'on') {
-			if (intervals.exists('debug'))
-				return message.reply('انا مشغل الdebugger اصلا يبشا');
+		const { CHANNEL_BOT_STATUS } = this.client.config.CHANNELS;
 
-			message.reply(`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`);
+		if (intervals.exists('debug')) {
+			await message.reply('انا مشغل الdebugger اصلا يبشا');
+			return;
+		}
 
-			log(this.client, 'Logging every 2000ms', 'warn');
-			intervals.setInterval({
-				time: 2000,
-				name: 'debug',
-				callback: () => {
-					log(this.client, this.usageToString(), 'info');
-				}
-			});
-		} else if (params[0] === 'off') {
-			if (!intervals.exists('debug'))
-				return message.reply('انا مش مشغل الdebugger اصلا يبشا');
+		await message.reply(
+			`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`
+		);
 
-			message.reply(`قفلت الـ debugger خلاص`);
+		await log(this.client, 'Logging every 2000ms', 'warn');
+		intervals.setInterval({
+			time: 2000,
+			name: 'debug',
+			callback: () => {
+				log(this.client, this.usageToString(), 'info');
+			}
+		});
+	};
 
-			log(this.client, 'Logger disabled', 'warn');
-			intervals.clearInterval('debug');
-		} else return message.reply('اول باراميتر المفروض يبقى on او off');
+	stop = async ({ message }: CommandContext) => {
+		const intervals = <IntervalsController>(
+			this.client.controllers.get('intervals')
+		);
+
+		if (!intervals.exists('debug')) {
+			await message.reply('انا مش مشغل الdebugger اصلا يبشا');
+			return;
+		}
+
+		await message.reply(`قفلت الـ debugger خلاص`);
+
+		await log(this.client, 'Logger disabled', 'warn');
+		intervals.clearInterval('debug');
 	};
 
 	usageToString = () => {
