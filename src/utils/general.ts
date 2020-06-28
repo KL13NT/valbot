@@ -11,7 +11,7 @@ export function createAlertMessage(message: string, alertLevel: AlertLevel) {
 	const notification = `[${alertLevel}] ${message}`;
 
 	if (alertLevel === 'info') return notification;
-	else return `${notification} <@${ROLE_DEVELOPER}>`;
+	else return `${notification} <@&${ROLE_DEVELOPER}>`;
 }
 
 /**
@@ -27,15 +27,18 @@ export async function log(
 
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
-	if (MODE !== 'PRODUCTION') return;
-	if (!client.ready) return queue.enqueue({ func: log, args: [...arguments] });
+	if (MODE !== 'PRODUCTION' || !client.ready) return;
+	if (queue && queue.ready)
+		return queue.enqueue({ func: log, args: [...arguments] });
 
 	const { CHANNEL_BOT_STATUS } = client.config.CHANNELS;
 
 	const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
 	const message = createAlertMessage(String(notification), alertLevel); // @see
 
-	await channel.send(message);
+	if (typeof notification === 'object')
+		await channel.send(`${message}\n\n**Stack trace**\n${notification.stack}`);
+	else await channel.send(`${message}`);
 }
 
 /**

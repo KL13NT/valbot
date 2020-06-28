@@ -15,6 +15,7 @@ export default class ControllersLoader extends Loader {
 	load = () => {
 		Object.values(Controllers).forEach(controller => {
 			const controllerInstance = new controller(this.client);
+
 			this.client.controllers.set(
 				controllerInstance.options.name,
 				controllerInstance

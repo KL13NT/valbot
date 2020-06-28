@@ -58,8 +58,8 @@ export default class ValClient extends Client {
 		this.ValGuild = this.guilds.cache.first();
 
 		this.initLoaders();
-		await this.initConfig();
 		this.initListeners();
+		await this.initConfig();
 
 		this.emit('queueExecute', 'Client ready');
 
@@ -72,8 +72,6 @@ export default class ValClient extends Client {
 			type: 'PLAYING'
 		};
 
-		log(this, `Current presence: ${presence.type} ${presence.message}`, 'info');
-
 		if (this.user)
 			this.user
 				.setActivity(presence.message, { type: presence.type })
@@ -84,8 +82,6 @@ export default class ValClient extends Client {
 	 * Initialises client loaders. Doesn't handle exceptions on purpose.
 	 */
 	initLoaders = () => {
-		log(this, 'Loaders loading', 'info');
-
 		Object.values(loaders).forEach(loader => {
 			new loader(this).load();
 		});
