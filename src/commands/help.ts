@@ -15,7 +15,7 @@ export default class Help extends Command {
 			extraParams: true,
 			optionalParams: 0,
 			description: `لو محتاج مساعدة`,
-			exampleUsage: `\`val! help\` او \`val! help command\``,
+			exampleUsage: ` او val! help command`,
 			auth: {
 				method: 'ROLE',
 				required: 'AUTH_EVERYONE'
@@ -42,29 +42,24 @@ export default class Help extends Command {
 	};
 
 	commandsAsFields = () => {
-		const sorted = Array.from(this.client.commands.values()).sort((a, b) => {
-			return a.options.category < b.options.category ? -1 : 1;
+		const commands: Map<string, string> = new Map<string, string>();
+
+		Array.from(this.client.commands.values()).forEach(command => {
+			const key = command.options.category;
+			const value = commands.get(key);
+
+			if (value) commands.set(key, `${value}\n\`${command.options.name}\``);
+			else commands.set(key, `\`${command.options.name}\``);
 		});
 
-		let cat = '';
-		let commandString = '';
-		let fields: EmbedField[] = [];
-
-		sorted.forEach(command => {
-			commandString += `\`${command.options.name}\`\n`;
-
-			if (cat !== command.options.category) {
-				cat = command.options.category;
-
-				fields.push({
-					name: cat,
-					value: commandString,
-					inline: true
-				});
-
-				commandString = '';
-			}
-		});
+		const fields: EmbedField[] = [];
+		for (const category of commands) {
+			fields.push({
+				name: category[0],
+				value: category[1],
+				inline: true
+			});
+		}
 
 		return fields;
 	};

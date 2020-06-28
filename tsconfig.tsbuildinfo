@@ -1201,7 +1201,7 @@
         "affectsGlobalScope": false
       },
       "./src/commands/help.ts": {
-        "version": "f27990dfcc28a825c539ee379c26956e71b55d16e24ba45a61e2e838309d9452",
+        "version": "1ea4480f99798a4d26988db1cc8ed35cda4dd5b3868b2b06710e4ae1defd8283",
         "signature": "6948e906133b77ee997686e1ec3cce9438eff96064f9896d6ea18c7b29fabe73",
         "affectsGlobalScope": false
       },
