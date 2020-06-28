@@ -6,9 +6,7 @@ import { log } from '../utils/general';
 
 export default class NewGuildMemberListener extends Listener {
 	constructor(client: ValClient) {
-		super(client);
-
-		this.events.set('guildMemberAdd', this.onGuildMemberAdd);
+		super(client, ['guildMemberAdd']);
 	}
 
 	onGuildMemberAdd = async (member: GuildMember): Promise<void> => {

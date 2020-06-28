@@ -20,7 +20,7 @@ export default class ControllersLoader extends Loader {
 				controllerInstance
 			);
 
-			log(this.client, `${controllerInstance.options.name} loaded`, 'info');
+			log(this.client, `${controller.name} loaded`, 'info');
 		});
 	};
 }

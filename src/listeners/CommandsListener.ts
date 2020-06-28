@@ -9,9 +9,7 @@ import {
 
 export default class CommandsListener extends Listener {
 	constructor(client: ValClient) {
-		super(client);
-
-		this.events.set('ready', this.onCommand);
+		super(client, ['command']);
 	}
 
 	onCommand = (message: Message): void => {

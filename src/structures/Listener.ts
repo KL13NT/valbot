@@ -1,17 +1,20 @@
 import ValClient from '../ValClient';
-import { ListenerHandler } from '../types/interfaces';
+
+import { capitalise } from '../utils/general';
 
 export default class Listener {
+	[index: string]: any; //eslint-disable-line
 	client: ValClient;
-	events: Map<string, ListenerHandler>;
+	events: string[];
 
-	constructor(client: ValClient) {
+	constructor(client: ValClient, events: string[]) {
 		this.client = client;
+		this.events = events;
 	}
 
 	init = (): void => {
-		this.events.forEach((handler, event) => {
-			this.client.on(event, handler);
+		this.events.forEach(event => {
+			this.client.on(event, this[`on${capitalise(event)}`]);
 		});
 	};
 }

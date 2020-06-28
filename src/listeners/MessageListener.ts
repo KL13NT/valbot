@@ -11,9 +11,7 @@ const { CLIENT_ID, DEV_CLIENT_ID } = process.env;
 
 export default class MessageListener extends Listener {
 	constructor(client: ValClient) {
-		super(client);
-
-		this.events.set('message', this.onMessage);
+		super(client, ['message']);
 	}
 
 	onMessage = async (message: Message): Promise<void> => {

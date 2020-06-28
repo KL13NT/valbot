@@ -1,4 +1,3 @@
-export { default as ClientReadyListener } from './ClientReadyListener';
 export { default as MessageListener } from './MessageListener';
 export { default as VoiceListener } from './VoiceListener';
 export { default as NewGuildMemberListener } from './NewGuildMemberListener';

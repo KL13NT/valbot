@@ -72,3 +72,7 @@ export function calculateUniqueWords(message: string) {
 		return false;
 	}).length;
 }
+
+export function capitalise(event: string) {
+	return event.charAt(0).toUpperCase() + event.substr(1);
+}

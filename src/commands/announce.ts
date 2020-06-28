@@ -53,7 +53,7 @@ export default class Announce extends Command {
 			}
 
 			const hook = await target.createWebhook('Announcements', {
-				avatar: localToBuffer('../media/botlogo.png'),
+				avatar: localToBuffer('../../media/botlogo.png'),
 				reason: 'Announcing'
 			});
 

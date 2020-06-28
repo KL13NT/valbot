@@ -8,10 +8,10 @@ import {
 	UserInfo
 } from '../types/interfaces';
 
-const FRAME = path.resolve(__dirname, '../media/Frame 1.svg');
-const BACKGROUND = '../media/bg.jpg';
-const MIC = '../media/mic.png';
-const AVATAR = '../media/botlogo.png';
+const FRAME = path.resolve(__dirname, '../../media/Frame 1.svg');
+const BACKGROUND = '../../media/bg.jpg';
+const MIC = '../../media/mic.png';
+const AVATAR = '../../media/botlogo.png';
 
 /**
  * Converts images into Base64 URIs

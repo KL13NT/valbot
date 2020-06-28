@@ -17,11 +17,6 @@ import {
 	QueueController
 } from './controllers';
 
-/**
- * @param { ClientOptions	} options DiscordClientOptions
- * @param { String } prefix The prefix used for all commands
- */
-
 export default class ValClient extends Client {
 	readonly prefix: string;
 	ready: boolean;
@@ -38,26 +33,37 @@ export default class ValClient extends Client {
 		this.controllers = new Map<string, IController>();
 	}
 
-	init = (token = AUTH_TOKEN) => {
+	init = async (token = AUTH_TOKEN) => {
 		try {
 			this.login(token);
 
-			this.initLoaders();
-			this.initConfig();
-			this.initListeners();
+			this.on('ready', this.onReady);
 
 			console.log(
 				fs
-					.readFileSync(path.resolve(__dirname, './media/bigtitle.txt'), 'utf8')
+					.readFileSync(
+						path.resolve(__dirname, '../media/bigtitle.txt'),
+						'utf8'
+					)
 					.toString()
 			);
 		} catch (err) {
-			log(
-				this,
-				`Something went wrong when initiating ValClient. Fix it and try again. Automatically retrying ${err.message}`,
-				'error'
-			);
+			log(this, err, 'error');
 		}
+	};
+
+	onReady = async (): Promise<void> => {
+		this.setPresence();
+
+		this.ValGuild = this.guilds.cache.first();
+
+		this.initLoaders();
+		await this.initConfig();
+		this.initListeners();
+
+		this.emit('queueExecute', 'Client ready');
+
+		log(this, 'Client ready', 'info');
 	};
 
 	setPresence = () => {
@@ -88,7 +94,8 @@ export default class ValClient extends Client {
 	};
 
 	/**
-	 * Initialises client listeners. Doesn't handle exceptions on purpose.
+	 * Initialises client listeners.
+	 * If it throws it means something is wrong with code, not behaviour.
 	 */
 	initListeners = () => {
 		log(this, 'Listeners loading', 'info');
@@ -126,9 +133,7 @@ export default class ValClient extends Client {
 				queue.enqueue({ func: this.initConfig, args: [] });
 			}
 		} catch (err) {
-			const message = `Something went wrong when initialising ConfigController, ${err.message}`;
-
-			log(this, message, 'error');
+			log(this, err, 'error');
 		}
 	};
 }

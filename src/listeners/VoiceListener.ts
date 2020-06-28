@@ -5,9 +5,7 @@ import { LevelsController } from '../Controllers';
 
 export default class VoiceListener extends Listener {
 	constructor(client: ValClient) {
-		super(client);
-
-		this.events.set('voiceStateUpdate', this.onVoiceStateUpdate);
+		super(client, ['voiceStateUpdate']);
 	}
 
 	onVoiceStateUpdate = (_: VoiceState, newState: VoiceState): void => {

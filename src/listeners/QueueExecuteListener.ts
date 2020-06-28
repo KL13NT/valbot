@@ -6,9 +6,7 @@ import { QueueController } from '../Controllers';
 
 export default class QueueExecuteListener extends Listener {
 	constructor(client: ValClient) {
-		super(client);
-
-		this.events.set('queueExecute', this.onQueueExecute);
+		super(client, ['queueExecute']);
 	}
 
 	onQueueExecute = async (reason: string): Promise<void> => {

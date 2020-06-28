@@ -1,4 +1,4 @@
-import ValClient from './src/ValClient';
+import ValClient from './ValClient';
 
 const client: ValClient = new ValClient({
 	fetchAllMembers: true,
