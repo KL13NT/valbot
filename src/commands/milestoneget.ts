@@ -42,7 +42,7 @@ export default class MilestoneGet extends Command {
 			}
 
 			await message.reply(this.getLevelMilestones(Number(levelMatch[0])));
-		} catch (err) {
+		} catch (err) { 
 			log(this.client, err, 'error');
 		}
 	};

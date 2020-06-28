@@ -25,6 +25,13 @@ export default class MilestoneAdd extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
+		const levels = <LevelsController>this.client.controllers.get('levels');
+		const filter = (m: Message) => m.author.id === member.id;
+		const awaitOptions = {
+			time: 60 * 1000,
+			max: 1
+		};
+
 		const { message, member, params, channel } = context;
 
 		const levelRegex = /^(\d+)$/i;
@@ -32,14 +39,6 @@ export default class MilestoneAdd extends Command {
 		const roleIDRegex = /^(\d+)$/i;
 		const nameRegex = /([a-zA-Z0-9 ]{1,40})/i;
 		const descriptionRegex = /(.{30,300})/i;
-
-		const levels = <LevelsController>this.client.controllers.get('levels');
-
-		const filter = (m: Message) => m.author.id === member.id;
-		const awaitOptions = {
-			time: 60 * 1000,
-			max: 1
-		};
 
 		const level = Number(params[0].match(levelRegex)[0]);
 		const roleIDNameMatch =
@@ -85,13 +84,13 @@ export default class MilestoneAdd extends Command {
 			).first().content;
 
 			if (!descriptionRegex.test(description)) {
-				message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش');
+				await message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش');
 				return;
 			}
 
-			levels.addMilestone(level, name, description, role.id);
+			await levels.addMilestone(level, name, description, role.id);
 
-			message.reply('ضيفت الـ milestone دي. ');
+			await message.reply('ضيفت الـ milestone دي. ');
 		} catch (err) {
 			log(this.client, err, 'error');
 		}

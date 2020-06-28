@@ -24,17 +24,15 @@ export default class MilestoneRemove extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
-		const { message, member, params, channel } = context;
 		const levels = <LevelsController>this.client.controllers.get('levels');
-
-		const levelRegex = /(\d+)/i;
-
 		const filter = (m: Message) => m.author.id === member.id;
 		const awaitOptions = {
 			time: 60 * 1000,
 			max: 1
 		};
 
+		const { message, member, params, channel } = context;
+		const levelRegex = /(\d+)/i;
 		const level = Number(params[0].match(levelRegex)[0]);
 
 		try {
@@ -50,7 +48,7 @@ export default class MilestoneRemove extends Command {
 			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
 				.content;
 
-			levels.removeMilestone(level, name);
+			await levels.removeMilestone(level, name);
 
 			await message.reply('شيلت الـ milestone دي');
 		} catch (err) {

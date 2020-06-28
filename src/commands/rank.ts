@@ -5,6 +5,7 @@ import { getMemberObject } from '../utils/object';
 import ValClient from '../ValClient';
 import { CommandContext } from '../structures';
 import { MongoController, RedisController } from '../Controllers';
+import { Snowflake } from 'discord.js';
 
 export default class Rank extends Command {
 	constructor(client: ValClient) {
@@ -24,56 +25,71 @@ export default class Rank extends Command {
 		});
 	}
 
-	_run = async ({ message, params, member: ctxMember }: CommandContext) => {
+	_run = async ({ message, params, member }: CommandContext) => {
+		const [userMention] = params;
+		const id = userMention
+			? userMention.replace(/<|>|!|@/g, '')
+			: member.user.id;
+
 		try {
-			const mongo = <MongoController>this.client.controllers.get('mongo');
-			const redis = <RedisController>this.client.controllers.get('redis');
-			const [userMention] = params;
-
-			const id = userMention
-				? userMention.replace(/<|>|!|@/g, '')
-				: ctxMember.user.id;
-
 			if (id === process.env.CLIENT_ID || id === process.env.CLIENT_DEV_ID) {
 				await message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
 				return;
 			}
 
-			const member = getMemberObject(this.client, id);
-
-			const res = await mongo.getLevel(id);
-			const avatar_url = member.user.displayAvatarURL();
-			const displayName = member.user.username.substr(0, 12) + '...';
-			const displayID = member.user.tag.split('#')[1];
-
-			const voice = res ? res.voice : await redis.get(`VOICE:${id}`);
-			const text = res ? res.text : await redis.get(`TEXT:${id}`);
-			const exp = await redis.get(`EXP:${id}`);
-			const level = await redis.get(`LEVEL:${id}`);
-
-			const userInfo = {
-				avatar_url,
-				displayName,
-				USER_ID: displayID
-			};
-			const levelInfo = {
-				exp: Number(exp) || 1,
-				text: Number(text) || 1,
-				voice: Number(voice) || 1,
-				level: Number(level) || 1,
-				levelEXP: 60 * Number(level) * 0.1 + 60 || 1
-			};
+			const levelInfo = await this.getLevels(id);
+			const userInfo = this.getUserInfo(id);
 
 			const card = await generateRankCard(userInfo, levelInfo);
 			await message.reply("Here's the requested rank", {
 				files: [
 					{
-						attachment: card
+						attachment: card,
+						name: `Rank Card`
 					}
 				]
 			});
 		} catch (err) {
 			log(this.client, err, 'error');
 		}
+	};
+
+	getUserInfo = (id: Snowflake) => {
+		const target = getMemberObject(this.client, id);
+
+		const avatar_url = target.user.displayAvatarURL();
+		const displayName = target.user.username.substr(0, 12) + '...';
+		const USER_ID = target.user.tag.split('#')[1];
+
+		return {
+			avatar_url,
+			displayName,
+			USER_ID
+		};
+	};
+
+	getLevels = async (id: Snowflake) => {
+		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const redis = <RedisController>this.client.controllers.get('redis');
+
+		const res = await mongo.getLevel(id);
+
+		const voice: number | string = res
+			? res.voice
+			: await redis.get(`VOICE:${id}`);
+		const text: number | string = res
+			? res.text
+			: await redis.get(`TEXT:${id}`);
+
+		const exp: number | string = await redis.get(`EXP:${id}`);
+		const level: number | string = await redis.get(`LEVEL:${id}`);
+
+		return {
+			voice: Number(voice) || 1,
+			text: Number(text) || 1,
+			exp: Number(exp) || 1,
+			level: Number(level) || 1,
+			levelEXP: 60 * Number(level) * 0.1 + 60
+		};
 	};
 }

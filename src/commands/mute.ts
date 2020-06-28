@@ -2,6 +2,7 @@ import ValClient from '../ValClient';
 
 import { Command, CommandContext } from '../structures';
 import { mute, isMuted } from '../utils/moderation';
+import { log } from '../utils/general';
 
 export default class Mute extends Command {
 	constructor(client: ValClient) {
@@ -25,24 +26,28 @@ export default class Mute extends Command {
 		const [mention, ...reasonWords] = params;
 		const mentionRegex = /<@!(\d+)>/;
 
-		if (!mentionRegex.test(mention)) {
-			await message.reply('لازم تعمل منشن للـ member');
-			return;
+		try {
+			if (!mentionRegex.test(mention)) {
+				await message.reply('لازم تعمل منشن للـ member');
+				return;
+			}
+
+			const id = mention.match(mentionRegex)[1];
+			const reason = reasonWords.join(' ');
+
+			if (isMuted(this.client, id)) {
+				await message.reply('معمولهم mute اصلاً');
+				return;
+			}
+
+			await mute(this.client, {
+				member: id,
+				moderator: member.id,
+				channel: channel.id,
+				reason
+			});
+		} catch (err) {
+			log(this.client, err, 'error');
 		}
-
-		const id = mention.match(mentionRegex)[1];
-		const reason = reasonWords.join(' ');
-
-		if (isMuted(this.client, id)) {
-			await message.reply('معمولهم mute اصلاً');
-			return;
-		}
-
-		await mute(this.client, {
-			member: id,
-			moderator: member.id,
-			channel: channel.id,
-			reason
-		});
 	};
 }
