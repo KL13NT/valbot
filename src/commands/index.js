@@ -1,18 +1,15 @@
-module.exports = [
-	require('./setup'),
-	require('./clear'),
-	require('./help'),
-	require('./rank'),
-	require('./teach'),
-	require('./rolegive'),
-	require('./roleremove'),
-	require('./debug'),
-	require('./milestoneget'),
-	require('./milestoneadd'),
-	require('./milestoneremove'),
-	require('./announce'),
-	require('./mute'),
-	require('./ban'),
-	require('./warn')
-	// require('./reactionroles')
-]
+export { default as Setup } from './setup';
+export { default as Clear } from './clear';
+export { default as Help } from './help';
+export { default as Rank } from './rank';
+export { default as Teach } from './teach';
+export { default as RoleGive } from './rolegive';
+export { default as RoleRemove } from './roleremove';
+export { default as Debug } from './debug';
+export { default as MilestoneGet } from './milestoneget';
+export { default as MilestoneAdd } from './milestoneadd';
+export { default as MilestoneRemove } from './milestoneremove';
+export { default as Announce } from './announce';
+export { default as Mute } from './mute';
+export { default as Ban } from './ban';
+export { default as Warn } from './warn';
