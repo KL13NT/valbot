@@ -11,9 +11,6 @@ import {
 } from '../utils/object';
 
 export default class Announce extends Command {
-	/**
-	 * Constructs help command
-	 */
 	constructor(client: ValClient) {
 		super(client, {
 			name: 'announce',
@@ -48,7 +45,7 @@ export default class Announce extends Command {
 
 		try {
 			if (!target) {
-				message.reply('التشانل دي مش موجودة او مش فويس');
+				await message.reply('التشانل دي مش موجودة او مش فويس');
 				return;
 			}
 
@@ -57,7 +54,7 @@ export default class Announce extends Command {
 				reason: 'Announcing'
 			});
 
-			message.reply('ابعت بقى الـ announcement');
+			await message.reply('ابعت بقى الـ announcement');
 
 			const collected = await channel.awaitMessages(filter, awaitOptions);
 			const announcement = collected.first().content;

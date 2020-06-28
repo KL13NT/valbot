@@ -1,12 +1,11 @@
-import { Command, CommandContext } from '../structures';
-import { createEmbed } from '../utils/embed';
 import ValClient from '../ValClient';
 
+import { EmbedField } from 'discord.js';
+import { Command, CommandContext } from '../structures';
+import { createEmbed } from '../utils/embed';
+import { log } from '../utils/general';
+
 export default class Help extends Command {
-	/**
-	 * Constructs help command
-	 * @param {ValClient} client
-	 */
 	constructor(client: ValClient) {
 		super(client, {
 			name: 'help',
@@ -25,8 +24,54 @@ export default class Help extends Command {
 	}
 
 	_run = async ({ message, member }: CommandContext) => {
-		const embed = createEmbed({
-			title: 'Help',
+		const commands = this.commandsAsFields();
+		const embed = this.createHelpEmbed(commands);
+
+		try {
+			const dm = await member.createDM();
+			await dm.send(embed);
+
+			const sent = await message.reply('بعتلك رسالة جادة جداً');
+
+			setTimeout(() => {
+				sent.delete().catch(err => log(this.client, err, 'error'));
+			}, 5 * 1000);
+		} catch (err) {
+			log(this.client, err, 'error');
+		}
+	};
+
+	commandsAsFields = () => {
+		const sorted = Array.from(this.client.commands.values()).sort((a, b) => {
+			return a.options.category < b.options.category ? -1 : 1;
+		});
+
+		let cat = '';
+		let commandString = '';
+		let fields: EmbedField[] = [];
+
+		sorted.forEach(command => {
+			commandString += `\`${command.options.name}\`\n`;
+
+			if (cat !== command.options.category) {
+				cat = command.options.category;
+
+				fields.push({
+					name: cat,
+					value: commandString,
+					inline: true
+				});
+
+				commandString = '';
+			}
+		});
+
+		return fields;
+	};
+
+	createHelpEmbed = (commands: EmbedField[]) =>
+		createEmbed({
+			title: ':book: مساعدة',
 			description: `اهلاً اهلاً. شوف القايمة دي, متقسمه لعناوين حسب اللي انت ممكن تحتاجه`,
 			fields: [
 				{
@@ -42,34 +87,14 @@ export default class Help extends Command {
 					value: `https://discord.gg/xrGAnTg`
 				},
 				{
+					name: '\u200b',
+					value: '\u200b'
+				},
+				{
 					name: '**الكوماندز الموجودة دلوقتي**',
 					value: `\u200b`
-				}
+				},
+				...commands
 			]
 		});
-
-		// create an object of category: [...commandNames] for easier joining to strings
-		const commands: { [index: string]: string[] } = {};
-
-		for (const command in this.client.commands) {
-			const { category, name } = this.client.commands.get(command).options;
-
-			if (!commands[category]) commands[category] = [];
-			commands[category].push(name);
-		}
-
-		Object.keys(commands).forEach(cat => {
-			const categoryCommands = `\`${commands[cat].join('`\n`')}\``;
-			embed.addField(cat, categoryCommands, true);
-		});
-
-		const dm = await member.createDM();
-		await dm.send(embed);
-
-		const sent = await message.reply('بعتلك رسالة جادة جداً');
-
-		setTimeout(() => {
-			sent.delete();
-		}, 5 * 1000);
-	};
 }

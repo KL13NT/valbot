@@ -1196,13 +1196,13 @@
         "affectsGlobalScope": false
       },
       "./src/commands/clear.ts": {
-        "version": "e7e4b53e614db06ee3f3f125354da825ed810187f7b45c94a4e199777ae3c846",
-        "signature": "26f4ac3da9e32ccf56e1dc96f11abf5c462c2ef6945e7fc001aa6bc6654d9ceb",
+        "version": "c8f6b0f1f0db938fcf0aee90172a47c5ebc048af430cf0dd145487efa3837e16",
+        "signature": "b839cef9004b5e43fd7b79ce6a3517828c4e2387229e9f4e8fdff8333df9f331",
         "affectsGlobalScope": false
       },
       "./src/commands/help.ts": {
-        "version": "b371977074d1fedf8ad13a636f30d315a95f2a2c435fc8cd7f5d503f27ed5cb3",
-        "signature": "a879882e13451867818f40945e755b17f066f5394100ca7cdb17ebee7f248075",
+        "version": "3c43add9417f31167694279eb96aac4f5dbc8a9c34964cf911bd90f552186483",
+        "signature": "70823f84200c624865e06aa86724b34597c184db8ace302440cf7df385ce260a",
         "affectsGlobalScope": false
       },
       "./src/utils/svg.ts": {
@@ -1251,7 +1251,7 @@
         "affectsGlobalScope": false
       },
       "./src/commands/announce.ts": {
-        "version": "586e5411297bc7056c79ad80ed64d001e13ad86aa66d1d5709e2cec42e48e073",
+        "version": "34030370dc864806fcf9ef5248479fe83954a40ee301b47ea17de66aca5c08cc",
         "signature": "3a9b502411af8ac276371b0938b3ce0a3c69927a21aa805f22c28b5c47311fbc",
         "affectsGlobalScope": false
       },
@@ -1261,7 +1261,7 @@
         "affectsGlobalScope": false
       },
       "./src/commands/ban.ts": {
-        "version": "a28d85b7488f158a437e08f45032bc7fd85f0b6516ca3eeb48c883b7f599d532",
+        "version": "72fd77342e7474cf1188e622e81ea4f66a9957a34d31997446fd476c69e6713a",
         "signature": "6e91ca97775da798e8c0a575a66992a8982dd48f8c8922a8230ea792c4d71095",
         "affectsGlobalScope": false
       },
@@ -3547,6 +3547,7 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./src/structures/index.ts",
+        "./src/utils/general.ts",
         "./src/utils/moderation.ts",
         "./src/valclient.ts"
       ],
@@ -3575,8 +3576,10 @@
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts",
+        "./node_modules/discord.js/typings/index.d.ts",
         "./src/structures/index.ts",
         "./src/utils/embed.ts",
+        "./src/utils/general.ts",
         "./src/valclient.ts"
       ],
       "./src/commands/index.ts": [
@@ -6060,6 +6063,7 @@
         "./src/valclient.ts"
       ],
       "./src/commands/help.ts": [
+        "./node_modules/discord.js/typings/index.d.ts",
         "./src/structures/index.ts",
         "./src/valclient.ts"
       ],

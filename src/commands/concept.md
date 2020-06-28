@@ -1,25 +1,37 @@
 import ValClient from '../ValClient';
 
-import { Command, CommandContext } from '../structures';
+import { CommandContext } from '../structures';
 import { log, notify } from '../utils/general';
 import { createClearEmbed } from '../utils/embed';
 
-export default class Clear extends Command {
+export default class Clear {
+	client: ValClient;
 	constructor(client: ValClient) {
-		super(client, {
+		this.client = client;
+		const options = {
 			name: `clear`,
 			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتمسح رسايل بعدد n`,
 			exampleUsage: `5`,
+			params: [
+				{
+					name: 'params',
+					validator: (value: string): boolean => {
+						if (isNaN(Number(value))) return false;
+						else return true;
+					},
+					formatter: (value: string): number => Number(value)
+				}
+			],
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
 				required: 'AUTH_MOD'
 			}
-		});
+		};
 	}
 
 	_run = async (context: CommandContext) => {
@@ -29,18 +41,18 @@ export default class Clear extends Command {
 		const count = parseInt(params[0]);
 		const errors = this.validateInput(count);
 
+		if (errors) {
+			await message.reply(errors);
+			return;
+		}
+
+		const embed = createClearEmbed({
+			moderator: member.id,
+			channel: channel.id,
+			count
+		});
+
 		try {
-			if (errors) {
-				await message.reply(errors);
-				return;
-			}
-
-			const embed = createClearEmbed({
-				moderator: member.id,
-				channel: channel.id,
-				count
-			});
-
 			await channel.bulkDelete(count + 1);
 
 			const sent = await message.reply(`مسحت ${count} يرايق.`);
