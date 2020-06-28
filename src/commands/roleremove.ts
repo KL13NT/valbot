@@ -13,7 +13,7 @@ export default class RoleRemove extends Command {
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتشيل روول من ميمبر`,
-			exampleUsage: `@Sovereign#4984 <role_name|role_id>`,
+			exampleUsage: `<mention> <role_name|role_id>`,
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
@@ -26,6 +26,7 @@ export default class RoleRemove extends Command {
 	_run = async (context: CommandContext) => {
 		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS;
 		const { message, params, channel, member } = context;
+
 		const roleNameRegex = /\w+/i;
 		const roleIDRegex = /\d+/i;
 		const mentionRegex = /<@!(\d+)>/;
@@ -46,6 +47,12 @@ export default class RoleRemove extends Command {
 			const targetMemberID = params[0].match(mentionRegex)[1];
 
 			const role = getRoleObject(this.client, roleID);
+
+			if (!role) {
+				await message.reply('الروول ده مش موجود');
+				return;
+			}
+
 			const targetMember = getMemberObject(this.client, targetMemberID);
 
 			const embed = createRoleEmbed({

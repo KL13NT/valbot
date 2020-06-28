@@ -18,6 +18,7 @@ export default class Clear {
 			params: [
 				{
 					name: 'params',
+					optional: false,
 					validator: (value: string): boolean => {
 						if (isNaN(Number(value))) return false;
 						else return true;

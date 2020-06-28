@@ -12,9 +12,9 @@ export default class Teach extends Command {
 			name: `teach`,
 			category: 'Management',
 			cooldown: 1000,
-			nOfParams: 0,
+			nOfParams: 1,
 			description: `بتعلم البوت يرد على حاجة`,
-			exampleUsage: `${client.prefix} teach hello`,
+			exampleUsage: `hello`,
 			extraParams: true,
 			optionalParams: 1,
 			auth: {
@@ -46,7 +46,11 @@ export default class Teach extends Command {
 			channel
 				.awaitMessages(collectorFilter, collectorOptions)
 				.then(collected =>
-					this.collectionSuccess(context, invoker, collected.first().content)
+					this.collectionSuccess(
+						context,
+						invoker,
+						collected.first().content
+					).catch(err => log(this.client, err, 'error'))
 				)
 				.catch(async () => {
 					await message.reply('وقتك خلص, جرب تاني');

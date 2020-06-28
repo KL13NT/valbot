@@ -13,7 +13,7 @@ export default class RoleGive extends Command {
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتدي لميمبر روول معين`,
-			exampleUsage: `@Sovereign#4984 <role_name|role_id>`,
+			exampleUsage: `<mention> <role_name|role_id>`,
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
@@ -46,6 +46,12 @@ export default class RoleGive extends Command {
 			const targetMemberID = params[0].match(mentionRegex)[1];
 
 			const role = getRoleObject(this.client, roleID);
+
+			if (!role) {
+				await message.reply('الروول مش موجود');
+				return;
+			}
+
 			const targetMember = getMemberObject(this.client, targetMemberID);
 
 			const embed = createRoleEmbed({
