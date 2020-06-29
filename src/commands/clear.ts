@@ -23,7 +23,7 @@ export default class Clear extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
-		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS;
+		const { CHANNEL_MOD_LOGS } = this.client.config;
 		const { message, member, params, channel } = context;
 
 		const count = parseInt(params[0]);

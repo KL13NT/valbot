@@ -24,7 +24,7 @@ export default class RoleGive extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
-		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS;
+		const { CHANNEL_MOD_LOGS } = this.client.config;
 		const { message, params, member, channel } = context;
 		const roleNameRegex = /\S+/i;
 		const roleIDRegex = /\d+/i;

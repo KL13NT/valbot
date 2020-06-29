@@ -162,8 +162,8 @@
         "affectsGlobalScope": false
       },
       "./src/types/interfaces.ts": {
-        "version": "c00dfe5aaca506af04a4226f09ecb3dae5d0b0735d381e0694a1974169fde852",
-        "signature": "be0d08dffbad2ac5903cd4a94ad823624ad919ef70f13980a869b605f1a4ac2a",
+        "version": "54bf272b7eb16f813c7fa762a6aa456c99b53fb717aa5d9498bd71016b73091c",
+        "signature": "9d82225360c9272cd3a4ed0b2f39f9a51369934c942ef5ab95b67513e32998d2",
         "affectsGlobalScope": false
       },
       "./src/structures/controller.ts": {
@@ -437,13 +437,13 @@
         "affectsGlobalScope": false
       },
       "./src/utils/object.ts": {
-        "version": "13b6aa629b2bab664ba801def49b2821936090e874b6133baabd5e04f29371b5",
+        "version": "0dacd55f52008b1c136cb3c1c52baa712cb62f94dcb06e262fd33d8b41dffd94",
         "signature": "9590ba62919831924b5497564f4efe65c023599a277d64e61d627365407b43ca",
         "affectsGlobalScope": false
       },
       "./src/utils/general.ts": {
-        "version": "0d8b087a0454ad112bdb7fc5f3413989622d60d887bd92d40ef160162b038d37",
-        "signature": "f2afccc6b627f9e61e6b3c6b601e49f7d831607a478c2112772a890857f72b3a",
+        "version": "02f65f8ff1daf8467556f7b390d0efa9140ae724b995b59943390e1fa035d462",
+        "signature": "94b0ba0d6e25e7dfd400d0f3c14725cf35e064f1974e683dca28fa4f3b8ef088",
         "affectsGlobalScope": false
       },
       "./src/controllers/rediscontroller.ts": {
@@ -462,8 +462,8 @@
         "affectsGlobalScope": false
       },
       "./src/controllers/mongocontroller.ts": {
-        "version": "237354ac5160c00fc58ca7121116a1ddf50cd6304a00813870632c17f818fd41",
-        "signature": "2de83b2f8d7443c55b50d96a51b91f84b32480c308786612a0a2bec75aed7d33",
+        "version": "4eb5bbe2cfac5aa116b9e519d247f3f24cf775b3acc7439c7bb47345ec366f4f",
+        "signature": "fb12b37e57182c1b1b05cb5b730000b2b2c00f08c7843a4fdc2e1855055596f3",
         "affectsGlobalScope": false
       },
       "./src/utils/embed.ts": {
@@ -1146,7 +1146,7 @@
         "affectsGlobalScope": false
       },
       "./src/utils/moderation.ts": {
-        "version": "f87400f6d4f936952630085061cd41368347fe0e21b71021094c2d4675219cf3",
+        "version": "f86dc94e4e589725bf7571cfbe2dfd5c647b9304af9a4ef5f0fb4714b1e829b4",
         "signature": "5b178f12eaa0ea4a6569a59f204d6a5a778006a35f221e1993dfb764f427f643",
         "affectsGlobalScope": false
       },
@@ -1176,7 +1176,7 @@
         "affectsGlobalScope": false
       },
       "./src/structures/command.ts": {
-        "version": "5675b45dae8ce70dc567ea516421f969513d781860b10e96c94a8318d7f7b747",
+        "version": "bd418e739994b5b0eb7cbaf61dbe38bd965c8fd305b7147a1fe007c4a6994117",
         "signature": "644fb9ebeba68b0936eb573622da4eb58200e239be285ecec4d1666d3c793dfc",
         "affectsGlobalScope": false
       },
@@ -1191,12 +1191,12 @@
         "affectsGlobalScope": false
       },
       "./src/commands/setup.ts": {
-        "version": "93e94468bdc26fb70fcb4c65d910a8a1a492be35b73d46bb6d8368d2b466fe88",
-        "signature": "050134672d56dc2a1d749c91eaf34f150fcd870f3cf28aab169f6addaa1e1d53",
+        "version": "1f67e73e1b64b4fefe42e9cfa43fcb1c514927f3cbd0978e83d499bc6615818e",
+        "signature": "be530b9392e7bf3bf3b900a22a70de9f51960110ae024b4f67566a1b43339121",
         "affectsGlobalScope": false
       },
       "./src/commands/clear.ts": {
-        "version": "c8f6b0f1f0db938fcf0aee90172a47c5ebc048af430cf0dd145487efa3837e16",
+        "version": "539acad5992909a4ca3c189885060182415c57985fa5f18397cb0cae696be1c0",
         "signature": "b839cef9004b5e43fd7b79ce6a3517828c4e2387229e9f4e8fdff8333df9f331",
         "affectsGlobalScope": false
       },
@@ -1221,17 +1221,17 @@
         "affectsGlobalScope": false
       },
       "./src/commands/rolegive.ts": {
-        "version": "cf8f3cb507c38e6cbcbac24d6f505666dcc9fe138190d8bde6956bc6f476289a",
+        "version": "8aa38dcb12eb1ddf45783fdd92d8155ff57bb261471a682478f3fad51d2647b9",
         "signature": "1f210e3114b6c5541290605a938b07a497e9549a8dae33fef672df73ad463300",
         "affectsGlobalScope": false
       },
       "./src/commands/roleremove.ts": {
-        "version": "14288735a2d6e30d497ee67bd763d1a08d47ac29e3b6a9aaebdaa184116a4031",
+        "version": "d2f9c8b0d43d9e120158a3f51679382bd6621daaa425c56ded44a1e8a3cc0f71",
         "signature": "7f2acbfe6fefdda3fd9e52b7738a6f310d6184c6d7ee74598e0e98b689de95f1",
         "affectsGlobalScope": false
       },
       "./src/commands/debug.ts": {
-        "version": "8b70afb7b357955ecbf759567422385d3889b97e795f8cfb7c8661d8bccc556f",
+        "version": "5787bb346a37e1a47ed3091bdf49de990cbf6781827f76bf6d89990b2b4e4135",
         "signature": "d0f0b6c0d0c89b5fc38401d3fbddb87bcf3b2b318f82095e8ccd6e68c964a97d",
         "affectsGlobalScope": false
       },
@@ -1315,8 +1315,18 @@
         "signature": "d0231fa6abb49ec39bb3ca053e9631e09f77adf9d4383499433d8661996ff3f7",
         "affectsGlobalScope": false
       },
+      "./node_modules/@types/hapi__joi/index.d.ts": {
+        "version": "c79976a6685d31506cdfa107995b47a35b2cfe673ad38ab72525487d1fb591c2",
+        "signature": "c79976a6685d31506cdfa107995b47a35b2cfe673ad38ab72525487d1fb591c2",
+        "affectsGlobalScope": false
+      },
+      "./src/types/validators.joi.ts": {
+        "version": "1a675723c266143145a45833bf76ba50495c3f4cb369872df9f4f127f6b44332",
+        "signature": "a70ae82dcf9b94d842901b3c37c80302b6fba7f2ae8c4bebcea0dfbb47b95db3",
+        "affectsGlobalScope": false
+      },
       "./src/valclient.ts": {
-        "version": "eef3bf53e240f839a2646cb253dd3a85dccccde926cbc5a6840bae628b2d9317",
+        "version": "f2b6ce9647f25fe13a90c7c0b23edaef182277e1566a640407a83bf4fdde0a95",
         "signature": "67424cdbaa3b365e94907037d0cc2f9e59dd367c96ef509c9dd6b390b44d26af",
         "affectsGlobalScope": false
       },
@@ -2748,6 +2758,12 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./node_modules/@types/hapi__joi/index.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
       "./node_modules/@types/istanbul-lib-coverage/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
@@ -3691,6 +3707,7 @@
         "./src/controllers/index.ts",
         "./src/structures/index.ts",
         "./src/types/interfaces.ts",
+        "./src/utils/general.ts",
         "./src/valclient.ts"
       ],
       "./src/commands/teach.ts": [
@@ -3782,6 +3799,7 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/discord.js/typings/index.d.ts",
+        "./src/controllers/index.ts",
         "./src/structures/controller.ts",
         "./src/types/interfaces.ts",
         "./src/utils/general.ts",
@@ -3999,6 +4017,13 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./src/types/validators.joi.ts": [
+        "./node_modules/@types/hapi__joi/index.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
       "./src/utils/embed.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
@@ -4067,6 +4092,7 @@
         "./src/loaders/index.ts",
         "./src/structures/command.ts",
         "./src/types/interfaces.ts",
+        "./src/types/validators.joi.ts",
         "./src/utils/general.ts"
       ]
     },
@@ -5266,6 +5292,12 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./node_modules/@types/hapi__joi/index.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
       "./node_modules/@types/istanbul-lib-coverage/index.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/ts3.2/fs.d.ts",
@@ -6267,6 +6299,9 @@
         "./src/structures/commandcontext.ts",
         "./src/valclient.ts"
       ],
+      "./src/types/validators.joi.ts": [
+        "./node_modules/@types/hapi__joi/index.d.ts"
+      ],
       "./src/utils/embed.ts": [
         "./node_modules/discord.js/typings/index.d.ts",
         "./src/types/interfaces.ts"
@@ -6438,6 +6473,7 @@
       "./node_modules/@types/bson/index.d.ts",
       "./node_modules/@types/color-name/index.d.ts",
       "./node_modules/@types/eslint-visitor-keys/index.d.ts",
+      "./node_modules/@types/hapi__joi/index.d.ts",
       "./node_modules/@types/istanbul-lib-coverage/index.d.ts",
       "./node_modules/@types/istanbul-lib-report/index.d.ts",
       "./node_modules/@types/istanbul-reports/index.d.ts",
@@ -6592,6 +6628,7 @@
       "./src/types/environment.d.ts",
       "./src/types/interfaces.ts",
       "./src/types/types.ts",
+      "./src/types/validators.joi.ts",
       "./src/utils/embed.ts",
       "./src/utils/event.ts",
       "./src/utils/general.ts",

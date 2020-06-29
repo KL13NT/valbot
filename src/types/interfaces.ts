@@ -26,35 +26,25 @@ export type IController =
 
 export type AlertLevel = 'info' | 'warn' | 'error';
 
-export interface AuthClientConfig {
+export interface ClientConfig {
 	[index: string]: Snowflake;
+
 	AUTH_ADMIN: Snowflake;
 	AUTH_MOD: Snowflake;
 	AUTH_VERIFIED: Snowflake;
 	AUTH_EVERYONE: Snowflake;
-}
 
-export interface ChannelsClientConfig {
-	[index: string]: Snowflake;
 	CHANNEL_NOTIFICATIONS: Snowflake;
+	CHANNEL_ANNOUNCEMENTS: Snowflake;
 	CHANNEL_RULES: Snowflake;
 	CHANNEL_POLLS: Snowflake;
 	CHANNEL_TEST: Snowflake;
 	CHANNEL_BOT_STATUS: Snowflake;
 	CHANNEL_MOD_LOGS: Snowflake;
-}
+	CHANNEL_BOT_BUGS: Snowflake;
 
-export interface RolesClientConfig {
-	[index: string]: Snowflake;
 	ROLE_MUTED: Snowflake;
 	ROLE_WARNED: Snowflake;
-}
-
-export interface ClientConfig {
-	[index: string]: AuthClientConfig | ChannelsClientConfig | RolesClientConfig;
-	AUTH: AuthClientConfig;
-	CHANNELS: ChannelsClientConfig;
-	ROLES: RolesClientConfig;
 }
 
 export interface Presence {

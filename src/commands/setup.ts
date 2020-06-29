@@ -1,13 +1,11 @@
 import ValClient from '../ValClient';
 
+import { ClientConfig } from '../types/interfaces';
 import { Command, CommandContext } from '../structures';
 import { Message, TextChannel, GuildMember } from 'discord.js';
-import { ClientConfig } from '../types/interfaces';
-import {
-	MongoController,
-	RedisController,
-	QueueController
-} from '../Controllers';
+import { MongoController, QueueController } from '../Controllers';
+
+import { log } from '../utils/general';
 
 export default class Setup extends Command {
 	constructor(client: ValClient) {
@@ -15,11 +13,11 @@ export default class Setup extends Command {
 			name: 'setup',
 			category: 'Development',
 			cooldown: 1000,
-			nOfParams: 0,
+			nOfParams: 2,
 			description: 'بتعمل setup للبوت. مينفعش تعمل cancel.',
-			exampleUsage: '',
+			exampleUsage: 'get\nget AUTH_ADMIN\nset\nset AUTH_ADMIN',
 			extraParams: false,
-			optionalParams: 0,
+			optionalParams: 1,
 			auth: {
 				method: 'ROLE',
 				required: 'AUTH_DEV',
@@ -28,54 +26,105 @@ export default class Setup extends Command {
 		});
 	}
 
-	_run = async ({ channel, member, message }: CommandContext) => {
-		const configTemplate = [
-			'AUTH.AUTH_ADMIN',
-			'AUTH.AUTH_MOD',
-			'AUTH.AUTH_VERIFIED',
-			'AUTH.AUTH_EVERYONE',
+	_run = async (context: CommandContext) => {
+		const { channel, member, message, params } = context;
+		const config = this.client.config;
 
-			'CHANNELS.CHANNEL_NOTIFICATIONS',
-			'CHANNELS.CHANNEL_RULES',
-			'CHANNELS.CHANNEL_POLLS',
-			'CHANNELS.CHANNEL_TEST',
-			'CHANNELS.CHANNEL_BOT_STATUS',
-			'CHANNELS.CHANNEL_MOD_LOGS',
+		const op = params[0];
+		const variable = params[1];
 
-			'ROLES.ROLE_MUTED',
-			'ROLES.ROLE_WARNED'
-		];
+		const filter = (m: Message) => m.author.id === member.id;
+		const awaitOptions = {
+			max: 1,
+			time: 60 * 1000,
+			errors: ['time']
+		};
 
-		const config = {};
+		try {
+			if (op !== 'get' && op !== 'set') {
+				await message.reply('لازم تحدد `set` ولا `get`');
+				return;
+			}
 
-		await message.reply('starting config setup. This is irreversible.');
+			if (params.length === 2 && !variable) {
+				await message.reply('مش موجود');
+				return;
+			}
 
-		const questions = configTemplate.map(variable =>
-			this.getKeyValue.bind(
-				null,
-				<TextChannel>channel,
-				member,
-				variable,
-				config
-			)
-		);
+			if (params.length === 2 && op === 'get') {
+				const value = config[variable];
 
-		for (const question of questions) {
-			await question();
+				await message.reply(`${variable} = ${value}`);
+				return;
+			}
+
+			if (params.length === 2 && op === 'set') {
+				await message.reply('ايه القيمة؟');
+
+				const value = (
+					await channel.awaitMessages(filter, awaitOptions)
+				).first().content;
+
+				config[variable] = value;
+
+				await this.updateConfig(config);
+				await message.reply(`تم.\n\`${variable}\` = \`${value}\``);
+				return;
+			}
+
+			if (op === 'get') {
+				const values = Object.keys(config).map(key => {
+					return `\`${key}\` = \`${config[key]}\``;
+				});
+
+				await message.reply(values.join('\n'));
+				return;
+			}
+
+			await message.reply('starting config setup. This is irreversible.');
+
+			const questions = Object.keys(config).map(variable =>
+				this.getKeyValue.bind(
+					null,
+					<TextChannel>channel,
+					member,
+					variable,
+					config
+				)
+			);
+
+			for (const question of questions) {
+				await question();
+			}
+
+			await message.reply('Saving config');
+
+			await this.updateConfig(config);
+			this.client.ready = true;
+		} catch (err) {
+			log(this.client, err, 'error');
 		}
-
-		message.reply('Saving config');
-
-		// this.setConfig(config); //TODO: uncomment
-		this.client.ready = true;
 	};
 
-	//TODO: fix this
+	updateConfig = async (config: ClientConfig) => {
+		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const queue = <QueueController>this.client.controllers.get('queue');
+
+		if (mongo.ready) {
+			await mongo.setConfig(config);
+			return;
+		} else
+			queue.enqueue({
+				func: this.updateConfig,
+				args: [config]
+			});
+	};
+
 	getKeyValue = async (
 		channel: TextChannel,
 		member: GuildMember,
-		path: string,
-		config: { [index: string]: { [index: string]: Message } }
+		key: string,
+		config: ClientConfig
 	) => {
 		const filter = (m: Message) => m.author.id === member.id;
 		const awaitOptions = {
@@ -84,37 +133,9 @@ export default class Setup extends Command {
 			errors: ['time']
 		};
 
-		const collection = path.split('.')[0];
-		const value = path.split('.')[1];
-
-		if (!config[collection]) config[collection] = {};
-
-		channel.send(path);
-		config[collection][value] = (
+		channel.send(key);
+		config[key] = (
 			await channel.awaitMessages(filter, awaitOptions)
-		).first();
+		).first().content;
 	};
-
-	async setConfig(config: ClientConfig) {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const redis = <RedisController>this.client.controllers.get('redis');
-		const queue = <QueueController>this.client.controllers.get('queue');
-
-		if (mongo.ready && redis.ready) {
-			this.client.config = config;
-
-			mongo.db.collection('config').updateOne(
-				{ GUILD_ID: String(process.env.GUILD_ID) },
-				{
-					$set: {
-						...config,
-						GUILD_ID: String(process.env.GUILD_ID)
-					}
-				},
-				{ upsert: true }
-			);
-		} else {
-			queue.enqueue({ func: this.setConfig, args: [config] });
-		}
-	}
 }

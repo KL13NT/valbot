@@ -10,8 +10,8 @@ import { createUserModerationEmbed } from './embed';
 export async function mute(client: ValClient, options: UserModerationOptions) {
 	const { member, moderator, channel, reason } = options;
 
-	const { ROLE_MUTED } = client.config.ROLES;
-	const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
+	const { ROLE_MUTED } = client.config;
+	const { CHANNEL_MOD_LOGS } = client.config;
 
 	const targetMember = getMemberObject(client, member);
 
@@ -48,7 +48,7 @@ export async function mute(client: ValClient, options: UserModerationOptions) {
 
 export async function ban(client: ValClient, options: UserModerationOptions) {
 	const { member, moderator, channel, reason } = options;
-	const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
+	const { CHANNEL_MOD_LOGS } = client.config;
 
 	const targetMember = getMemberObject(client, member);
 
@@ -75,8 +75,8 @@ export async function ban(client: ValClient, options: UserModerationOptions) {
 
 export async function warn(client: ValClient, options: UserModerationOptions) {
 	const { member, moderator, channel, reason } = options;
-	const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
-	const { ROLE_WARNED } = client.config.ROLES;
+	const { CHANNEL_MOD_LOGS } = client.config;
+	const { ROLE_WARNED } = client.config;
 
 	const targetMember = getMemberObject(client, member);
 
@@ -106,8 +106,8 @@ export async function unwarn(
 	options: UserModerationOptions
 ) {
 	const { member, moderator, channel, reason } = options;
-	const { ROLE_WARNED } = client.config.ROLES;
-	const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
+	const { ROLE_WARNED } = client.config;
+	const { CHANNEL_MOD_LOGS } = client.config;
 
 	const targetMember = getMemberObject(client, member);
 
@@ -137,8 +137,8 @@ export async function unmute(
 	options: UserModerationOptions
 ) {
 	const { member, moderator, channel, reason } = options;
-	const { ROLE_MUTED } = client.config.ROLES;
-	const { CHANNEL_MOD_LOGS } = client.config.CHANNELS;
+	const { ROLE_MUTED } = client.config;
+	const { CHANNEL_MOD_LOGS } = client.config;
 
 	const targetMember = getMemberObject(client, member);
 
@@ -164,14 +164,14 @@ export async function unmute(
 }
 
 export function isWarned(client: ValClient, member: Snowflake) {
-	const { ROLE_WARNED } = client.config.ROLES;
+	const { ROLE_WARNED } = client.config;
 	const targetMember = getMemberObject(client, member);
 
 	return targetMember.roles.cache.some(role => role.id === ROLE_WARNED);
 }
 
 export function isMuted(client: ValClient, member: string) {
-	const { ROLE_MUTED } = client.config.ROLES;
+	const { ROLE_MUTED } = client.config;
 	const targetMember = getMemberObject(client, member);
 
 	return targetMember.roles.cache.some(role => role.id === ROLE_MUTED);

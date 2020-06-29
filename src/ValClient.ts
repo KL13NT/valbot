@@ -7,7 +7,7 @@ import * as path from 'path';
 import * as loaders from './loaders';
 import * as listeners from './listeners';
 
-import { log } from './utils/general';
+import { log, transformObject } from './utils/general';
 import { ClientConfig, IController } from './types/interfaces';
 import { Presence } from './types/interfaces';
 import Command from './structures/Command';
@@ -17,6 +17,7 @@ import {
 	QueueController,
 	IntervalsController
 } from './controllers';
+import { ClientConfigValidator } from './types/validators.joi';
 
 export default class ValClient extends Client {
 	readonly prefix: string;
@@ -32,6 +33,22 @@ export default class ValClient extends Client {
 		this.ready = false;
 		this.prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
 		this.controllers = new Map<string, IController>();
+		this.config = {
+			AUTH_ADMIN: '',
+			AUTH_MOD: '',
+			AUTH_VERIFIED: '',
+			AUTH_EVERYONE: '',
+			CHANNEL_NOTIFICATIONS: '',
+			CHANNEL_ANNOUNCEMENTS: '',
+			CHANNEL_RULES: '',
+			CHANNEL_POLLS: '',
+			CHANNEL_TEST: '',
+			CHANNEL_BOT_STATUS: '',
+			CHANNEL_MOD_LOGS: '',
+			CHANNEL_BOT_BUGS: '',
+			ROLE_MUTED: '',
+			ROLE_WARNED: ''
+		};
 	}
 
 	init = async (token = AUTH_TOKEN) => {
@@ -131,12 +148,16 @@ export default class ValClient extends Client {
 						GUILD_ID: process.env.GUILD_ID
 					});
 
-				if (!response)
+				if (!response || ClientConfigValidator.validate(response).error) {
+					this.config = transformObject<ClientConfig>(response, this.config);
+					await mongo.setConfig(this.config);
+
 					return log(
 						this,
 						`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
 						'warn'
 					);
+				}
 
 				this.ready = true;
 				this.config = response;

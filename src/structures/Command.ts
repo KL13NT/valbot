@@ -95,7 +95,7 @@ export default abstract class Command {
 		const { member } = context;
 		const { required } = this.options.auth;
 
-		const AUTH_ROLES = this.client.config.AUTH;
+		const AUTH_ROLES = this.client.config;
 		const allRoles = Object.values(AUTH_ROLES);
 
 		const requiredRole: string = AUTH_ROLES[required];
@@ -177,7 +177,6 @@ export default abstract class Command {
 			category
 		} = this.options;
 		const { required, devOnly } = auth;
-		const { AUTH } = this.client.config;
 
 		const title = `**معلومات عن ${name}**\n`;
 		const fields = [
@@ -197,7 +196,7 @@ export default abstract class Command {
 				name: '**اقل role مسموح بيه**',
 				value: getRoleObject(
 					this.client,
-					devOnly ? process.env.ROLE_DEVELOPER : AUTH[required]
+					devOnly ? process.env.ROLE_DEVELOPER : this.client.config[required]
 				).name
 			},
 			{

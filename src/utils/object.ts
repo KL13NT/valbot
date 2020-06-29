@@ -13,7 +13,7 @@ export function getChannelObject(
 	client: ValClient,
 	channelId: Snowflake
 ): TextChannel | undefined {
-	const { CHANNEL_TEST } = client.config.CHANNELS;
+	const { CHANNEL_TEST } = client.config;
 
 	return <TextChannel>(
 		client.guilds.cache

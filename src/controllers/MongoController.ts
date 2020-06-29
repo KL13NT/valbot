@@ -4,10 +4,11 @@ import ValClient from '../ValClient';
 import Controller from '../structures/Controller';
 
 import { MongoClient, Db } from 'mongodb';
-import { Level, Milestone, Response } from '../types/interfaces';
+import { Level, Milestone, Response, ClientConfig } from '../types/interfaces';
 import { Snowflake } from 'discord.js';
 
 import { log } from '../utils/general';
+import { RedisController, QueueController } from '.';
 
 export default class MongoController extends Controller {
 	ready = false;
@@ -88,5 +89,34 @@ export default class MongoController extends Controller {
 				upsert: true
 			}
 		);
+	};
+
+	setConfig = async (config: ClientConfig) => {
+		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const redis = <RedisController>this.client.controllers.get('redis');
+		const queue = <QueueController>this.client.controllers.get('queue');
+
+		if (mongo.ready && redis.ready) {
+			this.client.config = config;
+
+			await mongo.db
+				.collection('config')
+				.deleteOne({ GUILD_ID: process.env.GUIILD_ID });
+
+			await mongo.db.collection('config').updateOne(
+				{ GUILD_ID: process.env.GUILD_ID },
+				{
+					$set: {
+						...config,
+						GUILD_ID: String(process.env.GUILD_ID)
+					}
+				},
+				{ upsert: true }
+			);
+
+			this.client.initConfig();
+		} else {
+			queue.enqueue({ func: this.setConfig, args: [config] });
+		}
 	};
 }

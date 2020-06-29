@@ -24,7 +24,7 @@ export default class RoleRemove extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
-		const { CHANNEL_MOD_LOGS } = this.client.config.CHANNELS;
+		const { CHANNEL_MOD_LOGS } = this.client.config;
 		const { message, params, channel, member } = context;
 
 		const roleNameRegex = /\w+/i;

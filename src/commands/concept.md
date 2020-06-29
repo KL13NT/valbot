@@ -14,7 +14,7 @@ export default class Clear {
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتمسح رسايل بعدد n`,
-			exampleUsage: `5`,
+			exampleUsages: [], // auto attach params
 			params: [
 				{
 					name: 'params',

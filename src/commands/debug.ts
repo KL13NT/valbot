@@ -48,7 +48,7 @@ export default class Debug extends Command {
 			this.client.controllers.get('intervals')
 		);
 
-		const { CHANNEL_BOT_STATUS } = this.client.config.CHANNELS;
+		const { CHANNEL_BOT_STATUS } = this.client.config;
 
 		if (intervals.exists('debug')) {
 			await message.reply('انا مشغل الdebugger اصلا يبشا');

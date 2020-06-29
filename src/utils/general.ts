@@ -31,7 +31,7 @@ export async function log(
 	if (queue && queue.ready)
 		return queue.enqueue({ func: log, args: [...arguments] });
 
-	const { CHANNEL_BOT_STATUS } = client.config.CHANNELS;
+	const { CHANNEL_BOT_STATUS } = client.config;
 
 	const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
 	const message = createAlertMessage(String(notification), alertLevel); // @see
@@ -51,7 +51,7 @@ export async function notify(options: NotificationOptions) {
 	if (!client.ready)
 		return queue.enqueue({ func: notify, args: [...arguments] });
 
-	const { CHANNEL_NOTIFICATIONS } = client.config.CHANNELS;
+	const { CHANNEL_NOTIFICATIONS } = client.config;
 
 	const target = getChannelObject(client, channel || CHANNEL_NOTIFICATIONS);
 
@@ -78,4 +78,27 @@ export function calculateUniqueWords(message: string) {
 
 export function capitalise(event: string) {
 	return event.charAt(0).toUpperCase() + event.substr(1);
+}
+
+// Transforms an object to include only keys available in another object. Flat objects only.
+export function transformObject<T>(
+	first: Record<string, unknown>,
+	second: Record<string, unknown>
+): T {
+	const x1 = { ...first };
+	const x2 = { ...second };
+
+	Object.keys(x2).forEach(key => {
+		if (!x1[key]) {
+			x1[key] = x2[key];
+		}
+	});
+
+	Object.keys(x1).forEach(key => {
+		if (typeof x2[key] === 'undefined') {
+			delete x1[key];
+		}
+	});
+
+	return <T>(<Record<string, unknown>>x1);
 }
