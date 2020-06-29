@@ -125,6 +125,8 @@ static/
 data/
 prod/
 out/
+
+# TypeScript cache
 *.tsbuildinfo
 
 *.rdb

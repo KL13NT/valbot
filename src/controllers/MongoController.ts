@@ -92,29 +92,24 @@ export default class MongoController extends Controller {
 	};
 
 	setConfig = async (config: ClientConfig) => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
 		const redis = <RedisController>this.client.controllers.get('redis');
 		const queue = <QueueController>this.client.controllers.get('queue');
 
-		if (mongo.ready && redis.ready) {
+		if (this.ready && redis.ready) {
 			this.client.config = config;
 
-			await mongo.db
+			await this.db
 				.collection('config')
-				.deleteOne({ GUILD_ID: process.env.GUIILD_ID });
+				.findOneAndDelete({ GUILD_ID: process.env.GUIILD_ID });
 
-			await mongo.db.collection('config').updateOne(
+			await this.db.collection('config').findOneAndReplace(
 				{ GUILD_ID: process.env.GUILD_ID },
 				{
-					$set: {
-						...config,
-						GUILD_ID: String(process.env.GUILD_ID)
-					}
+					...config,
+					GUILD_ID: String(process.env.GUILD_ID)
 				},
 				{ upsert: true }
 			);
-
-			this.client.initConfig();
 		} else {
 			queue.enqueue({ func: this.setConfig, args: [config] });
 		}

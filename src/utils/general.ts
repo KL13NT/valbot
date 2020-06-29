@@ -5,7 +5,7 @@ import { QueueController } from '../Controllers';
 import ValClient from '../ValClient';
 
 import { getChannelObject } from './object';
-import { TextChannel } from 'discord.js';
+import { TextChannel, GuildMember, Message } from 'discord.js';
 
 export function createAlertMessage(message: string, alertLevel: AlertLevel) {
 	const notification = `[${alertLevel}] ${message}`;
@@ -101,4 +101,15 @@ export function transformObject<T>(
 	});
 
 	return <T>(<Record<string, unknown>>x1);
+}
+
+export async function awaitMessages(channel: TextChannel, member: GuildMember) {
+	const filter = ({ author }: Message) => author.id === member.id;
+	const options = {
+		max: 1,
+		time: 60 * 1000,
+		errors: ['time']
+	};
+
+	return (await channel.awaitMessages(filter, options)).first().content;
 }

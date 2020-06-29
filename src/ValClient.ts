@@ -154,13 +154,17 @@ export default class ValClient extends Client {
 			if (mongo.ready && redis.ready) {
 				const response: ClientConfig = await mongo.db
 					.collection('config')
-					.findOne({
-						GUILD_ID: process.env.GUILD_ID
-					});
+					.findOne(
+						{
+							GUILD_ID: process.env.GUILD_ID
+						},
+						{ projection: { _id: 0, GUILD_ID: 0 } }
+					);
 
 				if (!response || ClientConfigValidator.validate(response).error) {
 					this.config = transformObject<ClientConfig>(response, this.config);
 					await mongo.setConfig(this.config);
+					console.log(ClientConfigValidator.validate(response).error);
 
 					return log(
 						this,
