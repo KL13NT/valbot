@@ -77,6 +77,8 @@ export default class ValClient extends Client {
 		this.initListeners();
 		await this.initConfig();
 
+		// console.log(this.user.presence);
+
 		const intervals = <IntervalsController>this.controllers.get('intervals');
 
 		intervals.setInterval({
@@ -97,12 +99,20 @@ export default class ValClient extends Client {
 				message: 'Sovereign writing bad code'
 			},
 			{
+				type: 'WATCHING',
+				message: 'Sovereign coding in SpaghettiScript'
+			},
+			{
 				message: `${this.prefix} help`,
+				type: 'PLAYING'
+			},
+			{
+				message: 'dumb',
 				type: 'PLAYING'
 			}
 		];
 
-		const presence = presences[Math.round(Math.random() * presences.length)];
+		const presence = presences[Math.floor(Math.random() * presences.length)];
 
 		if (this.user)
 			this.user

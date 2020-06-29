@@ -462,7 +462,7 @@
         "affectsGlobalScope": false
       },
       "./src/controllers/mongocontroller.ts": {
-        "version": "4eb5bbe2cfac5aa116b9e519d247f3f24cf775b3acc7439c7bb47345ec366f4f",
+        "version": "348c0b81b18b63753934617b474d7efb154d35454eced90b8f2e0f2a110d2628",
         "signature": "fb12b37e57182c1b1b05cb5b730000b2b2c00f08c7843a4fdc2e1855055596f3",
         "affectsGlobalScope": false
       },
@@ -1326,7 +1326,7 @@
         "affectsGlobalScope": false
       },
       "./src/valclient.ts": {
-        "version": "f2b6ce9647f25fe13a90c7c0b23edaef182277e1566a640407a83bf4fdde0a95",
+        "version": "054d9ce39608603a2840eb6f9b3dccc204206c8307978762812588cd10296d0a",
         "signature": "67424cdbaa3b365e94907037d0cc2f9e59dd367c96ef509c9dd6b390b44d26af",
         "affectsGlobalScope": false
       },
