@@ -1,6 +1,6 @@
 const { AUTH_TOKEN, MODE } = process.env;
 
-import { Client, ClientOptions, Guild } from 'discord.js';
+import { Client, ClientOptions, Guild, PresenceData } from 'discord.js';
 
 import * as fs from 'fs';
 import * as path from 'path';
@@ -9,7 +9,6 @@ import * as listeners from './listeners';
 
 import { log, transformObject } from './utils/general';
 import { ClientConfig, IController } from './types/interfaces';
-import { Presence } from './types/interfaces';
 import Command from './structures/Command';
 import {
 	MongoController,
@@ -21,34 +20,58 @@ import { ClientConfigValidator } from './types/validators.joi';
 
 export default class ValClient extends Client {
 	readonly prefix: string;
-	ready: boolean;
-	config: ClientConfig;
+	ready = false;
 	commands: Map<string, Command> = new Map<string, Command>();
 	controllers: Map<string, IController> = new Map<string, IController>();
 	ValGuild: Guild;
+	config: ClientConfig = {
+		AUTH_ADMIN: '',
+		AUTH_MOD: '',
+		AUTH_VERIFIED: '',
+		AUTH_EVERYONE: '',
+		CHANNEL_NOTIFICATIONS: '',
+		CHANNEL_ANNOUNCEMENTS: '',
+		CHANNEL_RULES: '',
+		CHANNEL_POLLS: '',
+		CHANNEL_TEST: '',
+		CHANNEL_BOT_STATUS: '',
+		CHANNEL_MOD_LOGS: '',
+		CHANNEL_BOT_BUGS: '',
+		ROLE_MUTED: '',
+		ROLE_WARNED: ''
+	};
+
+	presences: PresenceData[] = [
+		{
+			activity: {
+				type: 'WATCHING',
+				name: 'Sovereign writing bad code'
+			}
+		},
+		{
+			activity: {
+				type: 'WATCHING',
+				name: 'N1ffl3r making tanks'
+			}
+		},
+		{
+			activity: {
+				type: 'WATCHING',
+				name: 'Sovereign coding in SpaghettiScript'
+			}
+		},
+		{
+			activity: {
+				name: `${this.prefix} help`,
+				type: 'PLAYING'
+			}
+		}
+	];
 
 	constructor(options: ClientOptions) {
 		super(options);
 
-		this.ready = false;
 		this.prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
-		this.controllers = new Map<string, IController>();
-		this.config = {
-			AUTH_ADMIN: '',
-			AUTH_MOD: '',
-			AUTH_VERIFIED: '',
-			AUTH_EVERYONE: '',
-			CHANNEL_NOTIFICATIONS: '',
-			CHANNEL_ANNOUNCEMENTS: '',
-			CHANNEL_RULES: '',
-			CHANNEL_POLLS: '',
-			CHANNEL_TEST: '',
-			CHANNEL_BOT_STATUS: '',
-			CHANNEL_MOD_LOGS: '',
-			CHANNEL_BOT_BUGS: '',
-			ROLE_MUTED: '',
-			ROLE_WARNED: ''
-		};
 	}
 
 	init = async (token = AUTH_TOKEN) => {
@@ -77,14 +100,15 @@ export default class ValClient extends Client {
 		this.initListeners();
 		await this.initConfig();
 
-		// console.log(this.user.presence);
-
 		const intervals = <IntervalsController>this.controllers.get('intervals');
+
+		this.setPresence();
+		this.user.setStatus('dnd').catch(err => log(this, err, 'error'));
 
 		intervals.setInterval({
 			callback: this.setPresence,
 			name: 'presence',
-			time: 5 * 60 * 1000
+			time: 30 * 1000
 		});
 
 		this.emit('queueExecute', 'Client ready');
@@ -92,32 +116,13 @@ export default class ValClient extends Client {
 		log(this, 'Client ready', 'info');
 	};
 
-	setPresence = () => {
-		const presences: Presence[] = [
-			{
-				type: 'WATCHING',
-				message: 'Sovereign writing bad code'
-			},
-			{
-				type: 'WATCHING',
-				message: 'Sovereign coding in SpaghettiScript'
-			},
-			{
-				message: `${this.prefix} help`,
-				type: 'PLAYING'
-			},
-			{
-				message: 'dumb',
-				type: 'PLAYING'
-			}
+	setPresence = async () => {
+		const presence = this.presences[
+			Math.floor(Math.random() * this.presences.length)
 		];
 
-		const presence = presences[Math.floor(Math.random() * presences.length)];
-
 		if (this.user)
-			this.user
-				.setActivity(presence.message, { type: presence.type })
-				.catch(err => log(this, err.message, 'error'));
+			this.user.setPresence(presence).catch(err => log(this, err, 'error'));
 	};
 
 	/**
