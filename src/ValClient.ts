@@ -14,7 +14,8 @@ import Command from './structures/Command';
 import {
 	MongoController,
 	RedisController,
-	QueueController
+	QueueController,
+	IntervalsController
 } from './controllers';
 
 export default class ValClient extends Client {
@@ -53,13 +54,19 @@ export default class ValClient extends Client {
 	};
 
 	onReady = async (): Promise<void> => {
-		this.setPresence();
-
 		this.ValGuild = this.guilds.cache.first();
 
 		this.initLoaders();
 		this.initListeners();
 		await this.initConfig();
+
+		const intervals = <IntervalsController>this.controllers.get('intervals');
+
+		intervals.setInterval({
+			callback: this.setPresence,
+			name: 'presence',
+			time: 5 * 60 * 1000
+		});
 
 		this.emit('queueExecute', 'Client ready');
 
@@ -67,10 +74,18 @@ export default class ValClient extends Client {
 	};
 
 	setPresence = () => {
-		const presence: Presence = {
-			message: `${this.prefix} help`,
-			type: 'PLAYING'
-		};
+		const presences: Presence[] = [
+			{
+				type: 'WATCHING',
+				message: 'Sovereign writing bad code'
+			},
+			{
+				message: `${this.prefix} help`,
+				type: 'PLAYING'
+			}
+		];
+
+		const presence = presences[Math.round(Math.random() * presences.length)];
 
 		if (this.user)
 			this.user

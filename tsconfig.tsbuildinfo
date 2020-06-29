@@ -1216,7 +1216,7 @@
         "affectsGlobalScope": false
       },
       "./src/commands/teach.ts": {
-        "version": "a92cda88120bea8974340d37acb405e0ccc4ec676afe07818d0c1ba499133c9c",
+        "version": "314211205657302654eddc824d6de4cffa562b4a8290106702161911f0fdccb2",
         "signature": "324ef068ae83cae2ae6c33c22524ea8e93c7713173ef15d9b6a4a8ffebea5814",
         "affectsGlobalScope": false
       },
@@ -1316,7 +1316,7 @@
         "affectsGlobalScope": false
       },
       "./src/valclient.ts": {
-        "version": "05521141f863e7ea4953b85a06b4981b6aa382f515adc169ea31ddedae948032",
+        "version": "eef3bf53e240f839a2646cb253dd3a85dccccde926cbc5a6840bae628b2d9317",
         "signature": "67424cdbaa3b365e94907037d0cc2f9e59dd367c96ef509c9dd6b390b44d26af",
         "affectsGlobalScope": false
       },

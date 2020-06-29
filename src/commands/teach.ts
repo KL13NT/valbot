@@ -14,7 +14,7 @@ export default class Teach extends Command {
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتعلم البوت يرد على حاجة`,
-			exampleUsage: `hello`,
+			exampleUsage: `<invoker>`,
 			extraParams: true,
 			optionalParams: 1,
 			auth: {
