@@ -14,7 +14,7 @@ export default class QueueController extends Controller {
 			name: 'queue'
 		});
 
-		this.ready = false;
+		this.ready = true;
 		this.calls = [];
 	}
 

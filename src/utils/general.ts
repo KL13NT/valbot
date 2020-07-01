@@ -23,13 +23,9 @@ export async function log(
 	notification: string | Error,
 	alertLevel: AlertLevel
 ) {
-	const queue = <QueueController>client.controllers.get('queue');
-
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
 	if (MODE !== 'PRODUCTION' || !client.ready) return;
-	if (queue && queue.ready)
-		return queue.enqueue({ func: log, args: [...arguments] });
 
 	const { CHANNEL_BOT_STATUS } = client.config;
 

@@ -1,6 +1,6 @@
 const { CLIENT_ID } = process.env;
 
-import toxicity, { ToxicityClassifier } from '@tensorflow-models/toxicity';
+import { ToxicityClassifier, load } from '@tensorflow-models/toxicity';
 import Controller from '../structures/Controller';
 import ValClient from '../ValClient';
 import { Message } from 'discord.js';
@@ -31,11 +31,11 @@ export default class ToxicityController extends Controller {
 		];
 
 		if (process.env.MODE !== 'DEVELOPMENT')
-			toxicity.load(this.threshold, this.labels).then(model => {
+			load(this.threshold, this.labels).then(model => {
 				this.classifier = model;
 				this.ready = true;
 
-				log(client, 'ToxicityController loaded successfully', 'info');
+				log(this.client, 'ToxicityController loaded successfully', 'info');
 			});
 	}
 
