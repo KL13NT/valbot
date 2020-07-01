@@ -140,6 +140,7 @@ export default class Setup extends Command {
 			this.client.config = config;
 
 			await mongo.setConfig(config);
+			await this.client.onReady();
 			this.client.ready = true;
 
 			log(this.client, 'Client configured successfully.', 'info');
