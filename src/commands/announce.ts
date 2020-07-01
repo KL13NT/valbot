@@ -1,6 +1,6 @@
 import ValClient from '../ValClient';
 
-import { Message } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 import { Command, CommandContext } from '../structures';
 import { log } from '../utils/general';
@@ -29,7 +29,8 @@ export default class Announce extends Command {
 	}
 
 	_run = async (context: CommandContext): Promise<void> => {
-		const { message, member, params, channel } = context;
+		const { message, member, params } = context;
+		const channel = <TextChannel>context.channel;
 
 		const filter = (m: Message) => m.author.id === member.id;
 		const awaitOptions = {
@@ -54,13 +55,15 @@ export default class Announce extends Command {
 			const collected = await channel.awaitMessages(filter, awaitOptions);
 			const announcement = collected.first().content;
 
-			const hook = await target.createWebhook('Announcements', {
-				avatar: localToBuffer('../../media/botlogo.png'),
-				reason: 'Announcing'
-			});
+			const hooks = await channel.fetchWebhooks();
+			const hook =
+				hooks.find(hook => hook.name === 'Announcements') ||
+				(await target.createWebhook('Announcements', {
+					avatar: localToBuffer('../../media/valariumlogo.png'),
+					reason: 'Announcing'
+				}));
 
 			await hook.send(announcement);
-			await hook.delete('No longer needed');
 		} catch (err) {
 			log(this.client, err, 'error');
 		}
