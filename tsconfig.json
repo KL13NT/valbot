@@ -14,7 +14,7 @@
 		"removeComments": true,
 		"resolveJsonModule": true,
 		"strict": true,
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"strictNullChecks": false,
 		"strictFunctionTypes": true,
 		"strictBindCallApply": true,
@@ -22,11 +22,11 @@
 		"alwaysStrict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noImplicitReturns": true,
+		"noImplicitReturns": false,
 		"moduleResolution": "node",
 		"esModuleInterop": true,
 		"skipLibCheck": true
 	},
-	"include": ["./src/**/*", "./declarations.d.ts"],
+	"include": ["./src/**/*"],
 	"exclude": []
 }

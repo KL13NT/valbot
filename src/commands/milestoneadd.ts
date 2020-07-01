@@ -4,7 +4,7 @@ import { Command, CommandContext } from '../structures';
 import { log } from '../utils/general';
 import { getRoleObject } from '../utils/object';
 import { Message } from 'discord.js';
-import { LevelsController } from '../Controllers';
+import { LevelsController } from '../controllers';
 
 export default class MilestoneAdd extends Command {
 	constructor(client: ValClient) {

@@ -3,7 +3,7 @@ import ValClient from '../ValClient';
 import { Command, CommandContext } from '../structures';
 import { log } from '../utils/general';
 import { Message } from 'discord.js';
-import { LevelsController } from '../Controllers';
+import { LevelsController } from '../controllers';
 
 export default class MilestoneRemove extends Command {
 	constructor(client: ValClient) {

@@ -1,7 +1,7 @@
 const { ROLE_DEVELOPER, MODE } = process.env;
 
 import { AlertLevel, NotificationOptions } from '../types/interfaces';
-import { QueueController } from '../Controllers';
+import { QueueController } from '../controllers';
 import ValClient from '../ValClient';
 
 import { getChannelObject } from './object';

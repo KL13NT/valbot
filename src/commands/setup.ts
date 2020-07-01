@@ -3,7 +3,7 @@ import ValClient from '../ValClient';
 import { ClientConfig } from '../types/interfaces';
 import { Command, CommandContext } from '../structures';
 import { Message, TextChannel, GuildMember } from 'discord.js';
-import { MongoController, QueueController } from '../Controllers';
+import { MongoController, QueueController } from '../controllers';
 
 import { log, awaitMessages } from '../utils/general';
 import { ClientConfigValidator } from '../types/validators.joi';

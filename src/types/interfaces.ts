@@ -8,7 +8,7 @@ import {
 	LevelsController,
 	RedisController,
 	ToxicityController
-} from '../Controllers';
+} from '../controllers';
 import ValClient from '../ValClient';
 
 export type ListenerHandler = (...args: any[]) => void; // eslint-disable-line

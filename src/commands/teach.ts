@@ -2,7 +2,7 @@ import ValClient from '../ValClient';
 
 import { Message } from 'discord.js';
 import { Command, CommandContext } from '../structures';
-import { ConversationController } from '../Controllers';
+import { ConversationController } from '../controllers';
 
 import { log } from '../utils/general';
 

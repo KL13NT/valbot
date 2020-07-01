@@ -2,7 +2,7 @@ import ValClient from '../ValClient';
 
 import { Command, CommandContext } from '../structures';
 import { log } from '../utils/general';
-import { IntervalsController } from '../Controllers';
+import { IntervalsController } from '../controllers';
 
 export default class Debug extends Command {
 	constructor(client: ValClient) {

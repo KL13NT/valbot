@@ -1,7 +1,7 @@
 import Listener from '../structures/Listener';
 import ValClient from '../ValClient';
 import { VoiceState } from 'discord.js';
-import { LevelsController } from '../Controllers';
+import { LevelsController } from '../controllers';
 
 export default class VoiceListener extends Listener {
 	constructor(client: ValClient) {

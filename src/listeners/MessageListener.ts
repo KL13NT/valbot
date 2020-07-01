@@ -5,7 +5,7 @@ import {
 	ToxicityController,
 	LevelsController,
 	ConversationController
-} from '../Controllers';
+} from '../controllers';
 
 const { CLIENT_ID, DEV_CLIENT_ID } = process.env;
 

@@ -4,7 +4,7 @@ import { log, capitalise } from '../utils/general';
 import { getMemberObject } from '../utils/object';
 import ValClient from '../ValClient';
 import { CommandContext } from '../structures';
-import { MongoController, RedisController } from '../Controllers';
+import { MongoController, RedisController } from '../controllers';
 import { Snowflake } from 'discord.js';
 
 export default class Rank extends Command {

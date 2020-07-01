@@ -2,7 +2,7 @@ import Listener from '../structures/Listener';
 import ValClient from '../ValClient';
 
 import { log } from '../utils/general';
-import { QueueController } from '../Controllers';
+import { QueueController } from '../controllers';
 
 export default class QueueExecuteListener extends Listener {
 	constructor(client: ValClient) {
