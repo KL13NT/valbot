@@ -1,6 +1,6 @@
 tabWidth: 2
 useTabs: true
-semi: false
+semi: true
 singleQuote: true
 quoteProps: "as-needed"
 jsxSingleQuote: true

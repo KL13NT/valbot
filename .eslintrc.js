@@ -3,10 +3,11 @@ module.exports = {
 		browser: false,
 		commonjs: true,
 		es6: true,
-		node: true
+		node: true,
+		jest: true
 	},
-	extends: ['eslint:recommended'],
-	parser: 'babel-eslint',
+	extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		ecmaVersion: 10,
 		ecmaFeatures: {
@@ -15,11 +16,19 @@ module.exports = {
 			experimentalObjectRestSpread: true
 		}
 	},
-	plugins: [],
+	plugins: ['@typescript-eslint'],
 	rules: {
+		'prefer-rest-params': 0,
+		'@typescript-eslint/explicit-module-boundary-types': 0,
 		'linebreak-style': ['error', 'unix'],
-		quotes: ['error', 'single'],
-		semi: ['error', 'never'],
+		quotes: [
+			'error',
+			'single',
+			{
+				avoidEscape: true
+			}
+		],
+		semi: ['error', 'always'],
 		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-unused-vars': [
 			'error',
@@ -70,4 +79,4 @@ module.exports = {
 		'block-spacing': [2, 'always'],
 		'no-unused-vars': 1
 	}
-}
+};
