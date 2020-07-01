@@ -42,13 +42,13 @@ export default class MilestoneGet extends Command {
 			}
 
 			await message.reply(this.getLevelMilestones(Number(levelMatch[0])));
-		} catch (err) { 
+		} catch (err) {
 			log(this.client, err, 'error');
 		}
 	};
 
 	getLevelMilestones = (level: number) => {
-		const levels = <LevelsController>this.client.controllers.get('level');
+		const levels = <LevelsController>this.client.controllers.get('levels');
 		const milestones = levels.getMilestone(level);
 
 		if (!milestones) return 'مفيش milestones للـ level ده';
@@ -67,7 +67,7 @@ export default class MilestoneGet extends Command {
 	};
 
 	getAllMilestones = () => {
-		const levels = <LevelsController>this.client.controllers.get('level');
+		const levels = <LevelsController>this.client.controllers.get('levels');
 		let milestones = '\n';
 
 		if (Object.keys(levels.milestones).length === 0)

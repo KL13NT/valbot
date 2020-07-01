@@ -14,7 +14,7 @@ export default class RoleRemove extends Command {
 			nOfParams: 2,
 			description: `بتشيل روول من ميمبر`,
 			exampleUsage: `<mention> <role_name|role_id>`,
-			extraParams: false,
+			extraParams: true,
 			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
@@ -27,12 +27,16 @@ export default class RoleRemove extends Command {
 		const { CHANNEL_MOD_LOGS } = this.client.config;
 		const { message, params, channel, member } = context;
 
-		const roleNameRegex = /\w+/i;
+		const roleNameRegex = /.+/i;
 		const roleIDRegex = /\d+/i;
 		const mentionRegex = /<@!(\d+)>/;
 
+		const roleName = params.slice(1).join(' ');
+		const roleID =
+			roleName.match(roleNameRegex) || params[1].match(roleIDRegex);
+
 		try {
-			if (!roleNameRegex.test(params[1]) && !roleIDRegex.test(params[1])) {
+			if (!roleID) {
 				await message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
 				return;
 			}
@@ -42,11 +46,8 @@ export default class RoleRemove extends Command {
 				return;
 			}
 
-			const roleID =
-				params[1].match(roleNameRegex)[0] || params[1].match(roleIDRegex)[0];
 			const targetMemberID = params[0].match(mentionRegex)[1];
-
-			const role = getRoleObject(this.client, roleID);
+			const role = getRoleObject(this.client, roleID[0]);
 
 			if (!role) {
 				await message.reply('الروول ده مش موجود');

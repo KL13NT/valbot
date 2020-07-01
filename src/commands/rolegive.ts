@@ -8,13 +8,13 @@ import { log, notify } from '../utils/general';
 export default class RoleGive extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: `rolegive`,
+			name: 'rolegive',
 			category: 'Moderation',
 			cooldown: 1000,
 			nOfParams: 2,
-			description: `بتدي لميمبر روول معين`,
-			exampleUsage: `<mention> <role_name|role_id>`,
-			extraParams: false,
+			description: 'بتدي لميمبر روول معين.',
+			exampleUsage: '<mention> <role_name|role_id>',
+			extraParams: true,
 			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
@@ -26,12 +26,17 @@ export default class RoleGive extends Command {
 	_run = async (context: CommandContext) => {
 		const { CHANNEL_MOD_LOGS } = this.client.config;
 		const { message, params, member, channel } = context;
-		const roleNameRegex = /\S+/i;
+
+		const roleNameRegex = /.+/i;
 		const roleIDRegex = /\d+/i;
 		const mentionRegex = /<@!(\d+)>/;
 
+		const roleName = params.slice(1).join(' ');
+		const roleID =
+			roleName.match(roleNameRegex) || params[1].match(roleIDRegex);
+
 		try {
-			if (!roleNameRegex.test(params[1]) && !roleIDRegex.test(params[1])) {
+			if (!roleID) {
 				await message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
 				return;
 			}
@@ -41,11 +46,8 @@ export default class RoleGive extends Command {
 				return;
 			}
 
-			const roleID =
-				params[1].match(roleNameRegex)[0] || params[1].match(roleIDRegex)[0];
 			const targetMemberID = params[0].match(mentionRegex)[1];
-
-			const role = getRoleObject(this.client, roleID);
+			const role = getRoleObject(this.client, roleID[0]);
 
 			if (!role) {
 				await message.reply('الروول مش موجود');

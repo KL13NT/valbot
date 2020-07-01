@@ -14,7 +14,7 @@ declare module 'node-html-to-image' {
 		encoding?: 'base64' | 'binary';
 	}
 
-	export function nodeHtmlToImage(
+	export default function nodeHtmlToImage(
 		options: nodeHtmlToImageOptions
 	): Promise<string>;
 }

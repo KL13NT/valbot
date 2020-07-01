@@ -33,7 +33,8 @@ export default class Setup extends Command {
 		const config = this.client.config;
 
 		const op = params[0];
-		const variable = params[1].toLowerCase();
+		const variable = params[1];
+		const target = params[1].toLowerCase();
 
 		try {
 			if (op !== 'get' && op !== 'set') {
@@ -42,13 +43,15 @@ export default class Setup extends Command {
 			}
 
 			if (op === 'get') {
-				if (variable === 'all') {
+				if (target === 'all') {
 					const values = Object.keys(config).map(key => {
 						return `\`${key}\` = \`${config[key]}\``;
 					});
 
 					await message.reply(values.join('\n'));
 					return;
+				} else if (target === 'json') {
+					await this.getJSON(context);
 				} else {
 					await message.reply(`\`${variable}\` = \`${config[variable]}\``);
 					return;
@@ -56,13 +59,17 @@ export default class Setup extends Command {
 			}
 
 			if (op === 'set') {
-				if (variable === 'json') await this.setJSON(context);
-				else if (variable === 'all') await this.setAll(context);
+				if (target === 'json') await this.setJSON(context);
+				else if (target === 'all') await this.setAll(context);
 				else await this.setGeneral(context, variable);
 			}
 		} catch (err) {
 			log(this.client, err, 'error');
 		}
+	};
+
+	getJSON = async (context: CommandContext) => {
+		await context.message.reply(JSON.stringify(this.client.config));
 	};
 
 	setAll = async ({ message, channel, member }: CommandContext) => {

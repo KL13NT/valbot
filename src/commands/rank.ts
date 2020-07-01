@@ -1,6 +1,6 @@
 import { Command } from '../structures';
 import { generateRankCard } from '../utils/svg';
-import { log } from '../utils/general';
+import { log, capitalise } from '../utils/general';
 import { getMemberObject } from '../utils/object';
 import ValClient from '../ValClient';
 import { CommandContext } from '../structures';
@@ -44,8 +44,7 @@ export default class Rank extends Command {
 			await message.reply("Here's the requested rank", {
 				files: [
 					{
-						attachment: card,
-						name: `Rank Card`
+						attachment: card
 					}
 				]
 			});
@@ -56,15 +55,19 @@ export default class Rank extends Command {
 
 	getUserInfo = (id: Snowflake) => {
 		const target = getMemberObject(this.client, id);
+		const MAX_NAME_LENGTH = 18;
 
 		const avatar_url = target.user.displayAvatarURL();
-		const displayName = target.user.username.substr(0, 12) + '...';
-		const USER_ID = target.user.tag.split('#')[1];
+		const displayName = capitalise(
+			target.displayName.substr(0, MAX_NAME_LENGTH).toLowerCase()
+		);
 
 		return {
 			avatar_url,
-			displayName,
-			USER_ID
+			displayName:
+				target.user.username.length > MAX_NAME_LENGTH
+					? displayName + '...'
+					: displayName
 		};
 	};
 

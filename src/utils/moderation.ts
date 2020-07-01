@@ -24,23 +24,24 @@ export async function mute(client: ValClient, options: UserModerationOptions) {
 	});
 
 	try {
-		await targetMember.roles.add(ROLE_MUTED);
-
 		setTimeout(() => {
 			unmute(client, {
 				member,
 				moderator,
 				channel,
 				reason: 'Mute time expired'
-			});
+			}).catch(err => log(client, err, 'error'));
 		}, 5 * 60 * 1000);
 
-		notify({
-			client,
-			notification: `<@${member}>`,
-			embed,
-			channel: CHANNEL_MOD_LOGS
-		});
+		await Promise.all([
+			targetMember.roles.add(ROLE_MUTED),
+			notify({
+				client,
+				notification: `<@${member}>`,
+				embed,
+				channel: CHANNEL_MOD_LOGS
+			})
+		]);
 	} catch (err) {
 		log(client, err, 'error');
 	}
@@ -61,13 +62,15 @@ export async function ban(client: ValClient, options: UserModerationOptions) {
 	});
 
 	try {
-		await targetMember.ban({ reason });
-		notify({
-			client,
-			notification: `<@${member}>`,
-			embed,
-			channel: CHANNEL_MOD_LOGS
-		});
+		await Promise.all([
+			targetMember.ban({ reason }),
+			notify({
+				client,
+				notification: `<@${member}>`,
+				embed,
+				channel: CHANNEL_MOD_LOGS
+			})
+		]);
 	} catch (err) {
 		log(client, err, 'error');
 	}
@@ -89,13 +92,15 @@ export async function warn(client: ValClient, options: UserModerationOptions) {
 	});
 
 	try {
-		await targetMember.roles.add(ROLE_WARNED);
-		notify({
-			client,
-			notification: `<@${member}>`,
-			embed,
-			channel: CHANNEL_MOD_LOGS
-		});
+		await Promise.all([
+			targetMember.roles.add(ROLE_WARNED),
+			notify({
+				client,
+				notification: `<@${member}>`,
+				embed,
+				channel: CHANNEL_MOD_LOGS
+			})
+		]);
 	} catch (err) {
 		log(client, err, 'error');
 	}
@@ -120,13 +125,15 @@ export async function unwarn(
 	});
 
 	try {
-		await targetMember.roles.remove(ROLE_WARNED);
-		notify({
-			client,
-			notification: `<@${member}>`,
-			embed,
-			channel: CHANNEL_MOD_LOGS
-		});
+		await Promise.all([
+			targetMember.roles.remove(ROLE_WARNED),
+			notify({
+				client,
+				notification: `<@${member}>`,
+				embed,
+				channel: CHANNEL_MOD_LOGS
+			})
+		]);
 	} catch (err) {
 		log(client, err, 'error');
 	}
@@ -151,13 +158,15 @@ export async function unmute(
 	});
 
 	try {
-		await targetMember.roles.remove(ROLE_MUTED);
-		notify({
-			client,
-			notification: `<@${member}>`,
-			embed,
-			channel: CHANNEL_MOD_LOGS
-		});
+		await Promise.all([
+			targetMember.roles.remove(ROLE_MUTED),
+			notify({
+				client,
+				notification: `<@${member}>`,
+				embed,
+				channel: CHANNEL_MOD_LOGS
+			})
+		]);
 	} catch (err) {
 		log(client, err, 'error');
 	}

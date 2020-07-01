@@ -19,7 +19,7 @@ import {
 import { ClientConfigValidator } from './types/validators.joi';
 
 export default class ValClient extends Client {
-	readonly prefix: string;
+	readonly prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
 	ready = false;
 	commands: Map<string, Command> = new Map<string, Command>();
 	controllers: Map<string, IController> = new Map<string, IController>();
@@ -70,8 +70,6 @@ export default class ValClient extends Client {
 
 	constructor(options: ClientOptions) {
 		super(options);
-
-		this.prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
 	}
 
 	init = async (token = AUTH_TOKEN) => {

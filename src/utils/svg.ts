@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { nodeHtmlToImage } from 'node-html-to-image';
+import nodeHtmlToImage from 'node-html-to-image';
 import {
 	SVGContentOptions,
 	SVGContent,

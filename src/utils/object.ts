@@ -29,15 +29,12 @@ export function getChannelObject(
 }
 
 /**
- * Returns a Role object
+ * Returns a Role object based on name or id
  */
-export function getRoleObject(client: ValClient, roleID: Snowflake) {
+export function getRoleObject(client: ValClient, roleID: string) {
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM')
-		.roles.cache.find(role => {
-			if (/\d+/.test(roleID)) return role.id === roleID;
-			else return role.name === roleID;
-		});
+		.roles.cache.find(role => role.id === roleID || role.name === roleID);
 }
 
 /**
@@ -54,12 +51,16 @@ export function getMemberObject(client: ValClient, userId: Snowflake) {
  */
 export function getChannelFromMention(mention: string): string | undefined {
 	const channelIdRegex = /(<#(\d+)>)|(\d+)/;
-	const channelIdMatch = mention.match(channelIdRegex);
+	const match = mention.match(channelIdRegex);
 
-	return channelIdMatch[2] || channelIdMatch[3];
+	return match ? match[2] || match[3] : undefined;
 }
 
 export function localToBuffer(path: string) {
-	const file = readFileSync(resolve(__dirname, path));
-	return Buffer.from(file);
+	const file =
+		'data:image/jpeg;base64,' +
+		readFileSync(resolve(__dirname, path), {
+			encoding: 'base64'
+		});
+	return file;
 }

@@ -36,11 +36,12 @@ export default class MilestoneAdd extends Command {
 
 		const levelRegex = /^(\d+)$/i;
 		const roleNameRegex = /^(\S+)$/i;
-		const roleIDRegex = /^(\d+)$/i;
+		const roleIDRegex = /^<?@?&?(\d+)>?$/i;
 		const nameRegex = /([a-zA-Z0-9 ]{1,40})/i;
 		const descriptionRegex = /(.{30,300})/i;
 
 		const level = Number(params[0].match(levelRegex)[0]);
+
 		const roleIDNameMatch =
 			params[1].match(roleIDRegex) || params[1].match(roleNameRegex);
 

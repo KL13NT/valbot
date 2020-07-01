@@ -18,7 +18,7 @@ export default class Announce extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: `بتعمل اعلان بالشكل اللي تحبه.`,
-			exampleUsage: `<channel_id|channel_mention>`,
+			exampleUsage: `<channel_mention>`,
 			extraParams: false,
 			optionalParams: 1,
 			auth: {
@@ -49,17 +49,18 @@ export default class Announce extends Command {
 				return;
 			}
 
-			const hook = await target.createWebhook('Announcements', {
-				avatar: localToBuffer('../../media/botlogo.png'),
-				reason: 'Announcing'
-			});
-
 			await message.reply('ابعت بقى الـ announcement');
 
 			const collected = await channel.awaitMessages(filter, awaitOptions);
 			const announcement = collected.first().content;
 
+			const hook = await target.createWebhook('Announcements', {
+				avatar: localToBuffer('../../media/botlogo.png'),
+				reason: 'Announcing'
+			});
+
 			await hook.send(announcement);
+			await hook.delete('No longer needed');
 		} catch (err) {
 			log(this.client, err, 'error');
 		}

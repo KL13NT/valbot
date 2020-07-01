@@ -76,8 +76,11 @@ export function calculateUniqueWords(message: string) {
 	}).length;
 }
 
-export function capitalise(event: string) {
-	return event.charAt(0).toUpperCase() + event.substr(1);
+export function capitalise(str: string) {
+	return str.replace(
+		/\w\S*/g,
+		txt => txt.charAt(0).toUpperCase() + txt.substr(1)
+	);
 }
 
 // Transforms an object to include only keys available in another object. Flat objects only.
