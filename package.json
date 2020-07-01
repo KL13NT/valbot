@@ -51,11 +51,11 @@
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.0.5",
 		"tui-jsdoc-template": "^1.2.2",
-		"typescript": "^3.9.5",
 		"uglifyjs-webpack-plugin": "^2.1.2",
 		"url-loader": "^1.1.2"
 	},
 	"dependencies": {
+		"typescript": "^3.9.5",
 		"@babel/polyfill": "^7.4.4",
 		"@hapi/joi": "^17.1.1",
 		"@tensorflow-models/toxicity": "^1.2.2",
