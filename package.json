@@ -12,7 +12,7 @@
 		"start:dev": "nodemon -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
 		"watch": "tsc --watch",
 		"inspect": "nodemon --inspect -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
-		"start": "tsc && node -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
+		"start": "tsc && node -r dotenv/config ./prod/index.js dotenv_config_path=./prod.env",
 		"lint": "eslint --ext .js,.ts ./src --config .eslintrc.js --fix --global global",
 		"test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose"
 	},

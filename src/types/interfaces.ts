@@ -95,11 +95,15 @@ export interface Level {
 	id: Snowflake;
 }
 
-export interface Milestone {
-	level: number;
+export interface MilestoneAchievement {
 	name: string;
 	description: string;
 	roleID: Snowflake;
+}
+
+export interface Milestone {
+	level: number;
+	milestones: MilestoneAchievement[];
 }
 
 export interface Response {
@@ -139,7 +143,7 @@ export interface ClearEmbedOptions {
 }
 
 export interface LevelupEmbedOptions {
-	milestone: Milestone;
+	milestone: MilestoneAchievement;
 	role: Role;
 }
 

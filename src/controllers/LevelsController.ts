@@ -3,7 +3,7 @@ const { CLIENT_ID } = process.env;
 import Controller from '../structures/Controller';
 import ValClient from '../ValClient';
 import { Snowflake, Message, GuildMember, Role } from 'discord.js';
-import { Milestone } from '../types/interfaces';
+import { MilestoneAchievement } from '../types/interfaces';
 import {
 	QueueController,
 	RedisController,
@@ -18,7 +18,10 @@ import { createLevelupEmbed } from '../utils/embed';
 export default class LevelsController extends Controller {
 	ready = false;
 	activeVoice: Snowflake[] = [];
-	milestones: Map<number, Milestone[]> = new Map<number, Milestone[]>();
+	milestones: Map<string, MilestoneAchievement[]> = new Map<
+		string,
+		MilestoneAchievement[]
+	>();
 
 	constructor(client: ValClient) {
 		super(client, {
@@ -73,12 +76,9 @@ export default class LevelsController extends Controller {
 			});
 		});
 
-		mongo.getMilestones().then(milestones => {
-			milestones.forEach(milestone => {
-				if (!this.milestones.has(milestone.level))
-					this.milestones.set(milestone.level, []);
-
-				this.milestones.get(milestone.level).push(milestone);
+		mongo.getMilestones().then(levels => {
+			levels.forEach(level => {
+				this.milestones.set(String(level.level), level.milestones);
 			});
 		});
 	};
@@ -98,7 +98,7 @@ export default class LevelsController extends Controller {
 			const level = Number(await redis.get(`LEVEL:${id}`));
 			const exp = Number(await redis.get(`EXP:${id}`));
 
-			const gainedWords = Math.ceil(calculateUniqueWords(content) * 0.4);
+			const gainedWords = calculateUniqueWords(content);
 
 			if (exp) {
 				const nextText = Math.floor((textXP + gainedWords) / 6 - 60);
@@ -224,15 +224,18 @@ export default class LevelsController extends Controller {
 		this.levelUpMessage(id, level);
 	};
 
-	async enforceMilestone(userLevel: number, id: Snowflake) {
-		if (this.milestones.has(userLevel)) {
-			const milestones = this.milestones.get(userLevel);
+	enforceMilestone = async (userLevel: number, id: Snowflake) => {
+		if (this.milestones.has(String(userLevel))) {
+			const achievements = this.milestones.get(String(userLevel));
 			const member: GuildMember = getMemberObject(this.client, id);
 
-			milestones.forEach(async milestone => {
+			achievements.forEach(async achievement => {
 				try {
-					const role: Role = getRoleObject(this.client, milestone.roleID);
-					const embed = createLevelupEmbed({ milestone, role });
+					const role: Role = getRoleObject(this.client, achievement.roleID);
+					const embed = createLevelupEmbed({
+						milestone: achievement,
+						role
+					});
 
 					member.roles.add(role.id);
 					notify({
@@ -245,13 +248,13 @@ export default class LevelsController extends Controller {
 				}
 			});
 		}
-	}
+	};
 
-	async levelUpMessage(id: Snowflake, level: number) {
+	levelUpMessage = async (id: Snowflake, level: number) => {
 		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
 
 		notify({ client: this.client, notification });
-	}
+	};
 
 	async addMilestone(
 		level: number,
@@ -260,7 +263,7 @@ export default class LevelsController extends Controller {
 		roleID: Snowflake
 	) {
 		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const milestone = this.milestones.get(level);
+		const milestone = this.milestones.get(String(level));
 		const newMilestone = {
 			name,
 			roleID,
@@ -275,7 +278,7 @@ export default class LevelsController extends Controller {
 				milestone.push(newMilestone);
 			}
 		} else {
-			this.milestones.set(level, [newMilestone]);
+			this.milestones.set(String(level), [newMilestone]);
 		}
 
 		await mongo.db.collection('milestones').updateOne(
@@ -291,21 +294,21 @@ export default class LevelsController extends Controller {
 		);
 	}
 
-	getMilestone(level: number) {
-		return this.milestones.get(level);
-	}
+	getMilestone = (level: number) => {
+		return this.milestones.get(String(level));
+	};
 
-	async removeMilestone(level: number, name: string) {
+	removeMilestone = async (level: number, name: string) => {
 		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const milestone = this.milestones.get(level);
+		const milestone = this.milestones.get(String(level));
 
 		if (milestone) {
 			const ach = milestone.findIndex(ach => ach.name === name);
 
-			delete this.milestones.get(level)[ach];
+			delete this.milestones.get(String(level))[ach];
 
 			if (Object.keys(milestone).length === 0) {
-				this.milestones.delete(level);
+				this.milestones.delete(String(level));
 				mongo.db.collection('milestones').deleteOne({ level });
 			} else
 				mongo.db.collection('milestones').updateOne(
@@ -317,5 +320,5 @@ export default class LevelsController extends Controller {
 					}
 				);
 		}
-	}
+	};
 }
