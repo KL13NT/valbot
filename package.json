@@ -7,14 +7,13 @@
 	"author": "KL13NT <Nabil.tharwat@outlook.com>",
 	"license": "GPL-3.0-only",
 	"scripts": {
-		"docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs",
-		"develop": "yarn run-p watch start:dev",
-		"start:dev": "nodemon -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
 		"watch": "tsc --watch",
-		"inspect": "nodemon --inspect -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
-		"start": "tsc && node -r dotenv/config ./prod/index.js dotenv_config_path=./prod.env",
+		"develop": "yarn run-p watch start:dev",
+		"start": "tsc && node ./prod/index.js",
+		"start:dev": "nodemon -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
 		"lint": "eslint --ext .js,.ts ./src --config .eslintrc.js --fix --global global",
-		"test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose"
+		"test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose",
+		"docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.3.4",

@@ -17,8 +17,6 @@ export default class ConversationController extends Controller {
 		super(client, {
 			name: 'conversation'
 		});
-
-		this.init();
 	}
 
 	init = async () => {

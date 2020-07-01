@@ -12,8 +12,8 @@ export default class ControllersLoader extends Loader {
 		super(client);
 	}
 
-	load = () => {
-		Object.values(Controllers).forEach(controller => {
+	load = async () => {
+		for (const controller of Object.values(Controllers)) {
 			const controllerInstance = new controller(this.client);
 
 			this.client.controllers.set(
@@ -21,7 +21,9 @@ export default class ControllersLoader extends Loader {
 				controllerInstance
 			);
 
+			await controllerInstance.init();
+
 			log(this.client, `${controller.name} loaded`, 'info');
-		});
+		}
 	};
 }

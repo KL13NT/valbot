@@ -11,24 +11,27 @@ export default class IntervalsController extends Controller {
 			name: 'intervals'
 		});
 
-		this.ready = true;
 		this.intervals = new Map<string, NodeJS.Timeout>();
 	}
 
-	setInterval(intervalOptions: IntervalOptions) {
+	init = async () => {
+		this.ready = true;
+	};
+
+	setInterval = (intervalOptions: IntervalOptions) => {
 		const { name, time, callback } = intervalOptions;
 
 		if (this.exists(name)) this.clearInterval(name);
 
 		this.intervals.set(name, setInterval(callback, time));
-	}
+	};
 
-	clearInterval(name: string) {
+	clearInterval = (name: string) => {
 		clearInterval(this.intervals.get(name));
 		this.intervals.delete(name);
-	}
+	};
 
-	exists(name: string) {
+	exists = (name: string) => {
 		return this.intervals.has(name);
-	}
+	};
 }

@@ -1,5 +1,10 @@
 import ValClient from './ValClient';
 
+// failsafe
+if (!process.env.MODE) {
+	process.env.MODE = 'DEVELOPMENT';
+}
+
 const client: ValClient = new ValClient({
 	fetchAllMembers: true,
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION']

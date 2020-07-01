@@ -29,7 +29,9 @@ export default class ToxicityController extends Controller {
 			'sexual_explicit',
 			'toxicity'
 		];
+	}
 
+	init = async () => {
 		if (process.env.MODE !== 'DEVELOPMENT')
 			load(this.threshold, this.labels).then(model => {
 				this.classifier = model;
@@ -37,7 +39,7 @@ export default class ToxicityController extends Controller {
 
 				log(this.client, 'ToxicityController loaded successfully', 'info');
 			});
-	}
+	};
 
 	classify = async (message: Message) => {
 		if (!this.ready) return false;

@@ -12,7 +12,6 @@ import { ClientConfig, IController } from './types/interfaces';
 import Command from './structures/Command';
 import {
 	MongoController,
-	RedisController,
 	QueueController,
 	IntervalsController
 } from './controllers';
@@ -94,7 +93,7 @@ export default class ValClient extends Client {
 	onReady = async (): Promise<void> => {
 		this.ValGuild = this.guilds.cache.first();
 
-		this.initLoaders();
+		await this.initLoaders();
 		this.initListeners();
 		await this.initConfig();
 
@@ -126,10 +125,10 @@ export default class ValClient extends Client {
 	/**
 	 * Initialises client loaders. Doesn't handle exceptions on purpose.
 	 */
-	initLoaders = () => {
-		Object.values(loaders).forEach(loader => {
-			new loader(this).load();
-		});
+	initLoaders = async () => {
+		for (const loader of Object.values(loaders)) {
+			await new loader(this).load();
+		}
 
 		log(this, 'All loaders loaded successfully', 'info');
 	};
@@ -151,10 +150,9 @@ export default class ValClient extends Client {
 	initConfig = async () => {
 		try {
 			const mongo = <MongoController>this.controllers.get('mongo');
-			const redis = <RedisController>this.controllers.get('redis');
 			const queue = <QueueController>this.controllers.get('queue');
 
-			if (mongo.ready && redis.ready) {
+			if (mongo.ready) {
 				const response: ClientConfig = await mongo.db
 					.collection('config')
 					.findOne(
@@ -178,6 +176,8 @@ export default class ValClient extends Client {
 
 				this.ready = true;
 				this.config = response;
+
+				this.emit('queueExecute', 'Config ready');
 			} else {
 				queue.enqueue({ func: this.initConfig, args: [] });
 			}

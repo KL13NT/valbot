@@ -27,11 +27,9 @@ export default class LevelsController extends Controller {
 		super(client, {
 			name: 'levels'
 		});
-
-		this.init();
 	}
 
-	init = () => {
+	init = async () => {
 		const { controllers, ValGuild } = this.client;
 		const redis = <RedisController>controllers.get('redis');
 		const mongo = <MongoController>controllers.get('mongo');
@@ -181,17 +179,17 @@ export default class LevelsController extends Controller {
 		this.levelUp(id);
 	};
 
-	trackUser(id: Snowflake) {
+	trackUser = (id: Snowflake) => {
 		const index = this.activeVoice.indexOf(id);
 
 		if (index === -1) this.activeVoice.push(id);
-	}
+	};
 
-	untrackUser(id: Snowflake) {
+	untrackUser = (id: Snowflake) => {
 		const index = this.activeVoice.indexOf(id);
 
 		if (index !== -1) this.activeVoice.splice(index, 1);
-	}
+	};
 
 	levelUp = async (messageOrId: Message | Snowflake) => {
 		const { controllers } = this.client;
@@ -256,12 +254,12 @@ export default class LevelsController extends Controller {
 		notify({ client: this.client, notification });
 	};
 
-	async addMilestone(
+	addMilestone = async (
 		level: number,
 		name: string,
 		description: string,
 		roleID: Snowflake
-	) {
+	) => {
 		const mongo = <MongoController>this.client.controllers.get('mongo');
 		const milestone = this.milestones.get(String(level));
 		const newMilestone = {
@@ -292,7 +290,7 @@ export default class LevelsController extends Controller {
 				upsert: true
 			}
 		);
-	}
+	};
 
 	getMilestone = (level: number) => {
 		return this.milestones.get(String(level));

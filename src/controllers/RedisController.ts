@@ -28,10 +28,12 @@ export default class RedisController extends Controller {
 		this.setAsync = promisify(this.redis.set).bind(this.redis);
 		this.incrAsync = promisify(this.redis.incr).bind(this.redis);
 		this.incrbyAsync = promisify(this.redis.incrby).bind(this.redis);
+	}
 
+	init = async () => {
 		this.redis.on('ready', this.readyListener);
 		this.redis.on('error', this.errorListener);
-	}
+	};
 
 	errorListener = (err: Error) => {
 		log(this.client, err, 'error');

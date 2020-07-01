@@ -1,7 +1,7 @@
 import ValClient from '../ValClient';
 import { ControllerOptions } from '../types/interfaces';
 
-export default class Controller {
+export default abstract class Controller {
 	client: ValClient;
 	options: ControllerOptions;
 
@@ -9,4 +9,6 @@ export default class Controller {
 		this.client = client;
 		this.options = options;
 	}
+
+	abstract init(): Promise<void>;
 }

@@ -16,21 +16,25 @@ export function createAlertMessage(message: string, alertLevel: AlertLevel) {
 
 /**
  * Logs events to client and console
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString#Description
  */
 export async function log(
 	client: ValClient,
 	notification: string | Error,
 	alertLevel: AlertLevel
 ) {
+	const queue = <QueueController>client.controllers.get('queue');
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
-	if (MODE !== 'PRODUCTION' || !client.ready) return;
+	if (MODE !== 'PRODUCTION') return;
+	if (!client.ready) {
+		if (queue) queue.enqueue({ func: log, args: [...arguments] });
+		return;
+	}
 
 	const { CHANNEL_BOT_STATUS } = client.config;
 
 	const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
-	const message = createAlertMessage(String(notification), alertLevel); // @see
+	const message = createAlertMessage(String(notification), alertLevel);
 
 	if (typeof notification === 'object')
 		await channel.send(`${message}\n\n**Stack trace**\n${notification.stack}`);

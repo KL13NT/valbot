@@ -23,8 +23,6 @@ export default class MongoController extends Controller {
 		this.mongo = new MongoClient(DB_HOST, {
 			useNewUrlParser: true
 		});
-
-		this.init();
 	}
 
 	init = async () => {
