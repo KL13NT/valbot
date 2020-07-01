@@ -206,3 +206,13 @@ export interface SVGContent {
 	VOICE_LEVEL: number;
 	TEXT_LEVEL: number;
 }
+
+export interface ReminderSubscription{
+	member: Snowflake
+	description: string
+}
+
+export interface Reminder {
+	time: number, // 64-bit signed integer representing epoch, truncated to the nearest minute
+	subs: ReminderSubscription[]
+}
