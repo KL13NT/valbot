@@ -24,7 +24,7 @@ export default class CommandContext {
 		this.member = message.member;
 		this.channel = message.channel;
 		this.guild = message.guild;
-		this.params = [];
+		this.params = message.content.split(' ').slice(2);
 		this.message.content = this.message.content.replace(/\s+/g, ' ');
 	}
 }
