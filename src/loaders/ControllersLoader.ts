@@ -1,5 +1,5 @@
 import Loader from '../structures/Loader';
-import * as Controllers from '../Controllers';
+import * as Controllers from '../controllers';
 import ValClient from '../ValClient';
 
 import { log } from '../utils/general';
