@@ -7,7 +7,8 @@ import {
 	MongoController,
 	LevelsController,
 	RedisController,
-	ToxicityController
+	ToxicityController,
+	RemindersController
 } from '../controllers';
 import ValClient from '../ValClient';
 
@@ -22,7 +23,8 @@ export type IController =
 	| LevelsController
 	| IntervalsController
 	| RedisController
-	| ToxicityController;
+	| ToxicityController
+	| RemindersController;
 
 export type AlertLevel = 'info' | 'warn' | 'error';
 
@@ -207,12 +209,12 @@ export interface SVGContent {
 	TEXT_LEVEL: number;
 }
 
-export interface ReminderSubscription{
-	member: Snowflake
-	description: string
+export interface ReminderSubscription {
+	member: Snowflake;
+	description: string;
 }
 
 export interface Reminder {
-	time: number, // 64-bit signed integer representing epoch, truncated to the nearest minute
-	subs: ReminderSubscription[]
+	time: number; // 64-bit signed integer representing epoch, truncated to the nearest minute
+	subs: ReminderSubscription[];
 }

@@ -13,3 +13,4 @@ export { default as Announce } from './announce';
 export { default as Mute } from './mute';
 export { default as Ban } from './ban';
 export { default as Warn } from './warn';
+export { default as Remindme } from './remindme';
