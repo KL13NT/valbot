@@ -8,6 +8,8 @@ import {
 	UserInfo
 } from '../types/interfaces';
 
+import fetch from 'node-fetch';
+
 const FRAME = path.resolve(__dirname, '../../media/Frame 1.svg');
 const BACKGROUND = '../../media/bg.jpg';
 const MIC = '../../media/mic.png';
@@ -35,7 +37,7 @@ export const getLocalImageFromURL = (url: string) => {
  * Fetches remote images
  */
 export const getRemoteImageFromURL = async (url: string) => {
-	const resolved = await global.fetch(url);
+	const resolved = await fetch(url);
 	return Buffer.from(await resolved.arrayBuffer());
 };
 
