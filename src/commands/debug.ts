@@ -60,7 +60,7 @@ export default class Debug extends Command {
 		);
 
 		await log(this.client, 'Logging every 2000ms', 'warn');
-		intervals.setInterval({
+		intervals.set({
 			time: 2000,
 			name: 'debug',
 			callback: () => {
@@ -82,7 +82,7 @@ export default class Debug extends Command {
 		await message.reply(`قفلت الـ debugger خلاص`);
 
 		await log(this.client, 'Logger disabled', 'warn');
-		intervals.clearInterval('debug');
+		intervals.clear('debug');
 	};
 
 	usageToString = () => {

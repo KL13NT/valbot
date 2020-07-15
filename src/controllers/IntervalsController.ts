@@ -18,15 +18,15 @@ export default class IntervalsController extends Controller {
 		this.ready = true;
 	};
 
-	setInterval = (intervalOptions: IntervalOptions) => {
+	set = (intervalOptions: IntervalOptions) => {
 		const { name, time, callback } = intervalOptions;
 
-		if (this.exists(name)) this.clearInterval(name);
+		if (this.exists(name)) this.clear(name);
 
 		this.intervals.set(name, setInterval(callback, time));
 	};
 
-	clearInterval = (name: string) => {
+	clear = (name: string) => {
 		clearInterval(this.intervals.get(name));
 		this.intervals.delete(name);
 	};

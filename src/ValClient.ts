@@ -102,7 +102,7 @@ export default class ValClient extends Client {
 		this.setPresence();
 		this.user.setStatus('dnd').catch(err => log(this, err, 'error'));
 
-		intervals.setInterval({
+		intervals.set({
 			callback: this.setPresence,
 			name: 'presence',
 			time: 30 * 1000

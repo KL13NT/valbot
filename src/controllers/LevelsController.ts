@@ -67,7 +67,7 @@ export default class LevelsController extends Controller {
 				redis.set(`LEVEL:${id}`, String(level || 1));
 			});
 
-			intervals.setInterval({
+			intervals.set({
 				time: 1000 * 60,
 				name: 'voiceIncrement',
 				callback: this.voiceIncrement
