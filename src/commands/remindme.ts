@@ -68,14 +68,13 @@ export default class Remindme extends Command {
 				member: member.id
 			};
 
-			const count = await reminders.countRemindersOfMember(member.id);
-			if (count.length >= 2) {
+			const active = await reminders.getMemberReminders(member.id);
+			if (active.length >= 2) {
 				await message.reply('مينفعش تعمل اكتر من 2 ريمايندرز');
 				return;
 			}
 
-			const reminder = reminders.getReminder(target);
-			if (reminder && reminder.find(sub => sub.member === member.id)) {
+			if (active.find(sub => sub.time === target)) {
 				await message.reply('انت مسجل ف الوقت ده بالفعل');
 				return;
 			}

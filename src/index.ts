@@ -5,6 +5,8 @@ if (!process.env.MODE) {
 	process.env.MODE = 'DEVELOPMENT';
 }
 
+console.log(`[info] starting in ${process.env.MODE} mode`);
+
 const client: ValClient = new ValClient({
 	fetchAllMembers: true,
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION']

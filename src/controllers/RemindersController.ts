@@ -159,7 +159,7 @@ export default class RemindersController extends Controller {
 		return this.reminders.get(String(time));
 	};
 
-	countRemindersOfMember = (member: Snowflake) => {
+	getMemberReminders = (member: Snowflake): Promise<Reminder[]> => {
 		const mongo = <MongoController>this.client.controllers.get('mongo');
 
 		return mongo.db
