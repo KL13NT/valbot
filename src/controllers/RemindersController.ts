@@ -140,7 +140,9 @@ export default class RemindersController extends Controller {
 
 				const message = reminderSubsToString(current);
 
-				await channel.send(`**Reminders** \n${message}`);
+				await channel.send(`**Reminders** \n${message}`, {
+					split: message.length > 2000 ? true : false
+				});
 				await this.clear(now);
 				this.reminders.delete(String(now));
 			}
