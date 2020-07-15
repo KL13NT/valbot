@@ -40,7 +40,7 @@ export default class Remindme extends Command {
 			const description = await awaitMessages(channel, member);
 
 			await message.reply(
-				`امتى؟ الوقت بالفورمات دي: \n\`${example}\`.\nخلي ف اعتبارك ان كل التواريخ بتتسجل بالتوقيت الـ UTC يعني GMT`
+				`امتى؟ الوقت بالفورمات دي: \n\`${example}\`.\nخلي ف اعتبارك ان كل التواريخ بتتسجل بالتوقيت الـ UTC يعني GMT. يعني لو ف مصر و عايز تسجل الساعة 6 تكتب 4 و هكذا. لاحظ برضة ان فورمات الساعة 24 مش 12`
 			);
 			const time = await awaitMessages(channel, member);
 			const match = time.match(timeRegex);

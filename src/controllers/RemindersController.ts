@@ -29,6 +29,7 @@ export default class RemindersController extends Controller {
 			return;
 		}
 
+		await this.handleStale();
 		await this.fetchNextHour();
 
 		intervals.set({
@@ -67,6 +68,53 @@ export default class RemindersController extends Controller {
 		}
 	};
 
+	handleStale = async () => {
+		try {
+			const mongo = <MongoController>this.client.controllers.get('mongo');
+
+			const now = new Date();
+
+			const reminders: Reminder[] = await mongo.db
+				.collection('reminders')
+				.find({
+					time: {
+						$lte: now.getTime()
+						// to get all reminders that are supposed to happen next between now
+						// and next hour AND any that may have been missed because of a bot
+						// restart etc
+					}
+				})
+				.toArray();
+
+			if (reminders.length === 0) return;
+
+			let message = '**Stale Reminders**\n';
+
+			message += reminders.reduce<string>((stale, curr) => {
+				const date = new Date(curr.time).toUTCString();
+				const subs = reminderSubsToString(curr.subs);
+
+				return `${date}${stale}\n${subs}`;
+			}, '');
+
+			const { CHANNEL_NOTIFICATIONS } = this.client.config;
+			const channel = getChannelObject(this.client, CHANNEL_NOTIFICATIONS);
+
+			await channel.send(message);
+
+			await mongo.db.collection('reminders').deleteMany({
+				time: {
+					$lte: now.getTime()
+					// to get all reminders that are supposed to happen next between now
+					// and next hour AND any that may have been missed because of a bot
+					// restart etc
+				}
+			});
+		} catch (err) {
+			log(this.client, err, 'error');
+		}
+	};
+
 	check = async () => {
 		// Instead of fetching all data from the database which might use a lot of
 		// memory and make all db operations slow we could opt for partials.
@@ -93,6 +141,7 @@ export default class RemindersController extends Controller {
 				const message = reminderSubsToString(current);
 
 				await channel.send(`**Reminders** \n${message}`);
+				await this.clear(now);
 				this.reminders.delete(String(now));
 			}
 
@@ -147,14 +196,8 @@ export default class RemindersController extends Controller {
 		);
 	};
 
-	clearReminder = async (time: number) => {
+	clear = async (time: number) => {
 		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const queue = <QueueController>this.client.controllers.get('queue');
-
-		if (!mongo.ready) {
-			queue.enqueue({ func: this.clearReminder, args: [time] });
-			return;
-		}
 
 		this.reminders.delete(String(time));
 		return mongo.db.collection('reminders').findOneAndDelete({ time });
