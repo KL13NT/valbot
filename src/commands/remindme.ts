@@ -32,15 +32,15 @@ export default class Remindme extends Command {
 
 		const { message, member } = context;
 		const channel = <TextChannel>context.channel;
-		const example = '12/05/2020 20:30';
-		const timeRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s(\d{1,2}):(\d{1,2})$/;
+		const example = '12/05/2020 20:30 +02:00';
+		const timeRegex = /^(\d{2})\/(\d{2})\/(\d{4})\s(\d{2}):(\d{2})\s?((\+|-)\d{2}:\d{2})?$/;
 
 		try {
 			await message.reply('افكرك بأيه؟');
 			const description = await awaitMessages(channel, member);
 
 			await message.reply(
-				`امتى؟ الوقت بالفورمات دي: \n\`${example}\`.\nخلي ف اعتبارك ان كل التواريخ بتتسجل بالتوقيت الـ UTC يعني GMT. يعني لو ف مصر و عايز تسجل الساعة 6 تكتب 4 و هكذا. لاحظ برضة ان فورمات الساعة 24 مش 12`
+				`امتى؟ الوقت بالفورمات دي: \n\`${example}\`.\n لاحظ برضة ان فورمات الساعة 24 مش 12. لاحظ انك لازم تحدد الفرق مابين التوقيت المحلي ليك و الـ UTC او GMT. اللي هو الجزء +02:00 اللي ف اخر المثال ده. لو مكتبتوش هعتبر انك في UTC.`
 			);
 			const time = await awaitMessages(channel, member);
 			const match = time.match(timeRegex);
@@ -50,17 +50,18 @@ export default class Remindme extends Command {
 				return;
 			}
 
-			const [, day, month, year, hour, mins] = match;
+			const [, DD, MM, YYYY, HH, mm, Z] = match;
 
+			const now = new Date().getTime();
 			const date = new Date(
-				Date.UTC(
-					Number(year),
-					Number(month) - 1, // offset index
-					Number(day),
-					Number(hour),
-					Number(mins)
-				)
-			).getTime();
+				`${YYYY}-${MM}-${DD}T${HH}:${mm}:00.000${Z || 'Z'}`
+			);
+			const target = date.getTime();
+
+			if (now >= target) {
+				await message.reply('مينفعش تعمل ريمايندر لوقت سابق. بلاش هزار.');
+				return;
+			}
 
 			const sub: ReminderSubscription = {
 				description,
@@ -73,14 +74,14 @@ export default class Remindme extends Command {
 				return;
 			}
 
-			const reminder = reminders.getReminder(date);
+			const reminder = reminders.getReminder(target);
 			if (reminder && reminder.find(sub => sub.member === member.id)) {
 				await message.reply('انت مسجل ف الوقت ده بالفعل');
 				return;
 			}
 
-			await reminders.addReminder(date, sub);
-			await message.reply(`تم. هفكرك في ${new Date(date).toUTCString()}`);
+			await reminders.addReminder(target, sub);
+			await message.reply(`تم. هفكرك في \n${date.toString()}`);
 		} catch (err) {
 			log(this.client, err, 'error');
 		}

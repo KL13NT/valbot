@@ -1,6 +1,10 @@
 const { ROLE_DEVELOPER, MODE } = process.env;
 
-import { AlertLevel, NotificationOptions, ReminderSubscription } from '../types/interfaces';
+import {
+	AlertLevel,
+	NotificationOptions,
+	ReminderSubscription
+} from '../types/interfaces';
 import { QueueController } from '../controllers';
 import ValClient from '../ValClient';
 
@@ -25,7 +29,7 @@ export async function log(
 	const queue = <QueueController>client.controllers.get('queue');
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
-	if (MODE !== 'PRODUCTION') return;
+	if (MODE !== 'PRODUCTION' || alertLevel === 'info') return;
 	if (!client.ready) {
 		if (queue) queue.enqueue({ func: log, args: [...arguments] });
 		return;
@@ -117,7 +121,7 @@ export async function awaitMessages(channel: TextChannel, member: GuildMember) {
 	return (await channel.awaitMessages(filter, options)).first().content;
 }
 
-export function reminderSubsToString (subs: ReminderSubscription[]){
+export function reminderSubsToString(subs: ReminderSubscription[]) {
 	return subs
 		.map(sub => `<@${sub.member}>: ${sub.description}`)
 		.reduce((final, curr) => `${final}\n${curr}`, '');
