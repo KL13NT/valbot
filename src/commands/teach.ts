@@ -1,10 +1,10 @@
 import ValClient from '../ValClient';
 
-import { Message } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import { Command, CommandContext } from '../structures';
 import { ConversationController } from '../controllers';
 
-import { log } from '../utils/general';
+import { log, awaitMessages } from '../utils/general';
 
 export default class Teach extends Command {
 	constructor(client: ValClient) {
@@ -25,10 +25,9 @@ export default class Teach extends Command {
 	}
 
 	_run = async (context: CommandContext) => {
-		const { message, channel, params, member } = context;
+		const { message, params, member } = context;
+		const channel = <TextChannel>context.channel;
 		const invoker = params.join(' ').replace(/"/g, '').replace(/\s+/, ' ');
-		const collectorOptions = { max: 1, time: 60000, errors: ['time'] };
-		const collectorFilter = (m: Message) => m.author.id === member.id;
 
 		try {
 			if (params.length === 0) {
@@ -43,18 +42,8 @@ export default class Teach extends Command {
 
 			await message.reply('المفروض ارد ازاي بقى؟');
 
-			channel
-				.awaitMessages(collectorFilter, collectorOptions)
-				.then(collected =>
-					this.collectionSuccess(
-						context,
-						invoker,
-						collected.first().content
-					).catch(err => log(this.client, err, 'error'))
-				)
-				.catch(async () => {
-					await message.reply('وقتك خلص, جرب تاني');
-				});
+			const collected = await awaitMessages(channel, member);
+			await this.collectionSuccess(context, invoker, collected);
 		} catch (err) {
 			log(this.client, err, 'error');
 		}

@@ -1,9 +1,9 @@
 import ValClient from '../ValClient';
 
-import { Message, TextChannel } from 'discord.js';
+import { TextChannel } from 'discord.js';
 
 import { Command, CommandContext } from '../structures';
-import { log } from '../utils/general';
+import { log, awaitMessages } from '../utils/general';
 import {
 	getChannelObject,
 	getChannelFromMention,
@@ -32,13 +32,6 @@ export default class Announce extends Command {
 		const { message, member, params } = context;
 		const channel = <TextChannel>context.channel;
 
-		const filter = (m: Message) => m.author.id === member.id;
-		const awaitOptions = {
-			time: 60 * 1000,
-			max: 1,
-			errors: ['time']
-		};
-
 		const target = getChannelObject(
 			this.client,
 			getChannelFromMention(params[0])
@@ -52,8 +45,7 @@ export default class Announce extends Command {
 
 			await message.reply('ابعت بقى الـ announcement');
 
-			const collected = await channel.awaitMessages(filter, awaitOptions);
-			const announcement = collected.first().content;
+			const announcement = await awaitMessages(channel, member);
 
 			const hooks = await channel.fetchWebhooks();
 			const hook =

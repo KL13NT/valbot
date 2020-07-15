@@ -1,8 +1,8 @@
 import ValClient from '../ValClient';
 
 import { Command, CommandContext } from '../structures';
-import { log } from '../utils/general';
-import { Message } from 'discord.js';
+import { log, awaitMessages } from '../utils/general';
+import { TextChannel } from 'discord.js';
 import { LevelsController } from '../controllers';
 
 export default class MilestoneRemove extends Command {
@@ -25,13 +25,9 @@ export default class MilestoneRemove extends Command {
 
 	_run = async (context: CommandContext) => {
 		const levels = <LevelsController>this.client.controllers.get('levels');
-		const filter = (m: Message) => m.author.id === member.id;
-		const awaitOptions = {
-			time: 60 * 1000,
-			max: 1
-		};
 
-		const { message, member, params, channel } = context;
+		const { message, member, params } = context;
+		const channel = <TextChannel>context.channel;
 		const levelRegex = /(\d+)/i;
 		const level = Number(params[0].match(levelRegex)[0]);
 
@@ -45,8 +41,7 @@ export default class MilestoneRemove extends Command {
 
 			await message.reply('ايه اسم الـ achievement؟');
 
-			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
-				.content;
+			const name = await awaitMessages(channel, member);
 
 			await levels.removeMilestone(level, name);
 

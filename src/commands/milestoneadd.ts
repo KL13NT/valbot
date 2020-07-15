@@ -1,9 +1,9 @@
 import ValClient from '../ValClient';
 
 import { Command, CommandContext } from '../structures';
-import { log } from '../utils/general';
+import { log, awaitMessages } from '../utils/general';
 import { getRoleObject } from '../utils/object';
-import { Message } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import { LevelsController } from '../controllers';
 
 export default class MilestoneAdd extends Command {
@@ -26,13 +26,9 @@ export default class MilestoneAdd extends Command {
 
 	_run = async (context: CommandContext) => {
 		const levels = <LevelsController>this.client.controllers.get('levels');
-		const filter = (m: Message) => m.author.id === member.id;
-		const awaitOptions = {
-			time: 60 * 1000,
-			max: 1
-		};
 
-		const { message, member, params, channel } = context;
+		const { message, member, params } = context;
+		const channel = <TextChannel>context.channel;
 
 		const levelRegex = /^(\d+)$/i;
 		const roleNameRegex = /^(\S+)$/i;
@@ -68,8 +64,7 @@ export default class MilestoneAdd extends Command {
 
 			await message.reply('ايه اسم الـ achievement؟');
 
-			const name = (await channel.awaitMessages(filter, awaitOptions)).first()
-				.content;
+			const name = await awaitMessages(channel, member);
 
 			if (!nameRegex.test(name)) {
 				await message.reply(
@@ -80,9 +75,7 @@ export default class MilestoneAdd extends Command {
 
 			await message.reply('ايه وصف الـ achievement؟');
 
-			const description = (
-				await channel.awaitMessages(filter, awaitOptions)
-			).first().content;
+			const description = await awaitMessages(channel, member);
 
 			if (!descriptionRegex.test(description)) {
 				await message.reply('الوصف لازم يكون مابين 30 و 300 حرف, و يكون انجلش');
