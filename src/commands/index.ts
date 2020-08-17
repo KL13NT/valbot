@@ -15,3 +15,4 @@ export { default as Ban } from './ban';
 export { default as Warn } from './warn';
 export { default as Remindme } from './remindme';
 export { default as Reminders } from './reminders';
+export { default as Notify } from './notify';

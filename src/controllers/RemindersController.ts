@@ -122,6 +122,7 @@ export default class RemindersController extends Controller {
 		// reducing the amount of queries per hour to only 1 instead of 60, meaning
 		// that a day would equal 24 queries instead of 1440.
 		// This improves memory allocation and network traffic.
+
 		const { CHANNEL_NOTIFICATIONS } = this.client.config;
 		const date = new Date();
 		const now = Date.UTC(
