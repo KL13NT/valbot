@@ -249,7 +249,11 @@ export default class LevelsController extends Controller {
 	};
 
 	levelUpMessage = async (id: Snowflake, level: number) => {
-		const notification = `GG <@${id}>, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
+		const member = getMemberObject(this.client, id);
+		const mention =
+			typeof member === 'undefined' ? `<@${id}>` : `${member.displayName}`;
+
+		const notification = `GG ${mention}, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
 
 		notify({ client: this.client, notification });
 	};

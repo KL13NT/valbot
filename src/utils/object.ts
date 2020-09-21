@@ -1,10 +1,9 @@
 const { MODE } = process.env;
 
 import ValClient from '../ValClient';
-
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { Snowflake, TextChannel } from 'discord.js';
+import { GuildMember, Snowflake, TextChannel } from 'discord.js';
 
 /**
  * Returns a text channel
@@ -40,7 +39,10 @@ export function getRoleObject(client: ValClient, roleID: string) {
 /**
  * Returns a GuildMember object
  */
-export function getMemberObject(client: ValClient, userId: Snowflake) {
+export function getMemberObject(
+	client: ValClient,
+	userId: Snowflake
+): GuildMember | undefined {
 	return client.guilds.cache
 		.find(guild => guild.name === 'VALARIUM')
 		.members.cache.find(member => member.id === userId);
