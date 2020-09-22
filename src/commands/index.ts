@@ -16,3 +16,5 @@ export { default as Warn } from './warn';
 export { default as Remindme } from './remindme';
 export { default as Reminders } from './reminders';
 export { default as Notify } from './notify';
+export { default as PresenceSet } from './presenceset';
+export { default as PresenceClaer } from './presenceclear';

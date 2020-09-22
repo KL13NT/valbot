@@ -1,4 +1,4 @@
-import { ActivityType, Snowflake, Role, MessageEmbed } from 'discord.js';
+import { Snowflake, Role, MessageEmbed, PresenceData } from 'discord.js';
 import CommandContext from '../structures/CommandContext';
 import {
 	ConversationController,
@@ -47,11 +47,6 @@ export interface ClientConfig {
 
 	ROLE_MUTED: Snowflake;
 	ROLE_WARNED: Snowflake;
-}
-
-export interface Presence {
-	message: string;
-	type: ActivityType;
 }
 
 export interface ControllerOptions {
@@ -217,4 +212,8 @@ export interface ReminderSubscription {
 export interface Reminder {
 	time: number; // 64-bit signed integer representing epoch, truncated to the nearest minute
 	subs: ReminderSubscription[];
+}
+
+export interface Presence extends PresenceData {
+	priority: boolean;
 }

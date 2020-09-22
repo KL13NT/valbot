@@ -1,6 +1,7 @@
 const { AUTH_TOKEN, MODE } = process.env;
 
-import { Client, ClientOptions, Guild, PresenceData } from 'discord.js';
+import { Client, ClientOptions, Guild } from 'discord.js';
+import { ClientConfigValidator } from './types/validators.joi';
 
 import * as fs from 'fs';
 import * as path from 'path';
@@ -8,14 +9,13 @@ import * as loaders from './loaders';
 import * as listeners from './listeners';
 
 import { log, transformObject } from './utils/general';
-import { ClientConfig, IController } from './types/interfaces';
+import { ClientConfig, IController, Presence } from './types/interfaces';
 import Command from './structures/Command';
 import {
 	MongoController,
 	QueueController,
 	IntervalsController
 } from './controllers';
-import { ClientConfigValidator } from './types/validators.joi';
 
 export default class ValClient extends Client {
 	readonly prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
@@ -40,30 +40,46 @@ export default class ValClient extends Client {
 		ROLE_WARNED: ''
 	};
 
-	presences: PresenceData[] = [
+	presences: Presence[] = [
 		{
+			status: 'dnd',
 			activity: {
 				type: 'WATCHING',
 				name: 'Sovereign writing bad code'
-			}
+			},
+			priority: false
 		},
 		{
+			status: 'dnd',
 			activity: {
 				type: 'WATCHING',
-				name: 'N1ffl3r making tanks'
-			}
+				name: 'N1ffl3r making games'
+			},
+			priority: false
 		},
 		{
+			status: 'dnd',
+			activity: {
+				type: 'WATCHING',
+				name: 'Madara Omar disappearing'
+			},
+			priority: false
+		},
+		{
+			status: 'dnd',
 			activity: {
 				type: 'WATCHING',
 				name: 'Sovereign coding in SpaghettiScript'
-			}
+			},
+			priority: false
 		},
 		{
+			status: 'dnd',
 			activity: {
 				name: `${this.prefix} help`,
 				type: 'PLAYING'
-			}
+			},
+			priority: false
 		}
 	];
 
@@ -99,8 +115,7 @@ export default class ValClient extends Client {
 
 		const intervals = <IntervalsController>this.controllers.get('intervals');
 
-		this.setPresence();
-		this.user.setStatus('dnd').catch(err => log(this, err, 'error'));
+		await this.setPresence();
 
 		intervals.set({
 			callback: this.setPresence,
@@ -117,9 +132,20 @@ export default class ValClient extends Client {
 		const presence = this.presences[
 			Math.floor(Math.random() * this.presences.length)
 		];
+		const presenceWithPriority = this.presences.find(p => p.priority);
 
-		if (this.user)
-			this.user.setPresence(presence).catch(err => log(this, err, 'error'));
+		if (this.user) {
+			this.user
+				.setPresence(presenceWithPriority || presence)
+				.catch(err => log(this, err, 'error'));
+		} else {
+			const queue = <QueueController>this.controllers.get('QueueController');
+
+			queue.enqueue({
+				args: [],
+				func: this.setPresence
+			});
+		}
 	};
 
 	/**
