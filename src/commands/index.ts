@@ -18,3 +18,4 @@ export { default as Reminders } from './reminders';
 export { default as Notify } from './notify';
 export { default as PresenceSet } from './presenceset';
 export { default as PresenceClaer } from './presenceclear';
+export { default as Leaderboard } from './leaderboard';

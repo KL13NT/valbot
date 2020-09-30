@@ -10,7 +10,7 @@
 		"watch": "tsc --watch",
 		"develop": "yarn run-p watch start:dev",
 		"start": "tsc && node ./prod/index.js",
-		"start:dev": "nodemon -r dotenv/config ./prod/index.js dotenv_config_path=./.env",
+		"start:dev": "nodemon -r dotenv/config ./prod/index.js",
 		"lint": "eslint --ext .js,.ts ./src --config .eslintrc.js --fix --global global",
 		"test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose",
 		"docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs"
