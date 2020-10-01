@@ -4,7 +4,8 @@ import ValClient from '../ValClient';
 import { CommandContext } from '../structures';
 import { MongoController } from '../controllers';
 import { createEmbed } from '../utils/embed';
-import { getMemberObject } from '../utils/object';
+import { Level } from '../types/interfaces';
+// import { getMemberObject } from '../utils/object';
 
 export default class Leaderboard extends Command {
 	constructor(client: ValClient) {
@@ -14,8 +15,8 @@ export default class Leaderboard extends Command {
 			cooldown: 1000,
 			nOfParams: 0,
 			description: 'بتشوف مستوى اول عشر أشخاص',
-			exampleUsage: '<user_id>',
-			extraParams: true,
+			exampleUsage: '',
+			extraParams: false,
 			optionalParams: 0,
 			auth: {
 				method: 'ROLE',
@@ -24,24 +25,42 @@ export default class Leaderboard extends Command {
 		});
 	}
 
-	_run = async ({ message }: CommandContext) => {
+	generateLevelString = ({ id, level }: Level, { member }: CommandContext) => {
+		const yours = id === member.id ? ':star: **Your position**' : '';
+		return `Level **${String(level).padStart(2, '0')}** — <@${id}> ${yours}`;
+	};
+
+	_run = async (ctx: CommandContext) => {
+		const { message, member } = ctx;
 		const mongo = <MongoController>this.client.controllers.get('mongo');
+
 		try {
-			const res = await mongo.db
+			const levels: Level[] = await mongo.db
 				.collection('levels')
 				.find({})
 				.limit(10)
 				.sort({ level: -1 })
 				.toArray();
-			const mapArr = res.map(element => ({
-				name: `${getMemberObject(this.client, element.id).displayName}`,
-				value: `Level: ${element.level}\nEXP: ${element.exp}`
-			}));
+
+			const yours = await mongo.db
+				.collection('levels')
+				.findOne({ id: member.id });
+
+			const descriptions = levels.map(lvl =>
+				this.generateLevelString(lvl, ctx)
+			);
+
+			if (!levels.some(l => l.id === member.id)) {
+				descriptions.push(`\n${this.generateLevelString(yours, ctx)}`);
+			}
+
 			const msg = createEmbed({
-				title: 'Top 10',
-				fields: mapArr
+				title: 'Top 10 Active Members',
+				description: descriptions.join('\n'),
+				footer: { text: 'For full rank details use `v! rank`' }
 			});
-			message.reply(msg);
+
+			await message.reply(msg);
 		} catch (err) {
 			log(this.client, err, 'error');
 		}
