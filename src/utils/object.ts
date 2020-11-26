@@ -16,7 +16,7 @@ export function getChannelObject(
 
 	return <TextChannel>(
 		client.guilds.cache
-			.find(guild => guild.name === 'VALARIUM')
+			.first()
 			.channels.cache.find(
 				ch =>
 					ch.type === 'text' &&
@@ -32,7 +32,7 @@ export function getChannelObject(
  */
 export function getRoleObject(client: ValClient, roleID: string) {
 	return client.guilds.cache
-		.find(guild => guild.name === 'VALARIUM')
+		.first()
 		.roles.cache.find(role => role.id === roleID || role.name === roleID);
 }
 
@@ -43,8 +43,7 @@ export function getMemberObject(
 	client: ValClient,
 	userId: Snowflake
 ): GuildMember | undefined {
-	return client.guilds.cache
-		.find(guild => guild.name === 'VALARIUM')
+	return client.guilds.cache.first()
 		.members.cache.find(member => member.id === userId);
 }
 

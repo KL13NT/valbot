@@ -3,6 +3,7 @@ import ValClient from '../ValClient';
 import { Command, CommandContext } from '../structures';
 import { log, notify } from '../utils/general';
 import { createClearEmbed } from '../utils/embed';
+import { TextChannel } from 'discord.js';
 
 export default class Clear extends Command {
 	constructor(client: ValClient) {
@@ -24,7 +25,8 @@ export default class Clear extends Command {
 
 	_run = async (context: CommandContext) => {
 		const { CHANNEL_MOD_LOGS } = this.client.config;
-		const { message, member, params, channel } = context;
+		const { message, member, params } = context;
+		const channel = <TextChannel>context.channel;
 
 		const count = parseInt(params[0]);
 		const errors = this.validateInput(count);

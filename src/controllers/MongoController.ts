@@ -21,7 +21,8 @@ export default class MongoController extends Controller {
 		});
 
 		this.mongo = new MongoClient(DB_HOST, {
-			useNewUrlParser: true
+			useNewUrlParser: true,
+			useUnifiedTopology: true
 		});
 	}
 

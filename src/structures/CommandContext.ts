@@ -5,7 +5,8 @@ import {
 	GuildMember,
 	TextChannel,
 	Guild,
-	DMChannel
+	DMChannel,
+	NewsChannel
 } from 'discord.js';
 
 export default class CommandContext {
@@ -13,7 +14,7 @@ export default class CommandContext {
 	message: Message;
 	author: User;
 	member: GuildMember;
-	channel: TextChannel | DMChannel;
+	channel: TextChannel | DMChannel | NewsChannel;
 	guild: Guild;
 	params: string[];
 

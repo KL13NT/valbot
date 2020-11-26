@@ -89,9 +89,13 @@ export default class ValClient extends Client {
 
 	init = async (token = AUTH_TOKEN) => {
 		try {
-			this.login(token);
 
-			this.on('ready', this.onReady);
+
+			this.once('ready', this.onReady);
+
+			await this.login(token);
+
+			log(this, 'Logged in', 'info');
 
 			console.log(
 				fs
@@ -107,6 +111,8 @@ export default class ValClient extends Client {
 	};
 
 	onReady = async (): Promise<void> => {
+		log(this, 'Ready status received. Bot initialising.', 'info');
+
 		this.ValGuild = this.guilds.cache.first();
 
 		await this.initLoaders();

@@ -79,7 +79,7 @@ export default abstract class Command {
 	 */
 	stop = (context: CommandContext, isGraceful: boolean, error: Error): void => {
 		if (!isGraceful)
-			context.message.reply(error || ERROR_GENERIC_SOMETHING_WENT_WRONG);
+			context.message.reply(error.message || ERROR_GENERIC_SOMETHING_WENT_WRONG);
 		else context.message.reply(GENERIC_CONTROLLED_COMMAND_CANCEL);
 
 		this.ready = true;
