@@ -38,7 +38,7 @@ export default class Leaderboard extends Command {
 			const levels: Level[] = await mongo.db
 				.collection('levels')
 				.find({})
-				.limit(10)
+				.limit(20)
 				.sort({ level: -1 })
 				.toArray();
 
@@ -55,7 +55,7 @@ export default class Leaderboard extends Command {
 			}
 
 			const msg = createEmbed({
-				title: 'Top 10 Active Members',
+				title: 'Top 20 Active Members',
 				description: descriptions.join('\n'),
 				footer: { text: 'For full rank details use `v! rank`' }
 			});
