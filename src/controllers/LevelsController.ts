@@ -65,6 +65,7 @@ export default class LevelsController extends Controller {
 				redis.set(`VOICE:${id}`, String(voice || 1));
 				redis.set(`VOICE:XP:${id}`, String(voiceXP || 1));
 				redis.set(`LEVEL:${id}`, String(level || 1));
+				redis.set(`EXP:${id}`, String(level || 1));
 			});
 
 			intervals.set({
