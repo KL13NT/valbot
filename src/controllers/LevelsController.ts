@@ -11,9 +11,17 @@ import {
 	IntervalsController
 } from '.';
 
-import { log, calculateUniqueWords, notify } from '../utils/general';
+import {
+	log,
+	calculateUniqueWords,
+	notify,
+	calculateNextLevel
+	/* levelToExp */
+} from '../utils/general';
 import { getRoleObject, getMemberObject } from '../utils/object';
 import { createLevelupEmbed } from '../utils/embed';
+
+const XP_PER_MINUTE = 4;
 
 export default class LevelsController extends Controller {
 	ready = false;
@@ -58,14 +66,16 @@ export default class LevelsController extends Controller {
 		});
 
 		mongo.getLevels().then(async levels => {
-			levels.forEach(({ id, text, voice, level, textXP, voiceXP }) => {
+			levels.forEach(async ({ id, text, voice, level, textXP, voiceXP }) => {
 				// (value || 1) to handle old mongo documents that didn't have some props
-				redis.set(`TEXT:${id}`, String(text || 1));
-				redis.set(`TEXT:XP:${id}`, String(textXP || 1));
-				redis.set(`VOICE:${id}`, String(voice || 1));
-				redis.set(`VOICE:XP:${id}`, String(voiceXP || 1));
-				redis.set(`LEVEL:${id}`, String(level || 1));
-				redis.set(`EXP:${id}`, String(level || 1));
+				await Promise.all([
+					redis.set(`TEXT:${id}`, String(text || 1)),
+					redis.set(`TEXT:XP:${id}`, String(textXP || 1)),
+					redis.set(`VOICE:${id}`, String(voice || 1)),
+					redis.set(`VOICE:XP:${id}`, String(voiceXP || 1)),
+					redis.set(`LEVEL:${id}`, String(level || 1)),
+					redis.set(`EXP:${id}`, String(level || 1))
+				]);
 			});
 
 			intervals.set({
@@ -91,34 +101,52 @@ export default class LevelsController extends Controller {
 		if (id === CLIENT_ID || bot) return;
 
 		try {
-			const textXP = Number(await redis.get(`TEXT:XP:${id}`));
-			const text = Number(await redis.get(`TEXT:${id}`));
+			const cache = await Promise.all([
+				redis.get(`TEXT:XP:${id}`),
+				redis.get(`TEXT:${id}`),
+				redis.get(`LEVEL:${id}`),
+				redis.get(`EXP:${id}`)
+			]);
 
-			const level = Number(await redis.get(`LEVEL:${id}`));
-			const exp = Number(await redis.get(`EXP:${id}`));
+			const [textXP, text, level, exp] = cache.map(val => Number(val));
 
-			const gainedWords = calculateUniqueWords(content);
+			const gain =
+				calculateUniqueWords(content) > 10
+					? 10
+					: calculateUniqueWords(content); /* limit */
 
 			if (exp) {
-				const nextText = Math.floor((textXP + gainedWords) / 6 - 60);
-				const textIncrBy = nextText - text <= 0 ? 1 : nextText - text;
+				const nextText = calculateNextLevel(textXP + gain);
+				const nextLevel = calculateNextLevel(exp + gain);
 
-				const nextLevel = Math.floor((exp + gainedWords) / 6 - 60);
-				const levelIncrBy = nextLevel - level <= 0 ? 1 : nextLevel - level;
+				// console.log('exp', exp);
+				// console.log('gain', gain);
+				// console.log('level', level);
+				// console.log('textXP', textXP);
+				// console.log('text', text);
+				// console.log('nextText', nextText);
+				// console.log('nextLevel', nextLevel);
+				// console.log('---');
 
-				if (exp + gainedWords >= 60 * Number(level) * 0.1 + 60) {
-					redis.incrby(`LEVEL:${id}`, levelIncrBy);
-					redis.set(`EXP:${id}`, String(1));
-
-					this.levelUp(message);
+				if (nextText > text) {
+					await Promise.all([
+						redis.set(`TEXT:${id}`, String(nextText)),
+						redis.set(`TEXT:XP:${id}`, String(1))
+					]);
+				} else {
+					await Promise.all([
+						redis.incrby(`EXP:${id}`, gain),
+						redis.incrby(`TEXT:XP:${id}`, gain)
+					]);
 				}
 
-				if (textXP + gainedWords >= 60 * Number(text) * 0.1 + 60) {
-					redis.incrby(`TEXT:${id}`, textIncrBy);
-					redis.set(`TEXT:EXP:${id}`, String(1));
-				} else {
-					redis.incrby(`EXP:${id}`, gainedWords);
-					redis.incrby(`TEXT:XP:${id}`, gainedWords);
+				if (nextLevel > level) {
+					await Promise.all([
+						redis.set(`LEVEL:${id}`, String(nextLevel)),
+						redis.set(`EXP:${id}`, String(1))
+					]);
+
+					await this.levelUp(message);
 				}
 			} else this.initUser(id);
 		} catch (err) {
@@ -131,34 +159,39 @@ export default class LevelsController extends Controller {
 
 		this.activeVoice.forEach(async id => {
 			try {
-				const voiceXP = Number(await redis.get(`VOICE:XP:${id}`));
-				const voice = Number(await redis.get(`VOICE:${id}`));
+				const cache = await Promise.all([
+					redis.get(`VOICE:XP:${id}`),
+					redis.get(`VOICE:${id}`),
+					redis.get(`LEVEL:${id}`),
+					redis.get(`EXP:${id}`)
+				]);
+				const [voiceXP, voice, level, exp] = cache.map(val => Number(val));
 
-				const level = Number(await redis.get(`LEVEL:${id}`));
-				const exp = Number(await redis.get(`EXP:${id}`));
-
-				const XP_PER_MINUTE = 4;
+				const gain = XP_PER_MINUTE;
 
 				if (exp) {
-					const nextVoice = Math.floor((voiceXP + XP_PER_MINUTE) / 6 - 60);
-					const voiceIncrBy = nextVoice - voice <= 0 ? 1 : nextVoice - voice;
+					const nextVoice = calculateNextLevel(voiceXP + gain);
+					const nextLevel = calculateNextLevel(exp + gain);
 
-					const nextLevel = Math.floor((exp + XP_PER_MINUTE) / 6 - 60);
-					const levelIncrBy = nextLevel - voice <= 0 ? 1 : nextLevel - voice;
-
-					if (exp + XP_PER_MINUTE >= 60 * Number(level) * 0.1 + 60) {
-						redis.incrby(`LEVEL:${id}`, levelIncrBy);
-						redis.set(`EXP:${id}`, String(1));
-
-						this.levelUp(id);
+					if (nextVoice > voice) {
+						await Promise.all([
+							redis.set(`VOICE:${id}`, String(nextVoice)),
+							redis.set(`VOICE:XP:${id}`, String(1))
+						]);
+					} else {
+						await Promise.all([
+							redis.incrby(`EXP:${id}`, gain),
+							redis.incrby(`VOICE:XP:${id}`, gain)
+						]);
 					}
 
-					if (voiceXP + XP_PER_MINUTE >= 60 * Number(voice) * 0.1 + 60) {
-						redis.incrby(`VOICE:${id}`, voiceIncrBy);
-						redis.set(`VOICE:XP:${id}`, String(1));
-					} else {
-						redis.incrby(`EXP:${id}`, XP_PER_MINUTE);
-						redis.incrby(`VOICE:XP:${id}`, XP_PER_MINUTE);
+					if (nextLevel > level) {
+						await Promise.all([
+							redis.set(`LEVEL:${id}`, String(nextLevel)),
+							redis.set(`EXP:${id}`, String(1))
+						]);
+
+						await this.levelUp(id);
 					}
 				} else this.initUser(id);
 			} catch (err) {
@@ -170,14 +203,16 @@ export default class LevelsController extends Controller {
 	initUser = async (id: Snowflake) => {
 		const redis = <RedisController>this.client.controllers.get('redis');
 
-		redis.set(`EXP:${id}`, String(1));
-		redis.set(`LEVEL:${id}`, String(1));
-		redis.set(`TEXT:XP:${id}`, String(1));
-		redis.set(`TEXT:${id}`, String(1));
-		redis.set(`VOICE:XP:${id}`, String(1));
-		redis.set(`VOICE:${id}`, String(1));
+		await Promise.all([
+			redis.set(`EXP:${id}`, String(1)),
+			redis.set(`LEVEL:${id}`, String(1)),
+			redis.set(`TEXT:XP:${id}`, String(1)),
+			redis.set(`TEXT:${id}`, String(1)),
+			redis.set(`VOICE:XP:${id}`, String(1)),
+			redis.set(`VOICE:${id}`, String(1))
+		]);
 
-		this.levelUp(id);
+		await this.levelUp(id);
 	};
 
 	trackUser = (id: Snowflake) => {
@@ -200,16 +235,20 @@ export default class LevelsController extends Controller {
 		const id =
 			typeof messageOrId === 'string' ? messageOrId : messageOrId.member.id;
 
-		const exp = Number(await redis.get(`EXP:${id}`));
-		const level = Number(await redis.get(`LEVEL:${id}`));
+		const cache = await Promise.all([
+			redis.get(`EXP:${id}`),
+			redis.get(`LEVEL:${id}`),
+			redis.get(`VOICE:XP:${id}`),
+			redis.get(`VOICE:${id}`),
+			redis.get(`TEXT:XP:${id}`),
+			redis.get(`TEXT:${id}`)
+		]);
 
-		const voiceXP = Number(await redis.get(`VOICE:XP:${id}`));
-		const voice = Number(await redis.get(`VOICE:${id}`));
+		const [exp, level, voiceXP, voice, textXP, text] = cache.map(val =>
+			Number(val)
+		);
 
-		const textXP = Number(await redis.get(`TEXT:XP:${id}`));
-		const text = Number(await redis.get(`TEXT:${id}`));
-
-		mongo.syncLevels(id, {
+		await mongo.syncLevels(id, {
 			id,
 			exp,
 			text,
@@ -219,8 +258,10 @@ export default class LevelsController extends Controller {
 			voiceXP
 		});
 
-		this.enforceMilestone(level, id);
-		this.levelUpMessage(id, level);
+		await Promise.all([
+			this.enforceMilestone(level, id),
+			this.levelUpMessage(id, level)
+		]);
 	};
 
 	enforceMilestone = async (userLevel: number, id: Snowflake) => {
@@ -237,7 +278,7 @@ export default class LevelsController extends Controller {
 					});
 
 					member.roles.add(role.id);
-					notify({
+					await notify({
 						client: this.client,
 						notification: `<@${id}>`,
 						embed
@@ -250,13 +291,17 @@ export default class LevelsController extends Controller {
 	};
 
 	levelUpMessage = async (id: Snowflake, level: number) => {
-		const member = getMemberObject(this.client, id);
-		const mention =
-			typeof member === 'undefined' ? `<@${id}>` : `${member.displayName}`;
+		try {
+			const member = getMemberObject(this.client, id);
+			const mention =
+				typeof member === 'undefined' ? `<@${id}>` : `${member.displayName}`;
 
-		const notification = `GG ${mention}, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
+			const notification = `GG ${mention}, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
 
-		notify({ client: this.client, notification });
+			await notify({ client: this.client, notification });
+		} catch (err) {
+			log(this.client, err, 'error');
+		}
 	};
 
 	addMilestone = async (

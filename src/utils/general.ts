@@ -30,6 +30,7 @@ export async function log(
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
 	if (MODE !== 'PRODUCTION' || alertLevel === 'info') return;
+
 	if (!client.ready) {
 		if (queue) queue.enqueue({ func: log, args: [...arguments] });
 		return;
@@ -37,12 +38,18 @@ export async function log(
 
 	const { CHANNEL_BOT_STATUS } = client.config;
 
-	const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
-	const message = createAlertMessage(String(notification), alertLevel);
+	try {
+		const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
+		const message = createAlertMessage(String(notification), alertLevel);
 
-	if (typeof notification === 'object')
-		await channel.send(`${message}\n\n**Stack trace**\n${notification.stack}`);
-	else await channel.send(`${message}`);
+		if (typeof notification === 'object')
+			await channel.send(
+				`${message}\n\n**Stack trace**\n${notification.stack}`
+			);
+		else await channel.send(`${message}`);
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 /**
@@ -68,16 +75,27 @@ export async function notify(options: NotificationOptions) {
  * Calculates the number of unique words in a sentence
  */
 export function calculateUniqueWords(message: string) {
-	const unique: { [index: string]: string } = {};
+	const unique: { [index: string]: number } = {};
 
 	return message.split(' ').filter(word => {
-		if (!unique[word] && word.length >= 2) {
-			unique[word] = word;
+		if (unique[word] > 3) return false;
+
+		if (unique[word] === undefined) {
+			unique[word] = 0;
 			return true;
 		}
 
-		return false;
+		unique[word] += 1;
 	}).length;
+}
+
+export function calculateNextLevel(exp: number) {
+	const level = Math.floor((exp - 60) / 6);
+	return level <= 0 ? 1 : level;
+}
+
+export function levelToExp(level: number) {
+	return level * 6 + 60;
 }
 
 export function capitalise(str: string) {
