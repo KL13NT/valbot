@@ -1,6 +1,6 @@
-import Controller from '../structures/Controller';
-import { QueueCall } from '../types/interfaces';
-import ValClient from '../ValClient';
+import Controller from "../structures/Controller";
+import { QueueCall } from "../types/interfaces";
+import ValClient from "../ValClient";
 
 export default class QueueController extends Controller {
 	ready: boolean;
@@ -8,7 +8,7 @@ export default class QueueController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'queue'
+			name: "queue",
 		});
 
 		this.calls = [];

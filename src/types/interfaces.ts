@@ -1,12 +1,12 @@
-import { Snowflake, Role, MessageEmbed, PresenceData } from 'discord.js';
-import CommandContext from '../structures/CommandContext';
-import ValClient from '../ValClient';
+import { Snowflake, Role, MessageEmbed, PresenceData } from "discord.js";
+import CommandContext from "../structures/CommandContext";
+import ValClient from "../ValClient";
 
 export type ListenerHandler = (...args: any[]) => void; // eslint-disable-line
 
 export type Template = string;
 
-export type AlertLevel = 'info' | 'warn' | 'error';
+export type AlertLevel = "info" | "warn" | "error";
 
 export interface ClientConfig {
 	[index: string]: Snowflake;
@@ -155,6 +155,7 @@ export interface UserModerationOptions {
 }
 
 export interface UserInfo {
+	// eslint-disable-next-line camelcase
 	avatar_url: string;
 	displayName: string;
 }

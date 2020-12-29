@@ -1,12 +1,12 @@
-import Listener from '../structures/Listener';
-import ValClient from '../ValClient';
-import { GuildMember } from 'discord.js';
+import Listener from "../structures/Listener";
+import ValClient from "../ValClient";
+import { GuildMember } from "discord.js";
 
-import { log } from '../utils/general';
+import { log } from "../utils/general";
 
 export default class NewGuildMemberListener extends Listener {
 	constructor(client: ValClient) {
-		super(client, ['guildMemberAdd']);
+		super(client, ["guildMemberAdd"]);
 	}
 
 	onGuildMemberAdd = async (member: GuildMember): Promise<void> => {
@@ -22,8 +22,8 @@ export default class NewGuildMemberListener extends Listener {
 		} catch (err) {
 			log(
 				this.client,
-				'Something went wrong while greeting the new member, could yall do it for me?',
-				'error'
+				"Something went wrong while greeting the new member, could yall do it for me?",
+				"error",
 			);
 		}
 	};

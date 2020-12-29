@@ -1,12 +1,11 @@
-const { CLIENT_ID } = process.env;
+import { Message } from "discord.js";
+import { ToxicityClassifier, load } from "@tensorflow-models/toxicity";
 
-import { ToxicityClassifier, load } from '@tensorflow-models/toxicity';
-import Controller from '../structures/Controller';
-import ValClient from '../ValClient';
-import { Message } from 'discord.js';
+import Controller from "../structures/Controller";
+import ValClient from "../ValClient";
 
-import { warn, mute, isWarned } from '../utils/moderation';
-import { log } from '../utils/general';
+import { warn, mute, isWarned } from "../utils/moderation";
+import { log } from "../utils/general";
 
 export default class ToxicityController extends Controller {
 	ready = false;
@@ -17,27 +16,27 @@ export default class ToxicityController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'toxicity'
+			name: "toxicity",
 		});
 
 		this.labels = [
-			'identity_attack',
-			'severe_toxicity',
-			'threat',
-			'insult',
-			'obscene',
-			'sexual_explicit',
-			'toxicity'
+			"identity_attack",
+			"severe_toxicity",
+			"threat",
+			"insult",
+			"obscene",
+			"sexual_explicit",
+			"toxicity",
 		];
 	}
 
 	init = async () => {
-		if (process.env.MODE !== 'DEVELOPMENT')
+		if (process.env.MODE !== "DEVELOPMENT")
 			load(this.threshold, this.labels).then(model => {
 				this.classifier = model;
 				this.ready = true;
 
-				log(this.client, 'ToxicityController loaded successfully', 'info');
+				log(this.client, "ToxicityController loaded successfully", "info");
 			});
 	};
 
@@ -53,31 +52,31 @@ export default class ToxicityController extends Controller {
 				curr.results[0].probabilities[1] > this.confidence
 					? true
 					: result,
-			false
+			false,
 		);
 	};
 
-	handleToxic = async (message: Message) => {
+	handleToxic = async (message: Message): Promise<void> => {
 		const { author, channel } = message;
-		const reason = 'Used toxic language';
+		const reason = "Used toxic language";
 
 		if (isWarned(this.client, author.id)) {
-			await message.reply('دي تاني مرة تقل ادبك. ادي اخرتها. mute.');
+			await message.reply("دي تاني مرة تقل ادبك. ادي اخرتها. mute.");
 			await mute(this.client, {
 				member: author.id,
-				moderator: CLIENT_ID,
+				moderator: this.client.user.id,
 				channel: channel.id,
-				reason
+				reason,
 			});
 
 			message.delete({ reason });
 		} else {
-			await message.reply('متبقوش توكسيك. ده تحذير, المره الجاية mute.');
+			await message.reply("متبقوش توكسيك. ده تحذير, المره الجاية mute.");
 			await warn(this.client, {
 				member: author.id,
-				moderator: CLIENT_ID,
+				moderator: this.client.user.id,
 				channel: channel.id,
-				reason
+				reason,
 			});
 
 			message.delete({ reason });

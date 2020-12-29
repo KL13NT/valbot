@@ -1,11 +1,11 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { Controller } from '../structures';
-import { Reminder, ReminderSubscription } from '../types/interfaces';
-import { MongoController, QueueController, IntervalsController } from '.';
-import { log, reminderSubsToString } from '../utils/general';
-import { getChannelObject } from '../utils/object';
-import { Snowflake } from 'discord.js';
+import { Controller } from "../structures";
+import { Reminder, ReminderSubscription } from "../types/interfaces";
+import { MongoController, QueueController, IntervalsController } from ".";
+import { log, reminderSubsToString } from "../utils/general";
+import { getChannelObject } from "../utils/object";
+import { Snowflake } from "discord.js";
 
 export default class RemindersController extends Controller {
 	ready: boolean;
@@ -13,15 +13,15 @@ export default class RemindersController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'reminders'
+			name: "reminders",
 		});
 	}
 
 	init = async () => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const queue = <QueueController>this.client.controllers.get('queue');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
+		const queue = <QueueController>this.client.controllers.get("queue");
 		const intervals = <IntervalsController>(
-			this.client.controllers.get('intervals')
+			this.client.controllers.get("intervals")
 		);
 
 		if (!mongo.ready || !this.client.ready) {
@@ -34,8 +34,8 @@ export default class RemindersController extends Controller {
 
 		intervals.set({
 			callback: this.check,
-			name: 'reminders',
-			time: 1000 * 60
+			name: "reminders",
+			time: 1000 * 60,
 		});
 
 		this.ready = true;
@@ -43,20 +43,20 @@ export default class RemindersController extends Controller {
 
 	fetchNextHour = async () => {
 		try {
-			const mongo = <MongoController>this.client.controllers.get('mongo');
+			const mongo = <MongoController>this.client.controllers.get("mongo");
 
 			const nextHour = new Date();
 			nextHour.setHours(nextHour.getHours() + 1);
 
 			const reminders: Reminder[] = await mongo.db
-				.collection('reminders')
+				.collection("reminders")
 				.find({
 					time: {
-						$lte: nextHour.getTime()
+						$lte: nextHour.getTime(),
 						// to get all reminders that are supposed to happen next between now
 						// and next hour AND any that may have been missed because of a bot
 						// restart etc
-					}
+					},
 				})
 				.toArray();
 
@@ -64,54 +64,54 @@ export default class RemindersController extends Controller {
 				this.reminders.set(String(reminder.time), reminder.subs);
 			});
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
 	handleStale = async () => {
 		try {
-			const mongo = <MongoController>this.client.controllers.get('mongo');
+			const mongo = <MongoController>this.client.controllers.get("mongo");
 
 			const now = new Date();
 
 			const reminders: Reminder[] = await mongo.db
-				.collection('reminders')
+				.collection("reminders")
 				.find({
 					time: {
-						$lte: now.getTime()
+						$lte: now.getTime(),
 						// to get all reminders that are supposed to happen next between now
 						// and next hour AND any that may have been missed because of a bot
 						// restart etc
-					}
+					},
 				})
 				.toArray();
 
 			if (reminders.length === 0) return;
 
-			let message = '**Stale Reminders**\n';
+			let message = "**Stale Reminders**\n";
 
 			message += reminders.reduce<string>((stale, curr) => {
 				const date = new Date(curr.time).toUTCString();
 				const subs = reminderSubsToString(curr.subs);
 
 				return `${date}${stale}\n${subs}`;
-			}, '');
+			}, "");
 
 			const { CHANNEL_NOTIFICATIONS } = this.client.config;
 			const channel = getChannelObject(this.client, CHANNEL_NOTIFICATIONS);
 
 			await channel.send(message);
 
-			await mongo.db.collection('reminders').deleteMany({
+			await mongo.db.collection("reminders").deleteMany({
 				time: {
-					$lte: now.getTime()
+					$lte: now.getTime(),
 					// to get all reminders that are supposed to happen next between now
 					// and next hour AND any that may have been missed because of a bot
 					// restart etc
-				}
+				},
 			});
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
@@ -131,7 +131,7 @@ export default class RemindersController extends Controller {
 			date.getUTCDate(),
 			date.getUTCHours(),
 			date.getUTCMinutes(),
-			0
+			0,
 		);
 
 		try {
@@ -142,7 +142,7 @@ export default class RemindersController extends Controller {
 				const message = reminderSubsToString(current);
 
 				await channel.send(`**Reminders** \n${message}`, {
-					split: message.length > 2000 ? true : false
+					split: message.length > 2000,
 				});
 				await this.clear(now);
 				this.reminders.delete(String(now));
@@ -154,7 +154,7 @@ export default class RemindersController extends Controller {
 				await this.fetchNextHour();
 			}
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
@@ -163,17 +163,17 @@ export default class RemindersController extends Controller {
 	};
 
 	getMemberReminders = (member: Snowflake): Promise<Reminder[]> => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
 
 		return mongo.db
-			.collection('reminders')
-			.find({ 'subs.member': member })
+			.collection("reminders")
+			.find({ "subs.member": member })
 			.toArray();
 	};
 
 	addReminder = async (time: number, sub: ReminderSubscription) => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const queue = <QueueController>this.client.controllers.get('queue');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
+		const queue = <QueueController>this.client.controllers.get("queue");
 
 		const reminder = this.reminders.get(String(time));
 
@@ -186,23 +186,23 @@ export default class RemindersController extends Controller {
 
 		this.reminders.get(String(time)).push(sub);
 
-		return mongo.db.collection('reminders').findOneAndUpdate(
+		return mongo.db.collection("reminders").findOneAndUpdate(
 			{ time },
 			{
 				$push: {
-					subs: sub
-				}
+					subs: sub,
+				},
 			},
 			{
-				upsert: true
-			}
+				upsert: true,
+			},
 		);
 	};
 
 	clear = async (time: number) => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
 
 		this.reminders.delete(String(time));
-		return mongo.db.collection('reminders').findOneAndDelete({ time });
+		return mongo.db.collection("reminders").findOneAndDelete({ time });
 	};
 }

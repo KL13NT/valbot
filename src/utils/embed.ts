@@ -2,9 +2,9 @@ import {
 	ModerationEmbedOptions,
 	RoleEmbedOptions,
 	LevelupEmbedOptions,
-	ClearEmbedOptions
-} from '../types/interfaces';
-import { MessageEmbed, MessageEmbedOptions } from 'discord.js';
+	ClearEmbedOptions,
+} from "../types/interfaces";
+import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 
 /**
  * Creates a moderation (ban/mute/warn) event embed
@@ -15,26 +15,26 @@ export function createUserModerationEmbed({
 	moderator,
 	channel,
 	reason,
-	date
+	date,
 }: ModerationEmbedOptions) {
 	return createEmbed({
 		title: title,
 		fields: [
 			{
-				name: '**User**',
+				name: "**User**",
 				value: `<@${member}>`,
-				inline: true
+				inline: true,
 			},
-			{ name: '**User ID**', value: member, inline: true },
-			{ name: '**Moderator**', value: `<@${moderator}>`, inline: false },
-			{ name: '**Location**', value: `<#${channel}>`, inline: true },
-			{ name: '**Reason**', value: reason, inline: false },
+			{ name: "**User ID**", value: member, inline: true },
+			{ name: "**Moderator**", value: `<@${moderator}>`, inline: false },
+			{ name: "**Location**", value: `<#${channel}>`, inline: true },
+			{ name: "**Reason**", value: reason, inline: false },
 			{
-				name: '**Date / Time**',
+				name: "**Date / Time**",
 				value: date ? date.toUTCString() : new Date().toUTCString(),
-				inline: true
-			}
-		]
+				inline: true,
+			},
+		],
 	});
 }
 
@@ -47,26 +47,26 @@ export function createRoleEmbed({
 	moderator,
 	channel,
 	role,
-	date
+	date,
 }: RoleEmbedOptions) {
 	return createEmbed({
 		title: title,
 		fields: [
 			{
-				name: '**User**',
+				name: "**User**",
 				value: `<@${member}>`,
-				inline: true
+				inline: true,
 			},
-			{ name: '**User ID**', value: member, inline: true },
-			{ name: '**Moderator**', value: `<@${moderator}>`, inline: false },
-			{ name: '**Location**', value: `<#${channel}>`, inline: true },
-			{ name: '**Role**', value: `<@&${role}>`, inline: false },
+			{ name: "**User ID**", value: member, inline: true },
+			{ name: "**Moderator**", value: `<@${moderator}>`, inline: false },
+			{ name: "**Location**", value: `<#${channel}>`, inline: true },
+			{ name: "**Role**", value: `<@&${role}>`, inline: false },
 			{
-				name: '**Date / Time**',
+				name: "**Date / Time**",
 				value: date ? date.toUTCString() : new Date().toUTCString(),
-				inline: true
-			}
-		]
+				inline: true,
+			},
+		],
 	});
 }
 
@@ -78,14 +78,14 @@ export function createLevelupEmbed({ milestone, role }: LevelupEmbedOptions) {
 		title: `Achievement Unlocked - ${milestone.name}`,
 		description: `GG! You unlocked the ${milestone.name} achievement\nYou just received the ${role.name} role!`,
 		fields: [
-			{ name: 'Achievement name', value: milestone.name, inline: false },
+			{ name: "Achievement name", value: milestone.name, inline: false },
 			{
-				name: 'Achievement description',
+				name: "Achievement description",
 				value: milestone.description,
-				inline: false
-			}
-		]
-	}).setFooter('To get all available levels ask an admin/moderator.');
+				inline: false,
+			},
+		],
+	}).setFooter("To get all available levels ask an admin/moderator.");
 }
 
 /**
@@ -95,24 +95,24 @@ export function createClearEmbed({
 	moderator,
 	channel,
 	count,
-	date
+	date,
 }: ClearEmbedOptions) {
 	return createEmbed({
-		title: 'Message Purge',
+		title: "Message Purge",
 		fields: [
-			{ name: '**Moderator**', value: `<@${moderator}>`, inline: false },
-			{ name: '**Location**', value: `<#${channel}>`, inline: true },
+			{ name: "**Moderator**", value: `<@${moderator}>`, inline: false },
+			{ name: "**Location**", value: `<#${channel}>`, inline: true },
 			{
-				name: '**Purged Amount**',
+				name: "**Purged Amount**",
 				value: `Purged **${count}** messages`,
-				inline: true
+				inline: true,
 			},
 			{
-				name: '**Date / Time**',
+				name: "**Date / Time**",
 				value: date ? date.toUTCString() : new Date().toUTCString(),
-				inline: true
-			}
-		]
+				inline: true,
+			},
+		],
 	});
 }
 
@@ -121,7 +121,7 @@ export function createClearEmbed({
  */
 export function createEmbed(embedOptions: MessageEmbedOptions) {
 	const embed = new MessageEmbed(embedOptions)
-		.setColor('#ffcc5c')
+		.setColor("#ffcc5c")
 		.setTimestamp();
 
 	return embed;

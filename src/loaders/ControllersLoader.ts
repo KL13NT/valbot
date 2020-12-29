@@ -1,29 +1,25 @@
-import Loader from '../structures/Loader';
-import * as Controllers from '../controllers';
-import ValClient from '../ValClient';
+import Loader from "../structures/Loader";
+import * as Controllers from "../controllers";
 
-import { log } from '../utils/general';
+import { log } from "../utils/general";
 
 /**
  * Loads Controllers based on Controllers/index
  */
 export default class ControllersLoader extends Loader {
-	constructor(client: ValClient) {
-		super(client);
-	}
-
 	load = async () => {
 		for (const controller of Object.values(Controllers)) {
+			// eslint-disable-next-line new-cap
 			const controllerInstance = new controller(this.client);
 
 			this.client.controllers.set(
 				controllerInstance.options.name,
-				controllerInstance
+				controllerInstance,
 			);
 
 			await controllerInstance.init();
 
-			log(this.client, `${controller.name} loaded`, 'info');
+			log(this.client, `${controller.name} loaded`, "info");
 		}
 	};
 }

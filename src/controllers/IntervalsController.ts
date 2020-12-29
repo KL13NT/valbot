@@ -1,6 +1,6 @@
-import Controller from '../structures/Controller';
-import ValClient from '../ValClient';
-import { IntervalOptions } from '../types/interfaces';
+import Controller from "../structures/Controller";
+import ValClient from "../ValClient";
+import { IntervalOptions } from "../types/interfaces";
 
 export default class IntervalsController extends Controller {
 	ready = false;
@@ -8,7 +8,7 @@ export default class IntervalsController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'intervals'
+			name: "intervals",
 		});
 
 		this.intervals = new Map<string, NodeJS.Timeout>();

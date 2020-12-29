@@ -1,4 +1,4 @@
-import { EventOptions } from '../types/interfaces';
+import { EventOptions } from "../types/interfaces";
 
 /**
  * Generates an event string dynamically based on events.json

@@ -1,4 +1,4 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 import {
 	Message,
 	User,
@@ -6,8 +6,8 @@ import {
 	TextChannel,
 	Guild,
 	DMChannel,
-	NewsChannel
-} from 'discord.js';
+	NewsChannel,
+} from "discord.js";
 
 export default class CommandContext {
 	client: ValClient;
@@ -25,7 +25,7 @@ export default class CommandContext {
 		this.member = message.member;
 		this.channel = message.channel;
 		this.guild = message.guild;
-		this.params = message.content.split(' ').slice(2);
-		this.message.content = this.message.content.replace(/\s+/g, ' ');
+		this.params = message.content.split(" ").slice(2);
+		this.message.content = this.message.content.replace(/\s+/g, " ");
 	}
 }

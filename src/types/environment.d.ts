@@ -10,7 +10,7 @@ declare global {
 			DB_NAME: string;
 			GUIILD_ID: string;
 			ROLE_DEVELOPER: string;
-			MODE: 'DEVELOPMENT' | 'PRODUCTION';
+			MODE: "DEVELOPMENT" | "PRODUCTION";
 		}
 	}
 }

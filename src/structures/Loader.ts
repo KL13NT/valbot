@@ -1,4 +1,4 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
 export default abstract class Loader {
 	client: ValClient;

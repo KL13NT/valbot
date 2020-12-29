@@ -1,20 +1,21 @@
-const { ROLE_DEVELOPER, MODE } = process.env;
-
+/* eslint-disable prefer-rest-params */
 import {
 	AlertLevel,
 	NotificationOptions,
-	ReminderSubscription
-} from '../types/interfaces';
-import { QueueController } from '../controllers';
-import ValClient from '../ValClient';
+	ReminderSubscription,
+} from "../types/interfaces";
+import { QueueController } from "../controllers";
+import ValClient from "../ValClient";
 
-import { getChannelObject } from './object';
-import { TextChannel, GuildMember, Message } from 'discord.js';
+import { getChannelObject } from "./object";
+import { TextChannel, GuildMember, Message } from "discord.js";
+
+const { ROLE_DEVELOPER, MODE } = process.env;
 
 export function createAlertMessage(message: string, alertLevel: AlertLevel) {
 	const notification = `[${alertLevel}] ${message}`;
 
-	if (alertLevel === 'info') return notification;
+	if (alertLevel === "info") return notification;
 	else return `${notification} <@&${ROLE_DEVELOPER}>`;
 }
 
@@ -24,12 +25,12 @@ export function createAlertMessage(message: string, alertLevel: AlertLevel) {
 export async function log(
 	client: ValClient,
 	notification: string | Error,
-	alertLevel: AlertLevel
+	alertLevel: AlertLevel,
 ) {
-	const queue = <QueueController>client.controllers.get('queue');
+	const queue = <QueueController>client.controllers.get("queue");
 	console.log(`[${alertLevel}]`, notification); // need console regardless
 
-	if (MODE !== 'PRODUCTION' || alertLevel === 'info') return;
+	if (MODE !== "PRODUCTION" || alertLevel === "info") return;
 
 	if (!client.ready) {
 		if (queue) queue.enqueue({ func: log, args: [...arguments] });
@@ -42,9 +43,9 @@ export async function log(
 		const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
 		const message = createAlertMessage(String(notification), alertLevel);
 
-		if (typeof notification === 'object')
+		if (typeof notification === "object")
 			await channel.send(
-				`${message}\n\n**Stack trace**\n${notification.stack}`
+				`${message}\n\n**Stack trace**\n${notification.stack}`,
 			);
 		else await channel.send(`${message}`);
 	} catch (error) {
@@ -57,7 +58,7 @@ export async function log(
  */
 export async function notify(options: NotificationOptions) {
 	const { client, notification, embed, channel } = options;
-	const queue = <QueueController>client.controllers.get('queue');
+	const queue = <QueueController>client.controllers.get("queue");
 
 	if (!client.ready)
 		return queue.enqueue({ func: notify, args: [...arguments] });
@@ -66,7 +67,7 @@ export async function notify(options: NotificationOptions) {
 
 	const target = getChannelObject(client, channel || CHANNEL_NOTIFICATIONS);
 
-	if (!target) throw Error('Channel unavailable');
+	if (!target) throw Error("Channel unavailable");
 
 	await target.send({ content: notification, embed });
 }
@@ -77,7 +78,7 @@ export async function notify(options: NotificationOptions) {
 export function calculateUniqueWords(message: string) {
 	const unique: { [index: string]: number } = {};
 
-	return message.split(' ').filter(word => {
+	return message.split(" ").filter(word => {
 		if (unique[word] > 3) return false;
 
 		if (unique[word] === undefined) {
@@ -86,6 +87,7 @@ export function calculateUniqueWords(message: string) {
 		}
 
 		unique[word] += 1;
+		return false;
 	}).length;
 }
 
@@ -101,14 +103,14 @@ export function levelToExp(level: number) {
 export function capitalise(str: string) {
 	return str.replace(
 		/\w\S*/g,
-		txt => txt.charAt(0).toUpperCase() + txt.substr(1)
+		txt => txt.charAt(0).toUpperCase() + txt.substr(1),
 	);
 }
 
 // Transforms an object to include only keys available in another object. Flat objects only.
 export function transformObject<T>(
 	first: Record<string, unknown>,
-	second: Record<string, unknown>
+	second: Record<string, unknown>,
 ): T {
 	const x1 = { ...first };
 	const x2 = { ...second };
@@ -120,7 +122,7 @@ export function transformObject<T>(
 	});
 
 	Object.keys(x1).forEach(key => {
-		if (typeof x2[key] === 'undefined') {
+		if (typeof x2[key] === "undefined") {
 			delete x1[key];
 		}
 	});
@@ -133,7 +135,7 @@ export async function awaitMessages(channel: TextChannel, member: GuildMember) {
 	const options = {
 		max: 1,
 		time: 60 * 1000,
-		errors: ['time']
+		errors: ["time"],
 	};
 
 	return (await channel.awaitMessages(filter, options)).first().content;
@@ -142,7 +144,7 @@ export async function awaitMessages(channel: TextChannel, member: GuildMember) {
 export function reminderSubsToString(subs: ReminderSubscription[]) {
 	return subs
 		.map(sub => `<@${sub.member}>: ${sub.description}`)
-		.reduce((final, curr) => `${final}\n${curr}`, '');
+		.reduce((final, curr) => `${final}\n${curr}`, "");
 }
 
 /**
@@ -151,12 +153,12 @@ export function reminderSubsToString(subs: ReminderSubscription[]) {
  */
 export function compileTemplate(
 	data: Record<string, unknown>,
-	template: string
+	template: string,
 ) {
 	let temp = template;
 
 	Object.keys(data).forEach(key => {
-		temp = temp.replace(new RegExp(`${key}`, 'g'), <string>data[key]);
+		temp = temp.replace(new RegExp(`${key}`, "g"), <string>data[key]);
 	});
 
 	return temp;

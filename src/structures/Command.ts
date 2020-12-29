@@ -1,17 +1,17 @@
-import CommandContext from './CommandContext';
-import ValClient from '../ValClient';
+import CommandContext from "./CommandContext";
+import ValClient from "../ValClient";
 
 import {
 	GENERIC_CONTROLLED_COMMAND_CANCEL,
 	ERROR_GENERIC_SOMETHING_WENT_WRONG,
 	ERROR_COMMAND_NOT_ALLOWED,
-	ERROR_COMMAND_NOT_READY
-} from '../config/events.json';
+	ERROR_COMMAND_NOT_READY,
+} from "../config/events.json";
 
-import { generateParamError } from '../utils/commands';
-import { CommandOptions } from '../types/interfaces';
-import { Message } from 'discord.js';
-import { isAllowed, isEachParamValid, help } from '../utils/commands';
+import { generateParamError , isAllowed, isEachParamValid, help } from "../utils/commands";
+import { CommandOptions } from "../types/interfaces";
+import { Message } from "discord.js";
+
 
 export default abstract class Command {
 	client: ValClient;
@@ -26,16 +26,16 @@ export default abstract class Command {
 	}
 
 	run = async (message: Message): Promise<void> => {
-		if (!this.client.ready && this.options.name !== 'setup') {
+		if (!this.client.ready && this.options.name !== "setup") {
 			message.reply(
-				`مش جاهز لسه او البوت مش معمله setup. شغلوا \`${this.client.prefix} setup\``
+				`مش جاهز لسه او البوت مش معمله setup. شغلوا \`${this.client.prefix} setup\``,
 			);
 			return;
 		}
 
 		const context = new CommandContext(this.client, message);
 
-		if (context.params[0] === 'help') {
+		if (context.params[0] === "help") {
 			help(this.client, this.options, context);
 			return;
 		}

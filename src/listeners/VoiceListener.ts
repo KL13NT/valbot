@@ -1,11 +1,11 @@
-import Listener from '../structures/Listener';
-import ValClient from '../ValClient';
-import { VoiceState } from 'discord.js';
-import { LevelsController } from '../controllers';
+import Listener from "../structures/Listener";
+import ValClient from "../ValClient";
+import { VoiceState } from "discord.js";
+import { LevelsController } from "../controllers";
 
 export default class VoiceListener extends Listener {
 	constructor(client: ValClient) {
-		super(client, ['voiceStateUpdate']);
+		super(client, ["voiceStateUpdate"]);
 	}
 
 	onVoiceStateUpdate = (_: VoiceState, newState: VoiceState): void => {
@@ -13,7 +13,7 @@ export default class VoiceListener extends Listener {
 
 		if (member.user.bot) return;
 
-		const levels = <LevelsController>this.client.controllers.get('levels');
+		const levels = <LevelsController>this.client.controllers.get("levels");
 
 		if (this.shouldTrack(newState)) levels.trackUser(id);
 		else levels.untrackUser(id);
@@ -22,6 +22,6 @@ export default class VoiceListener extends Listener {
 	shouldTrack = (state: VoiceState): boolean => {
 		const { deaf, mute, channel } = state;
 
-		return !deaf && !mute && channel && channel.id !== '571721579214667786';
+		return !deaf && !mute && channel && channel.id !== "571721579214667786";
 	};
 }

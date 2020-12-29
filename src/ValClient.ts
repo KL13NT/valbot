@@ -1,116 +1,113 @@
-const { AUTH_TOKEN, MODE } = process.env;
+/* eslint-disable new-cap */
+import { Client, Guild } from "discord.js";
+import { ClientConfigValidator } from "./types/validators.joi";
 
-import { Client, ClientOptions, Guild } from 'discord.js';
-import { ClientConfigValidator } from './types/validators.joi';
+import * as fs from "fs";
+import * as path from "path";
+import * as loaders from "./loaders";
+import * as listeners from "./listeners";
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as loaders from './loaders';
-import * as listeners from './listeners';
-
-import { log, transformObject } from './utils/general';
-import { ClientConfig, Presence } from './types/interfaces';
-import Command from './structures/Command';
+import { log, transformObject } from "./utils/general";
+import { ClientConfig, Presence } from "./types/interfaces";
+import Command from "./structures/Command";
 import {
 	MongoController,
 	QueueController,
-	IntervalsController
-} from './controllers';
-import { Controller } from './structures';
+	IntervalsController,
+} from "./controllers";
+import { Controller } from "./structures";
+
+const { AUTH_TOKEN, MODE } = process.env;
 
 export default class ValClient extends Client {
-	readonly prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
+	readonly prefix = MODE === "DEVELOPMENT" ? "vd!" : "v!";
 	ready = false;
 	commands: Map<string, Command> = new Map<string, Command>();
 	controllers: Map<string, Controller> = new Map<string, Controller>();
 	ValGuild: Guild;
 	config: ClientConfig = {
-		AUTH_ADMIN: '',
-		AUTH_MOD: '',
-		AUTH_VERIFIED: '',
-		AUTH_EVERYONE: '',
-		CHANNEL_NOTIFICATIONS: '',
-		CHANNEL_ANNOUNCEMENTS: '',
-		CHANNEL_RULES: '',
-		CHANNEL_POLLS: '',
-		CHANNEL_TEST: '',
-		CHANNEL_BOT_STATUS: '',
-		CHANNEL_MOD_LOGS: '',
-		CHANNEL_BOT_BUGS: '',
-		ROLE_MUTED: '',
-		ROLE_WARNED: ''
+		AUTH_ADMIN: "",
+		AUTH_MOD: "",
+		AUTH_VERIFIED: "",
+		AUTH_EVERYONE: "",
+		CHANNEL_NOTIFICATIONS: "",
+		CHANNEL_ANNOUNCEMENTS: "",
+		CHANNEL_RULES: "",
+		CHANNEL_POLLS: "",
+		CHANNEL_TEST: "",
+		CHANNEL_BOT_STATUS: "",
+		CHANNEL_MOD_LOGS: "",
+		CHANNEL_BOT_BUGS: "",
+		ROLE_MUTED: "",
+		ROLE_WARNED: "",
 	};
 
 	presences: Presence[] = [
 		{
-			status: 'dnd',
+			status: "dnd",
 			activity: {
-				type: 'WATCHING',
-				name: 'Sovereign writing bad code'
+				type: "WATCHING",
+				name: "Sovereign writing bad code",
 			},
-			priority: false
+			priority: false,
 		},
 		{
-			status: 'dnd',
+			status: "dnd",
 			activity: {
-				type: 'WATCHING',
-				name: 'N1ffl3r making games'
+				type: "WATCHING",
+				name: "N1ffl3r making games",
 			},
-			priority: false
+			priority: false,
 		},
 		{
-			status: 'dnd',
+			status: "dnd",
 			activity: {
-				type: 'WATCHING',
-				name: 'Madara Omar disappearing'
+				type: "WATCHING",
+				name: "Madara Omar disappearing",
 			},
-			priority: false
+			priority: false,
 		},
 		{
-			status: 'dnd',
+			status: "dnd",
 			activity: {
-				type: 'WATCHING',
-				name: 'Sovereign coding in SpaghettiScript'
+				type: "WATCHING",
+				name: "Sovereign coding in SpaghettiScript",
 			},
-			priority: false
+			priority: false,
 		},
 		{
-			status: 'dnd',
+			status: "dnd",
 			activity: {
 				name: `${this.prefix} help`,
-				type: 'PLAYING'
+				type: "PLAYING",
 			},
-			priority: false
-		}
+			priority: false,
+		},
 	];
-
-	constructor(options: ClientOptions) {
-		super(options);
-	}
 
 	init = async (token = AUTH_TOKEN) => {
 		try {
-			this.once('ready', this.onReady);
+			this.once("ready", this.onReady);
 
 			await this.login(token);
 
-			log(this, 'Logged in', 'info');
+			log(this, "Logged in", "info");
 
 			console.log(
 				fs
 					.readFileSync(
-						path.resolve(__dirname, '../media/bigtitle.txt'),
-						'utf8'
+						path.resolve(__dirname, "../media/bigtitle.txt"),
+						"utf8",
 					)
-					.toString()
+					.toString(),
 			);
 		} catch (err) {
-			log(this, err, 'error');
+			log(this, err, "error");
 		}
 	};
 
 	onReady = async (): Promise<void> => {
-		log(this, 'Ready status received. Bot initialising.', 'info');
+		log(this, "Ready status received. Bot initialising.", "info");
 
 		this.ValGuild = this.guilds.cache.first();
 
@@ -118,19 +115,19 @@ export default class ValClient extends Client {
 		this.initListeners();
 		await this.initConfig();
 
-		const intervals = <IntervalsController>this.controllers.get('intervals');
+		const intervals = <IntervalsController>this.controllers.get("intervals");
 
 		await this.setPresence();
 
 		intervals.set({
 			callback: this.setPresence,
-			name: 'presence',
-			time: 30 * 1000
+			name: "presence",
+			time: 30 * 1000,
 		});
 
-		this.emit('queueExecute', 'Client ready');
+		this.emit("queueExecute", "Client ready");
 
-		log(this, 'Client ready', 'info');
+		log(this, "Client ready", "info");
 	};
 
 	setPresence = async () => {
@@ -142,13 +139,13 @@ export default class ValClient extends Client {
 		if (this.user) {
 			this.user
 				.setPresence(presenceWithPriority || presence)
-				.catch(err => log(this, err, 'error'));
+				.catch(err => log(this, err, "error"));
 		} else {
-			const queue = <QueueController>this.controllers.get('QueueController');
+			const queue = <QueueController>this.controllers.get("QueueController");
 
 			queue.enqueue({
 				args: [],
-				func: this.setPresence
+				func: this.setPresence,
 			});
 		}
 	};
@@ -161,7 +158,7 @@ export default class ValClient extends Client {
 			await new loader(this).load();
 		}
 
-		log(this, 'All loaders loaded successfully', 'info');
+		log(this, "All loaders loaded successfully", "info");
 	};
 
 	/**
@@ -169,28 +166,28 @@ export default class ValClient extends Client {
 	 * If it throws it means something is wrong with code, not behaviour.
 	 */
 	initListeners = () => {
-		log(this, 'Listeners loading', 'info');
+		log(this, "Listeners loading", "info");
 
 		Object.values(listeners).forEach(listener => {
 			new listener(this).init();
 		});
 
-		log(this, 'All listeners loaded successfully', 'info');
+		log(this, "All listeners loaded successfully", "info");
 	};
 
 	initConfig = async () => {
 		try {
-			const mongo = <MongoController>this.controllers.get('mongo');
-			const queue = <QueueController>this.controllers.get('queue');
+			const mongo = <MongoController>this.controllers.get("mongo");
+			const queue = <QueueController>this.controllers.get("queue");
 
 			if (mongo.ready) {
 				const response: ClientConfig = await mongo.db
-					.collection('config')
+					.collection("config")
 					.findOne(
 						{
-							GUILD_ID: process.env.GUILD_ID
+							GUILD_ID: process.env.GUILD_ID,
 						},
-						{ projection: { _id: 0, GUILD_ID: 0 } }
+						{ projection: { _id: 0, GUILD_ID: 0 } },
 					);
 
 				if (!response || ClientConfigValidator.validate(response).error) {
@@ -201,19 +198,19 @@ export default class ValClient extends Client {
 					return log(
 						this,
 						`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
-						'warn'
+						"warn",
 					);
 				}
 
 				this.ready = true;
 				this.config = response;
 
-				this.emit('queueExecute', 'Config ready');
+				this.emit("queueExecute", "Config ready");
 			} else {
 				queue.enqueue({ func: this.initConfig, args: [] });
 			}
 		} catch (err) {
-			log(this, err, 'error');
+			log(this, err, "error");
 		}
 	};
 }

@@ -1,17 +1,17 @@
-declare module 'node-html-to-image' {
-	import { Base64ScreenShotOptions, LaunchOptions } from 'puppeteer';
-	import { SVGContent } from './interfaces';
+declare module "node-html-to-image" {
+	import { Base64ScreenShotOptions, LaunchOptions } from "puppeteer";
+	import { SVGContent } from "./interfaces";
 
 	export interface nodeHtmlToImageOptions {
 		html: string;
 		output?: string;
-		type?: 'jpeg' | 'png';
+		type?: "jpeg" | "png";
 		content?: SVGContent;
 		quality?: number;
-		waitUntil?: 'string';
+		waitUntil?: "string";
 		transparent?: boolean;
 		puppeteerArgs?: LaunchOptions;
-		encoding?: 'base64' | 'binary';
+		encoding?: "base64" | "binary";
 	}
 
 	export default function nodeHtmlToImage(

@@ -1,17 +1,15 @@
-import Listener from '../structures/Listener';
-import ValClient from '../ValClient';
-import { Message } from 'discord.js';
+import Listener from "../structures/Listener";
+import ValClient from "../ValClient";
+import { Message } from "discord.js";
 import {
 	ToxicityController,
 	LevelsController,
-	ConversationController
-} from '../controllers';
-
-const { CLIENT_ID, DEV_CLIENT_ID } = process.env;
+	ConversationController,
+} from "../controllers";
 
 export default class MessageListener extends Listener {
 	constructor(client: ValClient) {
-		super(client, ['message']);
+		super(client, ["message"]);
 	}
 
 	onMessage = async (message: Message): Promise<void> => {
@@ -21,19 +19,20 @@ export default class MessageListener extends Listener {
 		const { content, mentions } = message;
 
 		const conversation = <ConversationController>(
-			controllers.get('conversation')
+			controllers.get("conversation")
 		);
-		const levels = <LevelsController>controllers.get('levels');
-		const toxicity = <ToxicityController>controllers.get('toxicity');
+		const levels = <LevelsController>controllers.get("levels");
+		const toxicity = <ToxicityController>controllers.get("toxicity");
 
 		const isToxic = await toxicity.classify(message);
-		const isClientMentioned =
-			mentions.members &&
-			mentions.members.some(m => m.id === CLIENT_ID || m.id === DEV_CLIENT_ID);
 
 		if (isToxic) return toxicity.handleToxic(message);
 
-		if (content.startsWith(prefix)) this.client.emit('command', message);
+		const isClientMentioned =
+			mentions.members &&
+			mentions.members.some(m => m.id === this.client.user.id);
+
+		if (content.startsWith(prefix)) this.client.emit("command", message);
 		else if (isClientMentioned) conversation.converse(message, true);
 
 		levels.message(message);
@@ -41,8 +40,7 @@ export default class MessageListener extends Listener {
 
 	shouldNotHandle = ({ author, channel, type, webhookID }: Message): boolean =>
 		!!webhookID ||
-		author.id === CLIENT_ID ||
-		author.id === DEV_CLIENT_ID ||
-		channel.type !== 'text' ||
-		type !== 'DEFAULT';
+		author.id === this.client.user.id ||
+		channel.type !== "text" ||
+		type !== "DEFAULT";
 }

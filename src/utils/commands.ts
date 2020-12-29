@@ -1,16 +1,16 @@
+import { CommandContext } from "../structures";
+import { CommandOptions } from "../types/interfaces";
+
+import ValClient from "../ValClient";
+
+import { getRoleObject } from "./object";
+import { createEmbed } from "./embed";
+import { createEventMessage } from "./event";
+
+import { ERROR_INSUFFICIENT_PARAMS_PASSED } from "../config/events.json";
+import { log } from "./general";
+
 const { ROLE_DEVELOPER } = process.env;
-
-import { CommandContext } from '../structures';
-import { CommandOptions } from '../types/interfaces';
-
-import ValClient from '../ValClient';
-
-import { getRoleObject } from './object';
-import { createEmbed } from './embed';
-import { createEventMessage } from './event';
-
-import { ERROR_INSUFFICIENT_PARAMS_PASSED } from '../config/events.json';
-import { log } from './general';
 
 // Client.config has all config variables, not only auth roles, how is it possible to use for auth only? Mongo preserves the ordering of documents keys, this allows us to store our auth roles in order without worrying.
 // Regardless of index, comparison will always happen on a specific index range such as [4, 9] for 5 roles, and thus we can exploit the fact that config keys are ordered to implement the old algorithm.
@@ -31,14 +31,14 @@ import { log } from './general';
 export function isAllowed(
 	client: ValClient,
 	options: CommandOptions,
-	context: CommandContext
+	context: CommandContext,
 ) {
 	const { member } = context;
 	const { required } = options.auth;
 
 	if (!member) return false;
 
-	if (member.hasPermission('ADMINISTRATOR')) return true;
+	if (member.hasPermission("ADMINISTRATOR")) return true;
 	if (options.auth.devOnly) return member.roles.cache.has(ROLE_DEVELOPER);
 	else {
 		const allRoles = Object.values(client.config);
@@ -73,7 +73,7 @@ export function isEachParamValid(options: CommandOptions, params: string[]) {
 export async function help(
 	client: ValClient,
 	options: CommandOptions,
-	context: CommandContext
+	context: CommandContext,
 ) {
 	const { member, message } = context;
 	const {
@@ -82,38 +82,38 @@ export async function help(
 		exampleUsage,
 		description,
 		auth,
-		category
+		category,
 	} = options;
 	const { required, devOnly } = auth;
 
 	const title = `**معلومات عن ${name}**\n`;
 	const fields = [
 		{
-			name: '**الاستعمال**',
+			name: "**الاستعمال**",
 			value: `\`${client.prefix} ${name} ${exampleUsage.replace(
-				'\n',
-				`\n${client.prefix} ${name}`
-			)}\``
+				"\n",
+				`\n${client.prefix} ${name}`,
+			)}\``,
 		},
 		{
-			name: '**الوصف/الوظيفة**',
-			value: `${description}`
+			name: "**الوصف/الوظيفة**",
+			value: `${description}`,
 		},
 		{
-			name: '**عدد الباراميترز**',
-			value: `${nOfParams}`
+			name: "**عدد الباراميترز**",
+			value: `${nOfParams}`,
 		},
 		{
-			name: '**اقل role مسموح بيه**',
+			name: "**اقل role مسموح بيه**",
 			value: getRoleObject(
 				client,
-				devOnly ? process.env.ROLE_DEVELOPER : client.config[required]
-			).name
+				devOnly ? process.env.ROLE_DEVELOPER : client.config[required],
+			).name,
 		},
 		{
-			name: '**الفئة**',
-			value: `${category}`
-		}
+			name: "**الفئة**",
+			value: `${category}`,
+		},
 	];
 
 	const embed = createEmbed({ title, fields });
@@ -122,13 +122,13 @@ export async function help(
 		.then(async dm => {
 			dm.send(embed);
 
-			const sent = await message.reply('بعتلك رسالة جادة جداً');
+			const sent = await message.reply("بعتلك رسالة جادة جداً");
 
 			setTimeout(() => {
 				sent.delete();
 			}, 5 * 1000);
 		})
-		.catch(err => log(client, err, 'error'));
+		.catch(err => log(client, err, "error"));
 }
 
 export function generateParamError(client: ValClient, options: CommandOptions) {
@@ -136,13 +136,13 @@ export function generateParamError(client: ValClient, options: CommandOptions) {
 		template: ERROR_INSUFFICIENT_PARAMS_PASSED,
 		variables: [
 			{
-				name: '_PREFIX',
-				value: client.prefix
+				name: "_PREFIX",
+				value: client.prefix,
 			},
 			{
-				name: 'COMMAND_NAME',
-				value: options.name
-			}
-		]
+				name: "COMMAND_NAME",
+				value: options.name,
+			},
+		],
 	});
 }

@@ -1,5 +1,5 @@
-import ValClient from '../ValClient';
-import { ControllerOptions } from '../types/interfaces';
+import ValClient from "../ValClient";
+import { ControllerOptions } from "../types/interfaces";
 
 export default abstract class Controller {
 	client: ValClient;

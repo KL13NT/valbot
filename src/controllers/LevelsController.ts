@@ -1,25 +1,23 @@
-const { CLIENT_ID } = process.env;
-
-import Controller from '../structures/Controller';
-import ValClient from '../ValClient';
-import { Snowflake, Message, GuildMember, Role } from 'discord.js';
-import { MilestoneAchievement } from '../types/interfaces';
+import Controller from "../structures/Controller";
+import ValClient from "../ValClient";
+import { Snowflake, Message, GuildMember, Role } from "discord.js";
+import { MilestoneAchievement } from "../types/interfaces";
 import {
 	QueueController,
 	RedisController,
 	MongoController,
-	IntervalsController
-} from '.';
+	IntervalsController,
+} from ".";
 
 import {
 	log,
 	calculateUniqueWords,
 	notify,
-	calculateNextLevel
+	calculateNextLevel,
 	/* levelToExp */
-} from '../utils/general';
-import { getRoleObject, getMemberObject } from '../utils/object';
-import { createLevelupEmbed } from '../utils/embed';
+} from "../utils/general";
+import { getRoleObject, getMemberObject } from "../utils/object";
+import { createLevelupEmbed } from "../utils/embed";
 
 const XP_PER_MINUTE = 4;
 
@@ -33,29 +31,29 @@ export default class LevelsController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'levels'
+			name: "levels",
 		});
 	}
 
 	init = async () => {
 		const { controllers, ValGuild } = this.client;
-		const redis = <RedisController>controllers.get('redis');
-		const mongo = <MongoController>controllers.get('mongo');
-		const intervals = <IntervalsController>controllers.get('intervals');
-		const queue = <QueueController>controllers.get('queue');
+		const redis = <RedisController>controllers.get("redis");
+		const mongo = <MongoController>controllers.get("mongo");
+		const intervals = <IntervalsController>controllers.get("intervals");
+		const queue = <QueueController>controllers.get("queue");
 
 		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
 		if (!mongo.ready || !redis.ready || !ValGuild.available)
 			return queue.enqueue({ func: this.init, args: [] });
 
 		const voiceStates = Array.from(
-			this.client.ValGuild.voiceStates.cache.values()
+			this.client.ValGuild.voiceStates.cache.values(),
 		);
 
 		voiceStates.forEach(({ deaf, mute, member, channel }) => {
 			if (
 				//TODO: move this to config
-				channel.id === '571721579214667786' ||
+				channel.id === "571721579214667786" ||
 				member.user.bot ||
 				deaf ||
 				mute
@@ -74,14 +72,14 @@ export default class LevelsController extends Controller {
 					redis.set(`VOICE:${id}`, String(voice || 1)),
 					redis.set(`VOICE:XP:${id}`, String(voiceXP || 1)),
 					redis.set(`LEVEL:${id}`, String(level || 1)),
-					redis.set(`EXP:${id}`, String(level || 1))
+					redis.set(`EXP:${id}`, String(level || 1)),
 				]);
 			});
 
 			intervals.set({
 				time: 1000 * 60,
-				name: 'voiceIncrement',
-				callback: this.voiceIncrement
+				name: "voiceIncrement",
+				callback: this.voiceIncrement,
 			});
 		});
 
@@ -93,19 +91,19 @@ export default class LevelsController extends Controller {
 	};
 
 	message = async (message: Message) => {
-		const redis = <RedisController>this.client.controllers.get('redis');
+		const redis = <RedisController>this.client.controllers.get("redis");
 
 		const { author, content } = message;
 		const { id, bot } = author;
 
-		if (id === CLIENT_ID || bot) return;
+		if (id === this.client.user.id || bot) return;
 
 		try {
 			const cache = await Promise.all([
 				redis.get(`TEXT:XP:${id}`),
 				redis.get(`TEXT:${id}`),
 				redis.get(`LEVEL:${id}`),
-				redis.get(`EXP:${id}`)
+				redis.get(`EXP:${id}`),
 			]);
 
 			const [textXP, text, level, exp] = cache.map(val => Number(val));
@@ -122,31 +120,31 @@ export default class LevelsController extends Controller {
 				if (nextText > text) {
 					await Promise.all([
 						redis.set(`TEXT:${id}`, String(nextText)),
-						redis.set(`TEXT:XP:${id}`, String(1))
+						redis.set(`TEXT:XP:${id}`, String(1)),
 					]);
 				} else {
 					await Promise.all([
 						redis.incrby(`EXP:${id}`, gain),
-						redis.incrby(`TEXT:XP:${id}`, gain)
+						redis.incrby(`TEXT:XP:${id}`, gain),
 					]);
 				}
 
 				if (nextLevel > level) {
 					await Promise.all([
 						redis.set(`LEVEL:${id}`, String(nextLevel)),
-						redis.set(`EXP:${id}`, String(1))
+						redis.set(`EXP:${id}`, String(1)),
 					]);
 
 					await this.levelUp(message);
 				}
 			} else this.initUser(id);
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
 	voiceIncrement = async () => {
-		const redis = <RedisController>this.client.controllers.get('redis');
+		const redis = <RedisController>this.client.controllers.get("redis");
 
 		this.activeVoice.forEach(async id => {
 			try {
@@ -154,7 +152,7 @@ export default class LevelsController extends Controller {
 					redis.get(`VOICE:XP:${id}`),
 					redis.get(`VOICE:${id}`),
 					redis.get(`LEVEL:${id}`),
-					redis.get(`EXP:${id}`)
+					redis.get(`EXP:${id}`),
 				]);
 				const [voiceXP, voice, level, exp] = cache.map(val => Number(val));
 
@@ -167,32 +165,32 @@ export default class LevelsController extends Controller {
 					if (nextVoice > voice) {
 						await Promise.all([
 							redis.set(`VOICE:${id}`, String(nextVoice)),
-							redis.set(`VOICE:XP:${id}`, String(1))
+							redis.set(`VOICE:XP:${id}`, String(1)),
 						]);
 					} else {
 						await Promise.all([
 							redis.incrby(`EXP:${id}`, gain),
-							redis.incrby(`VOICE:XP:${id}`, gain)
+							redis.incrby(`VOICE:XP:${id}`, gain),
 						]);
 					}
 
 					if (nextLevel > level) {
 						await Promise.all([
 							redis.set(`LEVEL:${id}`, String(nextLevel)),
-							redis.set(`EXP:${id}`, String(1))
+							redis.set(`EXP:${id}`, String(1)),
 						]);
 
 						await this.levelUp(id);
 					}
 				} else this.initUser(id);
 			} catch (err) {
-				log(this.client, err, 'error');
+				log(this.client, err, "error");
 			}
 		});
 	};
 
 	initUser = async (id: Snowflake) => {
-		const redis = <RedisController>this.client.controllers.get('redis');
+		const redis = <RedisController>this.client.controllers.get("redis");
 
 		await Promise.all([
 			redis.set(`EXP:${id}`, String(1)),
@@ -200,7 +198,7 @@ export default class LevelsController extends Controller {
 			redis.set(`TEXT:XP:${id}`, String(1)),
 			redis.set(`TEXT:${id}`, String(1)),
 			redis.set(`VOICE:XP:${id}`, String(1)),
-			redis.set(`VOICE:${id}`, String(1))
+			redis.set(`VOICE:${id}`, String(1)),
 		]);
 
 		await this.levelUp(id);
@@ -220,11 +218,11 @@ export default class LevelsController extends Controller {
 
 	levelUp = async (messageOrId: Message | Snowflake) => {
 		const { controllers } = this.client;
-		const redis = <RedisController>controllers.get('redis');
-		const mongo = <MongoController>controllers.get('mongo');
+		const redis = <RedisController>controllers.get("redis");
+		const mongo = <MongoController>controllers.get("mongo");
 
 		const id =
-			typeof messageOrId === 'string' ? messageOrId : messageOrId.member.id;
+			typeof messageOrId === "string" ? messageOrId : messageOrId.member.id;
 
 		const cache = await Promise.all([
 			redis.get(`EXP:${id}`),
@@ -232,11 +230,11 @@ export default class LevelsController extends Controller {
 			redis.get(`VOICE:XP:${id}`),
 			redis.get(`VOICE:${id}`),
 			redis.get(`TEXT:XP:${id}`),
-			redis.get(`TEXT:${id}`)
+			redis.get(`TEXT:${id}`),
 		]);
 
 		const [exp, level, voiceXP, voice, textXP, text] = cache.map(val =>
-			Number(val)
+			Number(val),
 		);
 
 		await mongo.syncLevels(id, {
@@ -246,12 +244,12 @@ export default class LevelsController extends Controller {
 			voice,
 			level,
 			textXP,
-			voiceXP
+			voiceXP,
 		});
 
 		await Promise.all([
 			this.enforceMilestone(level, id),
-			this.levelUpMessage(id, level)
+			this.levelUpMessage(id, level),
 		]);
 	};
 
@@ -265,17 +263,17 @@ export default class LevelsController extends Controller {
 					const role: Role = getRoleObject(this.client, achievement.roleID);
 					const embed = createLevelupEmbed({
 						milestone: achievement,
-						role
+						role,
 					});
 
 					member.roles.add(role.id);
 					await notify({
 						client: this.client,
 						notification: `<@${id}>`,
-						embed
+						embed,
 					});
 				} catch (err) {
-					log(this.client, err, 'error');
+					log(this.client, err, "error");
 				}
 			});
 		}
@@ -285,13 +283,13 @@ export default class LevelsController extends Controller {
 		try {
 			const member = getMemberObject(this.client, id);
 			const mention =
-				typeof member === 'undefined' ? `<@${id}>` : `${member.displayName}`;
+				typeof member === "undefined" ? `<@${id}>` : `${member.displayName}`;
 
 			const notification = `GG ${mention}, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
 
 			await notify({ client: this.client, notification });
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
@@ -299,15 +297,15 @@ export default class LevelsController extends Controller {
 		level: number,
 		name: string,
 		description: string,
-		roleID: Snowflake
+		roleID: Snowflake,
 	) => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
 		const milestone = this.milestones.get(String(level));
 		const newMilestone = {
 			name,
 			roleID,
 			description,
-			level
+			level,
 		};
 
 		if (milestone) {
@@ -320,16 +318,16 @@ export default class LevelsController extends Controller {
 			this.milestones.set(String(level), [newMilestone]);
 		}
 
-		await mongo.db.collection('milestones').updateOne(
+		await mongo.db.collection("milestones").updateOne(
 			{
-				level
+				level,
 			},
 			{
-				$push: { milestones: newMilestone }
+				$push: { milestones: newMilestone },
 			},
 			{
-				upsert: true
-			}
+				upsert: true,
+			},
 		);
 	};
 
@@ -338,7 +336,7 @@ export default class LevelsController extends Controller {
 	};
 
 	removeMilestone = async (level: number, name: string) => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
 		const milestone = this.milestones.get(String(level));
 
 		if (milestone) {
@@ -348,15 +346,15 @@ export default class LevelsController extends Controller {
 
 			if (Object.keys(milestone).length === 0) {
 				this.milestones.delete(String(level));
-				mongo.db.collection('milestones').deleteOne({ level });
+				mongo.db.collection("milestones").deleteOne({ level });
 			} else
-				mongo.db.collection('milestones').updateOne(
+				mongo.db.collection("milestones").updateOne(
 					{
-						level
+						level,
 					},
 					{
-						$pull: { milestones: { name: name } }
-					}
+						$pull: { milestones: { name: name } },
+					},
 				);
 		}
 	};

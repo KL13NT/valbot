@@ -1,20 +1,20 @@
-import fs from 'fs';
-import { resolve } from 'path';
-import { promisify } from 'util';
-import { SVGContentOptions, SVGContent } from '../types/interfaces';
+import fs from "fs";
+import { resolve } from "path";
+import { promisify } from "util";
+import { SVGContentOptions, SVGContent } from "../types/interfaces";
 
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 
 const readFile = promisify(fs.readFile);
 
-const AVATAR = '../../media/botlogo.png';
-const BASE64 = 'data:image/jpeg;base64,';
+const AVATAR = "../../media/botlogo.png";
+const BASE64 = "data:image/jpeg;base64,";
 
 /**
  * Converts images into Base64 URIs
  */
 export const imageToURI = (image: Buffer) => {
-	return BASE64 + Buffer.from(image).toString('base64');
+	return BASE64 + Buffer.from(image).toString("base64");
 };
 
 /**
@@ -37,13 +37,14 @@ export const getRemoteImageFromURL = async (url: string) => {
  */
 export const getContentObject = async ({
 	userInfo,
-	levelInfo
+	levelInfo,
 }: SVGContentOptions): Promise<SVGContent> => {
+	// eslint-disable-next-line camelcase
 	const { avatar_url, displayName } = userInfo;
 	const { exp, levelEXP, level, text, voice } = levelInfo;
 
 	const avatarBuffer =
-		process.env.MODE !== 'PRODUCTION'
+		process.env.MODE !== "PRODUCTION"
 			? await getLocalImageFromURL(AVATAR)
 			: await getRemoteImageFromURL(avatar_url);
 
@@ -56,7 +57,7 @@ export const getContentObject = async ({
 		CURRENT_EXP: exp,
 		LEVEL_EXP: levelEXP,
 		VOICE_LEVEL: voice,
-		TEXT_LEVEL: text
+		TEXT_LEVEL: text,
 	};
 };
 

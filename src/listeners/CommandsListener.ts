@@ -1,22 +1,22 @@
-import Listener from '../structures/Listener';
-import ValClient from '../ValClient';
-import { Message } from 'discord.js';
+import Listener from "../structures/Listener";
+import ValClient from "../ValClient";
+import { Message } from "discord.js";
 
 import {
 	GENERIC_COMMAND_NOT_UNDERSTOOD,
-	ERROR_COMMAND_DOES_NOT_EXIST
-} from '../config/events.json';
+	ERROR_COMMAND_DOES_NOT_EXIST,
+} from "../config/events.json";
 
 export default class CommandsListener extends Listener {
 	constructor(client: ValClient) {
-		super(client, ['command']);
+		super(client, ["command"]);
 	}
 
 	onCommand = (message: Message): void => {
 		const { content } = message;
 
 		const commandRegex = RegExp(
-			`${this.client.prefix}\\s+([a-zA-Z؀-ۿ]+)(\\s+)?`
+			`${this.client.prefix}\\s+([a-zA-Z؀-ۿ]+)(\\s+)?`,
 		);
 		const matchGroup = content.match(commandRegex);
 

@@ -1,11 +1,11 @@
-import Controller from '../structures/Controller';
-import ValClient from '../ValClient';
+import Controller from "../structures/Controller";
+import ValClient from "../ValClient";
 
-import { promisify } from 'util';
+import { promisify } from "util";
 
-import redis, { RedisClient } from 'redis';
+import redis, { RedisClient } from "redis";
 
-import { log } from '../utils/general';
+import { log } from "../utils/general";
 
 export default class RedisController extends Controller {
 	ready = false;
@@ -18,7 +18,7 @@ export default class RedisController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'redis'
+			name: "redis",
 		});
 		this.ready = false;
 
@@ -31,24 +31,24 @@ export default class RedisController extends Controller {
 	}
 
 	init = async () => {
-		this.redis.on('ready', this.readyListener);
-		this.redis.on('error', this.errorListener);
+		this.redis.on("ready", this.readyListener);
+		this.redis.on("error", this.errorListener);
 	};
 
 	errorListener = (err: Error) => {
-		log(this.client, err, 'error');
+		log(this.client, err, "error");
 
 		this.redis.removeAllListeners();
 		this.ready = false;
 	};
 
 	readyListener = () => {
-		log(this.client, 'Redis ready', 'info');
-		this.client.emit('queueExecute', 'Redis controller ready');
+		log(this.client, "Redis ready", "info");
+		this.client.emit("queueExecute", "Redis controller ready");
 
 		this.ready = true;
 
-		this.redis.removeListener('ready', this.readyListener);
+		this.redis.removeListener("ready", this.readyListener);
 	};
 
 	set = (key: string, value: string) => {
@@ -61,11 +61,11 @@ export default class RedisController extends Controller {
 
 	incr = (key: string) => {
 		if (this.redis.exists(key)) return this.incrAsync(key);
-		else throw Error('Key not found');
+		else throw Error("Key not found");
 	};
 
 	incrby = (key: string, by: number) => {
 		if (this.redis.exists(key)) return this.incrbyAsync(key, by);
-		else throw Error('Key not found');
+		else throw Error("Key not found");
 	};
 }

@@ -1,11 +1,11 @@
-import ValClient from '../ValClient';
-import MongoController from './MongoController';
-import { QueueController } from '.';
-import Controller from '../structures/Controller';
-import { Response } from '../types/interfaces';
-import { Message } from 'discord.js';
+import ValClient from "../ValClient";
+import MongoController from "./MongoController";
+import { QueueController } from ".";
+import Controller from "../structures/Controller";
+import { Response } from "../types/interfaces";
+import { Message } from "discord.js";
 
-import { log } from '../utils/general';
+import { log } from "../utils/general";
 
 export default class ConversationController extends Controller {
 	public ready = false;
@@ -15,14 +15,14 @@ export default class ConversationController extends Controller {
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'conversation'
+			name: "conversation",
 		});
 	}
 
 	init = async () => {
 		try {
-			const mongo = <MongoController>this.client.controllers.get('mongo');
-			const queue = <QueueController>this.client.controllers.get('queue');
+			const mongo = <MongoController>this.client.controllers.get("mongo");
+			const queue = <QueueController>this.client.controllers.get("queue");
 
 			if (mongo.ready) {
 				const responses = await mongo.getResponses();
@@ -30,7 +30,7 @@ export default class ConversationController extends Controller {
 				responses.forEach(({ invoker, reply }) => {
 					this.responses[invoker] = {
 						invoker,
-						reply
+						reply,
 					};
 				});
 
@@ -39,13 +39,13 @@ export default class ConversationController extends Controller {
 				queue.enqueue({ func: this.init, args: [] });
 			}
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
 	converse = async (message: Message, isClientMentioned: boolean) => {
 		const response = Object.values(this.responses).find(response =>
-			new RegExp(`${response.invoker}`, 'gi').test(message.content)
+			new RegExp(`${response.invoker}`, "gi").test(message.content),
 		);
 
 		//TODO: remove duplicate isClientMentioned logic
@@ -53,13 +53,13 @@ export default class ConversationController extends Controller {
 			message.reply(response.reply);
 		} else if (isClientMentioned)
 			message.reply(
-				`لو محتاجين مساعدة تقدروا تكتبوا \`${this.client.prefix} help\``
+				`لو محتاجين مساعدة تقدروا تكتبوا \`${this.client.prefix} help\``,
 			);
 	};
 
 	async teach(response: Response) {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const queue = <QueueController>this.client.controllers.get('queue');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
+		const queue = <QueueController>this.client.controllers.get("queue");
 
 		this.responses[response.invoker] = response;
 

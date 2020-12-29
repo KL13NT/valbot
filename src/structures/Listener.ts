@@ -1,6 +1,6 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { capitalise } from '../utils/general';
+import { capitalise } from "../utils/general";
 
 export default class Listener {
 	[index: string]: any; //eslint-disable-line

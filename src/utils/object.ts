@@ -1,16 +1,16 @@
-const { MODE } = process.env;
+import ValClient from "../ValClient";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+import { GuildMember, Snowflake, TextChannel } from "discord.js";
 
-import ValClient from '../ValClient';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-import { GuildMember, Snowflake, TextChannel } from 'discord.js';
+const { MODE } = process.env;
 
 /**
  * Returns a text channel
  */
 export function getChannelObject(
 	client: ValClient,
-	channelId: Snowflake
+	channelId: Snowflake,
 ): TextChannel | undefined {
 	const { CHANNEL_TEST } = client.config;
 
@@ -19,10 +19,10 @@ export function getChannelObject(
 			.first()
 			.channels.cache.find(
 				ch =>
-					ch.type === 'text' &&
-					(MODE === 'DEVELOPMENT'
+					ch.type === "text" &&
+					(MODE === "DEVELOPMENT"
 						? ch.id === CHANNEL_TEST
-						: ch.id === channelId)
+						: ch.id === channelId),
 			)
 	);
 }
@@ -41,7 +41,7 @@ export function getRoleObject(client: ValClient, roleID: string) {
  */
 export function getMemberObject(
 	client: ValClient,
-	userId: Snowflake
+	userId: Snowflake,
 ): GuildMember | undefined {
 	return client.guilds.cache.first()
 		.members.cache.find(member => member.id === userId);
@@ -59,9 +59,9 @@ export function getChannelFromMention(mention: string): string | undefined {
 
 export function localToBuffer(path: string) {
 	const file =
-		'data:image/jpeg;base64,' +
+		"data:image/jpeg;base64," +
 		readFileSync(resolve(__dirname, path), {
-			encoding: 'base64'
+			encoding: "base64",
 		});
 	return file;
 }

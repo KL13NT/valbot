@@ -1,16 +1,16 @@
-import ValClient from '../ValClient';
-import Controller from '../structures/Controller';
+import ValClient from "../ValClient";
+import Controller from "../structures/Controller";
 
-import { compileTemplate, log } from '../utils/general';
-import { Cluster } from 'puppeteer-cluster';
-import puppeteer from 'puppeteer';
+import { compileTemplate, log } from "../utils/general";
+import { Cluster } from "puppeteer-cluster";
+import puppeteer from "puppeteer";
 
 export default class RenderController extends Controller {
 	private cluster: Cluster;
 
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'render'
+			name: "render",
 		});
 	}
 
@@ -21,20 +21,20 @@ export default class RenderController extends Controller {
 					concurrency: Cluster.CONCURRENCY_CONTEXT,
 					maxConcurrency: 2,
 					puppeteerOptions: {
-						args: ['--no-sandbox', '--disable-setuid-sandbox'],
-						headless: true
-					}
+						args: ["--no-sandbox", "--disable-setuid-sandbox"],
+						headless: true,
+					},
 				});
 
 				await this.cluster.task(async ({ page, data: { html, content } }) => {
 					return this.screenshot(page, {
 						content,
-						html
+						html,
 					});
 				});
 			}
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
@@ -45,14 +45,14 @@ export default class RenderController extends Controller {
 	screenshot = async (page: puppeteer.Page, { content, html }) => {
 		const template = compileTemplate(content, html);
 
-		await page.setContent(template, { waitUntil: 'networkidle0' });
-		const element = await page.$('body');
+		await page.setContent(template, { waitUntil: "networkidle0" });
+		const element = await page.$("body");
 
 		const buffer = await element.screenshot({
-			type: 'jpeg',
+			type: "jpeg",
 			omitBackground: true,
-			encoding: 'binary',
-			quality: 100
+			encoding: "binary",
+			quality: 100,
 		});
 
 		return buffer;

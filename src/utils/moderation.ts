@@ -1,11 +1,11 @@
-import ValClient from '../ValClient';
-import { Snowflake } from 'discord.js';
+import ValClient from "../ValClient";
+import { Snowflake } from "discord.js";
 
-import { UserModerationOptions } from '../types/interfaces';
+import { UserModerationOptions } from "../types/interfaces";
 
-import { log, notify } from './general';
-import { getMemberObject } from './object';
-import { createUserModerationEmbed } from './embed';
+import { log, notify } from "./general";
+import { getMemberObject } from "./object";
+import { createUserModerationEmbed } from "./embed";
 
 export async function mute(client: ValClient, options: UserModerationOptions) {
 	const { member, moderator, channel, reason } = options;
@@ -16,11 +16,11 @@ export async function mute(client: ValClient, options: UserModerationOptions) {
 	const targetMember = getMemberObject(client, member);
 
 	const embed = createUserModerationEmbed({
-		title: 'Muted Member',
+		title: "Muted Member",
 		member,
 		moderator,
 		channel,
-		reason
+		reason,
 	});
 
 	try {
@@ -29,8 +29,8 @@ export async function mute(client: ValClient, options: UserModerationOptions) {
 				member,
 				moderator,
 				channel,
-				reason: 'Mute time expired'
-			}).catch(err => log(client, err, 'error'));
+				reason: "Mute time expired",
+			}).catch(err => log(client, err, "error"));
 		}, 5 * 60 * 1000);
 
 		await Promise.all([
@@ -39,11 +39,11 @@ export async function mute(client: ValClient, options: UserModerationOptions) {
 				client,
 				notification: `<@${member}>`,
 				embed,
-				channel: CHANNEL_MOD_LOGS
-			})
+				channel: CHANNEL_MOD_LOGS,
+			}),
 		]);
 	} catch (err) {
-		log(client, err, 'error');
+		log(client, err, "error");
 	}
 }
 
@@ -54,11 +54,11 @@ export async function ban(client: ValClient, options: UserModerationOptions) {
 	const targetMember = getMemberObject(client, member);
 
 	const embed = createUserModerationEmbed({
-		title: 'Banned Member',
+		title: "Banned Member",
 		member,
 		moderator,
 		channel,
-		reason
+		reason,
 	});
 
 	try {
@@ -68,11 +68,11 @@ export async function ban(client: ValClient, options: UserModerationOptions) {
 				client,
 				notification: `<@${member}>`,
 				embed,
-				channel: CHANNEL_MOD_LOGS
-			})
+				channel: CHANNEL_MOD_LOGS,
+			}),
 		]);
 	} catch (err) {
-		log(client, err, 'error');
+		log(client, err, "error");
 	}
 }
 
@@ -84,11 +84,11 @@ export async function warn(client: ValClient, options: UserModerationOptions) {
 	const targetMember = getMemberObject(client, member);
 
 	const embed = createUserModerationEmbed({
-		title: 'Warned Member',
+		title: "Warned Member",
 		member,
 		moderator,
 		channel,
-		reason
+		reason,
 	});
 
 	try {
@@ -98,17 +98,17 @@ export async function warn(client: ValClient, options: UserModerationOptions) {
 				client,
 				notification: `<@${member}>`,
 				embed,
-				channel: CHANNEL_MOD_LOGS
-			})
+				channel: CHANNEL_MOD_LOGS,
+			}),
 		]);
 	} catch (err) {
-		log(client, err, 'error');
+		log(client, err, "error");
 	}
 }
 
 export async function unwarn(
 	client: ValClient,
-	options: UserModerationOptions
+	options: UserModerationOptions,
 ) {
 	const { member, moderator, channel, reason } = options;
 	const { ROLE_WARNED } = client.config;
@@ -117,11 +117,11 @@ export async function unwarn(
 	const targetMember = getMemberObject(client, member);
 
 	const embed = createUserModerationEmbed({
-		title: 'Forgave Member',
+		title: "Forgave Member",
 		member,
 		moderator,
 		channel,
-		reason
+		reason,
 	});
 
 	try {
@@ -131,17 +131,17 @@ export async function unwarn(
 				client,
 				notification: `<@${member}>`,
 				embed,
-				channel: CHANNEL_MOD_LOGS
-			})
+				channel: CHANNEL_MOD_LOGS,
+			}),
 		]);
 	} catch (err) {
-		log(client, err, 'error');
+		log(client, err, "error");
 	}
 }
 
 export async function unmute(
 	client: ValClient,
-	options: UserModerationOptions
+	options: UserModerationOptions,
 ) {
 	const { member, moderator, channel, reason } = options;
 	const { ROLE_MUTED } = client.config;
@@ -150,11 +150,11 @@ export async function unmute(
 	const targetMember = getMemberObject(client, member);
 
 	const embed = createUserModerationEmbed({
-		title: 'Unmuted Member',
+		title: "Unmuted Member",
 		member,
 		moderator,
 		channel,
-		reason
+		reason,
 	});
 
 	try {
@@ -164,11 +164,11 @@ export async function unmute(
 				client,
 				notification: `<@${member}>`,
 				embed,
-				channel: CHANNEL_MOD_LOGS
-			})
+				channel: CHANNEL_MOD_LOGS,
+			}),
 		]);
 	} catch (err) {
-		log(client, err, 'error');
+		log(client, err, "error");
 	}
 }
 

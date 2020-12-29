@@ -1,8 +1,9 @@
-import Joi from '@hapi/joi';
+/* eslint-disable prefer-regex-literals */
+import Joi from "@hapi/joi";
 
 export const IDValidator = Joi.string()
 	.required()
-	.pattern(new RegExp('[0-9]+'));
+	.pattern(new RegExp("[0-9]+"));
 
 export const ClientConfigValidator = Joi.object({
 	AUTH_ADMIN: IDValidator,
@@ -20,5 +21,5 @@ export const ClientConfigValidator = Joi.object({
 	CHANNEL_BOT_BUGS: IDValidator,
 
 	ROLE_MUTED: IDValidator,
-	ROLE_WARNED: IDValidator
+	ROLE_WARNED: IDValidator,
 });
