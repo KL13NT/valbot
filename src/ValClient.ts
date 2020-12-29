@@ -9,19 +9,20 @@ import * as loaders from './loaders';
 import * as listeners from './listeners';
 
 import { log, transformObject } from './utils/general';
-import { ClientConfig, IController, Presence } from './types/interfaces';
+import { ClientConfig, Presence } from './types/interfaces';
 import Command from './structures/Command';
 import {
 	MongoController,
 	QueueController,
 	IntervalsController
 } from './controllers';
+import { Controller } from './structures';
 
 export default class ValClient extends Client {
 	readonly prefix = MODE === 'DEVELOPMENT' ? 'vd!' : 'v!';
 	ready = false;
 	commands: Map<string, Command> = new Map<string, Command>();
-	controllers: Map<string, IController> = new Map<string, IController>();
+	controllers: Map<string, Controller> = new Map<string, Controller>();
 	ValGuild: Guild;
 	config: ClientConfig = {
 		AUTH_ADMIN: '',
@@ -89,8 +90,6 @@ export default class ValClient extends Client {
 
 	init = async (token = AUTH_TOKEN) => {
 		try {
-
-
 			this.once('ready', this.onReady);
 
 			await this.login(token);

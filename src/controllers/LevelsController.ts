@@ -119,15 +119,6 @@ export default class LevelsController extends Controller {
 				const nextText = calculateNextLevel(textXP + gain);
 				const nextLevel = calculateNextLevel(exp + gain);
 
-				// console.log('exp', exp);
-				// console.log('gain', gain);
-				// console.log('level', level);
-				// console.log('textXP', textXP);
-				// console.log('text', text);
-				// console.log('nextText', nextText);
-				// console.log('nextLevel', nextLevel);
-				// console.log('---');
-
 				if (nextText > text) {
 					await Promise.all([
 						redis.set(`TEXT:${id}`, String(nextText)),

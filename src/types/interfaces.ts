@@ -1,30 +1,10 @@
 import { Snowflake, Role, MessageEmbed, PresenceData } from 'discord.js';
 import CommandContext from '../structures/CommandContext';
-import {
-	ConversationController,
-	IntervalsController,
-	QueueController,
-	MongoController,
-	LevelsController,
-	RedisController,
-	ToxicityController,
-	RemindersController
-} from '../controllers';
 import ValClient from '../ValClient';
 
 export type ListenerHandler = (...args: any[]) => void; // eslint-disable-line
 
 export type Template = string;
-
-export type IController =
-	| ConversationController
-	| QueueController
-	| MongoController
-	| LevelsController
-	| IntervalsController
-	| RedisController
-	| ToxicityController
-	| RemindersController;
 
 export type AlertLevel = 'info' | 'warn' | 'error';
 
@@ -193,9 +173,8 @@ export interface SVGContentOptions {
 }
 
 export interface SVGContent {
-	CANVAS_BACKGROUND: string;
+	[index: string]: unknown;
 	USER_AVATAR: string;
-	ICON_MIC: string;
 	USER_NAME: string;
 	CURRENT_LEVEL: number;
 	CURRENT_EXP: number;

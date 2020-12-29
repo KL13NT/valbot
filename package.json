@@ -8,9 +8,11 @@
 	"license": "GPL-3.0-only",
 	"scripts": {
 		"watch": "tsc --watch",
-		"develop": "yarn run-p watch start:dev",
+		"develop": "yarn run-p develop:mongo develop:redis watch develop:node",
+		"develop:mongo": "mongod --dbpath=data",
+		"develop:redis": "redis-server",
 		"start": "tsc && node ./prod/index.js",
-		"start:dev": "nodemon -r dotenv/config ./prod/index.js",
+		"develop:node": "nodemon --inspect -r dotenv/config ./prod/index.js --inspect",
 		"lint": "eslint --ext .js,.ts ./src --config .eslintrc.js --fix --global global",
 		"test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose",
 		"docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs"
@@ -57,7 +59,8 @@
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"mongodb": "^3.2.7",
-		"node-html-to-image": "^2.1.1",
+		"node-html-to-image": "^3.1.0",
+		"puppeteer-cluster": "^0.22.0",
 		"redis": "^3.0.2",
 		"typescript": "^3.9.5"
 	},

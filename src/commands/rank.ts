@@ -1,11 +1,23 @@
+import { Snowflake } from 'discord.js';
+import { resolve } from 'path';
+import { readFileSync } from 'fs';
+
+import ValClient from '../ValClient';
 import { Command } from '../structures';
-import { generateRankCard } from '../utils/svg';
 import { log, capitalise } from '../utils/general';
 import { getMemberObject } from '../utils/object';
-import ValClient from '../ValClient';
 import { CommandContext } from '../structures';
-import { MongoController, RedisController } from '../controllers';
-import { Snowflake } from 'discord.js';
+import {
+	MongoController,
+	RedisController,
+	RenderController
+} from '../controllers';
+import { getContentObject } from '../utils/svg';
+
+const TEMPLATE: string = readFileSync(
+	resolve(__dirname, '../../media/Frame 1.html'),
+	'utf-8'
+);
 
 export default class Rank extends Command {
 	constructor(client: ValClient) {
@@ -26,6 +38,7 @@ export default class Rank extends Command {
 	}
 
 	_run = async ({ message, params, member }: CommandContext) => {
+		const renderer = <RenderController>this.client.controllers.get('render');
 		const [userMention] = params;
 		const id = userMention
 			? userMention.replace(/<|>|!|@/g, '')
@@ -39,8 +52,10 @@ export default class Rank extends Command {
 
 			const levelInfo = await this.getLevels(id);
 			const userInfo = this.getUserInfo(id);
+			const content = await getContentObject({ userInfo, levelInfo });
 
-			const card = await generateRankCard(userInfo, levelInfo);
+			const card = await renderer.render({ html: TEMPLATE, content });
+
 			await message.reply("Here's the requested rank", {
 				files: [
 					{

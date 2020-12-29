@@ -1,36 +1,27 @@
 import fs from 'fs';
-import path from 'path';
-import nodeHtmlToImage from 'node-html-to-image';
-import {
-	SVGContentOptions,
-	SVGContent,
-	SVGContentLevelInfo,
-	UserInfo
-} from '../types/interfaces';
+import { resolve } from 'path';
+import { promisify } from 'util';
+import { SVGContentOptions, SVGContent } from '../types/interfaces';
 
 import fetch from 'node-fetch';
 
-const FRAME = path.resolve(__dirname, '../../media/Frame 1.svg');
-const BACKGROUND = '../../media/bg.jpg';
-const MIC = '../../media/mic.png';
+const readFile = promisify(fs.readFile);
+
 const AVATAR = '../../media/botlogo.png';
+const BASE64 = 'data:image/jpeg;base64,';
 
 /**
  * Converts images into Base64 URIs
  */
 export const imageToURI = (image: Buffer) => {
-	const base64Image = Buffer.from(image).toString('base64');
-	const dataURI = 'data:image/jpeg;base64,' + base64Image;
-
-	return dataURI;
+	return BASE64 + Buffer.from(image).toString('base64');
 };
 
 /**
  * Fetches local images
  */
-export const getLocalImageFromURL = (url: string) => {
-	const file = fs.readFileSync(path.resolve(__dirname, url));
-	return Buffer.from(file);
+export const getLocalImageFromURL = async (url: string) => {
+	return readFile(resolve(__dirname, url));
 };
 
 /**
@@ -38,7 +29,7 @@ export const getLocalImageFromURL = (url: string) => {
  */
 export const getRemoteImageFromURL = async (url: string) => {
 	const resolved = await fetch(url);
-	return Buffer.from(await resolved.arrayBuffer());
+	return resolved.buffer();
 };
 
 /**
@@ -51,21 +42,15 @@ export const getContentObject = async ({
 	const { avatar_url, displayName } = userInfo;
 	const { exp, levelEXP, level, text, voice } = levelInfo;
 
-	const bgBuffer = getLocalImageFromURL(BACKGROUND);
-	const micBuffer = getLocalImageFromURL(MIC);
 	const avatarBuffer =
 		process.env.MODE !== 'PRODUCTION'
-			? getLocalImageFromURL(AVATAR)
+			? await getLocalImageFromURL(AVATAR)
 			: await getRemoteImageFromURL(avatar_url);
 
-	const background = imageToURI(bgBuffer);
-	const mic = imageToURI(micBuffer);
-	const avatar = imageToURI(avatarBuffer);
+	const avatar = imageToURI(Buffer.from(avatarBuffer));
 
 	return {
-		CANVAS_BACKGROUND: background,
 		USER_AVATAR: avatar, //User.avatarURL()
-		ICON_MIC: mic,
 		CURRENT_LEVEL: level,
 		USER_NAME: displayName,
 		CURRENT_EXP: exp,
@@ -78,30 +63,28 @@ export const getContentObject = async ({
 /**
  * Returns card image after rendering it in puppeteer
  */
-export async function generateRankCard(
-	userInfo: UserInfo,
-	levelInfo: SVGContentLevelInfo
-) {
-	const template = fs.readFileSync(FRAME, 'utf-8');
-	const content = await getContentObject({ userInfo, levelInfo });
-
-	return nodeHtmlToImage({
-		html: `<html>
-				<head>
-					<style>
-						body {
-							width: 1580px;
-							height: 390px;
-						}
-					</style>
-				</head>
-				<body>
-					${template}
-				</body>
-				</html>`,
-		content,
-		puppeteerArgs: {
-			args: ['--no-sandbox', '--disable-setuid-sandbox']
-		}
-	});
-}
+// export async function generateRankCard(
+// 	userInfo: UserInfo,
+// 	levelInfo: SVGContentLevelInfo
+// ) {
+// 	return nodeHtmlToImage({
+// 		html: `<html>
+// 				<head>
+// 					<style>
+// 						body {
+// 							width: 1580px;
+// 							height: 390px;
+// 						}
+// 					</style>
+// 				</head>
+// 				<body>
+// 					${FRAME}
+// 				</body>
+// 				</html>`,
+// 		content,
+// 		puppeteerArgs: {
+// 			args: ['--no-sandbox', '--disable-setuid-sandbox']
+// 		},
+// 		encoding: 'binary'
+// 	});
+// }

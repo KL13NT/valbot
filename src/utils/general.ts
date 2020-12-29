@@ -144,3 +144,20 @@ export function reminderSubsToString(subs: ReminderSubscription[]) {
 		.map(sub => `<@${sub.member}>: ${sub.description}`)
 		.reduce((final, curr) => `${final}\n${curr}`, '');
 }
+
+/**
+ * Compiles a handlebars template (dumb)
+ * Uses new RegExp to create keys, make sure to handle that in your code.
+ */
+export function compileTemplate(
+	data: Record<string, unknown>,
+	template: string
+) {
+	let temp = template;
+
+	Object.keys(data).forEach(key => {
+		temp = temp.replace(new RegExp(`${key}`, 'g'), <string>data[key]);
+	});
+
+	return temp;
+}
