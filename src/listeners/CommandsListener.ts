@@ -6,6 +6,7 @@ import {
 	GENERIC_COMMAND_NOT_UNDERSTOOD,
 	ERROR_COMMAND_DOES_NOT_EXIST,
 } from "../config/events.json";
+import { log } from "../utils/general";
 
 export default class CommandsListener extends Listener {
 	constructor(client: ValClient) {
@@ -13,22 +14,26 @@ export default class CommandsListener extends Listener {
 	}
 
 	onCommand = (message: Message): void => {
-		const { content } = message;
+		try {
+			const { content } = message;
 
-		const commandRegex = RegExp(
-			`${this.client.prefix}\\s+([a-zA-Z؀-ۿ]+)(\\s+)?`,
-		);
-		const matchGroup = content.match(commandRegex);
+			const commandRegex = RegExp(
+				`${this.client.prefix}\\s+([a-zA-Z؀-ۿ]+)(\\s+)?`,
+			);
+			const matchGroup = content.match(commandRegex);
 
-		if (matchGroup === null) {
-			message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD);
-			return;
+			if (matchGroup === null) {
+				message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD);
+				return;
+			}
+
+			const [, commandName] = matchGroup; // [fullMatch, commandName]
+			const command = this.client.commands.get(commandName);
+
+			if (command === undefined) message.reply(ERROR_COMMAND_DOES_NOT_EXIST);
+			else command.run(message);
+		} catch (error) {
+			log(this.client, error, "error");
 		}
-
-		const [, commandName] = matchGroup; // [fullMatch, commandName]
-		const command = this.client.commands.get(commandName);
-
-		if (command === undefined) message.reply(ERROR_COMMAND_DOES_NOT_EXIST);
-		else command.run(message);
 	};
 }
