@@ -247,10 +247,7 @@ export default class LevelsController extends Controller {
 			voiceXP,
 		});
 
-		await Promise.all([
-			this.enforceMilestone(level, id),
-			this.levelUpMessage(id, level),
-		]);
+		await this.enforceMilestone(level, id);
 	};
 
 	enforceMilestone = async (userLevel: number, id: Snowflake) => {
@@ -276,20 +273,6 @@ export default class LevelsController extends Controller {
 					log(this.client, err, "error");
 				}
 			});
-		}
-	};
-
-	levelUpMessage = async (id: Snowflake, level: number) => {
-		try {
-			const member = getMemberObject(this.client, id);
-			const mention =
-				typeof member === "undefined" ? `<@${id}>` : `${member.displayName}`;
-
-			const notification = `GG ${mention}, you just advanced to level ${level}! :fireworks: <:PutinWaves:668209208113627136>`;
-
-			await notify({ client: this.client, notification });
-		} catch (err) {
-			log(this.client, err, "error");
 		}
 	};
 
