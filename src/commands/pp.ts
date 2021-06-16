@@ -13,7 +13,7 @@ export default class PP extends Command {
 			description: "بتجيبلك pp اي حد",
 			exampleUsage: "<user_mention>",
 			extraParams: true,
-			optionalParams: 0,
+			optionalParams: 1,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_VERIFIED",
@@ -21,16 +21,16 @@ export default class PP extends Command {
 		});
 	}
 
-	_run = async ({ message }: CommandContext) => {
+	_run = async ({ member, message }: CommandContext) => {
 		try {
-			if (message.mentions.users.size === 0) {
-				await message.reply("لازم تعمل منشن للـ member");
-				return;
-			}
+			const target =
+				message.mentions.users.size === 0
+					? member.user
+					: message.mentions.users.first();
 
-			const avatarUrl = message.mentions.users.first().displayAvatarURL();
+			const avatarUrl = target.displayAvatarURL({ dynamic: true, size: 4096 });
 
-			await message.reply(`${avatarUrl}?4096`);
+			await message.reply(avatarUrl);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
