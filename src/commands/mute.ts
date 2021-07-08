@@ -1,24 +1,24 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { Command, CommandContext } from '../structures';
-import { mute, isMuted } from '../utils/moderation';
-import { log } from '../utils/general';
+import { Command, CommandContext } from "../structures";
+import { mute, isMuted } from "../utils/moderation";
+import { log } from "../utils/general";
 
 export default class Mute extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'mute',
-			category: 'Moderation',
+			name: "mute",
+			category: "Moderation",
 			cooldown: 1000,
 			nOfParams: 2,
-			description: 'بتمنع الشخص انه يتكلم فويس او تيكست لمدة 5 دقايق',
-			exampleUsage: '<user_mention> <reason>',
+			description: "بتمنع الشخص انه يتكلم فويس او تيكست لمدة 5 دقايق",
+			exampleUsage: "<user_mention> <reason>",
 			extraParams: true,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_MOD'
-			}
+				method: "ROLE",
+				required: "AUTH_MOD",
+			},
 		});
 	}
 
@@ -28,15 +28,15 @@ export default class Mute extends Command {
 
 		try {
 			if (!mentionRegex.test(mention)) {
-				await message.reply('لازم تعمل منشن للـ member');
+				await message.reply("لازم تعمل منشن للـ member");
 				return;
 			}
 
 			const id = mention.match(mentionRegex)[1];
-			const reason = reasonWords.join(' ');
+			const reason = reasonWords.join(" ");
 
 			if (isMuted(this.client, id)) {
-				await message.reply('معمولهم mute اصلاً');
+				await message.reply("معمولهم mute اصلاً");
 				return;
 			}
 
@@ -44,10 +44,10 @@ export default class Mute extends Command {
 				member: id,
 				moderator: member.id,
 				channel: channel.id,
-				reason
+				reason,
 			});
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }

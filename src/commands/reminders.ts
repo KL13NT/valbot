@@ -1,30 +1,30 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { Command, CommandContext } from '../structures';
-import { log } from '../utils/general';
-import { RemindersController } from '../controllers';
+import { Command, CommandContext } from "../structures";
+import { log } from "../utils/general";
+import { RemindersController } from "../controllers";
 
 export default class Reminders extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'reminders',
-			category: 'Misc',
+			name: "reminders",
+			category: "Misc",
 			cooldown: 30 * 1000,
 			nOfParams: 0,
-			description: 'هقولك ال reminders بتوعك',
-			exampleUsage: '',
+			description: "هقولك ال reminders بتوعك",
+			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_VERIFIED'
-			}
+				method: "ROLE",
+				required: "AUTH_VERIFIED",
+			},
 		});
 	}
 
 	_run = async (context: CommandContext): Promise<void> => {
 		const reminders = <RemindersController>(
-			this.client.controllers.get('reminders')
+			this.client.controllers.get("reminders")
 		);
 
 		const { message, member } = context;
@@ -32,7 +32,7 @@ export default class Reminders extends Command {
 		try {
 			const active = await reminders.getMemberReminders(member.id);
 			if (active.length === 0) {
-				await message.reply('معندكش اي reminders.');
+				await message.reply("معندكش اي reminders.");
 				return;
 			}
 
@@ -41,11 +41,11 @@ export default class Reminders extends Command {
 				const date = new Date(curr.time).toString();
 
 				return `${all}\n\n${description}\n${date}`;
-			}, '');
+			}, "");
 
 			await message.reply(`الـ reminders بتوعك:\n${all}`);
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }

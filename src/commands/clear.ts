@@ -1,15 +1,15 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { Command, CommandContext } from '../structures';
-import { log, notify } from '../utils/general';
-import { createClearEmbed } from '../utils/embed';
-import { TextChannel } from 'discord.js';
+import { Command, CommandContext } from "../structures";
+import { log, notify } from "../utils/general";
+import { createClearEmbed } from "../utils/embed";
+import { TextChannel } from "discord.js";
 
 export default class Clear extends Command {
 	constructor(client: ValClient) {
 		super(client, {
 			name: `clear`,
-			category: 'Moderation',
+			category: "Moderation",
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتمسح رسايل بعدد n`,
@@ -17,9 +17,9 @@ export default class Clear extends Command {
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_MOD'
-			}
+				method: "ROLE",
+				required: "AUTH_MOD",
+			},
 		});
 	}
 
@@ -40,7 +40,7 @@ export default class Clear extends Command {
 			const embed = createClearEmbed({
 				moderator: member.id,
 				channel: channel.id,
-				count
+				count,
 			});
 
 			await channel.bulkDelete(count + 1);
@@ -48,23 +48,23 @@ export default class Clear extends Command {
 			const sent = await message.reply(`مسحت ${count} يرايق.`);
 
 			setTimeout(() => {
-				sent.delete().catch(err => log(this.client, err, 'error'));
+				sent.delete().catch(err => log(this.client, err, "error"));
 			}, 3 * 1000);
 
 			await notify({
 				client: this.client,
-				notification: '',
+				notification: "",
 				embed,
-				channel: CHANNEL_MOD_LOGS
+				channel: CHANNEL_MOD_LOGS,
 			});
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
 	validateInput = (count: number) => {
-		if (isNaN(count)) return 'لازم تدخل رقم';
-		else if (count === 0) return 'هنهزر ولا ايه؟';
+		if (isNaN(count)) return "لازم تدخل رقم";
+		else if (count === 0) return "هنهزر ولا ايه؟";
 		else return undefined;
 	};
 }

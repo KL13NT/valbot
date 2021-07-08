@@ -40,13 +40,13 @@ export const getContentObject = async ({
 	levelInfo,
 }: SVGContentOptions): Promise<SVGContent> => {
 	// eslint-disable-next-line camelcase
-	const { avatar_url, displayName } = userInfo;
+	const { avatarUrl, displayName } = userInfo;
 	const { exp, levelEXP, level, text, voice } = levelInfo;
 
 	const avatarBuffer =
 		process.env.MODE !== "PRODUCTION"
 			? await getLocalImageFromURL(AVATAR)
-			: await getRemoteImageFromURL(avatar_url);
+			: await getRemoteImageFromURL(avatarUrl);
 
 	const avatar = imageToURI(Buffer.from(avatarBuffer));
 

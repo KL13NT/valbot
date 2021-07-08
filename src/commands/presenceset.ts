@@ -1,26 +1,26 @@
-import { Command } from '../structures';
-import { log } from '../utils/general';
-import ValClient from '../ValClient';
-import { CommandContext } from '../structures';
-import { Presence } from '../types/interfaces';
-import { ActivityType } from 'discord.js';
+import { Command , CommandContext } from "../structures";
+import { log } from "../utils/general";
+import ValClient from "../ValClient";
+
+import { Presence } from "../types/interfaces";
+import { ActivityType } from "discord.js";
 
 export default class PresenceSet extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'presenceset',
-			category: 'Management',
+			name: "presenceset",
+			category: "Management",
 			cooldown: 1000,
 			nOfParams: 3,
-			description: 'بتعدل على الـ presence',
+			description: "بتعدل على الـ presence",
 			exampleUsage:
-				'<PLAYING|STREAMING|LISTENING|WATCHING> <PRIORITY:TRUE|FALSE> <ACTIVITY:STRING>',
+				"<PLAYING|STREAMING|LISTENING|WATCHING> <PRIORITY:TRUE|FALSE> <ACTIVITY:STRING>",
 			extraParams: true,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_ADMIN'
-			}
+				method: "ROLE",
+				required: "AUTH_ADMIN",
+			},
 		});
 	}
 
@@ -32,37 +32,37 @@ export default class PresenceSet extends Command {
 
 			if (
 				!/^(PLAYING|STREAMING|LISTENING|WATCHING)$/i.test(
-					activityType.toLowerCase()
+					activityType.toLowerCase(),
 				)
 			) {
-				await message.reply('حدد Type معروفة');
+				await message.reply("حدد Type معروفة");
 				return;
 			}
 
 			if (priority && !/^(true|false)$/i.test(priority.toLowerCase())) {
-				await message.reply('لازم تحدد priority يا اما TRUE يا اما FALSE');
+				await message.reply("لازم تحدد priority يا اما TRUE يا اما FALSE");
 				return;
 			}
 
 			const isPriority =
-				priority && priority.toLowerCase() === 'true' ? true : false;
+				!!(priority && priority.toLowerCase() === "true");
 
 			const newPresence: Presence = {
-				status: 'dnd',
+				status: "dnd",
 				activity: {
-					name: name.join(' '),
-					type: activityType
+					name: name.join(" "),
+					type: activityType,
 				},
-				priority: isPriority
+				priority: isPriority,
 			};
 
 			this.client.presences = [newPresence, ...copy];
 
 			await this.client.setPresence();
 
-			await message.reply('تم');
+			await message.reply("تم");
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }

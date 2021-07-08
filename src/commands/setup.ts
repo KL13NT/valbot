@@ -1,30 +1,30 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { ClientConfig } from '../types/interfaces';
-import { Command, CommandContext } from '../structures';
-import { Message, TextChannel, GuildMember } from 'discord.js';
-import { MongoController, QueueController } from '../controllers';
+import { ClientConfig } from "../types/interfaces";
+import { Command, CommandContext } from "../structures";
+import { Message, TextChannel, GuildMember } from "discord.js";
+import { MongoController, QueueController } from "../controllers";
 
-import { log, awaitMessages } from '../utils/general';
-import { ClientConfigValidator } from '../types/validators.joi';
+import { log, awaitMessages } from "../utils/general";
+import { ClientConfigValidator } from "../types/validators.joi";
 
 export default class Setup extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'setup',
-			category: 'Development',
+			name: "setup",
+			category: "Development",
 			cooldown: 1000,
 			nOfParams: 2,
-			description: 'بتعمل setup للبوت. مينفعش تعمل cancel.',
+			description: "بتعمل setup للبوت. مينفعش تعمل cancel.",
 			exampleUsage:
-				'get all\nget AUTH_ADMIN\nset all\nset AUTH_ADMIN\nset json',
+				"get all\nget AUTH_ADMIN\nset all\nset AUTH_ADMIN\nset json",
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_DEV',
-				devOnly: true
-			}
+				method: "ROLE",
+				required: "AUTH_DEV",
+				devOnly: true,
+			},
 		});
 	}
 
@@ -37,20 +37,20 @@ export default class Setup extends Command {
 		const target = params[1].toLowerCase();
 
 		try {
-			if (op !== 'get' && op !== 'set') {
-				await message.reply('لازم تحدد `set` ولا `get`');
+			if (op !== "get" && op !== "set") {
+				await message.reply("لازم تحدد `set` ولا `get`");
 				return;
 			}
 
-			if (op === 'get') {
-				if (target === 'all') {
+			if (op === "get") {
+				if (target === "all") {
 					const values = Object.keys(config).map(key => {
 						return `\`${key}\` = \`${config[key]}\``;
 					});
 
-					await message.reply(values.join('\n'));
+					await message.reply(values.join("\n"));
 					return;
-				} else if (target === 'json') {
+				} else if (target === "json") {
 					await this.getJSON(context);
 				} else {
 					await message.reply(`\`${variable}\` = \`${config[variable]}\``);
@@ -58,13 +58,13 @@ export default class Setup extends Command {
 				}
 			}
 
-			if (op === 'set') {
-				if (target === 'json') await this.setJSON(context);
-				else if (target === 'all') await this.setAll(context);
+			if (op === "set") {
+				if (target === "json") await this.setJSON(context);
+				else if (target === "all") await this.setAll(context);
 				else await this.setGeneral(context, variable);
 			}
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
@@ -73,7 +73,7 @@ export default class Setup extends Command {
 	};
 
 	setAll = async ({ message, channel, member }: CommandContext) => {
-		await message.reply('starting config setup. This is irreversible.');
+		await message.reply("starting config setup. This is irreversible.");
 
 		const questions = Object.keys(this.client.config).map(variable =>
 			this.getKeyValue.bind(
@@ -81,15 +81,15 @@ export default class Setup extends Command {
 				<TextChannel>channel,
 				member,
 				variable,
-				this.client.config
-			)
+				this.client.config,
+			),
 		);
 
 		for (const question of questions) {
 			await question();
 		}
 
-		await message.reply('Saving config');
+		await message.reply("Saving config");
 
 		await this.updateConfig(this.client.config);
 		this.client.ready = true;
@@ -97,9 +97,9 @@ export default class Setup extends Command {
 
 	setGeneral = async (
 		{ message, channel, member }: CommandContext,
-		key: string
+		key: string,
 	) => {
-		await message.reply('ايه القيمة؟');
+		await message.reply("ايه القيمة؟");
 
 		const value = await awaitMessages(<TextChannel>channel, member);
 
@@ -110,7 +110,7 @@ export default class Setup extends Command {
 
 	setJSON = async ({ message, channel, member }: CommandContext) => {
 		await message.reply(
-			'حاسب, لما تستعمل JSON بدل ما تحدد كل متغير لوحدة بمسح الكونفيج الموجود و بسجل مكانه ال JSON. مفيش رجوع. ابعت ال JSON.'
+			"حاسب, لما تستعمل JSON بدل ما تحدد كل متغير لوحدة بمسح الكونفيج الموجود و بسجل مكانه ال JSON. مفيش رجوع. ابعت ال JSON.",
 		);
 
 		const jsonString = await awaitMessages(<TextChannel>channel, member);
@@ -119,22 +119,22 @@ export default class Setup extends Command {
 			const json = JSON.parse(jsonString);
 
 			if (ClientConfigValidator.validate(json).error) {
-				await message.reply('الداتا دي مش ماشية على السكيما صح.');
+				await message.reply("الداتا دي مش ماشية على السكيما صح.");
 				return;
 			} else {
 				this.updateConfig(json);
-				await message.reply('تم. الكونفيج الجديد اتسجل.');
+				await message.reply("تم. الكونفيج الجديد اتسجل.");
 				return;
 			}
 		} catch (err) {
-			await message.reply('في حاجة غلط ف ال JSON اللي انت كتبته. جرب تاني.');
-			log(this.client, err, 'error');
+			await message.reply("في حاجة غلط ف ال JSON اللي انت كتبته. جرب تاني.");
+			log(this.client, err, "error");
 		}
 	};
 
 	updateConfig = async (config: ClientConfig) => {
-		const mongo = <MongoController>this.client.controllers.get('mongo');
-		const queue = <QueueController>this.client.controllers.get('queue');
+		const mongo = <MongoController>this.client.controllers.get("mongo");
+		const queue = <QueueController>this.client.controllers.get("queue");
 
 		if (mongo.ready) {
 			this.client.config = config;
@@ -143,11 +143,11 @@ export default class Setup extends Command {
 			await this.client.onReady();
 			this.client.ready = true;
 
-			log(this.client, 'Client configured successfully.', 'info');
+			log(this.client, "Client configured successfully.", "info");
 		} else
 			queue.enqueue({
 				func: this.updateConfig,
-				args: [config]
+				args: [config],
 			});
 	};
 
@@ -155,13 +155,13 @@ export default class Setup extends Command {
 		channel: TextChannel,
 		member: GuildMember,
 		key: string,
-		config: ClientConfig
+		config: ClientConfig,
 	) => {
 		const filter = (m: Message) => m.author.id === member.id;
 		const awaitOptions = {
 			max: 1,
 			time: 60 * 1000,
-			errors: ['time']
+			errors: ["time"],
 		};
 
 		channel.send(key);
