@@ -6,7 +6,7 @@ import {
 	LevelsController,
 	ConversationController,
 } from "../controllers";
-import { log } from "../utils/general";
+import { isAdmin, isDev, log } from "../utils/general";
 
 export default class MessageListener extends Listener {
 	constructor(client: ValClient) {
@@ -15,7 +15,7 @@ export default class MessageListener extends Listener {
 
 	onMessage = async (message: Message): Promise<void> => {
 		try {
-			if (this.shouldNotHandle(message)) return;
+			if (!this.shouldHandle(message)) return;
 
 			const { prefix, controllers } = this.client;
 			const { content, mentions } = message;
@@ -43,9 +43,24 @@ export default class MessageListener extends Listener {
 		}
 	};
 
-	shouldNotHandle = ({ author, channel, type, webhookID }: Message): boolean =>
-		!!webhookID ||
-		author.id === this.client.user.id ||
-		channel.type !== "text" ||
-		type !== "DEFAULT";
+	/**
+	 * Handling conditions
+	 * - Author must not be a webhook
+	 * - Author must not be the bot
+	 * - Channel must be type 'text'
+	 * - MessageType must be 'default'
+	 * - If in DEV MODE then only ADMIN allowed to use
+	 */
+	shouldHandle = ({
+		author,
+		channel,
+		type,
+		webhookID,
+		member,
+	}: Message): boolean =>
+		!webhookID &&
+		author.id !== this.client.user.id &&
+		channel.type === "text" &&
+		type === "DEFAULT" &&
+		(!isDev() || isAdmin(member));
 }
