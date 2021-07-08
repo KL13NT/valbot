@@ -64,6 +64,7 @@
 		"@types/node": "^14.0.14",
 		"@types/puppeteer": "^3.0.0",
 		"@types/redis": "^2.8.22",
+		"chrono-node": "^2.3.0",
 		"discord.js": "^12.5.1",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",

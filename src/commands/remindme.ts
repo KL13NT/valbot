@@ -1,88 +1,129 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { TextChannel } from 'discord.js';
+import { TextChannel } from "discord.js";
 
-import { Command, CommandContext } from '../structures';
-import { log, awaitMessages } from '../utils/general';
-import { ReminderSubscription } from '../types/interfaces';
-import { RemindersController } from '../controllers';
+import { Command, CommandContext } from "../structures";
+import { log, awaitMessages, chronoResultToObject } from "../utils/general";
+import { ReminderSubscription } from "../types/interfaces";
+import { RemindersController } from "../controllers";
+import { parse } from "chrono-node";
+import { createEmbed } from "../utils/embed";
 
 export default class Remindme extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'remindme',
-			category: 'Misc',
+			name: "remindme",
+			category: "Misc",
 			cooldown: 30 * 1000,
-			nOfParams: 0,
-			description: 'قولي افكرك بحاجة امتى و هفكرك.',
-			exampleUsage: '',
-			extraParams: false,
+			nOfParams: 1,
+			description: "قولي افكرك بحاجة امتى و هفكرك. UTC بالأساس.",
+			exampleUsage:
+				"Valarium's next session 12 may 5 PM GMT+2\nValarium's next session this saturday 5 PM UTC",
+			extraParams: true,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_VERIFIED'
-			}
+				method: "ROLE",
+				required: "AUTH_VERIFIED",
+			},
 		});
 	}
 
 	_run = async (context: CommandContext): Promise<void> => {
 		const reminders = <RemindersController>(
-			this.client.controllers.get('reminders')
+			this.client.controllers.get("reminders")
 		);
 
-		const { message, member } = context;
+		const { message, member, params } = context;
 		const channel = <TextChannel>context.channel;
-		const example = '12/05/2020 20:30 +02:00';
-		const timeRegex = /^(\d{2})\/(\d{2})\/(\d{4})\s(\d{2}):(\d{2})\s?((\+|-)\d{2}:\d{2})?$/;
 
 		try {
-			await message.reply('افكرك بأيه؟');
-			const description = await awaitMessages(channel, member);
-
-			await message.reply(
-				`امتى؟ الوقت بالفورمات دي: \n\`${example}\`.\n لاحظ برضة ان فورمات الساعة 24 مش 12. لاحظ انك لازم تحدد الفرق مابين التوقيت المحلي ليك و الـ UTC او GMT. اللي هو الجزء +02:00 اللي ف اخر المثال ده. لو مكتبتوش هعتبر انك في UTC.`
+			const results = parse(
+				params.join(" "),
+				{ timezone: "UTC" },
+				{ forwardDate: true },
 			);
-			const time = await awaitMessages(channel, member);
-			const match = time.match(timeRegex);
 
-			if (!match) {
-				await message.reply('في حاجة غلط ف اللي انت كتبته, اتأكد من الوقت.');
+			if (results.length === 0) {
+				await message.reply("مش فاهم لول, متأكد انكوا كتبتوا وقت؟");
 				return;
 			}
 
-			const [, DD, MM, YYYY, HH, mm, Z] = match;
-
-			const now = new Date().getTime();
-			const date = new Date(
-				`${YYYY}-${MM}-${DD}T${HH}:${mm}:00.000${Z || 'Z'}`
+			// sometimes results will be more than 1 result, so we need to combine
+			// them together, always using the latest values, using impliedValues as
+			// basis to make sure date variables properties aren't passed null to the
+			// date constructor
+			const { year, month, day, hour, minute } = results.reduce(
+				(t, c) => ({
+					...t,
+					...chronoResultToObject(c),
+				}),
+				chronoResultToObject(results[0]),
 			);
-			const target = date.getTime();
 
-			if (now >= target) {
-				await message.reply('مينفعش تعمل ريمايندر لوقت سابق. بلاش هزار.');
+			const date = new Date(year, month - 1, day, hour, minute, 0, 0);
+
+			if (isNaN(date.getTime()) || new Date().getTime() >= date.getTime()) {
+				const lolreally = this.client.emojis.cache.find(
+					emoji => emoji.name === "lolreally",
+				);
+
+				await message.reply(
+					`مينفعش تعمل ريمايندر لوقت سابق. بلاش هزار. ${lolreally}`,
+				);
+
+				return;
+			}
+
+			const description = params
+				.filter(param => !results.some(result => result.text.includes(param)))
+				.join(" ");
+
+			console.log(description);
+
+			const confirmationEmbed = createEmbed({
+				title: "Confirmation (yes/no)",
+				description: `انا فاهمك صح كده؟`,
+				fields: [
+					{
+						name: "**هفكرك بـ**",
+						value: description,
+					},
+					{
+						name: "**تاريخ**",
+						value: date.toUTCString(),
+					},
+				],
+				footer: { text: "رد في خلال دقيقة وإلا هعتبر الـ reminder لاغي" },
+			});
+
+			await message.reply(confirmationEmbed);
+			const correct = await awaitMessages(channel, member);
+
+			if (correct.toLowerCase() === "no") {
+				await message.reply("Discarded the reminder");
 				return;
 			}
 
 			const sub: ReminderSubscription = {
 				description,
-				member: member.id
+				member: member.id,
 			};
 
 			const active = await reminders.getMemberReminders(member.id);
 			if (active.length >= 2) {
-				await message.reply('مينفعش تعمل اكتر من 2 ريمايندرز');
+				await message.reply("مينفعش تعمل اكتر من 2 ريمايندرز");
 				return;
 			}
 
-			if (active.find(sub => sub.time === target)) {
-				await message.reply('انت مسجل ف الوقت ده بالفعل');
+			if (active.find(sub => sub.time === date.getTime())) {
+				await message.reply("انت مسجل ف الوقت ده بالفعل");
 				return;
 			}
 
-			await reminders.addReminder(target, sub);
+			await reminders.addReminder(date.getTime(), sub);
 			await message.reply(`تم. هفكرك في \n${date.toString()}`);
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }
