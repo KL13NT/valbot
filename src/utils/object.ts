@@ -2,8 +2,7 @@ import ValClient from "../ValClient";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { GuildMember, Snowflake, TextChannel } from "discord.js";
-
-const { MODE } = process.env;
+import { isDev } from "./general";
 
 /**
  * Returns a text channel
@@ -17,13 +16,7 @@ export function getChannelObject(
 	return <TextChannel>(
 		client.guilds.cache
 			.first()
-			.channels.cache.find(
-				ch =>
-					ch.type === "text" &&
-					(MODE === "DEVELOPMENT"
-						? ch.id === CHANNEL_TEST
-						: ch.id === channelId),
-			)
+			.channels.cache.find(ch => (ch.id === isDev() ? CHANNEL_TEST : channelId))
 	);
 }
 
@@ -43,7 +36,8 @@ export function getMemberObject(
 	client: ValClient,
 	userId: Snowflake,
 ): GuildMember | undefined {
-	return client.guilds.cache.first()
+	return client.guilds.cache
+		.first()
 		.members.cache.find(member => member.id === userId);
 }
 

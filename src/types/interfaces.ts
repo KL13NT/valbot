@@ -156,7 +156,7 @@ export interface UserModerationOptions {
 
 export interface UserInfo {
 	// eslint-disable-next-line camelcase
-	avatar_url: string;
+	avatarUrl: string;
 	displayName: string;
 }
 

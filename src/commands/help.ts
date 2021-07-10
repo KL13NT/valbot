@@ -1,15 +1,15 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { EmbedField } from 'discord.js';
-import { Command, CommandContext } from '../structures';
-import { createEmbed } from '../utils/embed';
-import { log } from '../utils/general';
+import { EmbedField } from "discord.js";
+import { Command, CommandContext } from "../structures";
+import { createEmbed } from "../utils/embed";
+import { log } from "../utils/general";
 
 export default class Help extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'help',
-			category: 'Support',
+			name: "help",
+			category: "Support",
 			cooldown: 0,
 			nOfParams: 0,
 			extraParams: true,
@@ -17,9 +17,9 @@ export default class Help extends Command {
 			description: `لو محتاج مساعدة`,
 			exampleUsage: ` او val! help command`,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_EVERYONE'
-			}
+				method: "ROLE",
+				required: "AUTH_EVERYONE",
+			},
 		});
 	}
 
@@ -31,13 +31,13 @@ export default class Help extends Command {
 			const dm = await member.createDM();
 			await dm.send(embed);
 
-			const sent = await message.reply('بعتلك رسالة جادة جداً');
+			const sent = await message.reply("بعتلك رسالة جادة جداً");
 
 			setTimeout(() => {
-				sent.delete().catch(err => log(this.client, err, 'error'));
+				sent.delete().catch(err => log(this.client, err, "error"));
 			}, 5 * 1000);
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
@@ -57,7 +57,7 @@ export default class Help extends Command {
 			fields.push({
 				name: category[0],
 				value: category[1],
-				inline: true
+				inline: true,
 			});
 		}
 
@@ -66,30 +66,30 @@ export default class Help extends Command {
 
 	createHelpEmbed = (commands: EmbedField[]) =>
 		createEmbed({
-			title: ':book: مساعدة',
+			title: ":book: مساعدة",
 			description: `اهلاً اهلاً. شوف القايمة دي, متقسمه لعناوين حسب اللي انت ممكن تحتاجه`,
 			fields: [
 				{
-					name: '**مساعدة مع كوماند معينة**',
-					value: `تقدروا تكتبوا help بعد الكوماند زي كده: \`${this.client.prefix} clear help\``
+					name: "**مساعدة مع كوماند معينة**",
+					value: `تقدروا تكتبوا help بعد الكوماند زي كده: \`${this.client.prefix} clear help\``,
 				},
 				{
-					name: '**لو عندكوا اسئلة**',
-					value: `ممكن تشوفوا تشانل <#586789353217327104> او تسألوا حد من الـ Mods`
+					name: "**لو عندكوا اسئلة**",
+					value: `ممكن تشوفوا تشانل <#586789353217327104> او تسألوا حد من الـ Mods`,
 				},
 				{
-					name: '**لو عايزين تعملوا invite لحد**',
-					value: `https://discord.gg/xrGAnTg`
+					name: "**لو عايزين تعملوا invite لحد**",
+					value: `https://discord.gg/xrGAnTg`,
 				},
 				{
-					name: '\u200b',
-					value: '\u200b'
+					name: "\u200b",
+					value: "\u200b",
 				},
 				{
-					name: '**الكوماندز الموجودة دلوقتي**',
-					value: `\u200b`
+					name: "**الكوماندز الموجودة دلوقتي**",
+					value: `\u200b`,
 				},
-				...commands
-			]
+				...commands,
+			],
 		});
 }

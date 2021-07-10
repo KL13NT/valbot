@@ -8,7 +8,8 @@ import { QueueController } from "../controllers";
 import ValClient from "../ValClient";
 
 import { getChannelObject } from "./object";
-import { TextChannel, GuildMember, Message } from "discord.js";
+import { TextChannel, GuildMember, Message, Permissions } from "discord.js";
+import { ParsedResult } from "chrono-node";
 
 const { ROLE_DEVELOPER, MODE } = process.env;
 
@@ -163,3 +164,17 @@ export function compileTemplate(
 
 	return temp;
 }
+
+export const isAdmin = (member: GuildMember) =>
+	member.permissions.has(Permissions.FLAGS.ADMINISTRATOR);
+
+export const isDev = () => process.env.MODE === "DEVELOPMENT";
+
+export const chronoResultToObject = (result: ParsedResult) => ({
+	year: result.start.get("year"),
+	month: result.start.get("month"),
+	day: result.start.get("day"),
+	hour: result.start.get("hour"),
+	minute: result.start.get("minute"),
+	second: result.start.get("second"),
+});

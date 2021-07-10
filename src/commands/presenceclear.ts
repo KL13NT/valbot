@@ -1,23 +1,23 @@
-import { Command } from '../structures';
-import { log } from '../utils/general';
-import ValClient from '../ValClient';
-import { CommandContext } from '../structures';
+import { Command , CommandContext } from "../structures";
+import { log } from "../utils/general";
+import ValClient from "../ValClient";
+
 
 export default class PresenceClear extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'presenceclear',
-			category: 'Management',
+			name: "presenceclear",
+			category: "Management",
 			cooldown: 1000,
 			nOfParams: 0,
-			description: 'بتشيل اي jit presence معمول',
-			exampleUsage: '',
+			description: "بتشيل اي jit presence معمول",
+			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_ADMIN'
-			}
+				method: "ROLE",
+				required: "AUTH_ADMIN",
+			},
 		});
 	}
 
@@ -27,9 +27,9 @@ export default class PresenceClear extends Command {
 
 			await this.client.setPresence();
 
-			await message.reply('تم');
+			await message.reply("تم");
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }

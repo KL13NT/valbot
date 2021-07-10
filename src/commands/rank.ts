@@ -3,10 +3,10 @@ import { resolve } from "path";
 import { readFileSync } from "fs";
 
 import ValClient from "../ValClient";
-import { Command } from "../structures";
+import { Command, CommandContext } from "../structures";
 import { log, capitalise, levelToExp } from "../utils/general";
 import { getMemberObject } from "../utils/object";
-import { CommandContext } from "../structures";
+
 import { RedisController, RenderController } from "../controllers";
 import { getContentObject } from "../utils/svg";
 
@@ -42,7 +42,7 @@ export default class Rank extends Command {
 
 		try {
 			if (id === this.client.user.id) {
-				await message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
+				await message.reply("متكترش هزار عشان ميتعملش عليك صريخ ضحك :\"D");
 				return;
 			}
 
@@ -68,13 +68,13 @@ export default class Rank extends Command {
 		const target = getMemberObject(this.client, id);
 		const MAX_NAME_LENGTH = 18;
 
-		const avatar_url = target.user.displayAvatarURL();
+		const avatarUrl = target.user.displayAvatarURL();
 		const displayName = capitalise(
 			target.displayName.substr(0, MAX_NAME_LENGTH).toLowerCase(),
 		);
 
 		return {
-			avatar_url,
+			avatarUrl,
 			displayName:
 				target.user.username.length > MAX_NAME_LENGTH
 					? displayName + "..."

@@ -1,16 +1,16 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { TextChannel } from 'discord.js';
-import { Command, CommandContext } from '../structures';
-import { ConversationController } from '../controllers';
+import { TextChannel } from "discord.js";
+import { Command, CommandContext } from "../structures";
+import { ConversationController } from "../controllers";
 
-import { log, awaitMessages } from '../utils/general';
+import { log, awaitMessages } from "../utils/general";
 
 export default class Teach extends Command {
 	constructor(client: ValClient) {
 		super(client, {
 			name: `teach`,
-			category: 'Management',
+			category: "Management",
 			cooldown: 1000,
 			nOfParams: 1,
 			description: `بتعلم البوت يرد على حاجة`,
@@ -18,20 +18,20 @@ export default class Teach extends Command {
 			extraParams: true,
 			optionalParams: 1,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_ADMIN'
-			}
+				method: "ROLE",
+				required: "AUTH_ADMIN",
+			},
 		});
 	}
 
 	_run = async (context: CommandContext) => {
 		const { message, params, member } = context;
 		const channel = <TextChannel>context.channel;
-		const invoker = params.join(' ').replace(/"/g, '').replace(/\s+/, ' ');
+		const invoker = params.join(" ").replace(/"/g, "").replace(/\s+/, " ");
 
 		try {
 			if (params.length === 0) {
-				await message.reply(`\n${this.getResponses().join('\n')}`);
+				await message.reply(`\n${this.getResponses().join("\n")}`);
 				return;
 			}
 
@@ -40,18 +40,18 @@ export default class Teach extends Command {
 				return;
 			}
 
-			await message.reply('المفروض ارد ازاي بقى؟');
+			await message.reply("المفروض ارد ازاي بقى؟");
 
 			const collected = await awaitMessages(channel, member);
 			await this.collectionSuccess(context, invoker, collected);
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 
 	getResponses = () => {
 		const conversation = <ConversationController>(
-			this.client.controllers.get('conversation')
+			this.client.controllers.get("conversation")
 		);
 		const responses = conversation.getAllResponses();
 
@@ -65,15 +65,15 @@ export default class Teach extends Command {
 	collectionSuccess = async (
 		{ message }: CommandContext,
 		invoker: string,
-		reply: string
+		reply: string,
 	) => {
 		const conversation = <ConversationController>(
-			this.client.controllers.get('conversation')
+			this.client.controllers.get("conversation")
 		);
 
 		await conversation.teach({
 			invoker,
-			reply
+			reply,
 		});
 
 		await message.reply(`تمام, هبقى ارد على "${invoker}" بـ "${reply}"`);

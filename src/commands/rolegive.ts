@@ -1,25 +1,25 @@
-import ValClient from '../ValClient';
+import ValClient from "../ValClient";
 
-import { Command, CommandContext } from '../structures';
-import { getRoleObject, getMemberObject } from '../utils/object';
-import { createRoleEmbed } from '../utils/embed';
-import { log, notify } from '../utils/general';
+import { Command, CommandContext } from "../structures";
+import { getRoleObject, getMemberObject } from "../utils/object";
+import { createRoleEmbed } from "../utils/embed";
+import { log, notify } from "../utils/general";
 
 export default class RoleGive extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: 'rolegive',
-			category: 'Moderation',
+			name: "rolegive",
+			category: "Moderation",
 			cooldown: 1000,
 			nOfParams: 2,
-			description: 'بتدي لميمبر روول معين.',
-			exampleUsage: '<mention> <role_name|role_id>',
+			description: "بتدي لميمبر روول معين.",
+			exampleUsage: "<mention> <role_name|role_id>",
 			extraParams: true,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_MOD'
-			}
+				method: "ROLE",
+				required: "AUTH_MOD",
+			},
 		});
 	}
 
@@ -31,18 +31,18 @@ export default class RoleGive extends Command {
 		const roleIDRegex = /\d+/i;
 		const mentionRegex = /<@!(\d+)>/;
 
-		const roleName = params.slice(1).join(' ');
+		const roleName = params.slice(1).join(" ");
 		const roleID =
 			roleName.match(roleNameRegex) || params[1].match(roleIDRegex);
 
 		try {
 			if (!roleID) {
-				await message.reply('لازم تكتب اسم او الاي دي بتاع الروول');
+				await message.reply("لازم تكتب اسم او الاي دي بتاع الروول");
 				return;
 			}
 
 			if (!mentionRegex.test(params[0])) {
-				await message.reply('لازم تعمل منشن للميمبر اللي عايز تديله الروول ده');
+				await message.reply("لازم تعمل منشن للميمبر اللي عايز تديله الروول ده");
 				return;
 			}
 
@@ -50,18 +50,18 @@ export default class RoleGive extends Command {
 			const role = getRoleObject(this.client, roleID[0]);
 
 			if (!role) {
-				await message.reply('الروول مش موجود');
+				await message.reply("الروول مش موجود");
 				return;
 			}
 
 			const targetMember = getMemberObject(this.client, targetMemberID);
 
 			const embed = createRoleEmbed({
-				title: 'Member Role Added',
+				title: "Member Role Added",
 				member: targetMemberID,
 				moderator: member.id,
 				channel: channel.id,
-				role: role.id
+				role: role.id,
 			});
 
 			await Promise.all([
@@ -70,12 +70,12 @@ export default class RoleGive extends Command {
 					client: this.client,
 					notification: `<@${targetMemberID}>`,
 					embed,
-					channel: CHANNEL_MOD_LOGS
+					channel: CHANNEL_MOD_LOGS,
 				}),
-				message.reply(`اديت الميمبر ده روول ${role.name}`)
+				message.reply(`اديت الميمبر ده روول ${role.name}`),
 			]);
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }

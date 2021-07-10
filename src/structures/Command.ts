@@ -8,10 +8,15 @@ import {
 	ERROR_COMMAND_NOT_READY,
 } from "../config/events.json";
 
-import { generateParamError , isAllowed, isEachParamValid, help } from "../utils/commands";
+import {
+	generateParamError,
+	isAllowed,
+	isEachParamValid,
+	help,
+} from "../utils/commands";
 import { CommandOptions } from "../types/interfaces";
 import { Message } from "discord.js";
-
+import { isDev } from "../utils/general";
 
 export default abstract class Command {
 	client: ValClient;
@@ -27,7 +32,7 @@ export default abstract class Command {
 
 	run = async (message: Message): Promise<void> => {
 		if (!this.client.ready && this.options.name !== "setup") {
-			message.reply(
+			await message.reply(
 				`مش جاهز لسه او البوت مش معمله setup. شغلوا \`${this.client.prefix} setup\``,
 			);
 			return;
@@ -36,30 +41,30 @@ export default abstract class Command {
 		const context = new CommandContext(this.client, message);
 
 		if (context.params[0] === "help") {
-			help(this.client, this.options, context);
+			await help(this.client, this.options, context);
 			return;
 		}
 
 		if (!isAllowed(this.client, this.options, context)) {
-			message.reply(ERROR_COMMAND_NOT_ALLOWED);
+			await message.reply(ERROR_COMMAND_NOT_ALLOWED);
 			return;
 		}
 
 		if (!isEachParamValid(this.options, context.params)) {
-			message.reply(generateParamError(this.client, this.options));
+			await message.reply(generateParamError(this.client, this.options));
 			return;
 		}
 
 		this.enforceCooldown(context);
 	};
 
-	private enforceCooldown = (context: CommandContext): void => {
+	private enforceCooldown = async (context: CommandContext): Promise<void> => {
 		const { cooldown } = this.options;
 
-		if (this.ready) this._run(context);
-		else context.message.reply(ERROR_COMMAND_NOT_READY);
+		if (this.ready) await this._run(context);
+		else await context.message.reply(ERROR_COMMAND_NOT_READY);
 
-		if (cooldown !== 0) {
+		if (cooldown !== 0 && !isDev()) {
 			this.ready = false;
 
 			this.cooldownTimer = setTimeout(() => {
@@ -79,7 +84,9 @@ export default abstract class Command {
 	 */
 	stop = (context: CommandContext, isGraceful: boolean, error: Error): void => {
 		if (!isGraceful)
-			context.message.reply(error.message || ERROR_GENERIC_SOMETHING_WENT_WRONG);
+			context.message.reply(
+				error.message || ERROR_GENERIC_SOMETHING_WENT_WRONG,
+			);
 		else context.message.reply(GENERIC_CONTROLLED_COMMAND_CANCEL);
 
 		this.ready = true;

@@ -1,13 +1,13 @@
-import { Command, CommandContext } from '../structures';
-import { warn, isWarned } from '../utils/moderation';
-import { log } from '../utils/general';
-import ValClient from '../ValClient';
+import { Command, CommandContext } from "../structures";
+import { warn, isWarned } from "../utils/moderation";
+import { log } from "../utils/general";
+import ValClient from "../ValClient";
 
 export default class Warn extends Command {
 	constructor(client: ValClient) {
 		super(client, {
 			name: `warn`,
-			category: 'Moderation',
+			category: "Moderation",
 			cooldown: 1000,
 			nOfParams: 2,
 			description: `بتحذر ميمبر على حاجة عملها`,
@@ -15,9 +15,9 @@ export default class Warn extends Command {
 			extraParams: true,
 			optionalParams: 0,
 			auth: {
-				method: 'ROLE',
-				required: 'AUTH_MOD'
-			}
+				method: "ROLE",
+				required: "AUTH_MOD",
+			},
 		});
 	}
 
@@ -27,15 +27,15 @@ export default class Warn extends Command {
 
 		try {
 			if (!mentionRegex.test(mention)) {
-				await message.reply('لازم تعمل منشن للـ member');
+				await message.reply("لازم تعمل منشن للـ member");
 				return;
 			}
 
 			const id = mention.match(mentionRegex)[1];
-			const reason = reasonWords.join(' ');
+			const reason = reasonWords.join(" ");
 
 			if (isWarned(this.client, id)) {
-				await message.reply('الميمبر ده متحذر قبل كده');
+				await message.reply("الميمبر ده متحذر قبل كده");
 				return;
 			}
 
@@ -43,10 +43,10 @@ export default class Warn extends Command {
 				member: id,
 				moderator: member.id,
 				channel: channel.id,
-				reason
+				reason,
 			});
 		} catch (err) {
-			log(this.client, err, 'error');
+			log(this.client, err, "error");
 		}
 	};
 }

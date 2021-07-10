@@ -120,9 +120,7 @@ export function createClearEmbed({
  * Creates a general embed
  */
 export function createEmbed(embedOptions: MessageEmbedOptions) {
-	const embed = new MessageEmbed(embedOptions)
-		.setColor("#ffcc5c")
-		.setTimestamp();
+	const embed = new MessageEmbed(embedOptions).setColor("#ffcc5c");
 
 	return embed;
 }

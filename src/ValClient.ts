@@ -107,27 +107,31 @@ export default class ValClient extends Client {
 	};
 
 	onReady = async (): Promise<void> => {
-		log(this, "Ready status received. Bot initialising.", "info");
+		try {
+			log(this, "Ready status received. Bot initialising.", "info");
 
-		this.ValGuild = this.guilds.cache.first();
+			this.ValGuild = this.guilds.cache.first();
 
-		await this.initLoaders();
-		this.initListeners();
-		await this.initConfig();
+			await this.initLoaders();
+			this.initListeners();
+			await this.initConfig();
 
-		const intervals = <IntervalsController>this.controllers.get("intervals");
+			const intervals = <IntervalsController>this.controllers.get("intervals");
 
-		await this.setPresence();
+			await this.setPresence();
 
-		intervals.set({
-			callback: this.setPresence,
-			name: "presence",
-			time: 30 * 1000,
-		});
+			intervals.set({
+				callback: this.setPresence,
+				name: "presence",
+				time: 30 * 1000,
+			});
 
-		this.emit("queueExecute", "Client ready");
+			this.emit("queueExecute", "Client ready");
 
-		log(this, "Client ready", "info");
+			log(this, "Client ready", "info");
+		} catch (error) {
+			log(this, error, "error");
+		}
 	};
 
 	setPresence = async () => {
@@ -176,41 +180,41 @@ export default class ValClient extends Client {
 	};
 
 	initConfig = async () => {
-		try {
-			const mongo = <MongoController>this.controllers.get("mongo");
-			const queue = <QueueController>this.controllers.get("queue");
+		const mongo = <MongoController>this.controllers.get("mongo");
+		const queue = <QueueController>this.controllers.get("queue");
 
-			if (mongo.ready) {
-				const response: ClientConfig = await mongo.db
-					.collection("config")
-					.findOne(
-						{
-							GUILD_ID: process.env.GUILD_ID,
-						},
-						{ projection: { _id: 0, GUILD_ID: 0 } },
-					);
+		if (mongo.ready) {
+			const response: ClientConfig = await mongo.db
+				.collection("config")
+				.findOne(
+					{
+						GUILD_ID: process.env.GUILD_ID,
+					},
+					{ projection: { _id: 0, GUILD_ID: 0 } },
+				);
 
-				if (!response || ClientConfigValidator.validate(response).error) {
-					this.config = transformObject<ClientConfig>(response, this.config);
-					await mongo.setConfig(this.config);
-					console.log(ClientConfigValidator.validate(response).error);
+			if (!response || ClientConfigValidator.validate(response).error) {
+				this.config = transformObject<ClientConfig>(response, this.config);
+				await mongo.setConfig(this.config);
+				console.log(ClientConfigValidator.validate(response).error);
 
-					return log(
-						this,
-						`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
-						"warn",
-					);
-				}
-
-				this.ready = true;
-				this.config = response;
-
-				this.emit("queueExecute", "Config ready");
-			} else {
-				queue.enqueue({ func: this.initConfig, args: [] });
+				throw Error(
+					`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
+				);
 			}
-		} catch (err) {
-			log(this, err, "error");
+
+			const channelResolvers = Object.keys(response)
+				.filter(key => key.includes("CHANNEL_"))
+				.map(key => this.channels.fetch(response[key], true));
+
+			await Promise.all(channelResolvers);
+
+			this.ready = true;
+			this.config = response;
+
+			this.emit("queueExecute", "Config ready");
+		} else {
+			queue.enqueue({ func: this.initConfig, args: [] });
 		}
 	};
 }
