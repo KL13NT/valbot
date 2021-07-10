@@ -16,6 +16,7 @@ import {
 } from "../utils/commands";
 import { CommandOptions } from "../types/interfaces";
 import { Message } from "discord.js";
+import { isDev } from "../utils/general";
 
 export default abstract class Command {
 	client: ValClient;
@@ -63,7 +64,7 @@ export default abstract class Command {
 		if (this.ready) await this._run(context);
 		else await context.message.reply(ERROR_COMMAND_NOT_READY);
 
-		if (cooldown !== 0) {
+		if (cooldown !== 0 && !isDev()) {
 			this.ready = false;
 
 			this.cooldownTimer = setTimeout(() => {
