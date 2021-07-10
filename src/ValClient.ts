@@ -198,8 +198,10 @@ export default class ValClient extends Client {
 				await mongo.setConfig(this.config);
 				console.log(ClientConfigValidator.validate(response).error);
 
-				throw Error(
+				return log(
+					this,
 					`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
+					"warn",
 				);
 			}
 
