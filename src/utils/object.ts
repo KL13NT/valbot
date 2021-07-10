@@ -16,7 +16,9 @@ export function getChannelObject(
 	return <TextChannel>(
 		client.guilds.cache
 			.first()
-			.channels.cache.find(ch => (ch.id === isDev() ? CHANNEL_TEST : channelId))
+			.channels.cache.find(ch =>
+				isDev() ? ch.id === CHANNEL_TEST : ch.id === channelId,
+			)
 	);
 }
 
