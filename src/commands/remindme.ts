@@ -9,6 +9,8 @@ import { RemindersController } from "../controllers";
 import { parse } from "chrono-node";
 import { createEmbed } from "../utils/embed";
 
+const MIN_TIME_REMINDER = 5 * 60 * 1000;
+
 export default class Remindme extends Command {
 	constructor(client: ValClient) {
 		super(client, {
@@ -61,12 +63,15 @@ export default class Remindme extends Command {
 			);
 
 			const date = new Date(year, month - 1, day, hour, minute, 0, 0);
+			const now = new Date();
+			now.setSeconds(0);
+			now.setMilliseconds(0);
 
-			if (isNaN(date.getTime()) || new Date().getTime() >= date.getTime()) {
-				const lolreally = this.client.emojis.cache.find(
-					emoji => emoji.name === "lolreally",
-				);
+			const lolreally = this.client.emojis.cache.find(
+				emoji => emoji.name === "lolreally",
+			);
 
+			if (isNaN(date.getTime()) || now.getTime() >= date.getTime()) {
 				await message.reply(
 					`مينفعش تعمل ريمايندر لوقت سابق. بلاش هزار. ${lolreally}`,
 				);
@@ -74,40 +79,13 @@ export default class Remindme extends Command {
 				return;
 			}
 
-			const description = params
-				.filter(param => !results.some(result => result.text.includes(param)))
-				.join(" ");
+			if (date.getTime() - now.getTime() <= MIN_TIME_REMINDER) {
+				await message.reply(
+					`ذاكرة سمكة؟ شكلها والله ذاكرة سمكة. خلي الريمايندر اكتر من 5 دقايق. ${lolreally}`,
+				);
 
-			console.log(description);
-
-			const confirmationEmbed = createEmbed({
-				title: "Confirmation (yes/no)",
-				description: `انا فاهمك صح كده؟`,
-				fields: [
-					{
-						name: "**هفكرك بـ**",
-						value: description,
-					},
-					{
-						name: "**تاريخ**",
-						value: date.toUTCString(),
-					},
-				],
-				footer: { text: "رد في خلال دقيقة وإلا هعتبر الـ reminder لاغي" },
-			});
-
-			await message.reply(confirmationEmbed);
-			const correct = await awaitMessages(channel, member);
-
-			if (correct.toLowerCase() === "no") {
-				await message.reply("Discarded the reminder");
 				return;
 			}
-
-			const sub: ReminderSubscription = {
-				description,
-				member: member.id,
-			};
 
 			const active = await reminders.getMemberReminders(member.id);
 			if (active.length >= 2) {
@@ -120,8 +98,49 @@ export default class Remindme extends Command {
 				return;
 			}
 
+			const description = params
+				.filter(param => !results.some(result => result.text.includes(param)))
+				.join(" ");
+
+			const dateFormatter = new Intl.DateTimeFormat("ar-EG", {
+				dateStyle: "full",
+				timeStyle: "short",
+			});
+
+			const confirmationEmbed = createEmbed({
+				title: "Confirmation (yes/no)",
+				description: `انا فاهمك صح كده؟`,
+				fields: [
+					{
+						name: "**هفكرك بـ**",
+						value: description,
+					},
+					{
+						name: "**تاريخ**",
+						value: dateFormatter.format(date),
+					},
+				],
+				footer: { text: "رد في خلال دقيقة وإلا هعتبر الـ reminder لاغي" },
+			});
+
+			await message.reply(confirmationEmbed);
+			const choice = (await awaitMessages(channel, member)).toLowerCase();
+
+			if (choice !== "no" && choice !== "yes") {
+				await message.reply("مش فاهمك");
+				return;
+			} else if (choice === "no") {
+				await message.reply("تمام");
+				return;
+			}
+
+			const sub: ReminderSubscription = {
+				description,
+				member: member.id,
+			};
+
 			await reminders.addReminder(date.getTime(), sub);
-			await message.reply(`تم. هفكرك في \n${date.toString()}`);
+			await message.reply(`تم. هفكرك في \n${dateFormatter.format(date)}`);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
