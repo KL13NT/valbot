@@ -104,7 +104,8 @@ export default class Remindme extends Command {
 
 			const dateFormatter = new Intl.DateTimeFormat("ar-EG", {
 				dateStyle: "full",
-				timeStyle: "short",
+				timeStyle: "long",
+				timeZoneName: "short",
 			});
 
 			const confirmationEmbed = createEmbed({
