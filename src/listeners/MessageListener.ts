@@ -26,9 +26,12 @@ export default class MessageListener extends Listener {
 				controllers.get("conversation")
 			);
 
-			const isToxic = await toxicity.classify(message);
+			const classification = await toxicity.classify(message);
 
-			if (isToxic) return toxicity.handleToxic(message);
+			if (classification.length > 0) {
+				toxicity.report(message, classification);
+				return;
+			}
 
 			const isClientMentioned =
 				mentions.members &&
@@ -59,6 +62,7 @@ export default class MessageListener extends Listener {
 		member,
 	}: Message): boolean =>
 		!webhookID &&
+		this.client.ready &&
 		author.id !== this.client.user.id &&
 		channel.type === "text" &&
 		type === "DEFAULT" &&
