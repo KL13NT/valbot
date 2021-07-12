@@ -8,43 +8,22 @@ import { getMemberObject } from "./object";
 import { createUserModerationEmbed } from "./embed";
 
 export async function mute(client: ValClient, options: UserModerationOptions) {
-	const { member, moderator, channel, reason } = options;
-
-	const { ROLE_MUTED } = client.config;
-	const { CHANNEL_MOD_LOGS } = client.config;
+	const { member, moderator, channel } = options;
 
 	const targetMember = getMemberObject(client, member);
 
-	const embed = createUserModerationEmbed({
-		title: "Muted Member",
-		member,
-		moderator,
-		channel,
-		reason,
-	});
+	await targetMember.roles.add(client.config.ROLE_MUTED);
 
-	try {
-		setTimeout(() => {
-			unmute(client, {
-				member,
-				moderator,
-				channel,
-				reason: "Mute time expired",
-			}).catch(err => log(client, err, "error"));
-		}, 5 * 60 * 1000);
-
-		await Promise.all([
-			targetMember.roles.add(ROLE_MUTED),
-			notify({
-				client,
-				notification: `<@${member}>`,
-				embed,
-				channel: CHANNEL_MOD_LOGS,
-			}),
-		]);
-	} catch (err) {
-		log(client, err, "error");
-	}
+	// TODO: replace with better intervalled-scheme controller
+	// TODO: store number of violations in redis and use as multiplier
+	setTimeout(() => {
+		unmute(client, {
+			member,
+			moderator,
+			channel,
+			reason: "Mute time expired",
+		}).catch(err => log(client, err, "error"));
+	}, 5 * 60 * 1000);
 }
 
 export async function ban(client: ValClient, options: UserModerationOptions) {
@@ -143,6 +122,8 @@ export async function unmute(
 	client: ValClient,
 	options: UserModerationOptions,
 ) {
+	// TODO: decouple
+
 	const { member, moderator, channel, reason } = options;
 	const { ROLE_MUTED } = client.config;
 	const { CHANNEL_MOD_LOGS } = client.config;
