@@ -4,7 +4,7 @@ import {
 	LevelupEmbedOptions,
 	ClearEmbedOptions,
 } from "../types/interfaces";
-import { MessageEmbed, MessageEmbedOptions } from "discord.js";
+import { EmbedField, MessageEmbed, MessageEmbedOptions } from "discord.js";
 
 /**
  * Creates a moderation (ban/mute/warn) event embed
@@ -15,9 +15,9 @@ export function createUserModerationEmbed({
 	moderator,
 	channel,
 	reason,
-	date,
+	fields,
 }: ModerationEmbedOptions) {
-	return createEmbed({
+	const embed = createEmbed({
 		title: title,
 		fields: [
 			{
@@ -29,13 +29,12 @@ export function createUserModerationEmbed({
 			{ name: "**Moderator**", value: `<@${moderator}>`, inline: false },
 			{ name: "**Location**", value: `<#${channel}>`, inline: true },
 			{ name: "**Reason**", value: reason, inline: false },
-			{
-				name: "**Date / Time**",
-				value: date ? date.toUTCString() : new Date().toUTCString(),
-				inline: true,
-			},
 		],
 	});
+
+	if (fields) embed.addFields(fields);
+
+	return embed;
 }
 
 /**
@@ -123,4 +122,31 @@ export function createEmbed(embedOptions: MessageEmbedOptions) {
 	const embed = new MessageEmbed(embedOptions).setColor("#ffcc5c");
 
 	return embed;
+}
+
+export function getEmbedField(
+	embed: MessageEmbed,
+	name: string,
+	value?: string,
+): EmbedField | undefined {
+	return embed.fields.find(field => {
+		if (value)
+			return (
+				field.name.toLowerCase() === name.toLowerCase() &&
+				field.value.toLowerCase() === value.toLowerCase()
+			);
+
+		return field.name.toLowerCase() === name.toLowerCase();
+	});
+}
+
+export function updateEmbedFields(
+	embed: MessageEmbed,
+	update: Record<string, EmbedField>,
+) {
+	//
+	return new MessageEmbed({
+		...embed,
+		fields: embed.fields.map(field => update[field.name] || field),
+	});
 }
