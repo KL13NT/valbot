@@ -215,17 +215,21 @@ export default class ToxicityController extends Controller {
 			getEmbedField(embed, "author id").value,
 		);
 
+		const violationChannelId = getEmbedField(embed, "channel").value.match(
+			/<#(\d+)>/,
+		)[1];
+
 		const muteEmbed = createUserModerationEmbed({
 			title: "Muted Member",
 			member: member.id,
 			moderator: user.id,
-			channel: getEmbedField(embed, "channel").value.match(/<#(\d+)>/)[1],
+			channel: violationChannelId,
 			reason,
 		});
 
 		const violationMessage = getEmbedField(embed, "message id").value;
 		const violationChannel = <TextChannel>(
-			await this.client.channels.fetch(reaction.message.channel.id)
+			await this.client.channels.fetch(violationChannelId)
 		);
 
 		const updatedReport = updateEmbedFields(embed, {

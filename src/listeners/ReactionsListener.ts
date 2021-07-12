@@ -4,6 +4,7 @@ import ValClient from "../ValClient";
 // import { log } from "../utils/general";
 import { MessageReaction, User } from "discord.js";
 import { ToxicityController } from "../controllers";
+import { log } from "../utils/general";
 
 export default class ReactionsListener extends Listener {
 	constructor(client: ValClient) {
@@ -14,9 +15,13 @@ export default class ReactionsListener extends Listener {
 		reaction: MessageReaction,
 		user: User,
 	): Promise<void> => {
-		(<ToxicityController>this.client.controllers.get("toxicity")).react(
-			reaction,
-			user,
-		);
+		try {
+			(<ToxicityController>this.client.controllers.get("toxicity")).react(
+				reaction,
+				user,
+			);
+		} catch (err) {
+			log(this.client, err, "error");
+		}
 	};
 }
