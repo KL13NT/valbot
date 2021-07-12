@@ -1,4 +1,10 @@
-import { Snowflake, Role, MessageEmbed, PresenceData } from "discord.js";
+import {
+	Snowflake,
+	Role,
+	MessageEmbed,
+	PresenceData,
+	EmbedField,
+} from "discord.js";
 import CommandContext from "../structures/CommandContext";
 import ValClient from "../ValClient";
 
@@ -97,10 +103,10 @@ export interface IntervalOptions {
 export interface ModerationEmbedOptions {
 	title: string;
 	reason: string;
-	date?: Date;
 	member: Snowflake;
 	moderator: Snowflake;
 	channel: Snowflake;
+	fields?: EmbedField[];
 }
 
 export interface RoleEmbedOptions {

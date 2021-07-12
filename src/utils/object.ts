@@ -38,6 +38,7 @@ export function getMemberObject(
 	client: ValClient,
 	userId: Snowflake,
 ): GuildMember | undefined {
+	// replace with fetch
 	return client.guilds.cache
 		.first()
 		.members.cache.find(member => member.id === userId);
