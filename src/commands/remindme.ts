@@ -16,7 +16,7 @@ export default class Remindme extends Command {
 		super(client, {
 			name: "remindme",
 			category: "Misc",
-			cooldown: 30 * 1000,
+			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: "قولي افكرك بحاجة امتى و هفكرك. UTC بالأساس.",
 			exampleUsage:
