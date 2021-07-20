@@ -6,13 +6,21 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"prettier",
 	],
+	env: {
+		"jest/globals": true,
+	},
 	parser: "@typescript-eslint/parser",
 	parserOptions: {
 		ecmaVersion: 2018,
 		sourceType: "module",
 	},
-	plugins: ["prettier", "@typescript-eslint"],
+	plugins: ["prettier", "@typescript-eslint", "jest"],
 	rules: {
+		"jest/no-disabled-tests": "warn",
+		"jest/no-focused-tests": "error",
+		"jest/no-identical-title": "error",
+		"jest/prefer-to-have-length": "warn",
+		"jest/valid-expect": "error",
 		"no-tabs": 0,
 		"@typescript-eslint/explicit-module-boundary-types": 0,
 		"comma-dangle": ["error", "always-multiline"],

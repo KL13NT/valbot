@@ -1,5 +1,8 @@
 module.exports = {
-	testEnvironment: 'node',
-	setupFilesAfterEnv: ['jest-extended'],
-	setupFiles: ['dotenv/config']
-}
+	testEnvironment: "node",
+	collectCoverage: true,
+	setupFilesAfterEnv: ["jest-extended"],
+	setupFiles: ["dotenv/config"],
+	testMatch: null,
+	testRegex: ".*\\.test\\.ts",
+};

@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"typeRoots": ["./node_modules/@types"],
 		"incremental": true,
-		"target": "ES2021",
+		"target": "esnext",
 		"module": "commonjs",
 		"lib": ["DOM", "ES2016", "ES2020", "ESNext"],
 		"checkJs": false,
