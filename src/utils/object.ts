@@ -1,7 +1,7 @@
 import ValClient from "../ValClient";
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import { GuildMember, Snowflake, TextChannel } from "discord.js";
+import { GuildMember, Snowflake, TextChannel, VoiceChannel } from "discord.js";
 import { isDev } from "./general";
 
 /**
@@ -61,4 +61,12 @@ export function localToBuffer(path: string) {
 			encoding: "base64",
 		});
 	return file;
+}
+
+export function isChannelEmpty(channel: TextChannel | VoiceChannel) {
+	return channel && channel.members.size === 0;
+}
+
+export function isEveryMemberDeaf(channel: TextChannel | VoiceChannel) {
+	return channel && channel.members.every(member => member.voice.deaf);
 }
