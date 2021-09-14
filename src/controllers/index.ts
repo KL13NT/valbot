@@ -7,3 +7,4 @@ export { default as ConversationController } from "./ConversationController";
 export { default as RemindersController } from "./RemindersController";
 export { default as ToxicityController } from "./ToxicityController";
 export { default as RenderController } from "./RenderController";
+export { default as MusicController } from "./MusicController";
