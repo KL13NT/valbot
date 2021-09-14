@@ -20,3 +20,4 @@ export { default as Notify } from "./notify";
 export { default as PresenceSet } from "./presenceset";
 export { default as PresenceClaer } from "./presenceclear";
 export { default as Leaderboard } from "./leaderboard";
+export { default as Play } from "./play";
