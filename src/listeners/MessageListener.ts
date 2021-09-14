@@ -66,5 +66,7 @@ export default class MessageListener extends Listener {
 		author.id !== this.client.user.id &&
 		channel.type === "text" &&
 		type === "DEFAULT" &&
-		(!isDev() || isAdmin(member));
+		(!isDev() ||
+			isAdmin(member) ||
+			member.roles.cache.some(role => role.id === process.env.ROLE_DEVELOPER));
 }
