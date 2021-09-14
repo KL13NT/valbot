@@ -66,8 +66,7 @@ export default class ToxicityController extends Controller {
 	};
 
 	classify = async (message: Message): Promise<string[]> => {
-		if (isDev()) return Object.keys(this.labels);
-		if (!this.ready) return [];
+		if (!this.ready || isDev()) return [];
 
 		const { content: sentence } = message;
 		const predictions = await this.classifier.classify([sentence]);
