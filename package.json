@@ -12,6 +12,7 @@
 		"develop": "yarn run-p develop:mongo develop:redis watch develop:node",
 		"develop:mongo": "mongod --dbpath=data",
 		"develop:redis": "redis-server",
+		"dev:cloud": "yarn run-p watch develop:node",
 		"start": "tsc && node ./prod/index.js",
 		"develop:node": "nodemon -r dotenv/config ./prod/index.js --inspect",
 		"inspect:node": "nodemon --inspect -r dotenv/config ./prod/index.js --inspect",
