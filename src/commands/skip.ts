@@ -12,17 +12,17 @@ export default class Skip extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 0,
 			description: "عجلة قدام ياسطا",
-			exampleUsage: "-",
+			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
-				method: "ٌROLE",
+				method: "ROLE",
 				required: "AUTH_EVERYONE",
 			},
 		});
 	}
 
-	_run = async ({ member, message, params }: CommandContext) => {
+	_run = async ({ member, message }: CommandContext) => {
 		try {
 			const controller = this.client.controllers.get(
 				"music",
@@ -38,15 +38,6 @@ export default class Skip extends Command {
 				return;
 			}
 
-			// Extras
-			if (params.length > 1) {
-				await message.reply(
-					createEmbed({
-						description: `Skip doesn't take arguments but it is ok`,
-					}),
-				);
-			}
-
 			if (!controller.canUserPlay(voiceChannel)) {
 				await message.reply(
 					createEmbed({
@@ -59,7 +50,7 @@ export default class Skip extends Command {
 			if (this.client.voice.connections.size === 0) {
 				await message.reply(
 					createEmbed({
-						description: "Bot is not the channel.",
+						description: "Bot is not in a voice channel.",
 					}),
 				);
 			}
