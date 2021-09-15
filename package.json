@@ -63,6 +63,7 @@
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.4.4",
+		"@discordjs/opus": "^0.6.0",
 		"@hapi/joi": "^17.1.1",
 		"@tensorflow-models/toxicity": "^1.2.2",
 		"@tensorflow/tfjs": "^1.5.1",
@@ -70,6 +71,8 @@
 		"discord.js": "^12.5.1",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
+		"ffmpeg-static": "^4.4.0",
+		"fluent-ffmpeg": "^2.1.2",
 		"mongodb": "^3.2.7",
 		"node-html-to-image": "^3.1.0",
 		"puppeteer-cluster": "^0.22.0",
