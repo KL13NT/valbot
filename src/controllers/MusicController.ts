@@ -119,6 +119,12 @@ export default class MusicController extends Controller {
 	};
 
 	enqueue = (song: Song) => {
+		log(
+			this.client,
+			`Enqueued ${song.title} by ${song.requestingUserId}`,
+			"info",
+		);
+
 		this.setState({
 			queue: [...this.state.queue, song],
 		});
@@ -164,14 +170,15 @@ export default class MusicController extends Controller {
 		}
 
 		const song = this.state.queue[this.state.index];
-		const info = await ytdl.getInfo(song.url);
 
-		const formats = info.formats
-			.filter(format => format.quality === "tiny" && format.hasAudio)
-			.sort((formatA, formatB) => formatA.audioBitrate - formatB.audioBitrate);
+		log(
+			this.client,
+			`Starting to play ${song.title} with \`lowest\` format`,
+			"info",
+		);
 
-		const stream = ytdl.downloadFromInfo(info, {
-			format: formats[0],
+		const stream = ytdl(song.url, {
+			quality: "lowest",
 		});
 
 		this.setState({
@@ -186,6 +193,7 @@ export default class MusicController extends Controller {
 	};
 
 	pause = async () => {
+		log(this.client, "Pausing stream", "info");
 		this.state.stream.destroy();
 
 		this.setState({
@@ -199,21 +207,30 @@ export default class MusicController extends Controller {
 	// list = async () => {};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
-		if (!this.state.vc)
+		if (!this.state.vc) {
+			log(
+				this.client,
+				`Connecting to vc: ${vc.name}, text: ${text.name}`,
+				"info",
+			);
+
 			this.setState({
 				vc,
 				text,
 				connection: this.state.connection || (await vc.join()),
 			});
+		}
 	};
 
 	disconnect = async (reason = "User disconnected bot") => {
+		log(this.client, `Disconnecting, reason: ${reason}`, "info");
+
 		if (this.state.connection) this.state.connection.disconnect();
 		if (this.state.stream) this.state.stream.destroy();
 
 		clearTimeout(this.state.timeout);
 
-		const reply = await this.state.text.send(
+		await this.state.text.send(
 			createEmbed({
 				description: `Disconnected from voice channel. Reason: ${reason}`,
 			}),
@@ -231,8 +248,6 @@ export default class MusicController extends Controller {
 			index: 0,
 			dispatcher: null,
 		};
-
-		return reply;
 	};
 
 	canUserPlay = (vc: VoiceChannel) => {
