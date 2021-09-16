@@ -13,6 +13,7 @@ import ValClient from "../ValClient";
 import { Readable } from "stream";
 import { isChannelEmpty } from "../utils/object";
 import { createEmbed } from "../utils/embed";
+import { log } from "../utils/general";
 
 export type Seconds = number;
 
@@ -90,19 +91,26 @@ export default class MusicController extends Controller {
 		this.play(true);
 	};
 
-	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
-		if (oldState.member.id === this.client.user.id)
-			this.handleBotStateChange(oldState, newState);
-		else if (
-			oldState.channel?.id === this.state.vc?.id ||
-			newState.channel?.id === this.state.vc?.id
-		)
-			this.onStateChanged();
+	handleStateUpdate = async (oldState: VoiceState, newState: VoiceState) => {
+		try {
+			if (oldState.member.id === this.client.user.id)
+				await this.handleBotStateChange(oldState, newState);
+			else if (
+				oldState.channel?.id === this.state.vc?.id ||
+				newState.channel?.id === this.state.vc?.id
+			)
+				this.onStateChanged();
+		} catch (error) {
+			log(this.client, error, "error");
+		}
 	};
 
-	handleBotStateChange = (_oldState: VoiceState, newState: VoiceState) => {
+	handleBotStateChange = async (
+		_oldState: VoiceState,
+		newState: VoiceState,
+	) => {
 		if (!newState.channel && this.state.state === "playing") {
-			this.disconnect("User disconnected bot");
+			await this.disconnect("User disconnected bot");
 			return;
 		}
 
@@ -160,18 +168,16 @@ export default class MusicController extends Controller {
 		const song = this.state.queue[this.state.index];
 
 		const stream = ytdl(song.url, {
-			filter: "audioonly",
 			quality: QUALITY_ITAG,
 		});
-
-		this.state.connection.play(stream);
 
 		this.setState({
 			stream,
 			state: "playing",
 		});
 
-		this.state.stream.on("end", () => this.jump("skip"));
+		const dispatcher = this.state.connection.play(stream);
+		dispatcher.on("finish", () => this.jump("skip"));
 	};
 
 	pause = async () => {
