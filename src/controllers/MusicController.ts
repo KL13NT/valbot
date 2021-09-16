@@ -12,6 +12,7 @@ import { Controller } from "../structures";
 import ValClient from "../ValClient";
 import { Readable } from "stream";
 import { isChannelEmpty } from "../utils/object";
+import { createEmbed } from "../utils/embed";
 
 export type Seconds = number;
 
@@ -61,7 +62,7 @@ export interface MusicControllerState {
 }
 
 const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
-const QUALITY_ITAG = 250;
+const QUALITY_ITAG = "lowestaudio";
 
 export default class MusicController extends Controller {
 	private state: MusicControllerState = {
@@ -109,7 +110,7 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	enqueue = async (song: Song) => {
+	enqueue = (song: Song) => {
 		this.setState({
 			queue: [...this.state.queue, song],
 		});
@@ -201,7 +202,9 @@ export default class MusicController extends Controller {
 		clearTimeout(this.state.timeout);
 
 		const reply = await this.state.text.send(
-			`Disconnected from voice channel. Reason: ${reason}`,
+			createEmbed({
+				description: `Disconnected from voice channel. Reason: ${reason}`,
+			}),
 		);
 
 		this.state = {
@@ -224,13 +227,13 @@ export default class MusicController extends Controller {
 		return !this.state.vc || this.state.vc?.id === vc.id;
 	};
 
-	private setState = async (state: Partial<MusicControllerState>) => {
+	private setState = (state: Partial<MusicControllerState>) => {
 		this.state = { ...this.state, ...state };
 
 		this.onStateChanged();
 	};
 
-	private onStateChanged = async () => {
+	private onStateChanged = () => {
 		if (this.shouldTimeout() && !this.state.timeout) {
 			this.state.timeout = setTimeout(
 				() => this.disconnect("No one was listening :("),
