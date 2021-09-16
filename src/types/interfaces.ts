@@ -54,6 +54,7 @@ export interface CommandOptions {
 	exampleUsage: string;
 	extraParams: boolean;
 	optionalParams: number;
+	aliases?: string[];
 	auth: CommandAuthOptions;
 }
 
