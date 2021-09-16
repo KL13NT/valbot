@@ -144,7 +144,6 @@ export default class MusicController extends Controller {
 		return (
 			isChannelEmpty(this.state.vc) ||
 			this.state.queue.length === 0 /* empty queue */ ||
-			this.state.index === this.state.queue.length - 1 /* end of queue */ ||
 			this.state.state === "paused" ||
 			this.state.state === "stopped" ||
 			this.state.connection?.voice?.serverMute
