@@ -63,7 +63,6 @@ export interface MusicControllerState {
 }
 
 const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
-const QUALITY_ITAG = "lowestaudio";
 
 export default class MusicController extends Controller {
 	private state: MusicControllerState = {
@@ -166,9 +165,14 @@ export default class MusicController extends Controller {
 		}
 
 		const song = this.state.queue[this.state.index];
+		const info = await ytdl.getInfo(song.url);
 
-		const stream = ytdl(song.url, {
-			quality: QUALITY_ITAG,
+		const formats = info.formats
+			.filter(format => format.quality === "tiny" && format.hasAudio)
+			.sort((formatA, formatB) => formatA.audioBitrate - formatB.audioBitrate);
+
+		const stream = ytdl.downloadFromInfo(info, {
+			format: formats[0],
 		});
 
 		this.setState({
@@ -176,7 +180,9 @@ export default class MusicController extends Controller {
 			state: "playing",
 		});
 
-		const dispatcher = this.state.connection.play(stream);
+		const dispatcher = this.state.connection.play(stream, {
+			highWaterMark: 512,
+		});
 		dispatcher.on("finish", () => this.jump("skip"));
 	};
 
