@@ -100,8 +100,9 @@ export default class MusicController extends Controller {
 	};
 
 	handleBotStateChange = (_oldState: VoiceState, newState: VoiceState) => {
-		if (!newState.channel && this.state.stream) {
+		if (!newState.channel && this.state.state === "playing") {
 			this.disconnect("User disconnected bot");
+			return;
 		}
 
 		this.setState({
@@ -186,7 +187,7 @@ export default class MusicController extends Controller {
 	// list = async () => {};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
-		if (!this.state.vc?.id || !this.state.vc?.id)
+		if (!this.state.vc)
 			this.setState({
 				vc,
 				text,
