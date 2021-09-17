@@ -151,8 +151,18 @@ export default class MusicController extends Controller {
 			"info",
 		);
 
-		const stream = ytdl(song.url, {
-			quality: "lowest",
+		const stream = ytdl(song.url, { quality: "lowest" });
+
+		stream.on("error", async error => {
+			log(this.client, error, "error");
+
+			await this.state.text.send(
+				createEmbed({
+					description: `Couldn't play [${song.title}](${song.url})`,
+				}),
+			);
+
+			this.skip();
 		});
 
 		this.setState({
