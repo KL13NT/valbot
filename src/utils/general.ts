@@ -8,8 +8,10 @@ import { QueueController } from "../controllers";
 import ValClient from "../ValClient";
 
 import { getChannelObject } from "./object";
-import { TextChannel, GuildMember, Message, Permissions } from "discord.js";
+import { TextChannel, GuildMember, Message, Permissions, DMChannel, NewsChannel } from "discord.js";
 import { ParsedResult } from "chrono-node";
+import messages from "../messages.json";
+import { createEmbed } from "./embed";
 
 const { ROLE_DEVELOPER, MODE } = process.env;
 
@@ -178,3 +180,14 @@ export const chronoResultToObject = (result: ParsedResult) => ({
 	minute: result.start.get("minute"),
 	second: result.start.get("second"),
 });
+
+export const reply = async (
+	id: string,
+	channel: TextChannel | DMChannel | NewsChannel,
+	data?: Record<string, unknown>,
+) =>
+	channel.send(
+		createEmbed({
+			description: compileTemplate(data || {}, messages[id]),
+		}),
+	);

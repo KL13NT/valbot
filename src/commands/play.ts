@@ -1,19 +1,20 @@
 import ytdl from "ytdl-core";
 import LRU from "lru-cache";
+import stringSimilarity from "string-similarity";
 import { TextChannel } from "discord.js";
-import { decode } from "html-entities";
 
 import ValClient from "../ValClient";
 
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
+import { log, reply } from "../utils/general";
 import { MusicController } from "../controllers";
 
-import { createEmbed } from "../utils/embed";
 import { searchVideoMeta } from "../utils/youtube";
 import { Song } from "../controllers/MusicController";
 
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
+const KEY_LENGTH = 100;
+const MATCH_THRESHOLD = 0.65;
 
 export default class Play extends Command {
 	cache: LRU<string, Omit<Song, "requestingUserId">>;
@@ -43,102 +44,112 @@ export default class Play extends Command {
 
 	_run = async ({ member, message, params }: CommandContext) => {
 		try {
+			const voiceChannel = member.voice.channel;
+			const textChannel = message.channel as TextChannel;
 			const controller = this.client.controllers.get(
 				"music",
 			) as MusicController;
 
-			const textChannel = message.channel as TextChannel;
-			const voiceChannel = member.voice.channel;
-
 			if (!voiceChannel) {
-				await message.reply(
-					createEmbed({
-						description: `You're not connected to a voice channel`,
-					}),
-				);
+				await reply("Command.Play.NotConnected", message.channel);
 				return;
 			}
 
 			if (!controller.canUserPlay(voiceChannel)) {
-				await message.reply(
-					createEmbed({
-						description: "You must be in the same channel as the bot",
-					}),
-				);
+				await reply("Command.Play.NotAllowed", message.channel);
 				return;
 			}
 
-			const regex = /^(https:?)|(www\.)|(youtu)/;
-			const key = ytdl.validateURL(params[0])
-				? ytdl.getURLVideoID(params[0])
-				: params.join(" ");
-
-			if (regex.test(params[0]) && !ytdl.validateURL(params[0])) {
-				message.channel.send(
-					createEmbed({
-						description: "This link is invalid. Try a different one.",
-					}),
-				);
-
+			if (this.isInvalidLink(params[0])) {
+				await reply("Command.Play.InvalidLink", message.channel);
 				return;
 			}
 
-			let song = this.cache.get(key);
+			/**
+			 * A song has multiple possible values.
+			 */
+			const key = this.getKey(params);
+			const cached = this.cache.get(key);
 
-			if (!song) {
-				await log(
-					this.client,
-					`Song is not in the cache. Fetching instead. [${key}]`,
-					"info",
-				);
-
-				song = await this.fetchAndCache(params);
-			} else {
-				await log(this.client, `Song is in the cache. [${key}]`, "info");
+			if (cached === null) {
+				await reply("Command.Play.NotFound", message.channel);
+				return;
 			}
 
-			if (!song) {
-				await message.channel.send(
-					createEmbed({
-						description:
-							"Could't find a video matching this query. It might be restricted, or the search quota might have been depleted. If you're sure this video exists try using a link instead.",
-					}),
-				);
+			const matched = cached || this.getBestMatch(key);
+			const song = matched || (await this.fetchAndCache(params));
 
+			if (!song) {
+				await reply("Command.Play.GenericError", message.channel);
 				return;
 			}
 
 			const { url, title } = song;
+
+			// cache a song by title when found, this improves search results as well
+			// as the scenario where a song is played by link first then by a search query
+			this.cache.set(title.substr(0, KEY_LENGTH), song);
+
 			controller.enqueue({
 				url,
 				title,
 				requestingUserId: member.id,
 			});
 
-			await message.channel.send(
-				createEmbed({
-					description: `Queued [${decode(title)}](${url}) [${member}]`,
-				}),
-			);
+			await reply("Command.Play.Queued", message.channel, {
+				title,
+				url,
+				member,
+			});
 
 			await controller.connect(voiceChannel, textChannel);
 			await controller.play();
 		} catch (err) {
-			await log(this.client, err, "error");
+			log(this.client, err, "error");
 		}
 	};
 
+	getKey = (params: string[]) =>
+		ytdl.validateURL(params[0])
+			? ytdl.getURLVideoID(params[0])
+			: params.join(" ").substr(0, KEY_LENGTH);
+
+	isInvalidLink = (url: string) => {
+		const regex = /^(https:?)|(www\.)|(youtu)/;
+
+		return regex.test(url) && !ytdl.validateURL(url);
+	};
+
+	getBestMatch = (key: string) => {
+		if (this.cache.keys().length === 0) return null;
+
+		const { bestMatch } = stringSimilarity.findBestMatch(key, [
+			...this.cache.keys(),
+			"",
+		]);
+
+		if (bestMatch.rating > MATCH_THRESHOLD) {
+			return this.cache.get(bestMatch.target);
+		}
+
+		return null;
+	};
+
 	fetchAndCache = async (params: string[]) => {
+		const key = ytdl.validateURL(params[0])
+			? ytdl.getURLVideoID(params[0])
+			: params.join(" ").substr(0, KEY_LENGTH);
+
 		try {
 			const song = await this.fetchSongDetails(params);
-			const key = ytdl.validateURL(params[0])
-				? ytdl.getURLVideoID(params[0])
-				: params.join(" ");
 
-			if (song) this.cache.set(key, song);
+			this.cache.set(key, song);
 
 			return song;
 		} catch (error) {
+			this.cache.set(key, null);
+
+			log(this.client, error, "error");
 			return null;
 		}
 	};
@@ -149,7 +160,7 @@ export default class Play extends Command {
 
 			return this.cache.get(id);
 		} else {
-			const query = params.join(" ");
+			const query = params.join(" ").substr(0, KEY_LENGTH);
 
 			return this.cache.get(query);
 		}
