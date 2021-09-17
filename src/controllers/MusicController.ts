@@ -297,7 +297,7 @@ export default class MusicController extends Controller {
 			this.state.connection?.voice?.serverMute
 		);
 	};
-	
+
 	private destroyStreams = () => {
 		if (this.state.stream) {
 			this.state.stream.destroy();
