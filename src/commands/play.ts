@@ -1,4 +1,5 @@
 import ytdl from "ytdl-core";
+import LRU from "lru-cache";
 import { TextChannel } from "discord.js";
 import { decode } from "html-entities";
 
@@ -11,12 +12,11 @@ import { MusicController } from "../controllers";
 import { createEmbed } from "../utils/embed";
 import { searchVideoMeta } from "../utils/youtube";
 import { Song } from "../controllers/MusicController";
-import LRU from "lru-cache";
 
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
 
 export default class Play extends Command {
-	cache: LRU<string, Omit<Song, "requestingUserId"> | null>;
+	cache: LRU<string, Omit<Song, "requestingUserId">>;
 
 	constructor(client: ValClient) {
 		super(client, {
@@ -68,37 +68,43 @@ export default class Play extends Command {
 				return;
 			}
 
-			let song: Omit<Song, "requestingUserId"> =
-				this.cache.get(params[0]) || this.cache.get(params.join(" "));
+			const regex = /^(https:?)|(www\.)|(youtu)/;
+			const key = ytdl.validateURL(params[0])
+				? ytdl.getURLVideoID(params[0])
+				: params.join(" ");
 
-			if (song)
+			if (regex.test(params[0]) && !ytdl.validateURL(params[0])) {
+				message.channel.send(
+					createEmbed({
+						description: "This link is invalid. Try a different one.",
+					}),
+				);
+
+				return;
+			}
+
+			let song = this.cache.get(key);
+
+			if (!song) {
 				await log(
 					this.client,
-					`Song available in cache. Params ${params}`,
+					`Song is not in the cache. Fetching instead. [${key}]`,
 					"info",
 				);
 
-			if (song === undefined) {
-				await log(
-					this.client,
-					`Song is not available in cache. Params: ${params}`,
-					"info",
-				);
-
-				if (ytdl.validateURL(params[0]) || /https?:/.test(params[0]))
-					song = await this.getSongDetailsByUrl(params[0]);
-				else song = await this.getSongDetailsByQuery(params.join(" "));
+				song = await this.fetchAndCache(params);
+			} else {
+				await log(this.client, `Song is in the cache. [${key}]`, "info");
 			}
 
 			if (!song) {
-				await log(this.client, `Couldn't find song. Params: ${params}`, "info");
-
 				await message.channel.send(
 					createEmbed({
 						description:
 							"Could't find a video matching this query. It might be restricted, or the search quota might have been depleted. If you're sure this video exists try using a link instead.",
 					}),
 				);
+
 				return;
 			}
 
@@ -122,52 +128,85 @@ export default class Play extends Command {
 		}
 	};
 
-	getSongDetailsByUrl = async (
-		url: string,
-	): Promise<Omit<Song, "requestingUserId">> => {
+	fetchAndCache = async (params: string[]) => {
 		try {
-			const { title } = (await ytdl.getBasicInfo(url)).videoDetails;
+			const song = await this.fetchSongDetails(params);
+			const key = ytdl.validateURL(params[0])
+				? ytdl.getURLVideoID(params[0])
+				: params.join(" ");
 
-			this.cache.set(url, {
-				url,
-				title,
-			});
+			this.cache.set(key, song);
 
-			return {
-				url,
-				title,
-			};
+			return song;
 		} catch (error) {
-			await log(this.client, error, "error");
-			this.cache.set(url, null);
-
 			return null;
 		}
 	};
 
+	getSongFromCache = (params: string[]) => {
+		if (ytdl.validateURL(params[0])) {
+			const id = ytdl.getURLVideoID(params[0]);
+
+			return this.cache.get(id);
+		} else {
+			const query = params.join(" ");
+
+			return this.cache.get(query);
+		}
+	};
+
+	/**
+	 * @throws
+	 */
+	fetchSongDetails = async (params: string[]) => {
+		if (ytdl.validateURL(params[0])) {
+			return this.getSongDetailsByUrl(params[0]);
+		} else {
+			const query = params.join(" ");
+
+			return this.getSongDetailsByQuery(query);
+		}
+	};
+
+	/**
+	 * @throws
+	 */
+	getSongDetailsByUrl = async (
+		url: string,
+	): Promise<Omit<Song, "requestingUserId">> => {
+		const info = await ytdl.getBasicInfo(url);
+
+		if (!info) return null;
+
+		const { title } = info.videoDetails;
+
+		return {
+			url,
+			title,
+		};
+	};
+
+	/**
+	 * @throws
+	 */
 	getSongDetailsByQuery = async (
 		query: string,
 	): Promise<Omit<Song, "requestingUserId">> => {
-		try {
-			const { items } = await searchVideoMeta(query);
+		const { items } = await searchVideoMeta(query);
 
-			if (items.length === 0) {
-				this.cache.set(query, null);
-				return null;
-			}
-
-			const { snippet, id } = items[0];
-			const { videoId } = id;
-			const { title } = snippet;
-			const url = `${YOUTUBE_URL}${videoId}`;
-
-			return {
-				url,
-				title,
-			};
-		} catch (error) {
-			await log(this.client, error, "error");
+		if (items.length === 0) {
+			this.cache.set(query, null);
 			return null;
 		}
+
+		const { snippet, id } = items[0];
+		const { videoId } = id;
+		const { title } = snippet;
+		const url = `${YOUTUBE_URL}${videoId}`;
+
+		return {
+			url,
+			title,
+		};
 	};
 }
