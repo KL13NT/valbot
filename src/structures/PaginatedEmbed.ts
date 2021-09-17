@@ -39,6 +39,8 @@ export default class PaginationEmbed {
 			),
 		);
 
+		if (this.pages.length < 2) return;
+
 		const filter: CollectorFilter = (reaction, user) =>
 			Object.keys(this.emojis).includes(reaction.emoji.name) &&
 			!user.bot &&
