@@ -9,12 +9,15 @@ import { log } from "../utils/general";
 import { MusicController } from "../controllers";
 
 import { createEmbed } from "../utils/embed";
-import { fetchVideoMeta, searchVideoMeta } from "../utils/youtube";
+import { searchVideoMeta } from "../utils/youtube";
 import { Song } from "../controllers/MusicController";
+import LRU from "lru-cache";
 
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
 
 export default class Play extends Command {
+	cache: LRU<string, Omit<Song, "requestingUserId"> | null>;
+
 	constructor(client: ValClient) {
 		super(client, {
 			name: "play",
@@ -29,6 +32,12 @@ export default class Play extends Command {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
 			},
+		});
+
+		this.cache = new LRU({
+			maxAge: 1000 * 60 * 60 * 24,
+			max: 500,
+			length: () => 1,
 		});
 	}
 
@@ -59,17 +68,35 @@ export default class Play extends Command {
 				return;
 			}
 
-			let song: Omit<Song, "requestingUserId">;
+			let song: Omit<Song, "requestingUserId"> =
+				this.cache.get(params[0]) || this.cache.get(params.join(" "));
 
-			if (ytdl.validateURL(params[0]))
-				song = await this.getSongDetailsByUrl(params[0]);
-			else song = await this.getSongDetailsByQuery(params.join(" "));
+			if (song)
+				await log(
+					this.client,
+					`Song available in cache. Params ${params}`,
+					"info",
+				);
+
+			if (song === undefined) {
+				await log(
+					this.client,
+					`Song is not available in cache. Params: ${params}`,
+					"info",
+				);
+
+				if (ytdl.validateURL(params[0]) || /https?:/.test(params[0]))
+					song = await this.getSongDetailsByUrl(params[0]);
+				else song = await this.getSongDetailsByQuery(params.join(" "));
+			}
 
 			if (!song) {
+				await log(this.client, `Couldn't find song. Params: ${params}`, "info");
+
 				await message.channel.send(
 					createEmbed({
 						description:
-							"Could't find a video matching this query. It might be restricted. Try a different one.",
+							"Could't find a video matching this query. It might be restricted, or the search quota might have been depleted. If you're sure this video exists try using a link instead.",
 					}),
 				);
 				return;
@@ -91,42 +118,56 @@ export default class Play extends Command {
 			await controller.connect(voiceChannel, textChannel);
 			await controller.play();
 		} catch (err) {
-			log(this.client, err, "error");
+			await log(this.client, err, "error");
 		}
 	};
 
 	getSongDetailsByUrl = async (
 		url: string,
 	): Promise<Omit<Song, "requestingUserId">> => {
-		const id = ytdl.getURLVideoID(url);
-		const { items } = await fetchVideoMeta(id);
+		try {
+			const { title } = (await ytdl.getBasicInfo(url)).videoDetails;
 
-		if (items.length === 0) return null;
+			this.cache.set(url, {
+				url,
+				title,
+			});
 
-		const { snippet } = items[0];
-		const { title } = snippet;
+			return {
+				url,
+				title,
+			};
+		} catch (error) {
+			await log(this.client, error, "error");
+			this.cache.set(url, null);
 
-		return {
-			url,
-			title,
-		};
+			return null;
+		}
 	};
 
 	getSongDetailsByQuery = async (
 		query: string,
 	): Promise<Omit<Song, "requestingUserId">> => {
-		const { items } = await searchVideoMeta(query);
+		try {
+			const { items } = await searchVideoMeta(query);
 
-		if (items.length === 0) return null;
+			if (items.length === 0) {
+				this.cache.set(query, null);
+				return null;
+			}
 
-		const { snippet, id } = items[0];
-		const { videoId } = id;
-		const { title } = snippet;
-		const url = `${YOUTUBE_URL}${videoId}`;
+			const { snippet, id } = items[0];
+			const { videoId } = id;
+			const { title } = snippet;
+			const url = `${YOUTUBE_URL}${videoId}`;
 
-		return {
-			url,
-			title,
-		};
+			return {
+				url,
+				title,
+			};
+		} catch (error) {
+			await log(this.client, error, "error");
+			return null;
+		}
 	};
 }
