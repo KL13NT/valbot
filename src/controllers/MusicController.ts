@@ -69,7 +69,11 @@ export default class MusicController extends Controller {
 		state: "stopped",
 		index: 0,
 		position: 0,
-		queue: [],
+		queue: /* []  */ new Array(80).fill({
+			title: "Pink Guy - STFU (TastyTreat Remix) - OFFICIAL VIDEO",
+			url: "https://www.youtube.com/watch?v=vk98OllWCsY",
+			requestingUserId: "238009405176676352",
+		}),
 		text: null,
 		vc: null,
 		connection: null,
@@ -268,6 +272,10 @@ export default class MusicController extends Controller {
 
 	get queue() {
 		return this.state.queue;
+	}
+
+	get playState() {
+		return this.state.state;
 	}
 
 	private setState = (state: Partial<MusicControllerState>) => {

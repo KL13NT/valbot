@@ -30,7 +30,9 @@ export default class Queue extends Command {
 
 	_run = async ({ channel, member }: CommandContext) => {
 		try {
-			const { queue } = this.client.controllers.get("music") as MusicController;
+			const { queue, playState, getCurrentSong } = this.client.controllers.get(
+				"music",
+			) as MusicController;
 
 			if (queue.length === 0) {
 				channel.send(
@@ -43,14 +45,25 @@ export default class Queue extends Command {
 			}
 
 			const strings = queue.map(
-				(song, i) => `${i + 1}) ${song.title.substr(0, 40)}`,
+				(song, i) =>
+					`**${i + 1})** [${song.title.substr(0, 40)}](${song.url}) | <@!${
+						song.requestingUserId
+					}>\n`,
 			);
 
 			const pages = [];
+			const current = getCurrentSong();
+			const title =
+				playState === "playing"
+					? `**__Playing  ▶️__**\n[${current.title}](${current.url}) [<@!${current.requestingUserId}>]`
+					: `**__Stopped  ⏸️__**`;
+
 			for (let i = 0; i < queue.length; i += SONGS_PER_PAGE) {
 				pages.push(
 					createEmbed({
-						description: `${strings.slice(i, i + SONGS_PER_PAGE).join("\n")}`,
+						description: `${title}\n\n**__Up next__**\n${strings
+							.slice(i, i + SONGS_PER_PAGE)
+							.join("\n")}\n\n**${queue.length} songs in queue**`,
 					}),
 				);
 			}
