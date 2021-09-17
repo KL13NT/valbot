@@ -119,35 +119,15 @@ export default class MusicController extends Controller {
 	};
 
 	enqueue = (song: Song) => {
+		log(
+			this.client,
+			`Enqueued ${song.title} by ${song.requestingUserId}`,
+			"info",
+		);
+
 		this.setState({
 			queue: [...this.state.queue, song],
 		});
-	};
-
-	jump = async (op: "skip" | "prev" = "skip") => {
-		if (op === "prev" && this.state.index === 0)
-			return "No previous song in queue";
-
-		if (op === "skip" && this.state.index === this.state.queue.length - 1)
-			return "No more songs in queue";
-
-		this.setState({
-			index: this.state.index + (op === "skip" ? 1 : -1),
-		});
-
-		this.state.stream.destroy();
-
-		if (this.state.state === "playing") this.play(true);
-	};
-
-	shouldTimeout = () => {
-		return (
-			isChannelEmpty(this.state.vc) ||
-			this.state.queue.length === 0 /* empty queue */ ||
-			this.state.state === "paused" ||
-			this.state.state === "stopped" ||
-			this.state.connection?.voice?.serverMute
-		);
 	};
 
 	/**
@@ -164,14 +144,15 @@ export default class MusicController extends Controller {
 		}
 
 		const song = this.state.queue[this.state.index];
-		const info = await ytdl.getInfo(song.url);
 
-		const formats = info.formats
-			.filter(format => format.quality === "tiny" && format.hasAudio)
-			.sort((formatA, formatB) => formatA.audioBitrate - formatB.audioBitrate);
+		log(
+			this.client,
+			`Starting to play ${song.title} with \`lowest\` format`,
+			"info",
+		);
 
-		const stream = ytdl.downloadFromInfo(info, {
-			format: formats[0],
+		const stream = ytdl(song.url, {
+			quality: "lowest",
 		});
 
 		this.setState({
@@ -182,10 +163,11 @@ export default class MusicController extends Controller {
 		const dispatcher = this.state.connection.play(stream, {
 			highWaterMark: 512,
 		});
-		dispatcher.on("finish", () => this.jump("skip"));
+		dispatcher.on("finish", () => this.skip());
 	};
 
 	pause = async () => {
+		log(this.client, "Pausing stream", "info");
 		this.state.stream.destroy();
 
 		this.setState({
@@ -194,26 +176,63 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	// skip = async () => {};
-	// clear = async () => {};
-	// list = async () => {};
+	skip = async () => {
+		this.destroyStreams();
+
+		if (this.state.index === this.state.queue.length - 1) {
+			this.clear();
+			return;
+		}
+
+		this.setState({
+			index: this.state.index + 1,
+		});
+
+		if (this.state.state === "playing") this.play(true);
+	};
+
+	getCurrentSong = () => {
+		return this.state.queue[this.state.index];
+	};
+
+	clear = () => {
+		this.destroyStreams();
+
+		this.setState({
+			state: "stopped",
+			index: 0,
+			position: 0,
+			stream: null,
+			queue: [],
+			dispatcher: null,
+		});
+	};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
-		if (!this.state.vc)
+		if (!this.state.vc) {
+			log(
+				this.client,
+				`Connecting to vc: ${vc.name}, text: ${text.name}`,
+				"info",
+			);
+
 			this.setState({
 				vc,
 				text,
 				connection: this.state.connection || (await vc.join()),
 			});
+		}
 	};
 
 	disconnect = async (reason = "User disconnected bot") => {
+		log(this.client, `Disconnecting, reason: ${reason}`, "info");
+
 		if (this.state.connection) this.state.connection.disconnect();
-		if (this.state.stream) this.state.stream.destroy();
+		this.destroyStreams();
 
 		clearTimeout(this.state.timeout);
 
-		const reply = await this.state.text.send(
+		await this.state.text.send(
 			createEmbed({
 				description: `Disconnected from voice channel. Reason: ${reason}`,
 			}),
@@ -231,8 +250,6 @@ export default class MusicController extends Controller {
 			index: 0,
 			dispatcher: null,
 		};
-
-		return reply;
 	};
 
 	canUserPlay = (vc: VoiceChannel) => {
@@ -254,6 +271,26 @@ export default class MusicController extends Controller {
 		} else if (!this.shouldTimeout()) {
 			clearTimeout(this.state.timeout);
 			this.state.timeout = null;
+		}
+	};
+
+	private shouldTimeout = () => {
+		return (
+			isChannelEmpty(this.state.vc) ||
+			this.state.queue.length === 0 /* empty queue */ ||
+			this.state.state === "paused" ||
+			this.state.state === "stopped" ||
+			this.state.connection?.voice?.serverMute
+		);
+	};
+
+	private destroyStreams = () => {
+		if (this.state.stream) {
+			this.state.stream.destroy();
+		}
+
+		if (this.state.connection.dispatcher) {
+			this.state.connection.dispatcher.destroy();
 		}
 	};
 }

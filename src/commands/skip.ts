@@ -55,14 +55,19 @@ export default class Skip extends Command {
 				);
 			}
 
-			const hasMore = await controller.jump("skip");
-			if (hasMore) {
-				await message.reply(
-					createEmbed({
-						description: hasMore,
-					}),
-				);
-			}
+			const song = controller.getCurrentSong();
+
+			const response = song
+				? `Skipped [${song.title}](${song.url})`
+				: "The queue is empty.";
+
+			await message.reply(
+				createEmbed({
+					description: response,
+				}),
+			);
+
+			await controller.skip();
 		} catch (err) {
 			log(this.client, err, "error");
 		}
