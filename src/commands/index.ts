@@ -22,3 +22,4 @@ export { default as PresenceClaer } from "./presenceclear";
 export { default as Leaderboard } from "./leaderboard";
 export { default as Play } from "./play";
 export { default as Skip } from "./skip";
+export { default as Queue } from "./queue";

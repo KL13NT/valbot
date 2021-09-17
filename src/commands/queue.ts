@@ -4,9 +4,11 @@ import { Command, CommandContext } from "../structures";
 import { log } from "../utils/general";
 // import { createEmbed } from "../utils/embed";
 import { MusicController } from "../controllers";
-import Pagination from "discord-paginationembed";
+import PaginatedEmbed from "../structures/PaginatedEmbed";
+import { createEmbed } from "../utils/embed";
 import { TextChannel } from "discord.js";
-import { Song } from "../controllers/MusicController";
+
+const PAGES = 2;
 
 export default class Queue extends Command {
 	constructor(client: ValClient) {
@@ -27,27 +29,34 @@ export default class Queue extends Command {
 		});
 	}
 
-	_run = async ({ channel, author }: CommandContext) => {
+	_run = async ({ channel, member }: CommandContext) => {
 		try {
 			const { queue } = this.client.controllers.get("music") as MusicController;
 
-			// const description =
-			// 	queue.length === 0
-			// 		? "The queue is empty."
-			// 		: queue
-			// 				.map((song, i) => `${i + 1}) [${song.title}](${song.url})`)
-			// 				.join("\n");
+			const strings = queue.map(
+				(song, i) => `${i}) ${song.title.substr(0, 40)}`,
+			);
 
-			console.log(Pagination);
-			const embed = new Pagination.FieldsEmbed()
-				.setArray(queue.map(song => song.title))
-				.setAuthorizedUsers([author.id])
-				.setChannel(channel as TextChannel)
-				.setElementsPerPage(10)
-				.setPageIndicator(false)
-				.formatField("title", song => `${(song as Song).title}`);
+			const pages = [];
+			for (let i = 0; i < queue.length; i += PAGES) {
+				pages.push(
+					createEmbed({
+						description: `\`\`\`js\n${strings
+							.slice(i, i + PAGES)
+							.join("\n")}\`\`\``,
+					}),
+				);
+			}
 
-			embed.build();
+			console.log(pages);
+
+			const paginatedEmbed = new PaginatedEmbed(
+				channel as TextChannel,
+				member,
+				pages,
+			);
+
+			paginatedEmbed.init();
 
 			// TODO: paginate on long lists
 		} catch (err) {
