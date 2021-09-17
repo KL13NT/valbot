@@ -23,3 +23,4 @@ export { default as Leaderboard } from "./leaderboard";
 export { default as Play } from "./play";
 export { default as Skip } from "./skip";
 export { default as Queue } from "./queue";
+export { default as ClearQueue } from "./clear-queue";
