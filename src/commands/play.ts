@@ -1,13 +1,18 @@
+import ytdl from "ytdl-core";
+import { TextChannel } from "discord.js";
+import { decode } from "html-entities";
+
 import ValClient from "../ValClient";
 
 import { Command, CommandContext } from "../structures";
 import { log } from "../utils/general";
 import { MusicController } from "../controllers";
-import { TextChannel } from "discord.js";
 
-import ytdl from "ytdl-core";
 import { createEmbed } from "../utils/embed";
-import { fetchVideoMeta } from "../utils/youtube";
+import { fetchVideoMeta, searchVideoMeta } from "../utils/youtube";
+import { Song } from "../controllers/MusicController";
+
+const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
 
 export default class Play extends Command {
 	constructor(client: ValClient) {
@@ -17,8 +22,8 @@ export default class Play extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: "احلى اغنية دي ولا ايه",
-			exampleUsage: "<youtube_link>",
-			extraParams: false,
+			exampleUsage: "<youtube_link|query>",
+			extraParams: true,
 			optionalParams: 0,
 			auth: {
 				method: "ROLE",
@@ -45,15 +50,6 @@ export default class Play extends Command {
 				return;
 			}
 
-			if (params.length < 1 || !ytdl.validateURL(params[0])) {
-				await message.reply(
-					createEmbed({
-						description: `You must supply a valid YouTube video link`,
-					}),
-				);
-				return;
-			}
-
 			if (!controller.canUserPlay(voiceChannel)) {
 				await message.reply(
 					createEmbed({
@@ -63,38 +59,74 @@ export default class Play extends Command {
 				return;
 			}
 
-			const [url] = params;
-			const id = ytdl.getURLVideoID(url);
+			let song: Omit<Song, "requestingUserId">;
 
-			const { items } = await fetchVideoMeta(id);
+			if (ytdl.validateURL(params[0]))
+				song = await this.getSongDetailsByUrl(params[0]);
+			else song = await this.getSongDetailsByQuery(params.join(" "));
 
-			if (items.length === 0) {
-				await message.reply(
+			if (!song) {
+				await message.channel.send(
 					createEmbed({
-						description: "Video not found",
+						description:
+							"Could't find a video matching this query. It might be restricted. Try a different one.",
 					}),
 				);
 				return;
 			}
 
-			const { title } = items[0].snippet;
-
+			const { url, title } = song;
 			controller.enqueue({
 				url,
 				title,
 				requestingUserId: member.id,
 			});
 
-			await controller.connect(voiceChannel, textChannel);
-			await controller.play();
-
 			await message.channel.send(
 				createEmbed({
-					description: `Queued [${title}](${url}) [${member}]`,
+					description: `Queued [${decode(title)}](${url}) [${member}]`,
 				}),
 			);
+
+			await controller.connect(voiceChannel, textChannel);
+			await controller.play();
 		} catch (err) {
 			log(this.client, err, "error");
 		}
+	};
+
+	getSongDetailsByUrl = async (
+		url: string,
+	): Promise<Omit<Song, "requestingUserId">> => {
+		const id = ytdl.getURLVideoID(url);
+		const { items } = await fetchVideoMeta(id);
+
+		if (items.length === 0) return null;
+
+		const { snippet } = items[0];
+		const { title } = snippet;
+
+		return {
+			url,
+			title,
+		};
+	};
+
+	getSongDetailsByQuery = async (
+		query: string,
+	): Promise<Omit<Song, "requestingUserId">> => {
+		const { items } = await searchVideoMeta(query);
+
+		if (items.length === 0) return null;
+
+		const { snippet, id } = items[0];
+		const { videoId } = id;
+		const { title } = snippet;
+		const url = `${YOUTUBE_URL}${videoId}`;
+
+		return {
+			url,
+			title,
+		};
 	};
 }

@@ -25,7 +25,7 @@ export function createAlertMessage(message: string, alertLevel: AlertLevel) {
  */
 export async function log(
 	client: ValClient,
-	notification: string | Error,
+	notification: unknown,
 	alertLevel: AlertLevel,
 ) {
 	const queue = <QueueController>client.controllers.get("queue");
@@ -44,7 +44,7 @@ export async function log(
 		const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
 		const message = createAlertMessage(String(notification), alertLevel);
 
-		if (typeof notification === "object")
+		if (notification instanceof Error)
 			await channel.send(
 				`${message}\n\n**Stack trace**\n${notification.stack}`,
 			);

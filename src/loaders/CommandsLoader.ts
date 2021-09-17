@@ -11,6 +11,13 @@ export default class CommandsLoader extends Loader {
 		Object.values(commands).forEach(command => {
 			// eslint-disable-next-line new-cap
 			const newCommand = new command(this.client);
+
+			if (newCommand.options.aliases) {
+				newCommand.options.aliases.forEach(alias =>
+					this.client.commands.set(alias, newCommand),
+				);
+			}
+
 			this.client.commands.set(newCommand.options.name, newCommand);
 		});
 

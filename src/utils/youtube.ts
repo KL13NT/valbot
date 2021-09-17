@@ -1,12 +1,17 @@
 import fetch from "node-fetch";
 
-type Snippet = {
+interface Snippet {
 	title: string;
-};
+}
 
-type Item = {
+interface VideoIdType {
+	videoId: string;
+}
+
+interface Item {
 	snippet: Snippet;
-};
+	id?: VideoIdType;
+}
 
 export interface YouTubeResponse {
 	items: Item[];
@@ -18,6 +23,20 @@ export interface YouTubeResponse {
 export const fetchVideoMeta = (id: string): Promise<YouTubeResponse> =>
 	fetch(
 		`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&fields=items.snippet.title&key=${process.env.YOUTUBE_KEY}`,
+		{
+			headers: {
+				Accept: "application/json",
+			},
+		},
+	).then(res => res.json());
+
+export const searchVideoMeta = (query: string): Promise<YouTubeResponse> =>
+	fetch(
+		`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(
+			query,
+		)}&safeSearch=none&fields=items.snippet.title%2Citems.id.videoId&key=${
+			process.env.YOUTUBE_KEY
+		}`,
 		{
 			headers: {
 				Accept: "application/json",

@@ -12,6 +12,8 @@ import { Controller } from "../structures";
 import ValClient from "../ValClient";
 import { Readable } from "stream";
 import { isChannelEmpty } from "../utils/object";
+import { createEmbed } from "../utils/embed";
+import { log } from "../utils/general";
 
 export type Seconds = number;
 
@@ -61,7 +63,6 @@ export interface MusicControllerState {
 }
 
 const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
-const QUALITY_ITAG = 250;
 
 export default class MusicController extends Controller {
 	private state: MusicControllerState = {
@@ -89,19 +90,27 @@ export default class MusicController extends Controller {
 		this.play(true);
 	};
 
-	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
-		if (oldState.member.id === this.client.user.id)
-			this.handleBotStateChange(oldState, newState);
-		else if (
-			oldState.channel?.id === this.state.vc?.id ||
-			newState.channel?.id === this.state.vc?.id
-		)
-			this.onStateChanged();
+	handleStateUpdate = async (oldState: VoiceState, newState: VoiceState) => {
+		try {
+			if (oldState.member.id === this.client.user.id)
+				await this.handleBotStateChange(oldState, newState);
+			else if (
+				oldState.channel?.id === this.state.vc?.id ||
+				newState.channel?.id === this.state.vc?.id
+			)
+				this.onStateChanged();
+		} catch (error) {
+			log(this.client, error, "error");
+		}
 	};
 
-	handleBotStateChange = (_oldState: VoiceState, newState: VoiceState) => {
-		if (!newState.channel && this.state.stream) {
-			this.disconnect("User disconnected bot");
+	handleBotStateChange = async (
+		_oldState: VoiceState,
+		newState: VoiceState,
+	) => {
+		if (!newState.channel && this.state.state === "playing") {
+			await this.disconnect("User disconnected bot");
+			return;
 		}
 
 		this.setState({
@@ -109,7 +118,13 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	enqueue = async (song: Song) => {
+	enqueue = (song: Song) => {
+		log(
+			this.client,
+			`Enqueued ${song.title} by ${song.requestingUserId}`,
+			"info",
+		);
+
 		this.setState({
 			queue: [...this.state.queue, song],
 		});
@@ -130,22 +145,29 @@ export default class MusicController extends Controller {
 
 		const song = this.state.queue[this.state.index];
 
-		const stream = ytdl(song.url, {
-			filter: "audioonly",
-			quality: QUALITY_ITAG,
-		});
+		log(
+			this.client,
+			`Starting to play ${song.title} with \`lowest\` format`,
+			"info",
+		);
 
-		this.state.connection.play(stream);
+		const stream = ytdl(song.url, {
+			quality: "lowest",
+		});
 
 		this.setState({
 			stream,
 			state: "playing",
 		});
 
-		this.state.stream.on("end", () => this.skip());
+		const dispatcher = this.state.connection.play(stream, {
+			highWaterMark: 512,
+		});
+		dispatcher.on("finish", () => this.skip());
 	};
 
 	pause = async () => {
+		log(this.client, "Pausing stream", "info");
 		this.state.stream.destroy();
 
 		this.setState({
@@ -187,22 +209,33 @@ export default class MusicController extends Controller {
 	};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
-		if (!this.state.vc?.id || !this.state.vc?.id)
+		if (!this.state.vc) {
+			log(
+				this.client,
+				`Connecting to vc: ${vc.name}, text: ${text.name}`,
+				"info",
+			);
+
 			this.setState({
 				vc,
 				text,
 				connection: this.state.connection || (await vc.join()),
 			});
+		}
 	};
 
 	disconnect = async (reason = "User disconnected bot") => {
+		log(this.client, `Disconnecting, reason: ${reason}`, "info");
+
 		if (this.state.connection) this.state.connection.disconnect();
 		this.destroyStreams();
 
 		clearTimeout(this.state.timeout);
 
-		const reply = await this.state.text.send(
-			`Disconnected from voice channel. Reason: ${reason}`,
+		await this.state.text.send(
+			createEmbed({
+				description: `Disconnected from voice channel. Reason: ${reason}`,
+			}),
 		);
 
 		this.state = {
@@ -217,21 +250,19 @@ export default class MusicController extends Controller {
 			index: 0,
 			dispatcher: null,
 		};
-
-		return reply;
 	};
 
 	canUserPlay = (vc: VoiceChannel) => {
 		return !this.state.vc || this.state.vc?.id === vc.id;
 	};
 
-	private setState = async (state: Partial<MusicControllerState>) => {
+	private setState = (state: Partial<MusicControllerState>) => {
 		this.state = { ...this.state, ...state };
 
 		this.onStateChanged();
 	};
 
-	private onStateChanged = async () => {
+	private onStateChanged = () => {
 		if (this.shouldTimeout() && !this.state.timeout) {
 			this.state.timeout = setTimeout(
 				() => this.disconnect("No one was listening :("),
