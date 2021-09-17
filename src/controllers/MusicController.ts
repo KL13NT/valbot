@@ -266,6 +266,10 @@ export default class MusicController extends Controller {
 		return !this.state.vc || this.state.vc?.id === vc.id;
 	};
 
+	get queue() {
+		return this.state.queue;
+	}
+
 	private setState = (state: Partial<MusicControllerState>) => {
 		this.state = { ...this.state, ...state };
 
@@ -286,20 +290,20 @@ export default class MusicController extends Controller {
 
 	private shouldTimeout = () => {
 		return (
-			isChannelEmpty(this.state.vc) ||
+			(this.state.vc && isChannelEmpty(this.state.vc)) ||
 			this.state.queue.length === 0 /* empty queue */ ||
 			this.state.state === "paused" ||
 			this.state.state === "stopped" ||
 			this.state.connection?.voice?.serverMute
 		);
 	};
-
+	
 	private destroyStreams = () => {
 		if (this.state.stream) {
 			this.state.stream.destroy();
 		}
 
-		if (this.state.connection.dispatcher) {
+		if (this.state.connection?.dispatcher) {
 			this.state.connection.dispatcher.destroy();
 		}
 	};
