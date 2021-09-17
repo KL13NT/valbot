@@ -69,11 +69,7 @@ export default class MusicController extends Controller {
 		state: "stopped",
 		index: 0,
 		position: 0,
-		queue: /* []  */ new Array(80).fill({
-			title: "Pink Guy - STFU (TastyTreat Remix) - OFFICIAL VIDEO",
-			url: "https://www.youtube.com/watch?v=vk98OllWCsY",
-			requestingUserId: "238009405176676352",
-		}),
+		queue: [],
 		text: null,
 		vc: null,
 		connection: null,
