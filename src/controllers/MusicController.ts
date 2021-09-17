@@ -115,33 +115,6 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	jump = async (op: "skip" | "prev" = "skip") => {
-		if (op === "prev" && this.state.index === 0)
-			return "No previous song in queue";
-
-		if (op === "skip" && this.state.index === this.state.queue.length - 1)
-			return "No more songs in queue";
-
-		this.setState({
-			index: this.state.index + (op === "skip" ? 1 : -1),
-		});
-
-		this.state.stream.destroy();
-
-		if (this.state.state === "playing") this.play(true);
-	};
-
-	shouldTimeout = () => {
-		return (
-			isChannelEmpty(this.state.vc) ||
-			this.state.queue.length === 0 /* empty queue */ ||
-			this.state.index === this.state.queue.length - 1 /* end of queue */ ||
-			this.state.state === "paused" ||
-			this.state.state === "stopped" ||
-			this.state.connection?.voice?.serverMute
-		);
-	};
-
 	/**
 	 *
 	 * @param force a boolean to force a play, used when internal skipping
@@ -169,7 +142,7 @@ export default class MusicController extends Controller {
 			state: "playing",
 		});
 
-		this.state.stream.on("end", () => this.jump("skip"));
+		this.state.stream.on("end", () => this.skip());
 	};
 
 	pause = async () => {
@@ -181,9 +154,37 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	// skip = async () => {};
-	// clear = async () => {};
-	// list = async () => {};
+	skip = async () => {
+		this.destroyStreams();
+
+		if (this.state.index === this.state.queue.length - 1) {
+			this.clear();
+			return;
+		}
+
+		this.setState({
+			index: this.state.index + 1,
+		});
+
+		if (this.state.state === "playing") this.play(true);
+	};
+
+	getCurrentSong = () => {
+		return this.state.queue[this.state.index];
+	};
+
+	clear = () => {
+		this.destroyStreams();
+
+		this.setState({
+			state: "stopped",
+			index: 0,
+			position: 0,
+			stream: null,
+			queue: [],
+			dispatcher: null,
+		});
+	};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
 		if (!this.state.vc?.id || !this.state.vc?.id)
@@ -196,7 +197,7 @@ export default class MusicController extends Controller {
 
 	disconnect = async (reason = "User disconnected bot") => {
 		if (this.state.connection) this.state.connection.disconnect();
-		if (this.state.stream) this.state.stream.destroy();
+		this.destroyStreams();
 
 		clearTimeout(this.state.timeout);
 
@@ -239,6 +240,27 @@ export default class MusicController extends Controller {
 		} else if (!this.shouldTimeout()) {
 			clearTimeout(this.state.timeout);
 			this.state.timeout = null;
+		}
+	};
+
+	private shouldTimeout = () => {
+		return (
+			isChannelEmpty(this.state.vc) ||
+			this.state.queue.length === 0 /* empty queue */ ||
+			this.state.index === this.state.queue.length - 1 /* end of queue */ ||
+			this.state.state === "paused" ||
+			this.state.state === "stopped" ||
+			this.state.connection?.voice?.serverMute
+		);
+	};
+
+	private destroyStreams = () => {
+		if (this.state.stream) {
+			this.state.stream.destroy();
+		}
+
+		if (this.state.connection.dispatcher) {
+			this.state.connection.dispatcher.destroy();
 		}
 	};
 }
