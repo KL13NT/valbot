@@ -13,9 +13,12 @@ export default class CommandsLoader extends Loader {
 			const newCommand = new command(this.client);
 
 			if (newCommand.options.aliases) {
-				newCommand.options.aliases.forEach(alias =>
-					this.client.commands.set(alias, newCommand),
-				);
+				newCommand.options.aliases.forEach(alias => {
+					if (this.client.commands.get(alias))
+						throw new Error(`Conflicting command aliases found: ${alias}`);
+
+					this.client.commands.set(alias, newCommand);
+				});
 			}
 
 			this.client.commands.set(newCommand.options.name, newCommand);

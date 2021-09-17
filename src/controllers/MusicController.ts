@@ -69,7 +69,11 @@ export default class MusicController extends Controller {
 		state: "stopped",
 		index: 0,
 		position: 0,
-		queue: [],
+		queue: /* []  */ new Array(80).fill({
+			title: "Pink Guy - STFU (TastyTreat Remix) - OFFICIAL VIDEO",
+			url: "https://www.youtube.com/watch?v=vk98OllWCsY",
+			requestingUserId: "238009405176676352",
+		}),
 		text: null,
 		vc: null,
 		connection: null,
@@ -151,8 +155,18 @@ export default class MusicController extends Controller {
 			"info",
 		);
 
-		const stream = ytdl(song.url, {
-			quality: "lowest",
+		const stream = ytdl(song.url, { quality: "lowest" });
+
+		stream.on("error", async error => {
+			log(this.client, error, "error");
+
+			await this.state.text.send(
+				createEmbed({
+					description: `Couldn't play [${song.title}](${song.url})`,
+				}),
+			);
+
+			this.skip();
 		});
 
 		this.setState({
@@ -256,6 +270,14 @@ export default class MusicController extends Controller {
 		return !this.state.vc || this.state.vc?.id === vc.id;
 	};
 
+	get queue() {
+		return this.state.queue;
+	}
+
+	get playState() {
+		return this.state.state;
+	}
+
 	private setState = (state: Partial<MusicControllerState>) => {
 		this.state = { ...this.state, ...state };
 
@@ -276,9 +298,8 @@ export default class MusicController extends Controller {
 
 	private shouldTimeout = () => {
 		return (
-			isChannelEmpty(this.state.vc) ||
+			(this.state.vc && isChannelEmpty(this.state.vc)) ||
 			this.state.queue.length === 0 /* empty queue */ ||
-			this.state.index === this.state.queue.length - 1 /* end of queue */ ||
 			this.state.state === "paused" ||
 			this.state.state === "stopped" ||
 			this.state.connection?.voice?.serverMute
@@ -290,7 +311,7 @@ export default class MusicController extends Controller {
 			this.state.stream.destroy();
 		}
 
-		if (this.state.connection.dispatcher) {
+		if (this.state.connection?.dispatcher) {
 			this.state.connection.dispatcher.destroy();
 		}
 	};
