@@ -135,7 +135,7 @@ export default class Play extends Command {
 				? ytdl.getURLVideoID(params[0])
 				: params.join(" ");
 
-			this.cache.set(key, song);
+			if (song) this.cache.set(key, song);
 
 			return song;
 		} catch (error) {
@@ -195,7 +195,6 @@ export default class Play extends Command {
 		const { items } = await searchVideoMeta(query);
 
 		if (items.length === 0) {
-			this.cache.set(query, null);
 			return null;
 		}
 
