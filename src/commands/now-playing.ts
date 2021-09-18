@@ -5,7 +5,7 @@ import ValClient from "../ValClient";
 import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
 import { createEmbed } from "../utils/embed";
-import { reply } from "../utils/general";
+import { log, reply } from "../utils/general";
 
 export default class NowPlaying extends Command {
 	constructor(client: ValClient) {
@@ -59,15 +59,11 @@ export default class NowPlaying extends Command {
 		const song = controller.getCurrentSong();
 
 		if (!song) {
-			await message.reply(
-				createEmbed({
-					description: "No song is playing",
-				}),
-			);
+			await reply("Command.NowPlaying.NoSong", message.channel, {});
 			return;
 		}
 
-		if (song.isLive) {
+		if (song.live) {
 			await reply("Command.NowPlaying.Live", message.channel, {
 				title: song.title,
 				url: song.url,
@@ -77,12 +73,18 @@ export default class NowPlaying extends Command {
 			return;
 		}
 
-		const current = await controller.nowPlaying();
+		const current = controller.getCurrentStreamTime();
+		if (typeof current === "undefined") {
+			await reply("Command.NowPlaying.NotStarted", message.channel, {});
+			return;
+		}
+
+		log(this.client, "Now Playing", "info");
+
 		const total = song.duration;
+		const seekbar = progressbar.splitBar(total, current, 15, "▬", "🔘")[0];
 
-		const seekbar = this.seekbar(current, total);
-
-		await reply("Command.NowPlaying", message.channel, {
+		await reply("Command.NowPlaying.Song", message.channel, {
 			title: song.title,
 			url: song.url,
 			member: song.requestingUserId,
@@ -92,12 +94,8 @@ export default class NowPlaying extends Command {
 		});
 	};
 
-	private seekbar = (current, total) => {
-		const seekbar = progressbar.splitBar(total, current, 15, "▬", "🔘")[0];
-		return seekbar;
-	};
-
-	private formatDuration = duration => {
+	/** Display milliseconds in HH:MM:SS format */
+	private formatDuration = (duration: number): string => {
 		return prettyMilliseconds(duration, {
 			colonNotation: true,
 			secondsDecimalDigits: 0,

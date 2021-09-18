@@ -22,7 +22,7 @@ export type PlayState = "stopped" | "paused" | "playing" | "fetching";
 export interface Song {
 	title: string;
 	url: string;
-	isLive: "live" | "none";
+	live: boolean;
 
 	/** Song duration in milliseconds */
 	duration: number;
@@ -205,11 +205,8 @@ export default class MusicController extends Controller {
 		if (this.state.state === "playing") this.play(true);
 	};
 
-	nowPlaying = () => {
-		log(this.client, "Now Playing", "info");
-		if (this.state.connection.dispatcher) {
-			return this.state.connection.dispatcher.streamTime;
-		}
+	getCurrentStreamTime = () => {
+		return this.state?.connection?.dispatcher?.streamTime;
 	};
 
 	getCurrentSong = () => {

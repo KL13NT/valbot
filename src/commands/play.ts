@@ -1,8 +1,8 @@
 import ytdl from "ytdl-core";
-import { parse, toSeconds } from "iso8601-duration";
 import LRU from "lru-cache";
 import stringSimilarity from "string-similarity";
 import { TextChannel } from "discord.js";
+import { parse, toSeconds } from "iso8601-duration";
 
 import ValClient from "../ValClient";
 
@@ -85,7 +85,7 @@ export default class Play extends Command {
 				return;
 			}
 
-			const { url, title, duration, isLive } = song;
+			const { url, title, duration, live } = song;
 
 			// cache a song by title when found, this improves search results as well
 			// as the scenario where a song is played by link first then by a search query
@@ -96,7 +96,7 @@ export default class Play extends Command {
 				title,
 				requestingUserId: member.id,
 				duration,
-				isLive,
+				live,
 			});
 
 			await reply("Command.Play.Queued", message.channel, {
@@ -197,7 +197,7 @@ export default class Play extends Command {
 		return {
 			url,
 			title,
-			isLive: isLiveContent ? "live" : "none",
+			live: isLiveContent,
 			duration: Number(lengthSeconds) * 1000,
 		};
 	};
@@ -222,12 +222,13 @@ export default class Play extends Command {
 
 		const parsedDuration = parse(duration);
 		const durationInSeconds = toSeconds(parsedDuration);
+		const live = liveBroadcastContent === "live";
 
 		return {
 			url,
 			title,
 			duration: durationInSeconds * 1000,
-			isLive: liveBroadcastContent,
+			live,
 		};
 	};
 }
