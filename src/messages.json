@@ -4,5 +4,8 @@
 	"Command.Play.InvalidLink": "This link is invalid. Try another one.",
 	"Command.Play.NotFound": "Video doesn't exist",
 	"Command.Play.GenericError": "Could't find a video matching this query. It might be restricted, or the search quota might have been depleted. If you're sure this video exists try using a link instead.",
-	"Command.Play.Queued": "Queued [title](url) [member]"
+	"Command.Play.Queued": "Queued [title](url) [member]",
+	"Command.Play.NotPaused": "The bot is not paused.",
+	"Command.Play.AlreadyPlaying": "The bot is not paused",
+	"Command.Play.Resumed": "Resumed ️▶️"
 }
