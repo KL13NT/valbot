@@ -67,6 +67,16 @@ export default class NowPlaying extends Command {
 			return;
 		}
 
+		if (song.isLive) {
+			await reply("Command.NowPlaying.Live", message.channel, {
+				title: song.title,
+				url: song.url,
+				member: song.requestingUserId,
+			});
+
+			return;
+		}
+
 		const current = await controller.nowPlaying();
 		const total = song.duration;
 
