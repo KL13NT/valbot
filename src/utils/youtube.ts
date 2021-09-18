@@ -2,14 +2,20 @@ import fetch from "node-fetch";
 
 interface Snippet {
 	title: string;
+	liveBroadcastContent: "live" | "none";
 }
 
 interface VideoIdType {
 	videoId: string;
 }
 
+interface ContentDetails {
+	duration: string;
+}
+
 interface Item {
 	snippet: Snippet;
+	contentDetails: ContentDetails;
 	id?: VideoIdType;
 }
 
