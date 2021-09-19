@@ -2,7 +2,6 @@ import ytdl from "ytdl-core";
 import LRU from "lru-cache";
 import stringSimilarity from "string-similarity";
 import { TextChannel } from "discord.js";
-import { parse, toSeconds } from "iso8601-duration";
 
 import ValClient from "../ValClient";
 
@@ -150,8 +149,6 @@ export default class Play extends Command {
 
 			return song;
 		} catch (error) {
-			this.cache.set(key, null);
-
 			log(this.client, error, "error");
 			return null;
 		}
@@ -178,7 +175,8 @@ export default class Play extends Command {
 		} else {
 			const query = params.join(" ");
 
-			return this.getSongDetailsByQuery(query);
+			const url = await this.getSongUrl(query);
+			return this.getSongDetailsByUrl(url);
 		}
 	};
 
@@ -188,47 +186,37 @@ export default class Play extends Command {
 	getSongDetailsByUrl = async (
 		url: string,
 	): Promise<Omit<Song, "requestingUserId">> => {
-		const info = await ytdl.getBasicInfo(url);
+		try {
+			const info = await ytdl.getBasicInfo(url);
 
-		if (!info) return null;
+			if (!info) return null;
 
-		const { title, isLiveContent, lengthSeconds } = info.videoDetails;
+			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
 
-		return {
-			url,
-			title,
-			live: isLiveContent,
-			duration: Number(lengthSeconds) * 1000,
-		};
+			return {
+				url,
+				title,
+				live: isLiveContent,
+				duration: Number(lengthSeconds) * 1000,
+			};
+		} catch (error) {
+			if ((error as Error).message.includes("Video unavailable")) return null;
+			else throw error;
+		}
 	};
 
 	/**
 	 * @throws
 	 */
-	getSongDetailsByQuery = async (
-		query: string,
-	): Promise<Omit<Song, "requestingUserId">> => {
+	getSongUrl = async (query: string): Promise<string> => {
 		const { items } = await searchVideoMeta(query);
 
 		if (items.length === 0) {
 			return null;
 		}
 
-		const { snippet, id, contentDetails } = items[0];
-		const { videoId } = id;
-		const { title, liveBroadcastContent } = snippet;
-		const { duration } = contentDetails;
-		const url = `${YOUTUBE_URL}${videoId}`;
+		const { videoId } = items[0].id;
 
-		const parsedDuration = parse(duration);
-		const durationInSeconds = toSeconds(parsedDuration);
-		const live = liveBroadcastContent === "live";
-
-		return {
-			url,
-			title,
-			duration: durationInSeconds * 1000,
-			live,
-		};
+		return `${YOUTUBE_URL}${videoId}`;
 	};
 }
