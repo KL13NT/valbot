@@ -25,10 +25,10 @@ export default class Play extends Command {
 			category: "Music",
 			cooldown: 5 * 1000,
 			nOfParams: 1,
-			description: "احلى اغنية دي ولا ايه",
-			exampleUsage: "<youtube_link|query>",
+			description: "Start or continue playing a song",
+			exampleUsage: "?<youtube_link|query>",
 			extraParams: true,
-			optionalParams: 0,
+			optionalParams: 1,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -60,6 +60,11 @@ export default class Play extends Command {
 				return;
 			}
 
+			if (params.length === 0) {
+				await this.resume(controller, textChannel);
+				return;
+			}
+
 			if (this.isInvalidLink(params[0])) {
 				await reply("Command.Play.InvalidLink", message.channel);
 				return;
@@ -84,7 +89,7 @@ export default class Play extends Command {
 				return;
 			}
 
-			const { url, title } = song;
+			const { url, title, duration, live } = song;
 
 			// cache a song by title when found, this improves search results as well
 			// as the scenario where a song is played by link first then by a search query
@@ -94,6 +99,8 @@ export default class Play extends Command {
 				url,
 				title,
 				requestingUserId: member.id,
+				duration,
+				live,
 			});
 
 			await reply("Command.Play.Queued", message.channel, {
@@ -107,6 +114,24 @@ export default class Play extends Command {
 		} catch (err) {
 			log(this.client, err, "error");
 		}
+	};
+
+	resume = async (controller: MusicController, channel: TextChannel) => {
+		const current = controller.getCurrentSong();
+		const state = controller.playState;
+
+		if (state === "paused") {
+			controller.resume();
+			await reply("Command.Play.Resumed", channel);
+			return;
+		}
+
+		if (current) {
+			await reply("Command.Play.AlreadyPlaying", channel);
+			return;
+		}
+
+		await reply("Command.Play.NotPaused", channel);
 	};
 
 	getKey = (params: string[]) =>
@@ -147,8 +172,6 @@ export default class Play extends Command {
 
 			return song;
 		} catch (error) {
-			this.cache.set(key, null);
-
 			log(this.client, error, "error");
 			return null;
 		}
@@ -175,7 +198,8 @@ export default class Play extends Command {
 		} else {
 			const query = params.join(" ");
 
-			return this.getSongDetailsByQuery(query);
+			const url = await this.getSongUrl(query);
+			return this.getSongDetailsByUrl(url);
 		}
 	};
 
@@ -185,38 +209,37 @@ export default class Play extends Command {
 	getSongDetailsByUrl = async (
 		url: string,
 	): Promise<Omit<Song, "requestingUserId">> => {
-		const info = await ytdl.getBasicInfo(url);
+		try {
+			const info = await ytdl.getBasicInfo(url);
 
-		if (!info) return null;
+			if (!info) return null;
 
-		const { title } = info.videoDetails;
+			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
 
-		return {
-			url,
-			title,
-		};
+			return {
+				url,
+				title,
+				live: isLiveContent,
+				duration: Number(lengthSeconds) * 1000,
+			};
+		} catch (error) {
+			if ((error as Error).message.includes("Video unavailable")) return null;
+			else throw error;
+		}
 	};
 
 	/**
 	 * @throws
 	 */
-	getSongDetailsByQuery = async (
-		query: string,
-	): Promise<Omit<Song, "requestingUserId">> => {
+	getSongUrl = async (query: string): Promise<string> => {
 		const { items } = await searchVideoMeta(query);
 
 		if (items.length === 0) {
 			return null;
 		}
 
-		const { snippet, id } = items[0];
-		const { videoId } = id;
-		const { title } = snippet;
-		const url = `${YOUTUBE_URL}${videoId}`;
+		const { videoId } = items[0].id;
 
-		return {
-			url,
-			title,
-		};
+		return `${YOUTUBE_URL}${videoId}`;
 	};
 }
