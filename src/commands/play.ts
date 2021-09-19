@@ -25,10 +25,10 @@ export default class Play extends Command {
 			category: "Music",
 			cooldown: 5 * 1000,
 			nOfParams: 1,
-			description: "احلى اغنية دي ولا ايه",
-			exampleUsage: "<youtube_link|query>",
+			description: "Start or continue playing a song",
+			exampleUsage: "?<youtube_link|query>",
 			extraParams: true,
-			optionalParams: 0,
+			optionalParams: 1,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -57,6 +57,11 @@ export default class Play extends Command {
 
 			if (!controller.canUserPlay(voiceChannel)) {
 				await reply("Command.Play.NotAllowed", message.channel);
+				return;
+			}
+
+			if (params.length === 0) {
+				await this.resume(controller, textChannel);
 				return;
 			}
 
@@ -109,6 +114,24 @@ export default class Play extends Command {
 		} catch (err) {
 			log(this.client, err, "error");
 		}
+	};
+
+	resume = async (controller: MusicController, channel: TextChannel) => {
+		const current = controller.getCurrentSong();
+		const state = controller.playState;
+
+		if (state === "paused") {
+			controller.resume();
+			await reply("Command.Play.Resumed", channel);
+			return;
+		}
+
+		if (current) {
+			await reply("Command.Play.AlreadyPlaying", channel);
+			return;
+		}
+
+		await reply("Command.Play.NotPaused", channel);
 	};
 
 	getKey = (params: string[]) =>

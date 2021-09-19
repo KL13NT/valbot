@@ -180,14 +180,15 @@ export default class MusicController extends Controller {
 		dispatcher.on("finish", () => this.skip());
 	};
 
+	resume = () => {
+		this.resumeStreams();
+		this.setState({
+			state: "playing",
+		});
+	};
+
 	pause = async () => {
 		const time = this.state.connection.dispatcher.streamTime;
-
-		log(
-			this.client,
-			`Pausing stream ${new Date(time).toISOString().substr(11, 8)}`,
-			"info",
-		);
 
 		this.pauseStreams();
 		this.setState({
@@ -314,6 +315,11 @@ export default class MusicController extends Controller {
 			this.state.state === "stopped" ||
 			this.state.connection?.voice?.serverMute
 		);
+	};
+
+	private resumeStreams = () => {
+		this.state.stream?.resume?.();
+		this.state.connection?.dispatcher?.resume?.();
 	};
 
 	private destroyStreams = () => {
