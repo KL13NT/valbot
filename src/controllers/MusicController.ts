@@ -177,14 +177,6 @@ export default class MusicController extends Controller {
 	};
 
 	resume = () => {
-		const time = this.state.connection.dispatcher.streamTime;
-
-		log(
-			this.client,
-			`Resuming stream ${new Date(time).toISOString().substr(11, 8)}`,
-			"info",
-		);
-
 		this.resumeStreams();
 		this.setState({
 			state: "playing",
@@ -193,12 +185,6 @@ export default class MusicController extends Controller {
 
 	pause = async () => {
 		const time = this.state.connection.dispatcher.streamTime;
-
-		log(
-			this.client,
-			`Pausing stream ${new Date(time).toISOString().substr(11, 8)}`,
-			"info",
-		);
 
 		this.pauseStreams();
 		this.setState({
