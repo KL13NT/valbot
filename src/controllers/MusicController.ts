@@ -16,7 +16,7 @@ import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 
 export type Seconds = number;
-
+export type LoopState = "single" | "queue" | "disabled";
 export type PlayState = "stopped" | "paused" | "playing" | "fetching";
 
 export interface Song {
@@ -62,11 +62,17 @@ export interface MusicControllerState {
 	/** The connection.play dispatcher, used for seeking and other ops */
 	dispatcher: StreamDispatcher;
 
+	/** Looping mode
+	 * @default 'disabled'
+	 */
+	loop: LoopState;
+
 	/** Playing interval for calculating current position */
 	// interval: NodeJS.Timeout;
 }
 
 const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
+const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 
 export default class MusicController extends Controller {
 	private state: MusicControllerState = {
@@ -80,6 +86,7 @@ export default class MusicController extends Controller {
 		stream: null,
 		timeout: null,
 		dispatcher: null,
+		loop: "disabled",
 	};
 
 	constructor(client: ValClient) {
@@ -197,17 +204,36 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	skip = async () => {
+	/**
+	 *
+	 * @param command indicates whether a 'single' loop should jump to next song.
+	 * This is for cases where user has loop = 'single' and wish to skip the
+	 * looping song to loop the following, etc.
+	 */
+	skip = async (command = false) => {
+		const { loop, index, queue } = this.state;
+
 		this.destroyStreams();
 
-		if (this.state.index === this.state.queue.length - 1) {
+		if (index === queue.length - 1 && loop === "disabled") {
 			this.clear();
 			return;
 		}
 
-		this.setState({
-			index: this.state.index + 1,
-		});
+		if (index === queue.length - 1 && loop === "queue") {
+			this.setState({
+				index: 0,
+			});
+		} else if (loop === "single" && !command) {
+			this.setState({
+				index,
+			});
+			return;
+		} else {
+			this.setState({
+				index: index + 1,
+			});
+		}
 
 		if (this.state.state === "playing") this.play(true);
 	};
@@ -218,6 +244,12 @@ export default class MusicController extends Controller {
 
 	getCurrentSong = () => {
 		return this.state.queue[this.state.index];
+	};
+
+	loop = () => {
+		this.setState({
+			loop: LOOP_STATES[(LOOP_STATES.indexOf(this.state.loop) + 1) % 3],
+		});
 	};
 
 	clear = () => {
@@ -274,6 +306,7 @@ export default class MusicController extends Controller {
 			position: 0,
 			index: 0,
 			dispatcher: null,
+			loop: "disabled",
 		};
 	};
 
@@ -287,6 +320,10 @@ export default class MusicController extends Controller {
 
 	get playState() {
 		return this.state.state;
+	}
+
+	get loopState() {
+		return this.state.loop;
 	}
 
 	private setState = (state: Partial<MusicControllerState>) => {

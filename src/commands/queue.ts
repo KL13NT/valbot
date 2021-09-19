@@ -30,9 +30,12 @@ export default class Queue extends Command {
 
 	_run = async ({ channel, member }: CommandContext) => {
 		try {
-			const { queue, playState, getCurrentSong } = this.client.controllers.get(
-				"music",
-			) as MusicController;
+			const {
+				queue,
+				playState,
+				loopState,
+				getCurrentSong,
+			} = this.client.controllers.get("music") as MusicController;
 
 			if (queue.length === 0) {
 				channel.send(
@@ -63,7 +66,9 @@ export default class Queue extends Command {
 					createEmbed({
 						description: `${title}\n\n**__Up next__**\n${strings
 							.slice(i, i + SONGS_PER_PAGE)
-							.join("\n")}\n\n**${queue.length} songs in queue**`,
+							.join("\n")}\n\n**${
+							queue.length
+						} songs in queue | Loop: ${loopState}**`,
 					}),
 				);
 			}

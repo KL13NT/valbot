@@ -67,7 +67,7 @@ export default class Skip extends Command {
 				}),
 			);
 
-			await controller.skip();
+			await controller.skip(true);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
