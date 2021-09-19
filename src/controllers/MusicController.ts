@@ -345,11 +345,12 @@ export default class MusicController extends Controller {
 
 	private shouldTimeout = () => {
 		return (
-			(this.state.vc && isChannelEmpty(this.state.vc)) ||
-			this.state.queue.length === 0 /* empty queue */ ||
-			this.state.state === "paused" ||
-			this.state.state === "stopped" ||
-			this.state.connection?.voice?.serverMute
+			this.state.vc &&
+			(isChannelEmpty(this.state.vc) ||
+				this.state.queue.length === 0 /* empty queue */ ||
+				this.state.state === "paused" ||
+				this.state.state === "stopped" ||
+				this.state.connection?.voice?.serverMute)
 		);
 	};
 
