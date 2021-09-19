@@ -228,7 +228,6 @@ export default class MusicController extends Controller {
 			this.setState({
 				index,
 			});
-			return;
 		} else {
 			this.setState({
 				index: index + 1,
