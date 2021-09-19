@@ -20,7 +20,7 @@ import { Controller } from "./structures";
 const { AUTH_TOKEN, MODE } = process.env;
 
 export default class ValClient extends Client {
-	readonly prefix = MODE === "DEVELOPMENT" ? "vd!" : "v!";
+	readonly prefix = MODE === "DEVELOPMENT" ? "--" : "-";
 	ready = false;
 	commands: Map<string, Command> = new Map<string, Command>();
 	controllers: Map<string, Controller> = new Map<string, Controller>();

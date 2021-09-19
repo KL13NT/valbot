@@ -17,10 +17,8 @@ export default class CommandsListener extends Listener {
 		try {
 			const { content } = message;
 
-			const commandRegex = RegExp(
-				`${this.client.prefix}\\s+([a-zA-Z؀-ۿ]+)(\\s+)?`,
-			);
-			const matchGroup = content.match(commandRegex);
+			const commandRegex = RegExp(`${this.client.prefix}([a-zA-Z؀-ۿ]+)(\\s+)?`);
+			const matchGroup = content.replace(/\s+/gi, " ").match(commandRegex);
 
 			if (matchGroup === null) {
 				message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD);
