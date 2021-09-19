@@ -25,3 +25,4 @@ export { default as Skip } from "./skip";
 export { default as Queue } from "./queue";
 export { default as ClearQueue } from "./clear-queue";
 export { default as Pause } from "./pause";
+export { default as Loop } from "./loop";
