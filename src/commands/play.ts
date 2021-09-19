@@ -14,7 +14,7 @@ import { Song } from "../controllers/MusicController";
 
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
 const KEY_LENGTH = 100;
-const MATCH_THRESHOLD = 0.65;
+const MATCH_THRESHOLD = 0.8;
 
 export default class Play extends Command {
 	cache: LRU<string, Omit<Song, "requestingUserId">>;
