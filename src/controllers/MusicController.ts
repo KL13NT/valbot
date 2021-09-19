@@ -22,6 +22,10 @@ export type PlayState = "stopped" | "paused" | "playing" | "fetching";
 export interface Song {
 	title: string;
 	url: string;
+	live: boolean;
+
+	/** Song duration in milliseconds */
+	duration: number;
 
 	/** ID of the user who requested the song */
 	requestingUserId: Snowflake;
@@ -205,6 +209,10 @@ export default class MusicController extends Controller {
 		});
 
 		if (this.state.state === "playing") this.play(true);
+	};
+
+	getCurrentStreamTime = () => {
+		return this.state?.connection?.dispatcher?.streamTime;
 	};
 
 	getCurrentSong = () => {
