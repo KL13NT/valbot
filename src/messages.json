@@ -14,5 +14,13 @@
 	"Command.NowPlaying.NoSong": "No song is playing",
 	"Command.NowPlaying.Song": "__**Now Playing ▶️**__\n[title](url) [<@!member>]\n\nseekbar | `current / total`",
 	"Command.NowPlaying.Live": "__**Now Playing [ Live 🔴 ]**__\n[title](url) [<@!member>]",
-	"Command.NowPlaying.NotStarted": "Not started yet"
+	"Command.NowPlaying.NotStarted": "Not started yet",
+	"User.NotConnected": "You're not connected to a voice channel",
+	"User.SameChannel": "You must be in the same channel as the bot",
+	"Bot.NotExist": "Bot is not in a voice channel",
+	"Command.Pause.Paused": "Paused ⏸️",
+	"Command.Pause.AlreadyPaused": "Already Paused ⏸️",
+	"Command.ClearQueue.Cleared": "Queue cleared",
+	"Command.Queue.Empty": "The queue is empty",
+	"Command.Skip.Skipped": "Skipped [title](url)"
 }
