@@ -25,12 +25,12 @@ export default class Pause extends Command {
 		const voiceChannel = member.voice.channel;
 
 		if (this.client.voice.connections.size === 0) {
-			await reply("Bot.NotExist", message.channel, {});
+			await reply("Bot.VoiceNotConnected", message.channel, {});
 			return;
 		}
 
 		if (!voiceChannel) {
-			await reply("User.NotConnected", message.channel, {});
+			await reply("User.VoiceNotConnected", message.channel, {});
 			return;
 		}
 

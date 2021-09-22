@@ -40,7 +40,7 @@ export default class Loop extends Command {
 			) as MusicController;
 
 			if (!voiceChannel) {
-				await reply("User.NotConnected", message.channel);
+				await reply("User.VoiceNotConnected", message.channel);
 				return;
 			}
 
