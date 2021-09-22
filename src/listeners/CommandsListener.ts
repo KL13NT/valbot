@@ -13,7 +13,7 @@ export default class CommandsListener extends Listener {
 		super(client, ["command"]);
 	}
 
-	onCommand = (message: Message): void => {
+	onCommand = async (message: Message) => {
 		try {
 			const { content } = message;
 
@@ -21,14 +21,14 @@ export default class CommandsListener extends Listener {
 			const matchGroup = content.replace(/\s+/gi, " ").match(commandRegex);
 
 			if (matchGroup === null) {
-				message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD);
+				await message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD);
 				return;
 			}
 
 			const [, commandName] = matchGroup; // [fullMatch, commandName]
 			const command = this.client.commands.get(commandName.toLowerCase());
 
-			if (command === undefined) message.reply(ERROR_COMMAND_DOES_NOT_EXIST);
+			if (command === undefined) return;
 			else command.run(message);
 		} catch (error) {
 			log(this.client, error, "error");
