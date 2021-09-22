@@ -21,6 +21,9 @@ export type PlayState = "stopped" | "paused" | "playing" | "fetching";
 
 export interface Song {
 	title: string;
+
+	artist?: string;
+	name?: string;
 	url: string;
 	live: boolean;
 

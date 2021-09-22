@@ -3,6 +3,7 @@
 	"User.SameChannel": "You must be in the same channel as the bot",
 	"Bot.VoiceNotConnected": "Bot is not in a voice channel",
 	"Music.EmptyQueue": "The queue is empty",
+	"Music.NotPlaying": "No song is playing",
 	"Command.Play.NotConnected": "You're not connected to a voice channel.",
 	"Command.Play.NotAllowed": "You're not allowed to use the bot. It may be because you're not in a voice channel or not in the same channel as the bot.",
 	"Command.Play.InvalidLink": "This link is invalid. Try another one.",
@@ -23,5 +24,7 @@
 	"Command.Pause.AlreadyPaused": "Already Paused ⏸️",
 	"Command.ClearQueue.AlreadyEmpty": "The queue is already empty",
 	"Command.ClearQueue.Cleared": "Queue cleared",
-	"Command.Skip.Skipped": "Skipped [title](url)"
+	"Command.Skip.Skipped": "Skipped [title](url)",
+	"Command.Lyrics.NotFound": "No lyrics found (⊃◜⌓◝⊂)",
+	"Command.Lyrics.Paused": "Bot is paused ⏸️"
 }

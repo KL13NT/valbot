@@ -11,6 +11,8 @@ declare global {
 			GUIILD_ID: string;
 			ROLE_DEVELOPER: string;
 			MODE: "DEVELOPMENT" | "PRODUCTION";
+			YOUTUBE_KEY: string;
+			REDIS_URL?: string;
 		}
 	}
 }

@@ -89,7 +89,7 @@ export default class Play extends Command {
 				return;
 			}
 
-			const { url, title, duration, live } = song;
+			const { url, title, duration, live, artist, name } = song;
 
 			// cache a song by title when found, this improves search results as well
 			// as the scenario where a song is played by link first then by a search query
@@ -101,6 +101,8 @@ export default class Play extends Command {
 				requestingUserId: member.id,
 				duration,
 				live,
+				artist,
+				name,
 			});
 
 			await reply("Command.Play.Queued", message.channel, {
@@ -211,16 +213,18 @@ export default class Play extends Command {
 	): Promise<Omit<Song, "requestingUserId">> => {
 		try {
 			const info = await ytdl.getBasicInfo(url);
-
 			if (!info) return null;
 
 			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
+			const { artist, song: name } = info?.videoDetails?.media;
 
 			return {
 				url,
 				title,
 				live: isLiveContent,
 				duration: Number(lengthSeconds) * 1000,
+				artist,
+				name,
 			};
 		} catch (error) {
 			if ((error as Error).message.includes("Video unavailable")) return null;

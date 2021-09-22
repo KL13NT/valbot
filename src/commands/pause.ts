@@ -2,6 +2,7 @@ import ValClient from "../ValClient";
 import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
 import { reply } from "../utils/general";
+
 export default class Pause extends Command {
 	constructor(client: ValClient) {
 		super(client, {
