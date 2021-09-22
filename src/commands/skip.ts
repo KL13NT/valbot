@@ -1,7 +1,6 @@
 import { MusicController } from "../controllers";
 import { Command, CommandContext } from "../structures";
-import { createEmbed } from "../utils/embed";
-import { log } from "../utils/general";
+import { log, reply } from "../utils/general";
 import ValClient from "../ValClient";
 
 export default class Skip extends Command {
@@ -30,42 +29,36 @@ export default class Skip extends Command {
 			const voiceChannel = member.voice.channel;
 
 			if (!voiceChannel) {
-				await message.reply(
-					createEmbed({
-						description: `You're not connected to a voice channel`,
-					}),
-				);
+				await reply("User.VoiceNotConnected", message.channel, {});
 				return;
 			}
 
 			if (!controller.canUserPlay(voiceChannel)) {
-				await message.reply(
-					createEmbed({
-						description: "You must be in the same channel as the bot",
-					}),
-				);
+				await reply("User.SameChannel", message.channel, {});
 				return;
 			}
 
 			if (this.client.voice.connections.size === 0) {
-				await message.reply(
-					createEmbed({
-						description: "Bot is not in a voice channel.",
-					}),
-				);
+				await reply("Bot.VoiceNotConnected", message.channel, {});
+				return;
 			}
 
 			const song = controller.getCurrentSong();
 
 			const response = song
-				? `Skipped [${song.title}](${song.url})`
-				: "The queue is empty.";
+				? {
+						message: "Command.Skip.Skipped",
+						params: {
+							title: song.title,
+							url: song.url,
+						},
+				  }
+				: {
+						message: "Music.EmptyQueue",
+						params: {},
+				  };
 
-			await message.reply(
-				createEmbed({
-					description: response,
-				}),
-			);
+			await reply(response.message, message.channel, response.params);
 
 			await controller.skip(true);
 		} catch (err) {
