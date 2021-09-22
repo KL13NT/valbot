@@ -1,16 +1,16 @@
+import ValClient from "../ValClient";
 import lyricsFinder from "lyrics-finder";
 import { MusicController } from "../controllers";
 import { Command, CommandContext } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { log } from "../utils/general";
-import ValClient from "../ValClient";
+import { log, reply } from "../utils/general";
 
 export default class Lyrics extends Command {
 	constructor(client: ValClient) {
 		super(client, {
 			name: "lyrics",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 10 * 1000,
 			nOfParams: 0,
 			description: "Show song lyrics",
 			exampleUsage: "",
@@ -23,7 +23,7 @@ export default class Lyrics extends Command {
 		});
 	}
 
-	_run = async ({ member, message }: CommandContext) => {
+	_run = async ({ member, message, channel }: CommandContext) => {
 		try {
 			const controller = this.client.controllers.get(
 				"music",
@@ -80,34 +80,18 @@ export default class Lyrics extends Command {
 
 			log(this.client, "Lyrics", "info");
 
-			let lyrics;
-			if (
-				typeof song?.name === "undefined" ||
-				typeof song?.artist === "undefined"
-			) {
-				lyrics = await lyricsFinder(
-					"",
-					song.title.replace(/ *\([^)]*\) */g, ""),
-				);
-			} else {
-				lyrics = await lyricsFinder(
-					song.artist,
-					song.name.replace(/ *\([^)]*\) */g, ""),
-				);
-			}
+			const artist = song.artist || "";
+			const name = song.name || song.title.replace(/ *\([^)]*\) */g, "");
 
-			if (lyrics === "") {
-				await message.reply(
-					createEmbed({
-						description: "No lyrics found (⊃◜⌓◝⊂)",
-					}),
-				);
+			const lyrics = await lyricsFinder(artist, name);
+			if (!lyrics) {
+				await reply("Command.Lyrics.NotFound", channel);
 				return;
 			}
 
 			await message.reply(
 				createEmbed({
-					title: !song?.name ? song.title : song.name,
+					title: name,
 					description: lyrics,
 				}),
 			);

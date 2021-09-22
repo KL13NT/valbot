@@ -15,6 +15,5 @@
 	"Command.NowPlaying.Song": "__**Now Playing ▶️**__\n[title](url) [<@!member>]\n\nseekbar | `current / total`",
 	"Command.NowPlaying.Live": "__**Now Playing [ Live 🔴 ]**__\n[title](url) [<@!member>]",
 	"Command.NowPlaying.NotStarted": "Not started yet",
-	"Command.Lyrics.Show": "[title](url)\n\nlyrics",
-	"Command.Lyrics.None": "No lyrics found (⊃◜⌓◝⊂)"
+	"Command.Lyrics.NotFound": "No lyrics found (⊃◜⌓◝⊂)"
 }
