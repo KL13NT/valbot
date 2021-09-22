@@ -51,7 +51,7 @@ export default class Play extends Command {
 			) as MusicController;
 
 			if (!voiceChannel) {
-				await reply("Command.Play.NotConnected", message.channel);
+				await reply("User.VoiceNotConnected", message.channel);
 				return;
 			}
 
