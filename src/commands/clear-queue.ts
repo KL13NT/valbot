@@ -1,5 +1,9 @@
 import { MusicController } from "../controllers";
 import { Command, CommandContext } from "../structures";
+<<<<<<< HEAD
+import { createEmbed } from "../utils/embed";
+=======
+>>>>>>> master
 import { log, reply } from "../utils/general";
 import ValClient from "../ValClient";
 
@@ -44,7 +48,20 @@ export default class ClearQueue extends Command {
 				return;
 			}
 
+<<<<<<< HEAD
+			if (controller.queue.length === 0) {
+				await reply("Command.ClearQueue.AlreadyEmpty", message.channel);
+				return;
+			}
+
+			await message.reply(
+				createEmbed({
+					description: "Queue cleared.",
+				}),
+			);
+=======
 			await reply("Command.ClearQueue.Cleared", message.channel, {});
+>>>>>>> master
 
 			await controller.clear();
 		} catch (err) {
