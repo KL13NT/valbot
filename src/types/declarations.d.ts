@@ -15,6 +15,12 @@ declare module "node-html-to-image" {
 	}
 
 	export default function nodeHtmlToImage(
-		options: nodeHtmlToImageOptions
+		options: nodeHtmlToImageOptions,
 	): Promise<string>;
+}
+
+declare module "lyrics-finder" {
+	const lyricsFinder: (artist: string, name: string) => Promise<string>;
+
+	export default lyricsFinder;
 }
