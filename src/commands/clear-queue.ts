@@ -15,6 +15,7 @@ export default class ClearQueue extends Command {
 			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
+			aliases: ["stop"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
