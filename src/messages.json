@@ -14,5 +14,6 @@
 	"Command.NowPlaying.NoSong": "No song is playing",
 	"Command.NowPlaying.Song": "__**Now Playing ▶️**__\n[title](url) [<@!member>]\n\nseekbar | `current / total`",
 	"Command.NowPlaying.Live": "__**Now Playing [ Live 🔴 ]**__\n[title](url) [<@!member>]",
-	"Command.NowPlaying.NotStarted": "Not started yet"
+	"Command.NowPlaying.NotStarted": "Not started yet",
+	"Command.ClearQueue.AlreadyEmpty": "The queue is already empty"
 }

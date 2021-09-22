@@ -1,7 +1,7 @@
 import { MusicController } from "../controllers";
 import { Command, CommandContext } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { log } from "../utils/general";
+import { log, reply } from "../utils/general";
 import ValClient from "../ValClient";
 
 export default class ClearQueue extends Command {
@@ -53,6 +53,11 @@ export default class ClearQueue extends Command {
 						description: "Bot is not in a voice channel.",
 					}),
 				);
+			}
+
+			if (controller.queue.length === 0) {
+				await reply("Command.ClearQueue.AlreadyEmpty", message.channel);
+				return;
 			}
 
 			await message.reply(
