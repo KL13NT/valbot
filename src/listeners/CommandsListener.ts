@@ -26,7 +26,7 @@ export default class CommandsListener extends Listener {
 			}
 
 			const [, commandName] = matchGroup; // [fullMatch, commandName]
-			const command = this.client.commands.get(commandName);
+			const command = this.client.commands.get(commandName.toLowerCase());
 
 			if (command === undefined) message.reply(ERROR_COMMAND_DOES_NOT_EXIST);
 			else command.run(message);
