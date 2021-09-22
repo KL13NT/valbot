@@ -1,7 +1,7 @@
 import ValClient from "../ValClient";
 import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
-import { createEmbed } from "../utils/embed";
+import { reply } from "../utils/general";
 
 export default class Pause extends Command {
 	constructor(client: ValClient) {
@@ -26,58 +26,33 @@ export default class Pause extends Command {
 		const voiceChannel = member.voice.channel;
 
 		if (this.client.voice.connections.size === 0) {
-			await message.reply(
-				createEmbed({
-					description: "Bot is not in a voice channel.",
-				}),
-			);
-
+			await reply("Bot.VoiceNotConnected", message.channel, {});
 			return;
 		}
 
 		if (!voiceChannel) {
-			await message.reply(
-				createEmbed({
-					description: `You're not connected to a voice channel`,
-				}),
-			);
+			await reply("User.VoiceNotConnected", message.channel, {});
 			return;
 		}
 
 		if (!controller.canUserPlay(voiceChannel)) {
-			await message.reply(
-				createEmbed({
-					description: "You must be in the same channel as the bot",
-				}),
-			);
+			await reply("User.SameChannel", message.channel, {});
 			return;
 		}
 
 		const song = controller.getCurrentSong();
 
 		if (!song) {
-			await message.reply(
-				createEmbed({
-					description: "No song is playing",
-				}),
-			);
+			await reply("Command.NowPlaying.NoSong", message.channel, {});
 			return;
 		}
 
 		if (controller.playState === "paused") {
-			await message.reply(
-				createEmbed({
-					description: "Already Paused ⏸️",
-				}),
-			);
+			await reply("Command.Pause.AlreadyPaused", message.channel, {});
 			return;
 		}
 
-		await message.reply(
-			createEmbed({
-				description: "Paused ⏸️",
-			}),
-		);
+		await reply("Command.Pause.Paused", message.channel, {});
 
 		await controller.pause();
 	};

@@ -32,53 +32,31 @@ export default class Lyrics extends Command {
 			const voiceChannel = member.voice.channel;
 
 			if (!voiceChannel) {
-				await message.reply(
-					createEmbed({
-						description: `You're not connected to a voice channel`,
-					}),
-				);
+				await reply("User.VoiceNotConnected", channel);
 				return;
 			}
 
 			if (!controller.canUserPlay(voiceChannel)) {
-				await message.reply(
-					createEmbed({
-						description: "You must be in the same channel as the bot",
-					}),
-				);
+				await reply("User.SameChannel", channel);
 				return;
 			}
 
 			if (this.client.voice.connections.size === 0) {
-				await message.reply(
-					createEmbed({
-						description: "Bot is not in a voice channel.",
-					}),
-				);
+				await reply("Bot.VoiceNotConnected", channel);
+				return;
 			}
 
 			if (controller.playState === "paused") {
-				await message.reply(
-					createEmbed({
-						description: "Bot is paused ⏸️",
-					}),
-				);
-
+				await reply("Command.Lyrics.Paused", channel);
 				return;
 			}
 
 			const song = controller.getCurrentSong();
 
 			if (!song) {
-				await message.reply(
-					createEmbed({
-						description: "No song is playing",
-					}),
-				);
+				await reply("Music.NotPlaying", channel);
 				return;
 			}
-
-			log(this.client, "Lyrics", "info");
 
 			const artist = song.artist || "";
 			const name = song.name || song.title.replace(/ *\([^)]*\) */g, "");
