@@ -8,18 +8,20 @@ import { log } from "../utils/general";
  */
 export default class ControllersLoader extends Loader {
 	load = async () => {
-		for (const controller of Object.values(Controllers)) {
-			// eslint-disable-next-line new-cap
-			const controllerInstance = new controller(this.client);
+		for (const Controller of Object.values(Controllers)) {
+			const controllerInstance = new Controller(this.client);
 
 			this.client.controllers.set(
 				controllerInstance.options.name,
 				controllerInstance,
 			);
 
-			await controllerInstance.init();
+			log(this.client, `${controllerInstance.options.name} loaded`, "info");
+		}
 
-			log(this.client, `${controller.name} loaded`, "info");
+		for (const controller of this.client.controllers.values()) {
+			await controller.init();
+			log(this.client, `${controller.options.name} initialized`, "info");
 		}
 	};
 }
