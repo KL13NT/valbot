@@ -58,7 +58,7 @@ export default class PresenceSet extends Command {
 				priority: isPriority,
 			};
 
-			controller.addPresence(presence);
+			await controller.addPresence(presence);
 
 			await message.reply("تم");
 		} catch (err) {

@@ -27,26 +27,37 @@ export default class PresenceController extends Controller {
 		this.updatePresence();
 	};
 
-	addPresence = (presence: Presence) => {
+	addPresence = async (presence: Presence) => {
+		if (presence.priority) await this.clearPriority();
+
 		this.presences.unshift(presence);
-		this.updatePresence();
+		await this.updatePresence();
 	};
 
-	clearPriority = () => {
+	clearPriority = async () => {
 		this.presences = this.presences.filter(p => !p.priority);
-		this.updatePresence();
+		await this.updatePresence();
+	};
+
+	clearSource = async (source: string) => {
+		this.presences = this.presences.filter(
+			presence => presence.source !== source,
+		);
+		await this.updatePresence();
 	};
 
 	private updatePresence = async () => {
 		const presence = this.getRandomPresence();
 		const presenceWithPriority = this.presences.find(p => p.priority);
+		const current = presenceWithPriority || presence;
+
 		const queue = this.client.controllers.get(
 			"QueueController",
 		) as QueueController;
 
 		if (this.client.user) {
 			this.client.user
-				.setPresence(presenceWithPriority || presence)
+				.setPresence(current)
 				.catch((err: Error) => log(this.client, err, "error"));
 
 			return;

@@ -26,8 +26,8 @@ export default class PresenceClear extends Command {
 			const controller = this.client.controllers.get(
 				"presence",
 			) as PresenceController;
-			
-			controller.clearPriority();
+
+			await controller.clearPriority();
 
 			await message.reply("تم");
 		} catch (err) {
