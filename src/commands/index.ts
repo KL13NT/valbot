@@ -28,3 +28,4 @@ export { default as NowPlaying } from "./now-playing";
 export { default as Pause } from "./pause";
 export { default as Loop } from "./loop";
 export { default as Lyrics } from "./lyrics";
+export { default as Seek } from "./seek";

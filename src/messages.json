@@ -26,5 +26,8 @@
 	"Command.ClearQueue.Cleared": "Queue cleared",
 	"Command.Skip.Skipped": "Skipped [title](url)",
 	"Command.Lyrics.NotFound": "No lyrics found (⊃◜⌓◝⊂)",
-	"Command.Lyrics.Paused": "Bot is paused ⏸️"
+	"Command.Lyrics.Paused": "Bot is paused ⏸️",
+	"Command.Seek.TimeExceeded": "The passing duration exceeds the original duration",
+	"Command.Seek.Seeked": "Seeked [title](url) to position",
+	"Command.Seek.Invalid": "Invalid Parameter"
 }

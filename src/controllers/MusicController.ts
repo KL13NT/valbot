@@ -209,6 +209,22 @@ export default class MusicController extends Controller {
 
 	/**
 	 *
+	 * @param position is the number of seconds to seek to.
+	 */
+	seek = (position: number) => {
+		const song = this.state.queue[this.state.index];
+		const stream = ytdl(song.url, { quality: "lowest" });
+
+		const dispatcher = this.state.connection.play(stream, {
+			highWaterMark: 512,
+			seek: position,
+		});
+
+		dispatcher.on("finish", () => this.skip());
+	};
+
+	/**
+	 *
 	 * @param command indicates whether a 'single' loop should jump to next song.
 	 * This is for cases where user has loop = 'single' and wish to skip the
 	 * looping song to loop the following, etc.
