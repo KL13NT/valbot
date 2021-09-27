@@ -211,13 +211,13 @@ export default class MusicController extends Controller {
 	 *
 	 * @param position is the number of seconds to seek to.
 	 */
-	seek = (position: number) => {
+	seek = (timestamp: number) => {
 		const song = this.state.queue[this.state.index];
 		const stream = ytdl(song.url, { quality: "lowest" });
 
 		const dispatcher = this.state.connection.play(stream, {
 			highWaterMark: 512,
-			seek: position,
+			seek: timestamp,
 		});
 
 		dispatcher.on("finish", () => this.skip());

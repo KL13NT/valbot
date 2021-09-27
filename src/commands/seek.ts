@@ -51,15 +51,15 @@ export default class Seek extends Command {
 			}
 
 			const { duration, title, url } = controller.getCurrentSong();
-			const position = this.getSeconds(params[0]);
+			const timestamp = this.getSeconds(params[0]);
 
-			if (typeof position === "undefined") {
+			if (this.notValidTimestamp(timestamp)) {
 				await reply("Command.Seek.Invalid", textChannel);
 				return;
 			}
 
 			// Song duration is represented in milliseconds.
-			if (position > duration / 1000) {
+			if (timestamp > duration / 1000) {
 				await reply("Command.Seek.TimeExceeded", textChannel);
 				return;
 			}
@@ -67,14 +67,14 @@ export default class Seek extends Command {
 			await reply("Command.Seek.Seeked", textChannel, {
 				title,
 				url,
-				position: formatDuration(position * 1000, {
+				timestamp: formatDuration(timestamp * 1000, {
 					colonNotation: true,
 					secondsDecimalDigits: 0,
 				}),
 			});
 
 			log(this.client, "Seek", "info");
-			controller.seek(position);
+			controller.seek(timestamp);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
@@ -85,5 +85,11 @@ export default class Seek extends Command {
 			.split(":")
 			.map(period => Number(period))
 			.reduce((accumulator, period) => 60 * accumulator + period, 0);
+	};
+
+	notValidTimestamp = timestamp => {
+		return (
+			typeof timestamp === "undefined" || isNaN(timestamp) || timestamp < 0
+		);
 	};
 }
