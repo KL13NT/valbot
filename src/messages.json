@@ -29,5 +29,6 @@
 	"Command.Lyrics.Paused": "Bot is paused ⏸️",
 	"Command.Seek.TimeExceeded": "The passing duration exceeds the original duration",
 	"Command.Seek.Seeked": "Seeked [title](url) to timestamp",
-	"Command.Seek.Invalid": "Invalid Parameter: Seek accepts numbers only or HH:MM:SS notation"
+	"Command.Seek.Invalid": "Invalid Parameter: Seek accepts numbers only or HH:MM:SS notation",
+	"Dummy.Command": "Dummy Message"
 }
