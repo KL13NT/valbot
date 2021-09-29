@@ -29,6 +29,7 @@ export default class Play extends Command {
 			exampleUsage: "?<youtube_link|query>",
 			extraParams: true,
 			optionalParams: 1,
+			aliases: ["p"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
