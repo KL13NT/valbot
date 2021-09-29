@@ -1,10 +1,8 @@
 import progressbar from "string-progressbar";
-import prettyMilliseconds from "pretty-ms";
-
 import ValClient from "../ValClient";
 import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
-import { log, reply } from "../utils/general";
+import { formatDuration, log, reply } from "../utils/general";
 
 export default class NowPlaying extends Command {
 	constructor(client: ValClient) {
@@ -76,16 +74,8 @@ export default class NowPlaying extends Command {
 			url: song.url,
 			member: song.requestingUserId,
 			seekbar,
-			current: this.formatDuration(current),
-			total: this.formatDuration(total),
-		});
-	};
-
-	/** Display milliseconds in HH:MM:SS format */
-	private formatDuration = (duration: number): string => {
-		return prettyMilliseconds(duration, {
-			colonNotation: true,
-			secondsDecimalDigits: 0,
+			current: formatDuration(current),
+			total: formatDuration(total),
 		});
 	};
 }

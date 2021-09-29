@@ -8,8 +8,16 @@ import { QueueController } from "../controllers";
 import ValClient from "../ValClient";
 
 import { getChannelObject } from "./object";
-import { TextChannel, GuildMember, Message, Permissions, DMChannel, NewsChannel } from "discord.js";
+import {
+	TextChannel,
+	GuildMember,
+	Message,
+	Permissions,
+	DMChannel,
+	NewsChannel,
+} from "discord.js";
 import { ParsedResult } from "chrono-node";
+import prettyMilliseconds from "pretty-ms";
 import messages from "../messages.json";
 import { createEmbed } from "./embed";
 
@@ -191,3 +199,10 @@ export const reply = async (
 			description: compileTemplate(data || {}, messages[id]),
 		}),
 	);
+
+/** Format MS Duration in a specific format. */
+export const formatDuration = (duration: number) =>
+	prettyMilliseconds(duration, {
+		colonNotation: true,
+		secondsDecimalDigits: 0,
+	});
