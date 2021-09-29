@@ -8,13 +8,9 @@ import * as loaders from "./loaders";
 import * as listeners from "./listeners";
 
 import { log, transformObject } from "./utils/general";
-import { ClientConfig, Presence } from "./types/interfaces";
+import { ClientConfig } from "./types/interfaces";
 import Command from "./structures/Command";
-import {
-	MongoController,
-	QueueController,
-	IntervalsController,
-} from "./controllers";
+import { MongoController, QueueController } from "./controllers";
 import { Controller } from "./structures";
 
 const { AUTH_TOKEN, MODE } = process.env;
@@ -41,49 +37,6 @@ export default class ValClient extends Client {
 		ROLE_MUTED: "",
 		ROLE_WARNED: "",
 	};
-
-	presences: Presence[] = [
-		{
-			status: "dnd",
-			activity: {
-				type: "WATCHING",
-				name: "Sovereign writing bad code",
-			},
-			priority: false,
-		},
-		{
-			status: "dnd",
-			activity: {
-				type: "WATCHING",
-				name: "N1ffl3r making games",
-			},
-			priority: false,
-		},
-		{
-			status: "dnd",
-			activity: {
-				type: "WATCHING",
-				name: "Madara Omar disappearing",
-			},
-			priority: false,
-		},
-		{
-			status: "dnd",
-			activity: {
-				type: "WATCHING",
-				name: "Sovereign coding in SpaghettiScript",
-			},
-			priority: false,
-		},
-		{
-			status: "dnd",
-			activity: {
-				name: `${this.prefix} help`,
-				type: "PLAYING",
-			},
-			priority: false,
-		},
-	];
 
 	init = async (token = AUTH_TOKEN) => {
 		try {
@@ -116,41 +69,11 @@ export default class ValClient extends Client {
 			this.initListeners();
 			await this.initConfig();
 
-			const intervals = <IntervalsController>this.controllers.get("intervals");
-
-			await this.setPresence();
-
-			intervals.set({
-				callback: this.setPresence,
-				name: "presence",
-				time: 30 * 1000,
-			});
-
 			this.emit("queueExecute", "Client ready");
 
 			log(this, "Client ready", "info");
 		} catch (error) {
 			log(this, error, "error");
-		}
-	};
-
-	setPresence = async () => {
-		const presence = this.presences[
-			Math.floor(Math.random() * this.presences.length)
-		];
-		const presenceWithPriority = this.presences.find(p => p.priority);
-
-		if (this.user) {
-			this.user
-				.setPresence(presenceWithPriority || presence)
-				.catch(err => log(this, err, "error"));
-		} else {
-			const queue = <QueueController>this.controllers.get("QueueController");
-
-			queue.enqueue({
-				args: [],
-				func: this.setPresence,
-			});
 		}
 	};
 

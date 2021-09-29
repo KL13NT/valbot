@@ -14,6 +14,7 @@ import { Readable } from "stream";
 import { isChannelEmpty } from "../utils/object";
 import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
+import { PresenceController } from "./index";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
@@ -78,6 +79,7 @@ const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 
 export default class MusicController extends Controller {
+	private presence: PresenceController;
 	private state: MusicControllerState = {
 		state: "stopped",
 		index: 0,
@@ -99,6 +101,10 @@ export default class MusicController extends Controller {
 	}
 
 	init = async () => {
+		this.presence = this.client.controllers.get(
+			"presence",
+		) as PresenceController;
+
 		this.client.on("voiceStateUpdate", this.handleStateUpdate);
 
 		this.play(true);
@@ -166,7 +172,6 @@ export default class MusicController extends Controller {
 		);
 
 		const stream = ytdl(song.url, { quality: "lowest" });
-
 		stream.on("error", async error => {
 			log(this.client, error, "error");
 
@@ -178,6 +183,8 @@ export default class MusicController extends Controller {
 
 			this.skip();
 		});
+
+		await this.updatePresence();
 
 		this.setState({
 			stream,
@@ -235,6 +242,7 @@ export default class MusicController extends Controller {
 		const { loop, index, queue } = this.state;
 
 		this.destroyStreams();
+		await this.clearPresence();
 
 		if (index === queue.length - 1 && loop === "disabled") {
 			this.clear();
@@ -345,6 +353,26 @@ export default class MusicController extends Controller {
 	get loopState() {
 		return this.state.loop;
 	}
+
+	private updatePresence = async () => {
+		const song = this.getCurrentSong();
+
+		if (!song) return;
+
+		await this.presence.addPresence({
+			priority: true,
+			activity: {
+				name: song.title,
+				type: "LISTENING",
+				url: song.url,
+			},
+			status: "dnd",
+		});
+	};
+
+	private clearPresence = async () => {
+		await this.presence.clearSource("music");
+	};
 
 	private setState = (state: Partial<MusicControllerState>) => {
 		this.state = { ...this.state, ...state };

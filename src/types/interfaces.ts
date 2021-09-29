@@ -203,4 +203,5 @@ export interface Reminder {
 
 export interface Presence extends PresenceData {
 	priority: boolean;
+	source?: string;
 }

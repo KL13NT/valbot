@@ -1,9 +1,10 @@
-import { Command , CommandContext } from "../structures";
+import { Command, CommandContext } from "../structures";
 import { log } from "../utils/general";
 import ValClient from "../ValClient";
 
 import { Presence } from "../types/interfaces";
 import { ActivityType } from "discord.js";
+import { PresenceController } from "../controllers";
 
 export default class PresenceSet extends Command {
 	constructor(client: ValClient) {
@@ -28,7 +29,9 @@ export default class PresenceSet extends Command {
 		try {
 			const [type, priority, ...name] = params;
 			const activityType = <ActivityType>type;
-			const copy = Array.from(this.client.presences).filter(p => !p.priority); // remove other priority presences to avoid unexpected behaviour
+			const controller = this.client.controllers.get(
+				"presence",
+			) as PresenceController;
 
 			if (
 				!/^(PLAYING|STREAMING|LISTENING|WATCHING)$/i.test(
@@ -44,10 +47,9 @@ export default class PresenceSet extends Command {
 				return;
 			}
 
-			const isPriority =
-				!!(priority && priority.toLowerCase() === "true");
+			const isPriority = !!(priority && priority.toLowerCase() === "true");
 
-			const newPresence: Presence = {
+			const presence: Presence = {
 				status: "dnd",
 				activity: {
 					name: name.join(" "),
@@ -56,9 +58,7 @@ export default class PresenceSet extends Command {
 				priority: isPriority,
 			};
 
-			this.client.presences = [newPresence, ...copy];
-
-			await this.client.setPresence();
+			await controller.addPresence(presence);
 
 			await message.reply("تم");
 		} catch (err) {
