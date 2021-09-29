@@ -12,7 +12,7 @@ export default class Seek extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: "Seek to position in seconds.",
-			exampleUsage: "",
+			exampleUsage: "05:05",
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
