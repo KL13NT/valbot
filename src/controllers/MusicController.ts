@@ -212,6 +212,8 @@ export default class MusicController extends Controller {
 	 * @param position is the number of seconds to seek to.
 	 */
 	seek = (timestamp: number) => {
+		this.destroyStreams();
+
 		const song = this.state.queue[this.state.index];
 		const stream = ytdl(song.url, { quality: "lowest" });
 
