@@ -74,14 +74,8 @@ export default class NowPlaying extends Command {
 			url: song.url,
 			member: song.requestingUserId,
 			seekbar,
-			current: formatDuration(current, {
-				colonNotation: true,
-				secondsDecimalDigits: 0,
-			}),
-			total: formatDuration(total, {
-				colonNotation: true,
-				secondsDecimalDigits: 0,
-			}),
+			current: formatDuration(current),
+			total: formatDuration(total),
 		});
 	};
 }

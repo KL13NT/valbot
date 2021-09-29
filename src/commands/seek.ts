@@ -12,7 +12,7 @@ export default class Seek extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: "Seek to position in seconds.",
-			exampleUsage: "seek ",
+			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
 			auth: {
@@ -51,9 +51,9 @@ export default class Seek extends Command {
 			}
 
 			const { duration, title, url } = controller.getCurrentSong();
-			const timestamp = this.getSeconds(params[0]);
+			const timestamp = this.stringToTimestamp(params[0]);
 
-			if (this.notValidTimestamp(timestamp)) {
+			if (this.isInvalidTimestamp(timestamp)) {
 				await reply("Command.Seek.Invalid", textChannel);
 				return;
 			}
@@ -67,29 +67,23 @@ export default class Seek extends Command {
 			await reply("Command.Seek.Seeked", textChannel, {
 				title,
 				url,
-				timestamp: formatDuration(timestamp * 1000, {
-					colonNotation: true,
-					secondsDecimalDigits: 0,
-				}),
+				timestamp: formatDuration(timestamp * 1000),
 			});
 
-			log(this.client, "Seek", "info");
 			controller.seek(timestamp);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
 	};
 
-	getSeconds = (hms: string) => {
-		return hms
+	stringToTimestamp = (time: string) => {
+		return time
 			.split(":")
 			.map(period => Number(period))
 			.reduce((accumulator, period) => 60 * accumulator + period, 0);
 	};
 
-	notValidTimestamp = timestamp => {
-		return (
-			typeof timestamp === "undefined" || isNaN(timestamp) || timestamp < 0
-		);
+	isInvalidTimestamp = (timestamp: number) => {
+		return isNaN(timestamp) || timestamp < 0;
 	};
 }

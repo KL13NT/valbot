@@ -201,7 +201,8 @@ export const reply = async (
 	);
 
 /** Format MS Duration in a specific format. */
-export const formatDuration = (
-	duration: number,
-	options?: prettyMilliseconds.Options,
-) => prettyMilliseconds(duration, options);
+export const formatDuration = (duration: number) =>
+	prettyMilliseconds(duration, {
+		colonNotation: true,
+		secondsDecimalDigits: 0,
+	});
