@@ -28,7 +28,7 @@ export default class MessageListener extends Listener {
 
 			const classification = await toxicity.classify(message);
 
-			if (classification.length > 0) 
+			if (classification.length > 0)
 				await toxicity.report(message, classification);
 
 			const isClientMentioned =
@@ -63,6 +63,7 @@ export default class MessageListener extends Listener {
 		this.client.ready &&
 		author.id !== this.client.user.id &&
 		channel.type === "text" &&
+		!channel.nsfw &&
 		type === "DEFAULT" &&
 		(!isDev() ||
 			isAdmin(member) ||
