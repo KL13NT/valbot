@@ -216,7 +216,22 @@ export default class MusicController extends Controller {
 
 	/**
 	 *
-	 * @param position is the number of seconds to seek to.
+	 * @param id number: indicates the nth song in the queue.
+	 */
+	jump = async (id: number) => {
+		log(this.client, `Jump ${id}`, "info");
+		this.destroyStreams();
+
+		this.setState({
+			index: id - 1,
+		});
+
+		if (this.state.state === "playing") this.play(true);
+	};
+
+	/**
+	 *
+	 * @param timestamp is the number of seconds to seek to.
 	 */
 	seek = (timestamp: number) => {
 		this.destroyStreams();
