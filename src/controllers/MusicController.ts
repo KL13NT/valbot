@@ -216,14 +216,13 @@ export default class MusicController extends Controller {
 
 	/**
 	 *
-	 * @param id number: indicates the nth song in the queue.
+	 * @param index number: indicates the nth song in the queue.
 	 */
-	jump = async (id: number) => {
-		log(this.client, `Jump ${id}`, "info");
+	jump = async (index: number) => {
 		this.destroyStreams();
 
 		this.setState({
-			index: id - 1,
+			index: index,
 		});
 
 		if (this.state.state === "playing") this.play(true);

@@ -46,9 +46,9 @@ export default class Jump extends Command {
 				return;
 			}
 
-			const id = Number(params[0]);
+			const index = Number(params[0]) - 1;
 
-			if (this.isInvalidId(id)) {
+			if (isNaN(index)) {
 				await reply("Command.Jump.Invalid", textChannel);
 				return;
 			}
@@ -60,26 +60,22 @@ export default class Jump extends Command {
 				return;
 			}
 
-			if (id - 1 > queueLength) {
+			if (index >= queueLength || index < 0) {
 				await reply("Command.Jump.OutOfBoundaries", textChannel);
 				return;
 			}
 
-			const song = controller.queue[id - 1];
+			const { title, url } = controller.queue[index];
 
 			await reply("Command.Jump", textChannel, {
-				id,
-				title: song.title,
-				url: song.url,
+				id: index + 1,
+				title,
+				url,
 			});
 
-			await controller.jump(id);
+			await controller.jump(index);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
-	};
-
-	isInvalidId = (id: number) => {
-		return isNaN(id) || id <= 0;
 	};
 }
