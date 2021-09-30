@@ -61,7 +61,9 @@ export default class Jump extends Command {
 			}
 
 			if (index >= queueLength || index < 0) {
-				await reply("Command.Jump.OutOfBoundaries", textChannel);
+				await reply("Command.Jump.OutOfBoundaries", textChannel, {
+					id: index + 1,
+				});
 				return;
 			}
 

@@ -32,5 +32,5 @@
 	"Command.Seek.Invalid": "Seek accepts numbers only or HH:MM:SS notation",
 	"Command.Jump.Invalid": "Jump accepts numbers only",
 	"Command.Jump": "Jumped to id) [title](url)",
-	"Command.Jump.OutOfBoundaries": "Position is out of range"
+	"Command.Jump.OutOfBoundaries": "There is no position id"
 }

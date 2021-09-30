@@ -222,7 +222,7 @@ export default class MusicController extends Controller {
 		this.destroyStreams();
 
 		this.setState({
-			index: index,
+			index,
 		});
 
 		if (this.state.state === "playing") this.play(true);
