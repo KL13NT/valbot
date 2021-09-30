@@ -28,10 +28,8 @@ export default class MessageListener extends Listener {
 
 			const classification = await toxicity.classify(message);
 
-			if (classification.length > 0) {
-				toxicity.report(message, classification);
-				return;
-			}
+			if (classification.length > 0) 
+				await toxicity.report(message, classification);
 
 			const isClientMentioned =
 				mentions.members &&
