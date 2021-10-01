@@ -22,8 +22,8 @@ export default class Remove extends Command {
 		});
 	}
 
-	_run = async ({ member, message, params}: CommandContext) => {
-        try {
+	_run = async ({ member, message, params }: CommandContext) => {
+		try {
 			const voiceChannel = member.voice.channel;
 			const textChannel = message.channel as TextChannel;
 			const controller = this.client.controllers.get(
@@ -54,7 +54,6 @@ export default class Remove extends Command {
 
 			const queueLength = controller.queue.length;
 
-
 			if (index >= queueLength || index < 0) {
 				await reply("Command.Remove.OutOfBoundaries", textChannel, {
 					id: index + 1,
@@ -62,10 +61,10 @@ export default class Remove extends Command {
 				return;
 			}
 
-            if (index === controller.currentSongIndex) {
-                await reply("Command.Remove.CurrentlyPlaying", textChannel);
-                return;
-            }
+			if (index === controller.currentSongIndex) {
+				await reply("Command.Remove.CurrentlyPlaying", textChannel);
+				return;
+			}
 
 			const { title, url } = controller.queue[index];
 
