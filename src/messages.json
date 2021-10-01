@@ -32,5 +32,9 @@
 	"Command.Seek.Invalid": "Seek accepts numbers only or HH:MM:SS notation",
 	"Command.Jump.Invalid": "Jump accepts numbers only",
 	"Command.Jump": "Jumped to id) [title](url)",
-	"Command.Jump.OutOfBoundaries": "There is no position id"
+	"Command.Jump.OutOfBoundaries": "There is no position id",
+	"Command.Remove.OutOfBoundaries": "There is no position id",
+	"Command.Remove.Removed": "Removed id) [title](url)",
+	"Command.Remove.Invalid": "Remove accepts numbers only",
+	"Command.Remove.CurrentlyPlaying": "The song is currently playing"
 }

@@ -280,6 +280,23 @@ export default class MusicController extends Controller {
 		if (this.state.state === "playing") this.play(true);
 	};
 
+	/**
+	 *
+	 * @param songId is the index of the song in the queue.
+	 */
+	remove = async (songIndex: number) => {
+		if (songIndex > this.state.index) {
+			this.setState({
+				queue: this.state.queue.filter((_, index) => index !== songIndex),
+			});
+		} else {
+			this.setState({
+				queue: this.state.queue.filter((_, index) => index !== songIndex),
+				index: this.state.index - 1,
+			});
+		}
+	};
+
 	getCurrentStreamTime = () => {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};
@@ -362,6 +379,10 @@ export default class MusicController extends Controller {
 
 	get playState() {
 		return this.state.state;
+	}
+
+	get currentSongIndex() {
+		return this.state.index;
 	}
 
 	get loopState() {
