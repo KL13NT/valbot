@@ -92,7 +92,7 @@ yarn develop # if you chose to use a local installation
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to
-your .env file or your deployment environment
+your .env file or your deployment environment:
 
 ```bash
 CLIENT_ID= # client ID (Discord Apps Page)
@@ -215,6 +215,51 @@ everywhere to implement repetitive logic.
 - `Loader`: for loading anythin on `ValClient`
 - `PaginatedEmbed`: for multi-page embeds that use reactions to change pages
 
+## How it Works
+
+Upon launching, an instance of ValClient (the bot's main client responsible for
+a guild). This instance authenticates with Discord's servers and then starts
+loading.
+
+The loading process consists of three stages, loaders, listeners, config.
+Loaders are instances of the `Loader` structure that is responsible for loading
+anything that is load-able. This includes commands and controllers. Those are
+loaded on the `ValClient` as members called `commands` and `controllers`
+respectively.
+
+The next stage is initializing listeners. Listeners are handlers that fire on
+events of the _discord.js_ `Client`. Such handlers include `MessageListener` and
+`NewGuildMemberListener`.
+
+The last stage is loading config. During this stage the client tries to load
+runtime configuration variables from the _mongo_ store. If this fails or cannot
+find the config for any reason (maybe the first time the bot is launched) then
+you're required to use the `setup` command to configure it. When the config is
+found and validated, then and only then does the `ValClient` register as
+`ready`.
+
+## Accessing Controllers
+
+You'll probably need to access a controller's method one way or another when
+implementing new logic. To do this, you can use the `client` member on all
+instances using `this.client` to get access to the `.controllers` map. You'll
+then need to cast the returned type from `this.client.controllers` to the
+respective type you want.
+
+For example:
+
+```typescript
+export default class Skip extends Command {
+	constructor(client: ValClient) {
+		super(client, ...);
+	}
+
+	_run = async () => {
+    const controller = this.client.controllers.get("music") as MusicController;
+  };
+}
+```
+
 ## Code Style
 
 Please follow the linting rules in `.eslintrc.js` paired with Prettier. Both are configured.
@@ -238,4 +283,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the
+[all-contributors](https://github.com/all-contributors/all-contributors)
+specification. Contributions of any kind welcome!
