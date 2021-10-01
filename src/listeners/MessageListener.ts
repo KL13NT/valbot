@@ -26,7 +26,8 @@ export default class MessageListener extends Listener {
 				controllers.get("conversation")
 			);
 
-			const classification = await toxicity.classify(message);
+			const nsfw = message.channel.type === "text" && message.channel.nsfw;
+			const classification = nsfw ? [] : await toxicity.classify(message);
 
 			if (classification.length > 0)
 				await toxicity.report(message, classification);
@@ -63,7 +64,6 @@ export default class MessageListener extends Listener {
 		this.client.ready &&
 		author.id !== this.client.user.id &&
 		channel.type === "text" &&
-		!channel.nsfw &&
 		type === "DEFAULT" &&
 		(!isDev() ||
 			isAdmin(member) ||
