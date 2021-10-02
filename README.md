@@ -287,6 +287,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/Amrsamy19"><img src="https://avatars.githubusercontent.com/u/46032085?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amrsamy19</b></sub></a><br /><a href="https://github.com/KL13NT/valbot/commits?author=Amrsamy19" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/omarabdelaz1z"><img src="https://avatars.githubusercontent.com/u/59033999?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Omar Abdelaziz</b></sub></a><br /><a href="https://github.com/KL13NT/valbot/commits?author=omarabdelaz1z" title="Code">💻</a> <a href="#ideas-omarabdelaz1z" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-omarabdelaz1z" title="Maintenance">🚧</a> <a href="#question-omarabdelaz1z" title="Answering Questions">💬</a> <a href="https://github.com/KL13NT/valbot/issues?q=author%3Aomarabdelaz1z" title="Bug reports">🐛</a> <a href="https://github.com/KL13NT/valbot/pulls?q=is%3Apr+reviewed-by%3Aomarabdelaz1z" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/durgeshahire07"><img src="https://avatars.githubusercontent.com/u/68327306?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Durgesh Ahire</b></sub></a><br /><a href="https://github.com/KL13NT/valbot/commits?author=durgeshahire07" title="Code">💻</a></td>
   </tr>
 </table>
 
