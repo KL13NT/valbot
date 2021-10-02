@@ -9,7 +9,7 @@ export default class Jump extends Command {
 		super(client, {
 			name: "jump",
 			category: "Music",
-			cooldown: 15 * 1000,
+			cooldown: 5 * 1000,
 			nOfParams: 1,
 			description: "Jump to a specific song in queue.",
 			exampleUsage: "jump 1",
