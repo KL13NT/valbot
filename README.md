@@ -26,6 +26,18 @@ Before contributing, kindly check the [contribution
 guidelines](./CONTRIBUTING.md). Please adhere to this project's [code of
 conduct](./CODE_OF_CONDUCT.md).
 
+## How we manage this repository
+
+We use GitHub issues, projects, and milestones to track progress and decide
+which features are to be assigned/worked on. Before checking the issues list
+make sure to check the current milestones and/or projects to check which
+feature/bug fix we need. This would ensure your contribution is a high priority
+for us.
+
+We use [Milestones](https://github.com/KL13NT/valbot/milestones) to track the
+progress of specific ideas, and use Projects for the overall view of issues and
+ongoing work.
+
 ## Features
 
 - Toxicity filtering using the TensorFlow [Toxicity
