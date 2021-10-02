@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ValBot Community Support (Discussions)
+    url: https://github.com/KL13NT/valbot/discussions
+    about: Please ask and answer questions here.
+  - name: Code of Conduct Violations (Discussions)
+    url: https://github.com/KL13NT/valbot/discussions
+    about: Report community code of conduct violations here.
+  - name: GitHub Security Bugs
+    url: https://discord.gg/xrGAnTg
+    about: Please report security vulnerabilities to the admins on our Discord server.

@@ -19,7 +19,9 @@
 		"lint": "eslint --ext .js,.ts ./src --config .eslintrc.js --fix",
 		"pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
 		"test": "jest --colors --expand --logHeapUsage --config jest.config.js --verbose",
-		"docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs"
+		"docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -r ./ -d docs",
+		"contributors:add": "all-contributors add",
+		"contributors:generate": "all-contributors generate"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.3.4",
