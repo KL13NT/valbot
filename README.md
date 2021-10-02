@@ -1,4 +1,7 @@
 # ValariumBot
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 A bot for the Valarium community discord server. Run `tsc` in the root project directory to compile it first.
 
@@ -122,6 +125,19 @@ I love contributing to OSS! And would love contributions to this repo. Checkout 
 ## Contributors
 
 - [KL13NT](https://github.com/KL13NT) Owner
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/durgeshahire07"><img src="https://avatars.githubusercontent.com/u/68327306?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Durgesh Ahire</b></sub></a><br /><a href="https://github.com/KL13NT/valbot/commits?author=durgeshahire07" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 # Backlog
 
