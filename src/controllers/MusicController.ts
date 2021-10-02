@@ -1,7 +1,6 @@
 import ytdl from "ytdl-core";
 
 import {
-	Snowflake,
 	StreamDispatcher,
 	TextChannel,
 	VoiceChannel,
@@ -15,25 +14,11 @@ import { isChannelEmpty } from "../utils/object";
 import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 import { PresenceController } from "./index";
+import { Song } from "../types/interfaces";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
 export type PlayState = "stopped" | "paused" | "playing" | "fetching";
-
-export interface Song {
-	title: string;
-
-	artist?: string;
-	name?: string;
-	url: string;
-	live: boolean;
-
-	/** Song duration in milliseconds */
-	duration: number;
-
-	/** ID of the user who requested the song */
-	requestingUserId: Snowflake;
-}
 
 export interface MusicControllerState {
 	/** An array of the songs in the current queue */

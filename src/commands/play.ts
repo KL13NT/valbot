@@ -18,7 +18,7 @@ const MATCH_THRESHOLD = 0.8;
 
 export default class Play extends Command {
 	cache: LRU<string, Omit<Song, "requestingUserId">>;
-
+	retriver: (url: string) => Song[];
 	constructor(client: ValClient) {
 		super(client, {
 			name: "play",

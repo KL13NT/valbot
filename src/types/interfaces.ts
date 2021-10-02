@@ -14,6 +14,20 @@ export type Template = string;
 
 export type AlertLevel = "info" | "warn" | "error";
 
+export interface Song {
+	title: string;
+
+	artist?: string;
+	name?: string;
+	url: string;
+	live: boolean;
+
+	/** Song duration in milliseconds */
+	duration: number;
+
+	/** ID of the user who requested the song */
+	requestingUserId: Snowflake;
+}
 export interface ClientConfig {
 	[index: string]: Snowflake;
 
