@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "durgeshahire07",
+      "name": "Durgesh Ahire",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68327306?v=4",
+      "profile": "https://github.com/durgeshahire07",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "valbot",
+  "projectOwner": "KL13NT",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
