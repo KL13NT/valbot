@@ -259,7 +259,7 @@ export default class MusicController extends Controller {
 		await this.clearPresence();
 
 		if (index === queue.length - 1 && loop === "disabled") {
-			this.clear();
+			await this.clear();
 			return;
 		}
 
@@ -282,7 +282,7 @@ export default class MusicController extends Controller {
 
 	/**
 	 *
-	 * @param songId is the index of the song in the queue.
+	 * @param songIndex is the index of the song in the queue.
 	 */
 	remove = async (songIndex: number) => {
 		if (songIndex > this.state.index) {
@@ -311,7 +311,7 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	clear = () => {
+	clear = async () => {
 		this.destroyStreams();
 
 		this.setState({
@@ -322,6 +322,8 @@ export default class MusicController extends Controller {
 			queue: [],
 			dispatcher: null,
 		});
+
+		await this.clearPresence();
 	};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
@@ -367,6 +369,8 @@ export default class MusicController extends Controller {
 			dispatcher: null,
 			loop: "disabled",
 		};
+
+		await this.clearPresence();
 	};
 
 	canUserPlay = (vc: VoiceChannel) => {
@@ -401,6 +405,7 @@ export default class MusicController extends Controller {
 				type: "LISTENING",
 				url: song.url,
 			},
+			source: "music",
 			status: "dnd",
 		});
 	};
