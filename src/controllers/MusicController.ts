@@ -314,6 +314,8 @@ export default class MusicController extends Controller {
 	clear = async () => {
 		this.destroyStreams();
 
+		await this.clearPresence();
+
 		this.setState({
 			state: "stopped",
 			index: 0,
@@ -322,8 +324,6 @@ export default class MusicController extends Controller {
 			queue: [],
 			dispatcher: null,
 		});
-
-		await this.clearPresence();
 	};
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
@@ -348,6 +348,8 @@ export default class MusicController extends Controller {
 		if (this.state.connection) this.state.connection.disconnect();
 		this.destroyStreams();
 
+		await this.clearPresence();
+
 		clearTimeout(this.state.timeout);
 
 		await this.state.text.send(
@@ -369,8 +371,6 @@ export default class MusicController extends Controller {
 			dispatcher: null,
 			loop: "disabled",
 		};
-
-		await this.clearPresence();
 	};
 
 	canUserPlay = (vc: VoiceChannel) => {

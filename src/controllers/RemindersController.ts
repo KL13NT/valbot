@@ -150,7 +150,7 @@ export default class RemindersController extends Controller {
 
 			// update cached reminders
 			if (date.getMinutes() === 0) {
-				await this.reminders.clear();
+				this.reminders.clear();
 				await this.fetchNextHour();
 			}
 		} catch (err) {
