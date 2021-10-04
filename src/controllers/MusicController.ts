@@ -266,7 +266,7 @@ export default class MusicController extends Controller {
 		await this.clearPresence();
 
 		if (index === queue.length - 1 && loop === "disabled") {
-			this.clear();
+			await this.clear();
 			return;
 		}
 
@@ -289,7 +289,7 @@ export default class MusicController extends Controller {
 
 	/**
 	 *
-	 * @param songId is the index of the song in the queue.
+	 * @param songIndex is the index of the song in the queue.
 	 */
 	remove = async (songIndex: number) => {
 		if (songIndex > this.state.index) {
@@ -302,6 +302,34 @@ export default class MusicController extends Controller {
 				index: this.state.index - 1,
 			});
 		}
+	};
+
+	/**
+	 *
+	 * @param songIndex is the index of the song to be moved.
+	 * @param newIndex is the new index of the song.
+	 */
+	move = (songIndex: number, newIndex: number) => {
+		const currentIndex = this.state.index;
+		const movingSong: Song = this.state.queue[songIndex];
+
+		const filtered = this.state.queue.filter(
+			(_: Song, index: number) => index !== songIndex,
+		);
+
+		const targetDirection = currentIndex - newIndex > 0 ? 1 : -1;
+		const sourceDirection = currentIndex - songIndex > 0 ? 1 : -1;
+		const newCurrentlyPlayingIndex =
+			targetDirection === sourceDirection
+				? currentIndex
+				: currentIndex + targetDirection;
+
+		filtered.splice(newIndex, 0, movingSong);
+
+		this.setState({
+			queue: filtered,
+			index: newCurrentlyPlayingIndex,
+		});
 	};
 
 	getCurrentStreamTime = () => {
@@ -318,8 +346,10 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	clear = () => {
+	clear = async () => {
 		this.destroyStreams();
+
+		await this.clearPresence();
 
 		this.setState({
 			state: "stopped",
@@ -352,6 +382,8 @@ export default class MusicController extends Controller {
 
 		if (this.state.connection) this.state.connection.disconnect();
 		this.destroyStreams();
+
+		await this.clearPresence();
 
 		clearTimeout(this.state.timeout);
 
@@ -408,6 +440,7 @@ export default class MusicController extends Controller {
 				type: "LISTENING",
 				url: song.url,
 			},
+			source: "music",
 			status: "dnd",
 		});
 	};

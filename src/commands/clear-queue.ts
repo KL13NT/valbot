@@ -51,7 +51,7 @@ export default class ClearQueue extends Command {
 
 			await reply("Command.ClearQueue.Cleared", message.channel);
 
-			controller.clear();
+			await controller.clear();
 		} catch (err) {
 			log(this.client, err, "error");
 		}
