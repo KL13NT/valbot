@@ -297,6 +297,28 @@ export default class MusicController extends Controller {
 		}
 	};
 
+	/**
+	 *
+	 * @param songIndex is the index of the song to be moved.
+	 * @param newIndex is the new index of the song.
+	 */
+	move = async (songIndex: number, newIndex: number) => {
+		let tempSong: Song;
+		const songs = this.queue;
+
+		// eslint-disable-next-line array-callback-return
+		const tempQueue = songs.filter(function (song: Song, index: number) {
+			if (index !== songIndex) return song;
+			tempSong = song;
+		});
+
+		tempQueue.splice(newIndex, 0, tempSong);
+
+		this.setState({
+			queue: tempQueue,
+		});
+	};
+
 	getCurrentStreamTime = () => {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};
