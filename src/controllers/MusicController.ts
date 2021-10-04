@@ -15,6 +15,8 @@ import { isChannelEmpty } from "../utils/object";
 import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 import { PresenceController } from "./index";
+import MongoController from "./MongoController";
+import { Playlist } from "../types/interfaces";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
@@ -81,6 +83,7 @@ const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 
 export default class MusicController extends Controller {
 	private presence: PresenceController;
+	private mongo: MongoController;
 	private state: MusicControllerState = {
 		state: "stopped",
 		index: 0,
@@ -102,6 +105,7 @@ export default class MusicController extends Controller {
 	}
 
 	init = async () => {
+		this.mongo = this.client.controllers.get("mongo") as MongoController;
 		this.presence = this.client.controllers.get(
 			"presence",
 		) as PresenceController;
@@ -410,6 +414,94 @@ export default class MusicController extends Controller {
 
 	canUserPlay = (vc: VoiceChannel) => {
 		return !this.state.vc || this.state.vc?.id === vc.id;
+	};
+
+	/**
+	 *
+	 * @throws
+	 */
+	getPlaylist = async (name: string, userId: Snowflake): Promise<Playlist> => {
+		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+
+		return this.mongo.db
+			.collection<Playlist>("playlists")
+			.findOne({ name, userId });
+	};
+
+	/**
+	 *
+	 * @throws
+	 */
+	createPlaylist = async (name: string, userId: Snowflake) => {
+		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+
+		const found = await this.mongo.db
+			.collection<Playlist>("playlists")
+			.findOne({ name });
+
+		if (found && found.userId !== userId)
+			throw new Error(
+				`A playlist with this name already exists by user ${found.userId}`,
+			);
+
+		const result = await this.mongo.db
+			.collection<Playlist>("playlists")
+			.insertOne({
+				name,
+				queue: this.state.queue,
+				userId,
+			});
+
+		if (!result.result.ok) throw new Error("Failed to create playlist");
+	};
+
+	/**
+	 *
+	 * @throws
+	 */
+	deletePlaylist = async (name: string, userId: Snowflake) => {
+		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+
+		const found = await this.mongo.db
+			.collection<Playlist>("playlists")
+			.findOne({ name });
+
+		if (!found) throw new Error("No playlist with this name exists");
+
+		if (found && found.userId !== userId)
+			throw new Error("This playlist doesn't belong to this user");
+
+		const results = await this.mongo.db.collection("playlists").deleteOne({
+			_id: found._id,
+		});
+
+		if (!results.result.ok) throw new Error("Failed to delete playlist");
+	};
+
+	/**
+	 *
+	 * @throws
+	 */
+	updatePlaylist = async (name: string, userId: Snowflake) => {
+		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+
+		const found = await this.mongo.db
+			.collection<Playlist>("playlists")
+			.findOne({ name });
+
+		if (!found) throw new Error("No playlist with this name exists");
+
+		if (found && found.userId !== userId)
+			throw new Error("This playlist doesn't belong to this user");
+
+		const results = await this.mongo.db.collection("playlists").updateOne(
+			{ _id: found._id },
+			{
+				queue: this.state.queue,
+			},
+		);
+
+		if (!results.result.ok) throw new Error("Failed to delete playlist");
 	};
 
 	get queue() {
