@@ -316,6 +316,8 @@ export default class MusicController extends Controller {
 
 		this.setState({
 			queue: tempQueue,
+			index:
+				songIndex < this.state.index ? this.state.index - 1 : this.state.index,
 		});
 	};
 
