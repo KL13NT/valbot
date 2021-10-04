@@ -26,6 +26,7 @@ export interface Song {
 	artist?: string;
 	name?: string;
 	url: string;
+	id: number;
 	live: boolean;
 
 	/** Song duration in milliseconds */
@@ -138,7 +139,7 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	enqueue = (song: Song) => {
+	enqueue = (song: Omit<Song, "id">) => {
 		log(
 			this.client,
 			`Enqueued ${song.title} by ${song.requestingUserId}`,
@@ -146,7 +147,13 @@ export default class MusicController extends Controller {
 		);
 
 		this.setState({
-			queue: [...this.state.queue, song],
+			queue: [
+				...this.state.queue,
+				{
+					...song,
+					id: this.state.queue.length,
+				},
+			],
 		});
 	};
 
