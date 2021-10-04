@@ -303,21 +303,25 @@ export default class MusicController extends Controller {
 	 * @param newIndex is the new index of the song.
 	 */
 	move = (songIndex: number, newIndex: number) => {
-		let tempSong: Song;
-		const songs = this.queue;
+		const currentIndex = this.state.index;
+		const movingSong: Song = this.state.queue[songIndex];
 
-		// eslint-disable-next-line array-callback-return
-		const tempQueue = songs.filter(function (song: Song, index: number) {
-			if (index !== songIndex) return song;
-			tempSong = song;
-		});
+		const filtered = this.state.queue.filter(
+			(_: Song, index: number) => index !== songIndex,
+		);
 
-		tempQueue.splice(newIndex, 0, tempSong);
+		const targetDirection = currentIndex - newIndex > 0 ? 1 : -1;
+		const sourceDirection = currentIndex - songIndex > 0 ? 1 : -1;
+		const newCurrentlyPlayingIndex =
+			targetDirection === sourceDirection
+				? currentIndex
+				: currentIndex + targetDirection;
+
+		filtered.splice(newIndex, 0, movingSong);
 
 		this.setState({
-			queue: tempQueue,
-			index:
-				songIndex < this.state.index ? this.state.index - 1 : this.state.index,
+			queue: filtered,
+			index: newCurrentlyPlayingIndex,
 		});
 	};
 

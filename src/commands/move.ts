@@ -9,10 +9,10 @@ export default class Move extends Command {
 		super(client, {
 			name: "move",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 2 * 1000,
 			nOfParams: 2,
 			description:
-				"moves a certain track from its position to a specified position",
+				"moves a certain track from its position to a specified position when passing one song index it moves the song to the next index so it is played next",
 			exampleUsage: "4 5",
 			extraParams: false,
 			optionalParams: 1,
