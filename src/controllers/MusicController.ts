@@ -297,6 +297,34 @@ export default class MusicController extends Controller {
 		}
 	};
 
+	/**
+	 *
+	 * @param songIndex is the index of the song to be moved.
+	 * @param newIndex is the new index of the song.
+	 */
+	move = (songIndex: number, newIndex: number) => {
+		const currentIndex = this.state.index;
+		const movingSong: Song = this.state.queue[songIndex];
+
+		const filtered = this.state.queue.filter(
+			(_: Song, index: number) => index !== songIndex,
+		);
+
+		const targetDirection = currentIndex - newIndex > 0 ? 1 : -1;
+		const sourceDirection = currentIndex - songIndex > 0 ? 1 : -1;
+		const newCurrentlyPlayingIndex =
+			targetDirection === sourceDirection
+				? currentIndex
+				: currentIndex + targetDirection;
+
+		filtered.splice(newIndex, 0, movingSong);
+
+		this.setState({
+			queue: filtered,
+			index: newCurrentlyPlayingIndex,
+		});
+	};
+
 	getCurrentStreamTime = () => {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};

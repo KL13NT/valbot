@@ -32,3 +32,4 @@ export { default as Seek } from "./seek";
 export { default as Jump } from "./jump";
 export { default as Remove } from "./remove";
 export { default as PreviousNow } from "./previous-now";
+export { default as Move } from "./move";
