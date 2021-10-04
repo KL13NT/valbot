@@ -87,7 +87,7 @@ export default class Move extends Command {
 				index: newIndex + 1,
 			});
 
-			await controller.move(songIndex, newIndex);
+			controller.move(songIndex, newIndex);
 			return;
 		} catch (err) {
 			log(this.client, err, "error");
