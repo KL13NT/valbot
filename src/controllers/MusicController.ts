@@ -17,6 +17,8 @@ import { log } from "../utils/general";
 import { PresenceController } from "./index";
 import MongoController from "./MongoController";
 import { Playlist } from "../types/interfaces";
+import UserError from "../structures/UserError";
+import { ObjectId } from "bson";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
@@ -420,12 +422,22 @@ export default class MusicController extends Controller {
 	 *
 	 * @throws
 	 */
-	getPlaylist = async (name: string, userId: Snowflake): Promise<Playlist> => {
-		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+	loadPlaylist = async (name: string, userId: Snowflake) => {
+		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
-		return this.mongo.db
+		const found = await this.mongo.db
 			.collection<Playlist>("playlists")
-			.findOne({ name, userId });
+			.findOne({ name });
+
+		if (!found) throw new UserError("No playlist with this name exists");
+
+		this.setState({
+			queue: found.queue.map(song => ({
+				...song,
+				requestingUserId: userId,
+			})),
+			index: 0,
+		});
 	};
 
 	/**
@@ -433,14 +445,14 @@ export default class MusicController extends Controller {
 	 * @throws
 	 */
 	createPlaylist = async (name: string, userId: Snowflake) => {
-		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
 		const found = await this.mongo.db
 			.collection<Playlist>("playlists")
 			.findOne({ name });
 
 		if (found && found.userId !== userId)
-			throw new Error(
+			throw new UserError(
 				`A playlist with this name already exists by user ${found.userId}`,
 			);
 
@@ -452,7 +464,7 @@ export default class MusicController extends Controller {
 				userId,
 			});
 
-		if (!result.result.ok) throw new Error("Failed to create playlist");
+		if (!result.result.ok) throw new UserError("Failed to create playlist");
 	};
 
 	/**
@@ -460,22 +472,24 @@ export default class MusicController extends Controller {
 	 * @throws
 	 */
 	deletePlaylist = async (name: string, userId: Snowflake) => {
-		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
 		const found = await this.mongo.db
 			.collection<Playlist>("playlists")
 			.findOne({ name });
 
-		if (!found) throw new Error("No playlist with this name exists");
+		if (!found) throw new UserError("No playlist with this name exists");
 
 		if (found && found.userId !== userId)
-			throw new Error("This playlist doesn't belong to this user");
+			throw new UserError("This playlist doesn't belong to this user");
 
 		const results = await this.mongo.db.collection("playlists").deleteOne({
-			_id: found._id,
+			_id: new ObjectId(found._id),
 		});
 
-		if (!results.result.ok) throw new Error("Failed to delete playlist");
+		console.log(found, results);
+
+		if (!results.result.ok) throw new UserError("Failed to delete playlist");
 	};
 
 	/**
@@ -483,25 +497,27 @@ export default class MusicController extends Controller {
 	 * @throws
 	 */
 	updatePlaylist = async (name: string, userId: Snowflake) => {
-		if (!this.mongo.ready) throw new Error("The database is not ready yet");
+		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
 		const found = await this.mongo.db
 			.collection<Playlist>("playlists")
 			.findOne({ name });
 
-		if (!found) throw new Error("No playlist with this name exists");
+		if (!found) throw new UserError("No playlist with this name exists");
 
 		if (found && found.userId !== userId)
-			throw new Error("This playlist doesn't belong to this user");
+			throw new UserError("This playlist doesn't belong to this user");
 
 		const results = await this.mongo.db.collection("playlists").updateOne(
 			{ _id: found._id },
 			{
-				queue: this.state.queue,
+				$set: {
+					queue: this.state.queue,
+				},
 			},
 		);
 
-		if (!results.result.ok) throw new Error("Failed to delete playlist");
+		if (!results.result.ok) throw new UserError("Failed to delete playlist");
 	};
 
 	get queue() {
