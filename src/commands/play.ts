@@ -17,7 +17,7 @@ const KEY_LENGTH = 100;
 const MATCH_THRESHOLD = 0.8;
 
 export default class Play extends Command {
-	cache: LRU<string, Omit<Song, "requestingUserId">>;
+	cache: LRU<string, Omit<Song, "requestingUserId" | "id">>;
 
 	constructor(client: ValClient) {
 		super(client, {
@@ -211,7 +211,7 @@ export default class Play extends Command {
 	 */
 	getSongDetailsByUrl = async (
 		url: string,
-	): Promise<Omit<Song, "requestingUserId">> => {
+	): Promise<Omit<Song, "requestingUserId" | "id">> => {
 		try {
 			const info = await ytdl.getBasicInfo(url);
 			if (!info) return null;
