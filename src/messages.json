@@ -42,5 +42,7 @@
 	"Command.Move.Moved": "Moved [title](url) to the position index",
 	"Command.Move.OutOfBoundaries": "the position is out of the queue bounds",
 	"Command.Move.Invalid": "Move accepts numbers only",
-	"Command.Move.CurrentlyPlaying": "The song is currently playing and can't be moved"
+	"Command.Move.CurrentlyPlaying": "The song is currently playing and can't be moved",
+	"Command.Shuffle.Shuffled": "Shuffled",
+	"Command.Shuffle.Unshuffled": "Unshuffled"
 }
