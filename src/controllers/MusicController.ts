@@ -39,7 +39,7 @@ export interface MusicControllerState {
 	/** Voice channel the bot is connected to */
 	vc: VoiceChannel;
 
-	/** ytdl play stream  */
+	/** ytdl play stream */
 	stream: Readable;
 
 	/** Voice connection for current instance */
@@ -55,6 +55,9 @@ export interface MusicControllerState {
 	 * @default 'disabled'
 	 */
 	loop: LoopState;
+
+	/** The shuffle state */
+	shuffle: boolean;
 
 	/** Playing interval for calculating current position */
 	// interval: NodeJS.Timeout;
@@ -77,6 +80,7 @@ export default class MusicController extends Controller {
 		timeout: null,
 		dispatcher: null,
 		loop: "disabled",
+		shuffle: false,
 	};
 
 	constructor(client: ValClient) {
@@ -316,6 +320,21 @@ export default class MusicController extends Controller {
 		});
 	};
 
+	shuffle = () => {
+		const { queue, shuffle, index: songIndex } = this.state;
+		const upNext = queue.filter((_, index) => index > songIndex);
+		const alreadyPlayed = queue.filter((_, index) => index <= songIndex);
+
+		if (shuffle) upNext.sort((a, b) => (a.id < b.id ? -1 : 1));
+		else upNext.sort(() => Math.random() - 0.5);
+
+		this.setState({
+			queue: [...alreadyPlayed, ...upNext],
+			index: songIndex,
+			shuffle: !shuffle,
+		});
+	};
+
 	getCurrentStreamTime = () => {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};
@@ -389,6 +408,7 @@ export default class MusicController extends Controller {
 			index: 0,
 			dispatcher: null,
 			loop: "disabled",
+			shuffle: false,
 		};
 	};
 
@@ -410,6 +430,10 @@ export default class MusicController extends Controller {
 
 	get loopState() {
 		return this.state.loop;
+	}
+
+	get shuffleState() {
+		return this.state.shuffle;
 	}
 
 	private updatePresence = async () => {
