@@ -2,17 +2,15 @@ import btoa from "btoa";
 import fetch from "node-fetch";
 import { Song } from "../types/interfaces";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("dotenv").config();
 type Track = Omit<Song, "requestingUserId" | "id">;
 
 const filterResponse = (response: string) => {
 	try {
 		const regExp = /var ytInitialData = (.+?)<\/script>/im;
-		const semiColon = /;$/;
+		const semicolon = /;$/;
 
 		const matchResult = response.match(regExp);
-		return matchResult[1].replace(semiColon, "");
+		return matchResult[1].replace(semicolon, "");
 	} catch (err) {
 		throw Error("Error while filtering response");
 	}
@@ -104,7 +102,7 @@ class SpotifyAuth {
 			if (!response.ok)
 				throw new Error("Spotify Error: Failed to authenticate with spotify");
 
-			return await response.json();
+			return response.json();
 		} catch (err) {
 			console.log(err);
 			throw err;
