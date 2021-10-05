@@ -1,21 +1,20 @@
-import { TextChannel } from "discord.js";
-import { MusicController } from "../controllers";
-import { Command, CommandContext } from "../structures";
-import { log, reply } from "../utils/general";
 import ValClient from "../ValClient";
+import { Command, CommandContext } from "../structures";
+import { MusicController } from "../controllers";
+import { log, reply } from "../utils/general";
+import { TextChannel } from "discord.js";
 
-export default class Jump extends Command {
+export default class Remove extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: "jump",
+			name: "remove",
 			category: "Music",
 			cooldown: 5 * 1000,
 			nOfParams: 1,
-			description: "Jump to a specific song in queue.",
-			exampleUsage: "jump 1",
+			description: "Removes a track from the queue",
+			exampleUsage: "4",
 			extraParams: false,
 			optionalParams: 0,
-			aliases: ["j"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -49,33 +48,33 @@ export default class Jump extends Command {
 			const index = Number(params[0]) - 1;
 
 			if (isNaN(index)) {
-				await reply("Command.Jump.Invalid", textChannel);
+				await reply("Command.Remove.Invalid", textChannel);
 				return;
 			}
 
 			const queueLength = controller.queue.length;
 
-			if (queueLength === 0) {
-				await reply("Music.EmptyQueue", textChannel);
-				return;
-			}
-
 			if (index >= queueLength || index < 0) {
-				await reply("Command.Jump.OutOfBoundaries", textChannel, {
+				await reply("Command.Remove.OutOfBoundaries", textChannel, {
 					id: index + 1,
 				});
 				return;
 			}
 
+			if (index === controller.currentSongIndex) {
+				await reply("Command.Remove.CurrentlyPlaying", textChannel);
+				return;
+			}
+
 			const { title, url } = controller.queue[index];
 
-			await reply("Command.Jump", textChannel, {
+			await reply("Command.Remove.Removed", textChannel, {
 				id: index + 1,
 				title,
 				url,
 			});
 
-			await controller.jump(index);
+			await controller.remove(index);
 		} catch (err) {
 			log(this.client, err, "error");
 		}

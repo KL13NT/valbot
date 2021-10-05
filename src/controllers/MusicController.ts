@@ -250,7 +250,7 @@ export default class MusicController extends Controller {
 		await this.clearPresence();
 
 		if (index === queue.length - 1 && loop === "disabled") {
-			this.clear();
+			await this.clear();
 			return;
 		}
 
@@ -271,6 +271,51 @@ export default class MusicController extends Controller {
 		if (this.state.state === "playing") this.play(true);
 	};
 
+	/**
+	 *
+	 * @param songIndex is the index of the song in the queue.
+	 */
+	remove = async (songIndex: number) => {
+		if (songIndex > this.state.index) {
+			this.setState({
+				queue: this.state.queue.filter((_, index) => index !== songIndex),
+			});
+		} else {
+			this.setState({
+				queue: this.state.queue.filter((_, index) => index !== songIndex),
+				index: this.state.index - 1,
+			});
+		}
+	};
+
+	/**
+	 *
+	 * @param songIndex is the index of the song to be moved.
+	 * @param newIndex is the new index of the song.
+	 */
+	move = (songIndex: number, newIndex: number) => {
+		const currentIndex = this.state.index;
+		const movingSong: Song = this.state.queue[songIndex];
+
+		const filtered = this.state.queue.filter(
+			(_: Song, index: number) => index !== songIndex,
+		);
+
+		const targetDirection = currentIndex - newIndex > 0 ? 1 : -1;
+		const sourceDirection = currentIndex - songIndex > 0 ? 1 : -1;
+		const newCurrentlyPlayingIndex =
+			targetDirection === sourceDirection
+				? currentIndex
+				: currentIndex + targetDirection;
+
+		filtered.splice(newIndex, 0, movingSong);
+
+		this.setState({
+			queue: filtered,
+			index: newCurrentlyPlayingIndex,
+		});
+	};
+
 	getCurrentStreamTime = () => {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};
@@ -285,8 +330,10 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	clear = () => {
+	clear = async () => {
 		this.destroyStreams();
+
+		await this.clearPresence();
 
 		this.setState({
 			state: "stopped",
@@ -319,6 +366,8 @@ export default class MusicController extends Controller {
 
 		if (this.state.connection) this.state.connection.disconnect();
 		this.destroyStreams();
+
+		await this.clearPresence();
 
 		clearTimeout(this.state.timeout);
 
@@ -355,6 +404,10 @@ export default class MusicController extends Controller {
 		return this.state.state;
 	}
 
+	get currentSongIndex() {
+		return this.state.index;
+	}
+
 	get loopState() {
 		return this.state.loop;
 	}
@@ -371,6 +424,7 @@ export default class MusicController extends Controller {
 				type: "LISTENING",
 				url: song.url,
 			},
+			source: "music",
 			status: "dnd",
 		});
 	};

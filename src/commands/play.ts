@@ -11,7 +11,6 @@ import { MusicController } from "../controllers";
 
 import { searchVideoMeta } from "../utils/youtube";
 import { Song } from "../types/interfaces";
-import PlayBehaviorEntity from "../Entities/PlayBehavior";
 
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
 const KEY_LENGTH = 100;
@@ -19,7 +18,9 @@ const MATCH_THRESHOLD = 0.8;
 
 export default class Play extends Command {
 	cache: LRU<string, Omit<Song, "requestingUserId" | "id">>;
-	playEntity: PlayBehaviorEntity;
+	// TODO: uncommen when merging new single youtube play behavior
+	// playBehavior: PlayBehaviorEntity;
+
 	constructor(client: ValClient) {
 		super(client, {
 			name: "play",

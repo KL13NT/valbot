@@ -32,5 +32,15 @@
 	"Command.Seek.Invalid": "Seek accepts numbers only or HH:MM:SS notation",
 	"Command.Jump.Invalid": "Jump accepts numbers only",
 	"Command.Jump": "Jumped to id) [title](url)",
-	"Command.Jump.OutOfBoundaries": "There is no position id"
+	"Command.Jump.OutOfBoundaries": "There is no position id",
+	"Command.Remove.OutOfBoundaries": "There is no position id",
+	"Command.Remove.Removed": "Removed id) [title](url)",
+	"Command.Remove.Invalid": "Remove accepts numbers only",
+	"Command.Remove.CurrentlyPlaying": "The song is currently playing",
+	"Command.PreviousNow.NoPreviousSong": "No previous song in the queue",
+	"Command.PreviousNow.jumped": "Jumped to id) [title](url)",
+	"Command.Move.Moved": "Moved [title](url) to the position index",
+	"Command.Move.OutOfBoundaries": "the position is out of the queue bounds",
+	"Command.Move.Invalid": "Move accepts numbers only",
+	"Command.Move.CurrentlyPlaying": "The song is currently playing and can't be moved"
 }

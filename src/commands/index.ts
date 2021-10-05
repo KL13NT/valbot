@@ -30,3 +30,6 @@ export { default as Loop } from "./loop";
 export { default as Lyrics } from "./lyrics";
 export { default as Seek } from "./seek";
 export { default as Jump } from "./jump";
+export { default as Remove } from "./remove";
+export { default as PreviousNow } from "./previous-now";
+export { default as Move } from "./move";

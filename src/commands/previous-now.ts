@@ -4,18 +4,18 @@ import { Command, CommandContext } from "../structures";
 import { log, reply } from "../utils/general";
 import ValClient from "../ValClient";
 
-export default class Jump extends Command {
+export default class PreviousNow extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: "jump",
+			name: "previousNow",
 			category: "Music",
 			cooldown: 5 * 1000,
-			nOfParams: 1,
-			description: "Jump to a specific song in queue.",
-			exampleUsage: "jump 1",
+			nOfParams: 0,
+			description: "Jump to the previous track",
+			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
-			aliases: ["j"],
+			aliases: ["prev", "prevNow"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -23,7 +23,7 @@ export default class Jump extends Command {
 		});
 	}
 
-	_run = async ({ member, message, params }: CommandContext) => {
+	_run = async ({ member, message }: CommandContext) => {
 		try {
 			const voiceChannel = member.voice.channel;
 			const textChannel = message.channel as TextChannel;
@@ -46,13 +46,6 @@ export default class Jump extends Command {
 				return;
 			}
 
-			const index = Number(params[0]) - 1;
-
-			if (isNaN(index)) {
-				await reply("Command.Jump.Invalid", textChannel);
-				return;
-			}
-
 			const queueLength = controller.queue.length;
 
 			if (queueLength === 0) {
@@ -60,22 +53,37 @@ export default class Jump extends Command {
 				return;
 			}
 
-			if (index >= queueLength || index < 0) {
-				await reply("Command.Jump.OutOfBoundaries", textChannel, {
-					id: index + 1,
-				});
+			const index = controller.currentSongIndex;
+
+			if (index === 0 && controller.loopState !== "queue") {
+				await reply("Command.PreviousNow.NoPreviousSong", textChannel);
 				return;
 			}
 
-			const { title, url } = controller.queue[index];
+			if (index === 0 && controller.loopState === "queue") {
+				const lastSongInTheQueueIndex = queueLength - 1;
+				const { title, url } = controller.queue[lastSongInTheQueueIndex];
 
-			await reply("Command.Jump", textChannel, {
-				id: index + 1,
+				await reply("Command.PreviousNow.jumped", textChannel, {
+					id: lastSongInTheQueueIndex + 1,
+					title,
+					url,
+				});
+
+				await controller.jump(lastSongInTheQueueIndex);
+
+				return;
+			}
+
+			const { title, url } = controller.queue[index - 1];
+
+			await reply("Command.PreviousNow.jumped", textChannel, {
+				id: index,
 				title,
 				url,
 			});
 
-			await controller.jump(index);
+			await controller.jump(index - 1);
 		} catch (err) {
 			log(this.client, err, "error");
 		}

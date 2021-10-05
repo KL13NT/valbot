@@ -1,0 +1,56 @@
+{
+  "projectName": "valbot",
+  "projectOwner": "KL13NT",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Amrsamy19",
+      "name": "Amrsamy19",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46032085?v=4",
+      "profile": "https://github.com/Amrsamy19",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "omarabdelaz1z",
+      "name": "Omar Abdelaziz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59033999?v=4",
+      "profile": "https://github.com/omarabdelaz1z",
+      "contributions": [
+        "code",
+        "ideas",
+        "maintenance",
+        "question",
+        "bug",
+        "review"
+      ]
+    },
+    {
+      "login": "durgeshahire07",
+      "name": "Durgesh Ahire",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68327306?v=4",
+      "profile": "https://github.com/durgeshahire07",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "1Kuroyasha",
+      "name": "Mahmoud",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83430358?v=4",
+      "profile": "https://github.com/1Kuroyasha",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
