@@ -12,6 +12,13 @@ export default class CommandsLoader extends Loader {
 			// eslint-disable-next-line new-cap
 			const newCommand = new command(this.client);
 
+			/**
+			 * import commmands
+			 * iterate over each command, if has aliases -> iterate over them
+			 * client.commands.set(alias/name, commandObject) previousNow
+			 * 
+			 * get(previousnow) X
+			 */
 			if (newCommand.options.aliases) {
 				newCommand.options.aliases.forEach(alias => {
 					if (this.client.commands.get(alias))

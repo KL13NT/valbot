@@ -6,7 +6,6 @@ import {
 	EmbedField,
 } from "discord.js";
 import { ObjectId } from "mongodb";
-import { Song } from "../controllers/MusicController";
 import CommandContext from "../structures/CommandContext";
 import ValClient from "../ValClient";
 
