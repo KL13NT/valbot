@@ -1,7 +1,33 @@
-import { Song } from "../types/interfaces";
 import fetch from "node-fetch";
+import { Song } from "../types/interfaces";
 
-const YOUTUBE_PLAYLIST_MATCHER = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+type Track = Omit<Song, "requestingUserId" | "id">;
+
+const YOUTUBE_PLAYLIST_MATCHER = /^.*(youtu.be\/|list=)([^#&?]*).*/;
+
+interface YoutubeTrack {
+	playlistPanelVideoRenderer: {
+		title: {
+			simpleText: string;
+		};
+		lengthText: {
+			simpleText: string;
+		};
+		videoId: string;
+	};
+}
+
+interface YoutubePlaylistResponse {
+	contents: {
+		twoColumnWatchNextResults: {
+			playlist?: {
+				playlist: {
+					contents: YoutubeTrack[];
+				};
+			};
+		};
+	};
+}
 
 const filterResponse = (response: string) => {
 	try {
@@ -25,12 +51,11 @@ const stringToTimestamp = (time: string) => {
 };
 
 interface PlaylistRetriever {
-	fetchSongs(url: string): Promise<Song[]>;
-	conform(url: string): string;
+	fetchSongs(url: string): Promise<Track[]>;
 }
 
 class YoutubePlaylist implements PlaylistRetriever {
-	fetchSongs = (url: string) => {
+	fetchSongs = async (url: string) => {
 		const conformedUrl = this.conform(url);
 
 		return fetch(conformedUrl)
@@ -44,56 +69,54 @@ class YoutubePlaylist implements PlaylistRetriever {
 		return `https://www.youtube.com/watch?v=1&list=${playlistId}`;
 	};
 
-	parseResponse = (response: string): Song[] => {
-		const json = JSON.parse(response);
+	parseResponse = (response: string) => {
+		const json: YoutubePlaylistResponse = JSON.parse(response);
+
 		const playlistItems =
-			json.contents.twoColumnWatchNextResults?.playlist?.playlist?.contents;
+			json.contents.twoColumnWatchNextResults.playlist.playlist.contents;
 
 		if (!playlistItems)
 			throw new Error("The playlist is either empty or not found");
 
 		return playlistItems
 			.filter(item => typeof item.playlistPanelVideoRenderer !== "undefined")
-			.map(item => this.parseItem(item.playlistPanelVideoRenderer));
+			.map(item => this.parseItem(item));
 	};
 
-	parseItem = (item: Record<string, any>): Omit<Song, "requestingUserId"> => {
+	parseItem = (item: YoutubeTrack): Track => {
 		return {
-			title: item.title.simpleText,
-			duration: stringToTimestamp(item.lengthText.simpleText) * 1000,
-			url: `https://www.youtube.com/watch?v=${item.videoId}`,
+			title: item.playlistPanelVideoRenderer.title.simpleText,
+			duration:
+				stringToTimestamp(
+					item.playlistPanelVideoRenderer.lengthText.simpleText,
+				) * 1000,
+			url: `https://www.youtube.com/watch?v=${item.playlistPanelVideoRenderer.videoId}`,
 			live: null,
+			name: null,
+			artist: null,
 		};
 	};
 }
 
-class PlayBehaviorEntity {
-	private strategySelector = [
+export default class PlayBehaviorEntity {
+	private playlistSelector = [
 		{
 			matcher: YOUTUBE_PLAYLIST_MATCHER,
 			strategy: new YoutubePlaylist(),
 		},
 	];
 
-	public fetchSongs = (url: string): Promise<Song[]> => {
-		const strategy = this.determineStrategy(url);
+	public fetchSongs = (url: string): Promise<Track[]> => {
+		const strategy = this.determinePlaylistStrategy(url);
 
 		if (!strategy) throw new Error("This link is not supported yet");
-
 		return strategy.fetchSongs(url);
 	};
 
-	private determineStrategy = (url: string): PlaylistRetriever => {
-		const selected = this.strategySelector.find(strategy =>
+	private determinePlaylistStrategy = (url: string): PlaylistRetriever => {
+		const selected = this.playlistSelector.find(strategy =>
 			strategy.matcher.test(url),
 		);
 		return selected ? selected.strategy : null;
 	};
 }
-
-const playEntity = new PlayBehaviorEntity();
-playEntity
-	.fetchSongs(
-		"https://www.youtube.com/playlist?list=PLd_7Ide8yuofr-DJjFYiO076eRW2yL4V7",
-	)
-	.then(response => response.forEach(song => console.log(song)));

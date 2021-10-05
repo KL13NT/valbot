@@ -16,7 +16,7 @@ export type AlertLevel = "info" | "warn" | "error";
 
 export interface Song {
 	title: string;
-
+	id: number;
 	artist?: string;
 	name?: string;
 	url: string;
