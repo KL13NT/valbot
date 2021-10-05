@@ -15,7 +15,7 @@ export default class PreviousNow extends Command {
 			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
-			aliases: ["prev", "prevNow"],
+			aliases: ["prev"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",

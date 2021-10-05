@@ -28,7 +28,7 @@ export default class CommandsLoader extends Loader {
 				});
 			}
 
-			this.client.commands.set(newCommand.options.name, newCommand);
+			this.client.commands.set(newCommand.options.name.toLowerCase(), newCommand);
 		});
 
 		log(this.client, "Commands loaded successfully", "info");
