@@ -5,6 +5,8 @@ import {
 	PresenceData,
 	EmbedField,
 } from "discord.js";
+import { ObjectId } from "mongodb";
+import { Song } from "../controllers/MusicController";
 import CommandContext from "../structures/CommandContext";
 import ValClient from "../ValClient";
 
@@ -13,6 +15,13 @@ export type ListenerHandler = (...args: any[]) => void; // eslint-disable-line
 export type Template = string;
 
 export type AlertLevel = "info" | "warn" | "error";
+
+export interface Playlist {
+	name: string;
+	userId: Snowflake;
+	queue: Song[];
+	_id: ObjectId;
+}
 
 export interface Song {
 	title: string;
@@ -28,6 +37,7 @@ export interface Song {
 	/** ID of the user who requested the song */
 	requestingUserId: Snowflake;
 }
+
 export interface ClientConfig {
 	[index: string]: Snowflake;
 

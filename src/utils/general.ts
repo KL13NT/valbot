@@ -196,7 +196,7 @@ export const reply = async (
 ) =>
 	channel.send(
 		createEmbed({
-			description: compileTemplate(data || {}, messages[id]),
+			description: compileTemplate(data || {}, messages[id] || id),
 		}),
 	);
 
