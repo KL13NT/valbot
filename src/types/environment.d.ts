@@ -13,6 +13,8 @@ declare global {
 			MODE: "DEVELOPMENT" | "PRODUCTION";
 			YOUTUBE_KEY: string;
 			REDIS_URL?: string;
+			SPOTIFY_ID: string;
+			SPOTIFY_SECRET: string;
 		}
 	}
 }
