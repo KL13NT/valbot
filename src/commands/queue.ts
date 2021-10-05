@@ -30,7 +30,9 @@ export default class Queue extends Command {
 
 	_run = async ({ channel, member }: CommandContext) => {
 		try {
-			const controller = this.client.controllers.get("music") as MusicController;
+			const controller = this.client.controllers.get(
+				"music",
+			) as MusicController;
 
 			if (controller.queue.length === 0) {
 				channel.send(
@@ -44,7 +46,8 @@ export default class Queue extends Command {
 
 			const strings = controller.queue.map(
 				(song, i) =>
-					`**${i + 1})** [${song.title.substr(0, 40)}](${song.url}) | <@!${song.requestingUserId
+					`**${i + 1})** [${song.title.substr(0, 40)}](${song.url}) | <@!${
+						song.requestingUserId
 					}> ${i === controller.currentSongIndex ? "▶️" : ""}\n`,
 			);
 
@@ -52,7 +55,9 @@ export default class Queue extends Command {
 			const current = controller.getCurrentSong();
 			const title =
 				controller.playState === "playing"
-					? `**__Playing  ▶️__**\n**${controller.currentSongIndex})** [${current.title}](${current.url}) [<@!${current.requestingUserId}>]`
+					? `**__Playing  ▶️__**\n**${controller.currentSongIndex + 1})** [${
+							current.title
+					  }](${current.url}) [<@!${current.requestingUserId}>]`
 					: `**__Stopped  ⏸️__**`;
 
 			for (let i = 0; i < controller.queue.length; i += SONGS_PER_PAGE) {
