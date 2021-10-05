@@ -23,6 +23,21 @@ export interface Playlist {
 	_id: ObjectId;
 }
 
+export interface Song {
+	title: string;
+	id: number;
+	artist?: string;
+	name?: string;
+	url: string;
+	live: boolean;
+
+	/** Song duration in milliseconds */
+	duration: number;
+
+	/** ID of the user who requested the song */
+	requestingUserId: Snowflake;
+}
+
 export interface ClientConfig {
 	[index: string]: Snowflake;
 

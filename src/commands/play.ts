@@ -10,7 +10,7 @@ import { log, reply } from "../utils/general";
 import { MusicController } from "../controllers";
 
 import { searchVideoMeta } from "../utils/youtube";
-import { Song } from "../controllers/MusicController";
+import { Song } from "../types/interfaces";
 
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
 const KEY_LENGTH = 100;
@@ -18,6 +18,8 @@ const MATCH_THRESHOLD = 0.8;
 
 export default class Play extends Command {
 	cache: LRU<string, Omit<Song, "requestingUserId" | "id">>;
+	// TODO: uncommen when merging new single youtube play behavior
+	// playBehavior: PlayBehaviorEntity;
 
 	constructor(client: ValClient) {
 		super(client, {

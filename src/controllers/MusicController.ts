@@ -1,5 +1,4 @@
 import ytdl from "ytdl-core";
-
 import {
 	Snowflake,
 	StreamDispatcher,
@@ -8,37 +7,22 @@ import {
 	VoiceConnection,
 	VoiceState,
 } from "discord.js";
-import { Controller } from "../structures";
-import ValClient from "../ValClient";
 import { Readable } from "stream";
+import { ObjectId } from "bson";
+
+import ValClient from "../ValClient";
+import MongoController from "./MongoController";
+import UserError from "../structures/UserError";
+import { Controller } from "../structures";
 import { isChannelEmpty } from "../utils/object";
 import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 import { PresenceController } from "./index";
-import MongoController from "./MongoController";
-import { Playlist } from "../types/interfaces";
-import UserError from "../structures/UserError";
-import { ObjectId } from "bson";
+import { Playlist, Song } from "../types/interfaces";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
 export type PlayState = "stopped" | "paused" | "playing" | "fetching";
-
-export interface Song {
-	title: string;
-
-	artist?: string;
-	name?: string;
-	url: string;
-	id: number;
-	live: boolean;
-
-	/** Song duration in milliseconds */
-	duration: number;
-
-	/** ID of the user who requested the song */
-	requestingUserId: Snowflake;
-}
 
 export interface MusicControllerState {
 	/** An array of the songs in the current queue */
@@ -59,7 +43,7 @@ export interface MusicControllerState {
 	/** Voice channel the bot is connected to */
 	vc: VoiceChannel;
 
-	/** ytdl play stream  */
+	/** ytdl play stream */
 	stream: Readable;
 
 	/** Voice connection for current instance */
@@ -75,6 +59,9 @@ export interface MusicControllerState {
 	 * @default 'disabled'
 	 */
 	loop: LoopState;
+
+	/** The shuffle state */
+	shuffle: boolean;
 
 	/** Playing interval for calculating current position */
 	// interval: NodeJS.Timeout;
@@ -98,6 +85,7 @@ export default class MusicController extends Controller {
 		timeout: null,
 		dispatcher: null,
 		loop: "disabled",
+		shuffle: false,
 	};
 
 	constructor(client: ValClient) {
@@ -338,6 +326,21 @@ export default class MusicController extends Controller {
 		});
 	};
 
+	shuffle = () => {
+		const { queue, shuffle, index: songIndex } = this.state;
+		const upNext = queue.filter((_, index) => index > songIndex);
+		const alreadyPlayed = queue.filter((_, index) => index <= songIndex);
+
+		if (shuffle) upNext.sort((a, b) => (a.id < b.id ? -1 : 1));
+		else upNext.sort(() => Math.random() - 0.5);
+
+		this.setState({
+			queue: [...alreadyPlayed, ...upNext],
+			index: songIndex,
+			shuffle: !shuffle,
+		});
+	};
+
 	getCurrentStreamTime = () => {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};
@@ -411,6 +414,7 @@ export default class MusicController extends Controller {
 			index: 0,
 			dispatcher: null,
 			loop: "disabled",
+			shuffle: false,
 		};
 	};
 
@@ -551,6 +555,10 @@ export default class MusicController extends Controller {
 
 	get loopState() {
 		return this.state.loop;
+	}
+
+	get shuffleState() {
+		return this.state.shuffle;
 	}
 
 	private updatePresence = async () => {

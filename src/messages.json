@@ -48,5 +48,7 @@
 	"Command.Playlist.Create": "Created playlist successfully",
 	"Command.Playlist.Delete": "Deleted playlist successfully",
 	"Command.Playlist.Update": "Updated playlist successfully",
-	"Command.Playlist.List": "**user's Playlists**\n\nsongs"
+	"Command.Playlist.List": "**user's Playlists**\n\nsongs",
+	"Command.Shuffle.Shuffled": "Shuffled",
+	"Command.Shuffle.Unshuffled": "Unshuffled"
 }
