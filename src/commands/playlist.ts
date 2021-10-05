@@ -6,7 +6,7 @@ import { MusicController } from "../controllers";
 import UserError from "../structures/UserError";
 import { TextChannel } from "discord.js";
 
-type Operation = "delete" | "create" | "update" | "load";
+type Operation = "delete" | "create" | "update" | "load" | "list";
 
 export default class Playlist extends Command {
 	constructor(client: ValClient) {
@@ -18,9 +18,9 @@ export default class Playlist extends Command {
 			nOfParams: 2,
 			description:
 				"Create, update, delete, or load a playlist using the current queue. Playlist names cannot contain spaces. Use - instead.",
-			exampleUsage: "<create|update|delete|load> playlist-name",
+			exampleUsage: "<create|update|delete|load|list> <?playlist-name>",
 			extraParams: false,
-			optionalParams: 0,
+			optionalParams: 1,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -38,17 +38,10 @@ export default class Playlist extends Command {
 				"music",
 			) as MusicController;
 
-			if (!voiceChannel) {
-				await reply("User.VoiceNotConnected", message.channel);
-				return;
-			}
-
-			if (!controller.canUserPlay(voiceChannel)) {
-				await reply("Command.Play.NotAllowed", message.channel);
-				return;
-			}
-
-			if (!/^(create)|(update)|(delete)|(load)$/i.test(operation)) {
+			if (
+				/^(create)|(update)|(delete)|(load)$/i.test(operation) &&
+				params.length < 2
+			) {
 				await reply("Command.Playlist.Invalid", channel);
 				return;
 			}
@@ -57,13 +50,47 @@ export default class Playlist extends Command {
 				case "create":
 					await controller.createPlaylist(name, member.id);
 					break;
+
 				case "delete":
 					await controller.deletePlaylist(name, member.id);
 					break;
+
 				case "update":
 					await controller.updatePlaylist(name, member.id);
 					break;
+
+				case "list": {
+					const playlists = await controller.getUserPlaylists(member.id);
+
+					if (playlists.length === 0)
+						throw new UserError("This user has no playlists");
+
+					await reply("Command.Playlist.List", channel, {
+						user: member.user.username,
+						songs: playlists
+							.map(
+								(playlist, index) =>
+									`**${index + 1})** ${playlist.name} has ${
+										playlist.queue.length
+									} tracks`,
+							)
+							.join("\n"),
+					});
+
+					return;
+				}
+
 				case "load": {
+					if (!voiceChannel) {
+						await reply("User.VoiceNotConnected", message.channel);
+						return;
+					}
+
+					if (!controller.canUserPlay(voiceChannel)) {
+						await reply("Command.Play.NotAllowed", message.channel);
+						return;
+					}
+
 					await controller.connect(voiceChannel, textChannel);
 					await controller.loadPlaylist(name, member.id);
 					await controller.play(true);

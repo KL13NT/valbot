@@ -47,5 +47,6 @@
 	"Command.Playlist.Load": "Loaded playlist successfully",
 	"Command.Playlist.Create": "Created playlist successfully",
 	"Command.Playlist.Delete": "Deleted playlist successfully",
-	"Command.Playlist.Update": "Updated playlist successfully"
+	"Command.Playlist.Update": "Updated playlist successfully",
+	"Command.Playlist.List": "**user's Playlists**\n\nsongs"
 }
