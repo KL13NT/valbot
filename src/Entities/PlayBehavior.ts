@@ -1,5 +1,6 @@
 import btoa from "btoa";
 import fetch from "node-fetch";
+import ytdl from "ytdl-core";
 import { Song } from "../types/interfaces";
 
 type Track = Omit<Song, "requestingUserId" | "id">;
@@ -110,7 +111,7 @@ class SpotifyAuth {
 	};
 }
 
-interface YoutubeTrack {
+interface YoutubeTrackResponse {
 	playlistPanelVideoRenderer: {
 		title: {
 			simpleText: string;
@@ -127,7 +128,7 @@ interface YoutubePlaylistResponse {
 		twoColumnWatchNextResults: {
 			playlist?: {
 				playlist: {
-					contents: YoutubeTrack[];
+					contents: YoutubeTrackResponse[];
 				};
 			};
 		};
@@ -136,6 +137,61 @@ interface YoutubePlaylistResponse {
 
 interface TrackRetriever {
 	fetchSong(query: string): Promise<Track>;
+}
+
+class YoutubeTrack implements TrackRetriever {
+	public fetchSong = async (query: string) => {
+		const url = await this.getUrl(query);
+		return this.getSongDetailsByUrl(url);
+	};
+
+	private getUrl = async (query: string) => {
+		const searchUrl = this.prepareSearchQuery(query);
+		return fetch(searchUrl)
+			.then(response => response.text())
+			.then(filterResponse)
+			.then(this.parseResponse);
+	};
+
+	private parseResponse = (response: string) => {
+		const json = JSON.parse(response);
+		const hits =
+			json.contents.twoColumnSearchResultsRenderer.primaryContents
+				.sectionListRenderer.contents[0]?.itemSectionRenderer?.contents;
+
+		const firstHit = hits[0].videoRenderer ?? hits[1].videoRenderer;
+
+		if (typeof firstHit === "undefined") throw new Error("No results found");
+
+		return `https://www.youtube.com/watch?v=${firstHit.videoId}`;
+	};
+
+	private prepareSearchQuery = (query: string): string => {
+		const encodedQuery = encodeURIComponent(query);
+		return `https://www.youtube.com/results?search_query=${encodedQuery}`;
+	};
+
+	private getSongDetailsByUrl = async (url: string): Promise<Track> => {
+		try {
+			const info = await ytdl.getBasicInfo(url);
+			if (!info) return null;
+
+			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
+			const { artist, song: name } = info?.videoDetails?.media;
+
+			return {
+				url,
+				title,
+				live: isLiveContent,
+				duration: Number(lengthSeconds) * 1000,
+				artist,
+				name,
+			};
+		} catch (error) {
+			if ((error as Error).message.includes("Video unavailable")) return null;
+			else throw error;
+		}
+	};
 }
 
 interface PlaylistRetriever {
@@ -171,7 +227,7 @@ class YoutubePlaylist implements PlaylistRetriever {
 			.map(item => this.parseItem(item));
 	};
 
-	parseItem = (item: YoutubeTrack): Track => {
+	parseItem = (item: YoutubeTrackResponse): Track => {
 		return {
 			title: item.playlistPanelVideoRenderer.title.simpleText,
 			duration:
@@ -311,6 +367,10 @@ export default class PlayBehaviorEntity {
 		{
 			matcher: SPOTIFY_SINGLE_MATCHER,
 			strategy: new SpotifyTrack(this.spotifyAuth),
+		},
+		{
+			matcher: /.+/,
+			strategy: new YoutubeTrack(),
 		},
 	];
 
