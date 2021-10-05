@@ -30,14 +30,9 @@ export default class Queue extends Command {
 
 	_run = async ({ channel, member }: CommandContext) => {
 		try {
-			const {
-				queue,
-				playState,
-				loopState,
-				getCurrentSong,
-			} = this.client.controllers.get("music") as MusicController;
+			const controller = this.client.controllers.get("music") as MusicController;
 
-			if (queue.length === 0) {
+			if (controller.queue.length === 0) {
 				channel.send(
 					createEmbed({
 						description: "The queue is empty.",
@@ -47,28 +42,27 @@ export default class Queue extends Command {
 				return;
 			}
 
-			const strings = queue.map(
+			const strings = controller.queue.map(
 				(song, i) =>
-					`**${i + 1})** [${song.title.substr(0, 40)}](${song.url}) | <@!${
-						song.requestingUserId
-					}>\n`,
+					`**${i + 1})** [${song.title.substr(0, 40)}](${song.url}) | <@!${song.requestingUserId
+					}> ${i === controller.currentSongIndex ? "▶️" : ""}\n`,
 			);
 
 			const pages = [];
-			const current = getCurrentSong();
+			const current = controller.getCurrentSong();
 			const title =
-				playState === "playing"
-					? `**__Playing  ▶️__**\n[${current.title}](${current.url}) [<@!${current.requestingUserId}>]`
+				controller.playState === "playing"
+					? `**__Playing  ▶️__**\n**${controller.currentSongIndex})** [${current.title}](${current.url}) [<@!${current.requestingUserId}>]`
 					: `**__Stopped  ⏸️__**`;
 
-			for (let i = 0; i < queue.length; i += SONGS_PER_PAGE) {
+			for (let i = 0; i < controller.queue.length; i += SONGS_PER_PAGE) {
 				pages.push(
 					createEmbed({
-						description: `${title}\n\n**__Up next__**\n${strings
+						description: `${title}\n\n**__Queue__**\n${strings
 							.slice(i, i + SONGS_PER_PAGE)
 							.join("\n")}\n\n**${
-							queue.length
-						} songs in queue | Loop: ${loopState}**`,
+							controller.queue.length
+						} songs in queue | Loop: ${controller.loopState}**`,
 					}),
 				);
 			}
