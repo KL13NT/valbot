@@ -78,7 +78,8 @@ export default class Play extends Command {
 			}
 
 			await controller.connect(voiceChannel, textChannel);
-			await controller.play();
+
+			if (controller.playState !== "paused") await controller.play();
 		} catch (error) {
 			if (error instanceof UserError) await reply(error.message, channel);
 			else await log(this.client, error, "error");
