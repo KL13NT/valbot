@@ -406,11 +406,12 @@ export default class MusicController extends Controller {
 
 		clearTimeout(this.state.timeout);
 
-		await this.state.text.send(
-			createEmbed({
-				description: `Disconnected from voice channel. Reason: ${reason}`,
-			}),
-		);
+		if (this.state.text)
+			await this.state.text.send(
+				createEmbed({
+					description: `Disconnected from voice channel. Reason: ${reason}`,
+				}),
+			);
 
 		this.state = {
 			stream: null,
