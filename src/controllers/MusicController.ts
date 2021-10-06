@@ -19,6 +19,8 @@ import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 import { PresenceController } from "./index";
 import { Playlist, Song } from "../types/interfaces";
+import { Track } from "../entities/music/types";
+import { YoutubeTrack } from "../entities/music/YouTubeBehavior";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
@@ -73,6 +75,7 @@ const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 export default class MusicController extends Controller {
 	private presence: PresenceController;
 	private mongo: MongoController;
+	private resolver: YoutubeTrack;
 	private state: MusicControllerState = {
 		state: "stopped",
 		index: 0,
@@ -95,6 +98,7 @@ export default class MusicController extends Controller {
 	}
 
 	init = async () => {
+		this.resolver = new YoutubeTrack();
 		this.mongo = this.client.controllers.get("mongo") as MongoController;
 		this.presence = this.client.controllers.get(
 			"presence",
@@ -133,21 +137,23 @@ export default class MusicController extends Controller {
 		});
 	};
 
-	enqueue = (song: Omit<Song, "id">) => {
-		log(
-			this.client,
-			`Enqueued ${song.title} by ${song.requestingUserId}`,
-			"info",
-		);
+	enqueue = (input: Track | Track[], requestingUserId: Snowflake) => {
+		const queue = Array.isArray(input)
+			? input.map((track, index) => ({
+					...track,
+					requestingUserId,
+					id: this.state.queue.length + index,
+			  }))
+			: [
+					{
+						...input,
+						requestingUserId,
+						id: this.state.queue.length,
+					},
+			  ];
 
 		this.setState({
-			queue: [
-				...this.state.queue,
-				{
-					...song,
-					id: this.state.queue.length,
-				},
-			],
+			queue: [...this.state.queue, ...queue],
 		});
 	};
 
@@ -164,7 +170,10 @@ export default class MusicController extends Controller {
 			return;
 		}
 
-		const song = this.state.queue[this.state.index];
+		const current = this.state.queue[this.state.index];
+		const song = current.spotify
+			? await this.resolver.fetch(current.title)
+			: current;
 
 		log(
 			this.client,

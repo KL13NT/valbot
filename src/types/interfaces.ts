@@ -30,6 +30,9 @@ export interface Song {
 	url: string;
 	live: boolean;
 
+	/** Indicates whether a song was loaded from Spotify, used when playing */
+	spotify: boolean;
+
 	/** Song duration in milliseconds */
 	duration: number;
 
