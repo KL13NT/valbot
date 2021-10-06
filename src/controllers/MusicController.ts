@@ -14,7 +14,6 @@ import ValClient from "../ValClient";
 import MongoController from "./MongoController";
 import UserError from "../structures/UserError";
 import { Controller } from "../structures";
-import { isChannelEmpty } from "../utils/object";
 import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 import { PresenceController } from "./index";
@@ -109,32 +108,20 @@ export default class MusicController extends Controller {
 		this.play(true);
 	};
 
-	handleStateUpdate = async (oldState: VoiceState, newState: VoiceState) => {
-		try {
-			if (oldState.member.id === this.client.user.id)
-				await this.handleBotStateChange(oldState, newState);
-			else if (
-				oldState.channel?.id === this.state.vc?.id ||
-				newState.channel?.id === this.state.vc?.id
-			)
-				this.onStateChanged();
-		} catch (error) {
-			log(this.client, error, "error");
-		}
-	};
+	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
+		if (oldState.member.id === this.client.user.id) {
+			this.setState({
+				vc: newState.channel,
+			});
 
-	handleBotStateChange = async (
-		_oldState: VoiceState,
-		newState: VoiceState,
-	) => {
-		if (!newState.channel) {
-			await this.disconnect("User disconnected bot");
 			return;
 		}
 
-		this.setState({
-			vc: newState.channel,
-		});
+		if (
+			oldState.channel?.id === this.state.vc?.id ||
+			newState.channel?.id === this.state.vc?.id
+		)
+			this.setState({});
 	};
 
 	enqueue = (input: Track | Track[], requestingUserId: Snowflake) => {
@@ -396,20 +383,18 @@ export default class MusicController extends Controller {
 		}
 	};
 
-	disconnect = async (reason = "User disconnected bot") => {
-		log(this.client, `Disconnecting, reason: ${reason}`, "info");
+	disconnect = async (reason = "Disconnected due to inactivity") => {
+		log(this.client, reason, "info");
 
 		if (this.state.connection) this.state.connection.disconnect();
 		this.destroyStreams();
-
-		await this.clearPresence();
 
 		clearTimeout(this.state.timeout);
 
 		if (this.state.text)
 			await this.state.text.send(
 				createEmbed({
-					description: `Disconnected from voice channel. Reason: ${reason}`,
+					description: reason,
 				}),
 			);
 
@@ -597,22 +582,25 @@ export default class MusicController extends Controller {
 		this.onStateChanged();
 	};
 
-	private onStateChanged = () => {
-		if (this.shouldTimeout() && !this.state.timeout) {
-			this.state.timeout = setTimeout(
-				() => this.disconnect("No one was listening :("),
-				DISCONNECT_AFTER,
-			);
-		} else if (!this.shouldTimeout()) {
+	private onStateChanged = async () => {
+		if (!this.shouldTimeout()) {
 			clearTimeout(this.state.timeout);
 			this.state.timeout = null;
+			return;
+		}
+
+		if (this.shouldTimeout() && !this.state.timeout) {
+			this.state.timeout = setTimeout(
+				() => this.disconnect(),
+				DISCONNECT_AFTER,
+			);
 		}
 	};
 
 	private shouldTimeout = () => {
 		return (
 			this.state.vc &&
-			(isChannelEmpty(this.state.vc) ||
+			(this.state.vc.members.size === 1 ||
 				this.state.queue.length === 0 /* empty queue */ ||
 				this.state.state === "paused" ||
 				this.state.state === "stopped" ||
