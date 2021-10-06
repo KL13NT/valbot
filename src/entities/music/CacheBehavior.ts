@@ -19,8 +19,6 @@ export default class CacheBehavior {
 	private playlists = new LRUCache<Key, Key[]>(options);
 
 	resolve = (strategy: PlaylistRetriever | TrackRetriever, key: Key) => {
-		console.log(this.tracks, this.playlists);
-
 		if (strategy.type === SINGLE_SYMBOL)
 			return this.resolveTrack(key) || this.resolveBestMatchTrack(key);
 
