@@ -23,12 +23,30 @@ export interface Playlist {
 }
 
 export interface Song {
+	/** Title of the song. Resolves to "Artists - Name" for Spotify songs and
+	 * "title" for YouTube tracks */
 	title: string;
+
+	/** Index of the track at the time of enqueuing for the first time */
 	id: number;
+
+	/** YouTube artist for registered tracks */
 	artist?: string;
+
+	/** YouTube song name for registered tracks */
 	name?: string;
+
+	/** Source URL of the song */
 	url: string;
+
+	/** Indicates whether it's a live video */
 	live: boolean;
+
+	/** Indicates whether a song was loaded from Spotify, used when playing */
+	spotify: boolean;
+
+	/** A string equal to the id of a spotify track id or youtube videoid, used for caching */
+	key: string;
 
 	/** Song duration in milliseconds */
 	duration: number;

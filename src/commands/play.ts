@@ -1,25 +1,15 @@
-import ytdl from "ytdl-core";
-import LRU from "lru-cache";
-import stringSimilarity from "string-similarity";
 import { TextChannel } from "discord.js";
 
 import ValClient from "../ValClient";
+import ResolveBehavior from "../entities/music/ResolveBehavior";
 
 import { Command, CommandContext } from "../structures";
 import { log, reply } from "../utils/general";
 import { MusicController } from "../controllers";
-
-import { searchVideoMeta } from "../utils/youtube";
-import { Song } from "../types/interfaces";
-
-const YOUTUBE_URL = `https://www.youtube.com/watch?v=`;
-const KEY_LENGTH = 100;
-const MATCH_THRESHOLD = 0.8;
+import UserError from "../structures/UserError";
 
 export default class Play extends Command {
-	cache: LRU<string, Omit<Song, "requestingUserId" | "id">>;
-	// TODO: uncommen when merging new single youtube play behavior
-	// playBehavior: PlayBehaviorEntity;
+	playBehavior: ResolveBehavior;
 
 	constructor(client: ValClient) {
 		super(client, {
@@ -27,8 +17,9 @@ export default class Play extends Command {
 			category: "Music",
 			cooldown: 5 * 1000,
 			nOfParams: 1,
-			description: "Start or continue playing a song",
-			exampleUsage: "?<youtube_link|query>",
+			description:
+				"Start or continue playing a song. Supports YouTube singles, playlists, mixes, and Spotify tracks, playlists, and albums.",
+			exampleUsage: "?<youtube_link|spotify_link|query>",
 			extraParams: true,
 			optionalParams: 1,
 			aliases: ["p"],
@@ -38,14 +29,10 @@ export default class Play extends Command {
 			},
 		});
 
-		this.cache = new LRU({
-			maxAge: 1000 * 60 * 60 * 24,
-			max: 500,
-			length: () => 1,
-		});
+		this.playBehavior = new ResolveBehavior();
 	}
 
-	_run = async ({ member, message, params }: CommandContext) => {
+	_run = async ({ member, message, params, channel }: CommandContext) => {
 		try {
 			const voiceChannel = member.voice.channel;
 			const textChannel = message.channel as TextChannel;
@@ -68,56 +55,33 @@ export default class Play extends Command {
 				return;
 			}
 
-			if (this.isInvalidLink(params[0])) {
-				await reply("Command.Play.InvalidLink", message.channel);
-				return;
-			}
+			const resolved = await this.resolve(params);
 
-			/**
-			 * A song has multiple possible values.
-			 */
-			const key = this.getKey(params);
-			const cached = this.cache.get(key);
-
-			if (cached === null) {
-				await reply("Command.Play.NotFound", message.channel);
-				return;
-			}
-
-			const matched = cached || this.getBestMatch(key);
-			const song = matched || (await this.fetchAndCache(params));
-
-			if (!song) {
+			if (!resolved) {
 				await reply("Command.Play.GenericError", message.channel);
 				return;
 			}
 
-			const { url, title, duration, live, artist, name } = song;
+			controller.enqueue(resolved, member.id);
 
-			// cache a song by title when found, this improves search results as well
-			// as the scenario where a song is played by link first then by a search query
-			this.cache.set(title.substr(0, KEY_LENGTH), song);
-
-			controller.enqueue({
-				url,
-				title,
-				requestingUserId: member.id,
-				duration,
-				live,
-				artist,
-				name,
-			});
-
-			await reply("Command.Play.Queued", message.channel, {
-				title,
-				url,
-				member,
-			});
+			if (Array.isArray(resolved))
+				await reply("Command.Play.Playlist", message.channel, {
+					number: resolved.length,
+				});
+			else {
+				const { title, url } = resolved;
+				await reply("Command.Play.Single", message.channel, {
+					title,
+					url,
+					member,
+				});
+			}
 
 			await controller.connect(voiceChannel, textChannel);
 			await controller.play();
-		} catch (err) {
-			log(this.client, err, "error");
+		} catch (error) {
+			if (error instanceof UserError) await reply(error.message, channel);
+			else await log(this.client, error, "error");
 		}
 	};
 
@@ -139,114 +103,11 @@ export default class Play extends Command {
 		await reply("Command.Play.NotPaused", channel);
 	};
 
-	getKey = (params: string[]) =>
-		ytdl.validateURL(params[0])
-			? ytdl.getURLVideoID(params[0])
-			: params.join(" ").substr(0, KEY_LENGTH);
-
-	isInvalidLink = (url: string) => {
-		const regex = /^(https:?)|(www\.)|(youtu)/;
-
-		return regex.test(url) && !ytdl.validateURL(url);
-	};
-
-	getBestMatch = (key: string) => {
-		if (this.cache.keys().length === 0) return null;
-
-		const { bestMatch } = stringSimilarity.findBestMatch(key, [
-			...this.cache.keys(),
-			"",
-		]);
-
-		if (bestMatch.rating > MATCH_THRESHOLD) {
-			return this.cache.get(bestMatch.target);
-		}
-
-		return null;
-	};
-
-	fetchAndCache = async (params: string[]) => {
-		const key = ytdl.validateURL(params[0])
-			? ytdl.getURLVideoID(params[0])
-			: params.join(" ").substr(0, KEY_LENGTH);
-
-		try {
-			const song = await this.fetchSongDetails(params);
-
-			this.cache.set(key, song);
-
-			return song;
-		} catch (error) {
-			log(this.client, error, "error");
-			return null;
-		}
-	};
-
-	getSongFromCache = (params: string[]) => {
-		if (ytdl.validateURL(params[0])) {
-			const id = ytdl.getURLVideoID(params[0]);
-
-			return this.cache.get(id);
-		} else {
-			const query = params.join(" ").substr(0, KEY_LENGTH);
-
-			return this.cache.get(query);
-		}
-	};
-
 	/**
 	 * @throws
 	 */
-	fetchSongDetails = async (params: string[]) => {
-		if (ytdl.validateURL(params[0])) {
-			return this.getSongDetailsByUrl(params[0]);
-		} else {
-			const query = params.join(" ");
-
-			const url = await this.getSongUrl(query);
-			return this.getSongDetailsByUrl(url);
-		}
-	};
-
-	/**
-	 * @throws
-	 */
-	getSongDetailsByUrl = async (
-		url: string,
-	): Promise<Omit<Song, "requestingUserId" | "id">> => {
-		try {
-			const info = await ytdl.getBasicInfo(url);
-			if (!info) return null;
-
-			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
-			const { artist, song: name } = info?.videoDetails?.media;
-
-			return {
-				url,
-				title,
-				live: isLiveContent,
-				duration: Number(lengthSeconds) * 1000,
-				artist,
-				name,
-			};
-		} catch (error) {
-			if ((error as Error).message.includes("Video unavailable")) return null;
-			else throw error;
-		}
-	};
-
-	/**
-	 * @throws
-	 */
-	getSongUrl = async (query: string): Promise<string> => {
-		const { items } = await searchVideoMeta(query);
-
-		if (items.length === 0) {
-			return null;
-		}
-
-		const { videoId } = items[0].id;
-
-		return `${YOUTUBE_URL}${videoId}`;
+	resolve = async (params: string[]) => {
+		const query = params.join(" ");
+		return this.playBehavior.fetch(query);
 	};
 }
