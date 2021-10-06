@@ -127,7 +127,7 @@ export default class MusicController extends Controller {
 		_oldState: VoiceState,
 		newState: VoiceState,
 	) => {
-		if (!newState.channel && this.state.state === "playing") {
+		if (!newState.channel) {
 			await this.disconnect("User disconnected bot");
 			return;
 		}
@@ -370,6 +370,7 @@ export default class MusicController extends Controller {
 		await this.clearPresence();
 
 		this.setState({
+			timeout: null,
 			state: "stopped",
 			index: 0,
 			position: 0,
@@ -516,8 +517,6 @@ export default class MusicController extends Controller {
 		const results = await this.mongo.db.collection("playlists").deleteOne({
 			_id: new ObjectId(found._id),
 		});
-
-		console.log(found, results);
 
 		if (!results.result.ok) throw new UserError("Failed to delete playlist");
 	};
