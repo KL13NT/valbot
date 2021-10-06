@@ -5,6 +5,8 @@ import UserError from "../../structures/UserError";
 import { stringToTimestamp } from "../../utils/general";
 
 import {
+	Key,
+	Matcher,
 	PlaylistRetriever,
 	PlayStrategySelector,
 	Track,
@@ -15,6 +17,7 @@ import {
 	YOUTUBE_PLAYLIST_MATCHER,
 	SINGLE_SYMBOL,
 	LIST_SYMBOL,
+	YOUTUBE_SEARCH_SINGLE_MATCHER,
 } from "./constants";
 
 interface YoutubeTrackResponse {
@@ -57,8 +60,12 @@ export class YoutubeTrack implements TrackRetriever {
 	public type = SINGLE_SYMBOL;
 
 	public fetch = async (query: string) => {
-		const url = await this.getUrl(query);
+		const url = ytdl.validateURL(query) ? query : await this.getUrl(query);
 		return this.getSongDetailsByUrl(url);
+	};
+
+	public generateKey = (query: string) => {
+		return ytdl.validateURL(query) ? ytdl.getURLVideoID(query) : query;
 	};
 
 	private getUrl = async (query: string) => {
@@ -103,6 +110,7 @@ export class YoutubeTrack implements TrackRetriever {
 				duration: Number(lengthSeconds) * 1000,
 				artist,
 				name,
+				key: info.videoDetails.videoId,
 				spotify: false,
 			};
 		} catch (error) {
@@ -128,6 +136,11 @@ export class YoutubePlaylist implements PlaylistRetriever {
 	conform = (url: string) => {
 		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[2];
 		return `https://www.youtube.com/watch?v=1&list=${playlistId}`;
+	};
+
+	generateKey = (url: Key) => {
+		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[2];
+		return playlistId;
 	};
 
 	parseResponse = (response: string) => {
@@ -156,17 +169,26 @@ export class YoutubePlaylist implements PlaylistRetriever {
 			name: null,
 			artist: null,
 			spotify: false,
+			key: item.playlistPanelVideoRenderer.videoId,
 		};
 	};
 }
 
 export class YoutubeStrategySelector implements PlayStrategySelector {
-	private options = [
-		{
-			matcher: YOUTUBE_PLAYLIST_MATCHER,
-			strategy: new YoutubePlaylist(),
-		},
-	];
+	private options: Matcher[];
+
+	constructor() {
+		this.options = [
+			{
+				matcher: YOUTUBE_PLAYLIST_MATCHER,
+				strategy: new YoutubePlaylist(),
+			},
+			{
+				matcher: YOUTUBE_SEARCH_SINGLE_MATCHER,
+				strategy: new YoutubeTrack(),
+			},
+		];
+	}
 
 	select = (url: string) => {
 		const selected = this.options.find(strategy => strategy.matcher.test(url));

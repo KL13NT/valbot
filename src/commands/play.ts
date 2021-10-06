@@ -8,7 +8,6 @@ import { log, reply } from "../utils/general";
 import { MusicController } from "../controllers";
 import UserError from "../structures/UserError";
 
-// TODO: re-enable caching behavior
 export default class Play extends Command {
 	playBehavior: ResolveBehavior;
 
@@ -18,7 +17,8 @@ export default class Play extends Command {
 			category: "Music",
 			cooldown: 5 * 1000,
 			nOfParams: 1,
-			description: "Start or continue playing a song",
+			description:
+				"Start or continue playing a song. Supports YouTube singles, playlists, mixes, and Spotify tracks, playlists, and albums.",
 			exampleUsage: "?<youtube_link|spotify_link|query>",
 			extraParams: true,
 			optionalParams: 1,

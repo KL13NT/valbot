@@ -60,6 +60,7 @@ const parseTrack = (track: SpotifyTrackResponse): Track => {
 		duration: track.duration_ms,
 		live: null,
 		spotify: true,
+		key: track.id,
 	};
 };
 
@@ -122,6 +123,10 @@ export class SpotifyTrack implements TrackRetriever {
 		this.spotifyAuth = spotifyAuth;
 	}
 
+	generateKey = (query: string) => {
+		return query.match(SPOTIFY_SINGLE_MATCHER)[1];
+	};
+
 	fetch = async (url: string) => {
 		const id = url.match(SPOTIFY_SINGLE_MATCHER)[1];
 		// eslint-disable-next-line camelcase
@@ -147,6 +152,10 @@ export class SpotifyPlaylist implements PlaylistRetriever {
 	constructor(spotifyAuth: SpotifyAuth) {
 		this.spotifyAuth = spotifyAuth;
 	}
+
+	generateKey = (query: string) => {
+		return query.match(SPOTIFY_PLAYLIST_MATCHER)[1];
+	};
 
 	fetch = async (url: string) => {
 		const id = url.match(SPOTIFY_PLAYLIST_MATCHER)[1];
@@ -176,6 +185,10 @@ export class SpotifyAlbum implements PlaylistRetriever {
 	constructor(spotifyAuth: SpotifyAuth) {
 		this.spotifyAuth = spotifyAuth;
 	}
+
+	generateKey = (query: string) => {
+		return query.match(SPOTIFY_ALBUM_MATCHER)[1];
+	};
 
 	fetch = async (url: string) => {
 		const id = url.match(SPOTIFY_ALBUM_MATCHER)[1];

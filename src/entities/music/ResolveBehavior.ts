@@ -1,9 +1,9 @@
+import CacheBehavior from "./CacheBehavior";
 import { SpotifyStrategySelector } from "./SpotifyBehavior";
-import { YoutubeStrategySelector, YoutubeTrack } from "./YouTubeBehavior";
+import { YoutubeStrategySelector } from "./YouTubeBehavior";
 
 export default class ResolveBehavior {
-	//TODO: add cache behavior here
-	private default = new YoutubeTrack();
+	private cache = new CacheBehavior();
 	private selectors = [
 		new SpotifyStrategySelector(),
 		new YoutubeStrategySelector(),
@@ -13,10 +13,19 @@ export default class ResolveBehavior {
 	 *
 	 * @throws
 	 */
-	public fetch = (url: string) => {
-		const strategy = this.determineStrategy(url) || this.default;
+	public fetch = async (url: string) => {
+		const strategy = this.determineStrategy(url);
+		const key = strategy.generateKey(url);
 
-		return strategy.fetch(url);
+		const result = this.cache.resolve(strategy, key);
+		if (result) return result;
+
+		const response = await strategy.fetch(url);
+
+		if (Array.isArray(response)) this.cache.addPlaylist(key, response);
+		else this.cache.addTrack(response.key, response);
+
+		return response;
 	};
 
 	private determineStrategy = (url: string) => {
