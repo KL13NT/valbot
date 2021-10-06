@@ -6,7 +6,7 @@ import { Key, PlaylistRetriever, Track, TrackRetriever } from "./types";
 
 const MATCH_THRESHOLD = 0.8;
 
-const options = {
+const options: LRUCache.Options<Key, Track | Key[]> = {
 	maxAge: 1000 * 60 * 60 * 24,
 	max: 500,
 	length: () => 1,
@@ -31,10 +31,10 @@ export default class CacheBehavior {
 		if (this.tracks.keys().length === 0) return null;
 
 		const values = this.tracks.values();
-
+		const titles = values.map(track => track.title);
 		const { bestMatch, bestMatchIndex } = stringSimilarity.findBestMatch(
 			query,
-			[...values.map(track => track.title), ""],
+			[...titles, ""], // empty string hack for error thrown when titles is empty
 		);
 
 		if (bestMatch.rating > MATCH_THRESHOLD) return values[bestMatchIndex];
