@@ -202,12 +202,12 @@ export default class MusicController extends Controller {
 	};
 
 	pause = async () => {
-		const time = this.state.connection.dispatcher.streamTime;
+		const time = this.state.connection.dispatcher.streamTime / 1000;
 
 		this.pauseStreams();
 		this.setState({
 			state: "paused",
-			position: time,
+			position: this.state.position + time,
 		});
 	};
 
@@ -611,6 +611,8 @@ export default class MusicController extends Controller {
 	private resumeStreams = () => {
 		this.state.stream?.resume?.();
 		this.state.connection?.dispatcher?.resume?.();
+		this.seek(this.state.position);
+
 	};
 
 	private destroyStreams = () => {
