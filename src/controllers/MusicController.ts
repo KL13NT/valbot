@@ -195,19 +195,20 @@ export default class MusicController extends Controller {
 	};
 
 	resume = () => {
-		this.resumeStreams();
+		this.seek(this.state.position);
 		this.setState({
 			state: "playing",
 		});
 	};
 
 	pause = async () => {
-		const time = this.state.connection.dispatcher.streamTime;
+		const time = this.state.connection.dispatcher.streamTime / 1000;
 
-		this.pauseStreams();
+		this.destroyStreams();
+
 		this.setState({
 			state: "paused",
-			position: time,
+			position: this.state.position + time,
 		});
 	};
 
@@ -241,6 +242,10 @@ export default class MusicController extends Controller {
 		});
 
 		dispatcher.on("finish", () => this.skip());
+
+		this.setState({
+			position: timestamp,
+		});
 	};
 
 	/**
@@ -608,11 +613,6 @@ export default class MusicController extends Controller {
 		);
 	};
 
-	private resumeStreams = () => {
-		this.state.stream?.resume?.();
-		this.state.connection?.dispatcher?.resume?.();
-	};
-
 	private destroyStreams = () => {
 		if (this.state.stream) {
 			this.state.stream.destroy();
@@ -620,16 +620,6 @@ export default class MusicController extends Controller {
 
 		if (this.state.connection?.dispatcher) {
 			this.state.connection.dispatcher.destroy();
-		}
-	};
-
-	private pauseStreams = () => {
-		if (this.state.stream) {
-			this.state.stream.pause();
-		}
-
-		if (this.state.connection?.dispatcher) {
-			this.state.connection.dispatcher.pause();
 		}
 	};
 }
