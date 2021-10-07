@@ -134,12 +134,12 @@ export class YoutubePlaylist implements PlaylistRetriever {
 	};
 
 	conform = (url: string) => {
-		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[2];
+		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[1];
 		return `https://www.youtube.com/watch?v=1&list=${playlistId}`;
 	};
 
 	generateKey = (url: Key) => {
-		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[2];
+		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[1];
 		return playlistId;
 	};
 
