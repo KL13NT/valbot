@@ -44,12 +44,14 @@ export default class Queue extends Command {
 				return;
 			}
 
-			const strings = controller.queue.map(
-				(song, i) =>
-					`**${i + 1})** [${song.title.substr(0, 40)}](${song.url}) | <@!${
-						song.requestingUserId
-					}> ${i === controller.currentSongIndex ? "▶️" : ""}\n`,
-			);
+			const strings = controller.queue.map((song, i) => {
+				const encoded = song.title.substr(0, 40).replace(/(\]|\[)/, "\\$1");
+				const title = `[${encoded}](${song.url})`;
+				const user = `<@!${song.requestingUserId}>`;
+				const playing = i === controller.currentSongIndex ? "▶️" : "";
+
+				return `**${i + 1})** ${title} | ${user} ${playing}\n`;
+			});
 
 			const pages = [];
 			const current = controller.getCurrentSong();
@@ -60,14 +62,17 @@ export default class Queue extends Command {
 					  }](${current.url}) [<@!${current.requestingUserId}>]`
 					: `**__Stopped  ⏸️__**`;
 
+			const loop = `Loop: ${controller.loopState}`;
+			const songs = `${controller.queue.length} songs in queue`;
+
 			for (let i = 0; i < controller.queue.length; i += SONGS_PER_PAGE) {
+				const list = strings.slice(i, i + SONGS_PER_PAGE).join("\n");
+				const queue = `**__Queue__**\n${list}`;
+				const page = `${title}\n\n${queue}\n\n**${songs} | ${loop}**`;
+
 				pages.push(
 					createEmbed({
-						description: `${title}\n\n**__Queue__**\n${strings
-							.slice(i, i + SONGS_PER_PAGE)
-							.join("\n")}\n\n**${
-							controller.queue.length
-						} songs in queue | Loop: ${controller.loopState}**`,
+						description: page,
 					}),
 				);
 			}
