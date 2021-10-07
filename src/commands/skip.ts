@@ -14,6 +14,7 @@ export default class Skip extends Command {
 			exampleUsage: "",
 			extraParams: false,
 			optionalParams: 0,
+			aliases: ["s"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
