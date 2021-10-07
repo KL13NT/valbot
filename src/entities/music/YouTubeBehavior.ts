@@ -82,7 +82,7 @@ export class YoutubeTrack implements TrackRetriever {
 			json.contents.twoColumnSearchResultsRenderer.primaryContents
 				.sectionListRenderer.contents[0]?.itemSectionRenderer?.contents;
 
-		const firstHit = hits[0].videoRenderer ?? hits[1].videoRenderer;
+		const firstHit = hits[0]?.videoRenderer ?? hits[1]?.videoRenderer;
 
 		if (typeof firstHit === "undefined")
 			throw new UserError("No results found");
@@ -134,12 +134,12 @@ export class YoutubePlaylist implements PlaylistRetriever {
 	};
 
 	conform = (url: string) => {
-		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[2];
+		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[1];
 		return `https://www.youtube.com/watch?v=1&list=${playlistId}`;
 	};
 
 	generateKey = (url: Key) => {
-		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[2];
+		const playlistId = url.match(YOUTUBE_PLAYLIST_MATCHER)[1];
 		return playlistId;
 	};
 
@@ -147,7 +147,7 @@ export class YoutubePlaylist implements PlaylistRetriever {
 		const json: YoutubePlaylistResponse = JSON.parse(response);
 
 		const playlistItems =
-			json.contents.twoColumnWatchNextResults.playlist.playlist.contents;
+			json.contents.twoColumnWatchNextResults?.playlist?.playlist?.contents;
 
 		if (!playlistItems)
 			throw new UserError("The playlist is either empty or not found");

@@ -47,6 +47,12 @@ interface SpotifyAuthResponse {
 	expires_in: number;
 }
 
+const validateResponse = response => {
+	if (!response.ok) throw new Error(`Spotify Error\n ${response.status}`);
+
+	return response.json();
+};
+
 const parseTrack = (track: SpotifyTrackResponse): Track => {
 	if (!track) throw new UserError("The track is not found");
 
@@ -109,7 +115,9 @@ export class SpotifyAuth {
 		});
 
 		if (!response.ok)
-			throw new Error("Spotify Error: Failed to authenticate with spotify");
+			throw new Error(
+				`Spotify Error ${response.status}: Failed to authenticate with spotify`,
+			);
 
 		return response.json();
 	};
@@ -140,7 +148,7 @@ export class SpotifyTrack implements TrackRetriever {
 				Authorization: `${token_type} ${access_token}`,
 			},
 		})
-			.then(response => response.json())
+			.then(validateResponse)
 			.then(parseTrack);
 	};
 }
@@ -169,11 +177,12 @@ export class SpotifyPlaylist implements PlaylistRetriever {
 				Authorization: `${token_type} ${access_token}`,
 			},
 		})
-			.then(response => response.json())
+			.then(validateResponse)
 			.then(this.parseResponse);
 	};
 
 	parseResponse = (response: SpotifyPlaylistResponse) => {
+		console.log(response);
 		return response.items.map(item => parseTrack(item.track));
 	};
 }
@@ -205,7 +214,7 @@ export class SpotifyAlbum implements PlaylistRetriever {
 					Authorization: `${token_type} ${access_token}`,
 				},
 			})
-				.then(response => response.json())
+				.then(validateResponse)
 				.then(this.parseResponse);
 		} catch (error) {
 			console.log(error);
