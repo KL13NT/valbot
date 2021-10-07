@@ -5,10 +5,10 @@ import { log, notify } from "../utils/general";
 import { createClearEmbed } from "../utils/embed";
 import { TextChannel } from "discord.js";
 
-export default class Clear extends Command {
+export default class Delete extends Command {
 	constructor(client: ValClient) {
 		super(client, {
-			name: `clear`,
+			name: `delete`,
 			category: "Moderation",
 			cooldown: 1000,
 			nOfParams: 1,

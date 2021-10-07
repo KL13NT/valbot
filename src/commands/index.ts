@@ -1,5 +1,5 @@
 export { default as Setup } from "./setup";
-export { default as Clear } from "./clear";
+export { default as Clear } from "./delete";
 export { default as Help } from "./help";
 export { default as Rank } from "./rank";
 export { default as Teach } from "./teach";
