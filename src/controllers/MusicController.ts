@@ -272,7 +272,7 @@ export default class MusicController extends Controller {
 			});
 		}
 
-		if (this.state.state === "playing") this.play(true);
+		if (["playing", "paused"].includes(this.state.state)) this.play(true);
 	};
 
 	/**
