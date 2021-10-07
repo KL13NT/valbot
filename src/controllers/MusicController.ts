@@ -195,7 +195,7 @@ export default class MusicController extends Controller {
 	};
 
 	resume = () => {
-		this.seek( this.state.position);
+		this.seek(this.state.position);
 		this.setState({
 			state: "playing",
 		});
