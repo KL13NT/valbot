@@ -18,12 +18,12 @@ export default class Loop extends Command {
 			name: "loop",
 			category: "Music",
 			cooldown: 5 * 1000,
-			nOfParams: 0,
+			nOfParams: 1,
 			description:
-				"Toggles the queue looping mode between [none, single, queue]",
-			exampleUsage: "",
+				"Changes loop state to one of 'off', 'single', 'queue'. Toggles between these states if not provided an option.",
+			exampleUsage: "?<single|queue|disabled>",
 			extraParams: false,
-			optionalParams: 0,
+			optionalParams: 1,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -31,7 +31,7 @@ export default class Loop extends Command {
 		});
 	}
 
-	_run = async ({ member, message }: CommandContext) => {
+	_run = async ({ member, message, params }: CommandContext) => {
 		try {
 			const voiceChannel = member.voice.channel;
 			const textChannel = message.channel as TextChannel;
@@ -39,17 +39,34 @@ export default class Loop extends Command {
 				"music",
 			) as MusicController;
 
+			if (this.client.voice.connections.size === 0) {
+				await reply("Bot.VoiceNotConnected", message.channel);
+				return;
+			}
+
 			if (!voiceChannel) {
-				await reply("User.VoiceNotConnected", message.channel);
+				await reply("User.VoiceNotConnected", textChannel);
 				return;
 			}
 
 			if (!controller.canUserPlay(voiceChannel)) {
-				await reply("Command.Play.NotAllowed", message.channel);
+				await reply("User.SameChannel", textChannel);
 				return;
 			}
 
-			controller.loop();
+			const match =
+				params.length !== 0
+					? params[0].match(/^(single|queue|disabled)$/i)
+					: null;
+
+			if (params.length === 0) controller.loop();
+			else if (match) {
+				const newLoopState = match[1] as LoopState;
+				controller.loop(newLoopState);
+			} else if (!match) {
+				await reply("Command.Loop.Invalid", textChannel);
+				return;
+			}
 
 			const { loopState } = controller;
 			await reply(LOOP_STATUS_MESSAGES[loopState], textChannel);
