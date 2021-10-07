@@ -70,6 +70,7 @@ export interface MusicControllerState {
 
 const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
+const DC_STATUS = 4;
 
 export default class MusicController extends Controller {
 	private presence: PresenceController;
@@ -109,14 +110,6 @@ export default class MusicController extends Controller {
 	};
 
 	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
-		if (oldState.member.id === this.client.user.id) {
-			this.setState({
-				vc: newState.channel,
-			});
-
-			return;
-		}
-
 		if (
 			oldState.channel?.id === this.state.vc?.id ||
 			newState.channel?.id === this.state.vc?.id
@@ -380,6 +373,13 @@ export default class MusicController extends Controller {
 				"info",
 			);
 
+			const connection = this.state.connection || (await vc.join());
+
+			connection.removeAllListeners();
+			connection.on("disconnect", () => {
+				this.disconnect();
+			});
+
 			this.setState({
 				vc,
 				text,
@@ -388,35 +388,42 @@ export default class MusicController extends Controller {
 		}
 	};
 
-	disconnect = async (reason = "Disconnected due to inactivity") => {
-		log(this.client, reason, "info");
+	disconnect = async () => {
+		try {
+			log(this.client, "Disconnected from vc", "info");
 
-		if (this.state.connection) this.state.connection.disconnect();
-		this.destroyStreams();
+			if (this.state.connection && this.state.connection.status !== DC_STATUS)
+				this.state.connection.disconnect();
 
-		clearTimeout(this.state.timeout);
+			this.destroyStreams();
+			this.clearPresence();
 
-		if (this.state.text)
-			await this.state.text.send(
-				createEmbed({
-					description: reason,
-				}),
-			);
+			clearTimeout(this.state.timeout);
 
-		this.state = {
-			stream: null,
-			connection: null,
-			text: null,
-			vc: null,
-			queue: [],
-			state: "stopped",
-			timeout: null,
-			position: 0,
-			index: 0,
-			dispatcher: null,
-			loop: "disabled",
-			shuffle: false,
-		};
+			if (this.state.text)
+				await this.state.text.send(
+					createEmbed({
+						description: "Disconnected from voice channel",
+					}),
+				);
+		} catch (error) {
+			log(this.client, "Disconnected from vc", "info");
+		} finally {
+			this.state = {
+				stream: null,
+				connection: null,
+				text: null,
+				vc: null,
+				queue: [],
+				state: "stopped",
+				timeout: null,
+				position: 0,
+				index: 0,
+				dispatcher: null,
+				loop: "disabled",
+				shuffle: false,
+			};
+		}
 	};
 
 	canUserPlay = (vc: VoiceChannel) => {
