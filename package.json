@@ -13,7 +13,7 @@
 		"develop:mongo": "mongod --dbpath=data",
 		"develop:redis": "redis-server",
 		"dev:cloud": "yarn run-p watch develop:node",
-		"start": "tsc && node ./prod/index.js",
+		"start": "tsc && node --inspect=9090 ./prod/index.js",
 		"develop:node": "nodemon -r dotenv/config ./prod/index.js --inspect",
 		"inspect:node": "nodemon --inspect -r dotenv/config ./prod/index.js --inspect",
 		"lint": "eslint --ext .js,.ts ./src --config .eslintrc.js --fix",
