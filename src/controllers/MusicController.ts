@@ -339,6 +339,10 @@ export default class MusicController extends Controller {
 		return this.state?.connection?.dispatcher?.streamTime;
 	};
 
+	getCurrentPosition = () => {
+		return this.state.position;
+	};
+
 	getCurrentSong = () => {
 		return this.state.queue[this.state.index];
 	};
