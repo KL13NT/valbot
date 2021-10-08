@@ -26,16 +26,29 @@ interface SpotifyTrackResponse {
 	}[];
 	// eslint-disable-next-line camelcase
 	duration_ms: number;
+	error?: {
+		status: number;
+		message: string;
+	};
 }
 
 interface SpotifyAlbumResponse {
 	items: SpotifyTrackResponse[];
+	error?: {
+		status: number;
+		message: string;
+	};
 }
 
 interface SpotifyPlaylistResponse {
 	items: {
 		track: SpotifyTrackResponse;
 	}[];
+	next?: string;
+	error?: {
+		status: number;
+		message: string;
+	};
 }
 
 interface SpotifyAuthResponse {
@@ -47,26 +60,27 @@ interface SpotifyAuthResponse {
 	expires_in: number;
 }
 
-const validateResponse = response => {
-	if (!response.ok) throw new Error(`Spotify Error\n ${response.status}`);
+const parseTrack = (response: SpotifyTrackResponse): Track => {
+	if (response.error) {
+		if (response.error.status === 404)
+			throw new UserError("The track is not found");
 
-	return response.json();
-};
+		throw new Error(
+			`Spotify Error [${response.error.status}]: ${response.error.message} `,
+		);
+	}
 
-const parseTrack = (track: SpotifyTrackResponse): Track => {
-	if (!track) throw new UserError("The track is not found");
-
-	const artists = track.artists.map(artist => artist.name);
+	const artists = response.artists.map(artist => artist.name);
 
 	return {
-		title: `${artists.join(" ")} - ${track.name}`,
-		name: track.name,
+		title: `${artists.join(" ")} - ${response.name}`,
+		name: response.name,
 		artist: artists.join(" "),
-		url: `https://open.spotify.com/track/${track.id}`,
-		duration: track.duration_ms,
+		url: `https://open.spotify.com/track/${response.id}`,
+		duration: response.duration_ms,
 		live: null,
 		spotify: true,
-		key: track.id,
+		key: response.id,
 	};
 };
 
@@ -148,7 +162,7 @@ export class SpotifyTrack implements TrackRetriever {
 				Authorization: `${token_type} ${access_token}`,
 			},
 		})
-			.then(validateResponse)
+			.then(response => response.json())
 			.then(parseTrack);
 	};
 }
@@ -165,25 +179,44 @@ export class SpotifyPlaylist implements PlaylistRetriever {
 		return query.match(SPOTIFY_PLAYLIST_MATCHER)[1];
 	};
 
-	fetch = async (url: string) => {
-		const id = url.match(SPOTIFY_PLAYLIST_MATCHER)[1];
-		// eslint-disable-next-line camelcase
-		const { token_type, access_token } = await this.spotifyAuth.getAuth();
-
-		return fetch(`https://api.spotify.com/v1/playlists/${id}/tracks`, {
+	private next = (URL: string, token: string, tracks: Track[] = []) => {
+		return fetch(URL, {
 			headers: {
 				Accept: "application/json",
 				// eslint-disable-next-line camelcase
-				Authorization: `${token_type} ${access_token}`,
+				Authorization: token,
 			},
 		})
-			.then(validateResponse)
-			.then(this.parseResponse);
+			.then(response => response.json())
+			.then(this.parseResponse)
+			.then(data => {
+				const response = [...tracks, ...data.tracks];
+				if (data.next) return this.next(data.next, token, response);
+				return response;
+			});
+	};
+
+	fetch = async (url: string) => {
+		const id = url.match(SPOTIFY_PLAYLIST_MATCHER)[1];
+		const URL = `https://api.spotify.com/v1/playlists/${id}/tracks`;
+		// eslint-disable-next-line camelcase
+		const { token_type, access_token } = await this.spotifyAuth.getAuth();
+		// eslint-disable-next-line camelcase
+		const token = `${token_type} ${access_token}`;
+
+		return this.next(URL, token, []);
 	};
 
 	parseResponse = (response: SpotifyPlaylistResponse) => {
-		console.log(response);
-		return response.items.map(item => parseTrack(item.track));
+		if (response.error)
+			throw new Error(
+				`Spotify Error [${response.error.status}]: ${response.error.message} `,
+			);
+
+		return {
+			tracks: response.items.map(item => parseTrack(item.track)),
+			next: response.next,
+		};
 	};
 }
 
@@ -214,7 +247,7 @@ export class SpotifyAlbum implements PlaylistRetriever {
 					Authorization: `${token_type} ${access_token}`,
 				},
 			})
-				.then(validateResponse)
+				.then(response => response.json())
 				.then(this.parseResponse);
 		} catch (error) {
 			console.log(error);
@@ -223,6 +256,11 @@ export class SpotifyAlbum implements PlaylistRetriever {
 	};
 
 	parseResponse = (response?: SpotifyAlbumResponse): Track[] => {
+		if (response.error)
+			throw new Error(
+				`Spotify Error [${response.error.status}]: ${response.error.message} `,
+			);
+
 		return response.items.map(item => parseTrack(item));
 	};
 }
