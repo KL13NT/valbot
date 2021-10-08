@@ -18,7 +18,14 @@ import {
 	SPOTIFY_SINGLE_MATCHER,
 } from "./constants";
 
-interface SpotifyTrackResponse {
+interface SpotifyResponse {
+	error?: {
+		status: number;
+		message: string;
+	};
+}
+
+interface SpotifyTrackResponse extends SpotifyResponse {
 	id: string;
 	name: string;
 	artists: {
@@ -26,29 +33,17 @@ interface SpotifyTrackResponse {
 	}[];
 	// eslint-disable-next-line camelcase
 	duration_ms: number;
-	error?: {
-		status: number;
-		message: string;
-	};
 }
 
-interface SpotifyAlbumResponse {
-	items: SpotifyTrackResponse[];
-	error?: {
-		status: number;
-		message: string;
-	};
+interface SpotifyAlbumResponse extends SpotifyResponse {
+	items?: SpotifyTrackResponse[];
 }
 
-interface SpotifyPlaylistResponse {
-	items: {
+interface SpotifyPlaylistResponse extends SpotifyResponse {
+	items?: {
 		track: SpotifyTrackResponse;
 	}[];
 	next?: string;
-	error?: {
-		status: number;
-		message: string;
-	};
 }
 
 interface SpotifyAuthResponse {
@@ -62,12 +57,7 @@ interface SpotifyAuthResponse {
 
 const parseTrack = (response: SpotifyTrackResponse): Track => {
 	if (response.error) {
-		if (response.error.status === 404)
-			throw new UserError("The track is not found");
-
-		throw new Error(
-			`Spotify Error [${response.error.status}]: ${response.error.message} `,
-		);
+		throw new UserError(`${response.error.message}`);
 	}
 
 	const artists = response.artists.map(artist => artist.name);
@@ -128,10 +118,7 @@ export class SpotifyAuth {
 			method: "POST",
 		});
 
-		if (!response.ok)
-			throw new Error(
-				`Spotify Error ${response.status}: Failed to authenticate with spotify`,
-			);
+		if (!response.ok) throw new Error(`Failed to authenticate with spotify`);
 
 		return response.json();
 	};
@@ -208,10 +195,7 @@ export class SpotifyPlaylist implements PlaylistRetriever {
 	};
 
 	parseResponse = (response: SpotifyPlaylistResponse) => {
-		if (response.error)
-			throw new Error(
-				`Spotify Error [${response.error.status}]: ${response.error.message} `,
-			);
+		if (response.error) throw new UserError(`${response.error.message} `);
 
 		return {
 			tracks: response.items.map(item => parseTrack(item.track)),
@@ -256,10 +240,7 @@ export class SpotifyAlbum implements PlaylistRetriever {
 	};
 
 	parseResponse = (response?: SpotifyAlbumResponse): Track[] => {
-		if (response.error)
-			throw new Error(
-				`Spotify Error [${response.error.status}]: ${response.error.message} `,
-			);
+		if (response.error) throw new UserError(`${response.error.message}`);
 
 		return response.items.map(item => parseTrack(item));
 	};
