@@ -343,10 +343,15 @@ export default class MusicController extends Controller {
 		return this.state.queue[this.state.index];
 	};
 
-	loop = () => {
+	loop = (state?: LoopState) => {
+		const toggled = LOOP_STATES[(LOOP_STATES.indexOf(this.state.loop) + 1) % 3];
+		const loop = !state ? toggled : state;
+
 		this.setState({
-			loop: LOOP_STATES[(LOOP_STATES.indexOf(this.state.loop) + 1) % 3],
+			loop,
 		});
+
+		return loop;
 	};
 
 	clear = async () => {
