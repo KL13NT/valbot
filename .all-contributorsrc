@@ -53,6 +53,17 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "skawy",
+      "name": "Ahmed Mostafa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63661486?v=4",
+      "profile": "https://github.com/skawy",
+      "contributions": [
+        "code",
+        "ideas",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
