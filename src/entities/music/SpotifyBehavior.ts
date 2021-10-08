@@ -56,9 +56,9 @@ interface SpotifyAuthResponse {
 }
 
 const parseTrack = (response: SpotifyTrackResponse): Track => {
-	if (response.error) {
+	if (response.error) 
 		throw new UserError(`${response.error.message}`);
-	}
+	
 
 	const artists = response.artists.map(artist => artist.name);
 
