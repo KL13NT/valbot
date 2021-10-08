@@ -54,22 +54,23 @@ export default class Loop extends Command {
 				return;
 			}
 
-			const match =
-				params.length !== 0
-					? params[0].match(/^(single|queue|disabled)$/i)
-					: null;
+			if (params.length === 0) {
+				const state = controller.loop();
+				await reply(LOOP_STATUS_MESSAGES[state], textChannel);
+				return;
+			}
 
-			if (params.length === 0) controller.loop();
-			else if (match) {
-				const newLoopState = match[1] as LoopState;
-				controller.loop(newLoopState);
-			} else {
+			const match = params[0].match(/^(single|queue|disabled)$/i);
+
+			if (!match) {
 				await reply("Command.Loop.Invalid", textChannel);
 				return;
 			}
 
-			const { loopState } = controller;
-			await reply(LOOP_STATUS_MESSAGES[loopState], textChannel);
+			const newLoopState = match[1] as LoopState;
+
+			const state = controller.loop(newLoopState);
+			await reply(LOOP_STATUS_MESSAGES[state], textChannel);
 		} catch (err) {
 			log(this.client, err, "error");
 		}
