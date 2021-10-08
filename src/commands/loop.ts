@@ -63,7 +63,7 @@ export default class Loop extends Command {
 			else if (match) {
 				const newLoopState = match[1] as LoopState;
 				controller.loop(newLoopState);
-			} else if (!match) {
+			} else {
 				await reply("Command.Loop.Invalid", textChannel);
 				return;
 			}
