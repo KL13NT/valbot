@@ -58,11 +58,14 @@ export default class NowPlaying extends Command {
 			return;
 		}
 
-		const current = controller.getCurrentStreamTime();
-		if (typeof current === "undefined") {
+		if (typeof controller.getCurrentStreamTime() === "undefined") {
 			await reply("Command.NowPlaying.NotStarted", message.channel, {});
 			return;
 		}
+
+		const current =
+			controller.getCurrentStreamTime() +
+			controller.getCurrentPosition() * 1000;
 
 		log(this.client, "Now Playing", "info");
 
