@@ -253,7 +253,7 @@ export default class MusicController extends Controller {
 		this.destroyStreams();
 		await this.clearPresence();
 
-		if (index === queue.length - 1 && loop === "disabled") {
+		if (index === queue.length - 1 && ["disabled", "single"].includes(loop)) {
 			await this.clear();
 			return;
 		}
