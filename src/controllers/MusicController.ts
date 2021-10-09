@@ -630,7 +630,14 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	private setState = (state: Partial<MusicControllerState>) => {
-		this.state = { ...this.state, ...state };
+		const position =
+			state.index && state.index !== this.state.index ? 0 : this.state.position;
+
+		this.state = {
+			...this.state,
+			...state,
+			position,
+		};
 
 		this.onStateChanged();
 	};
