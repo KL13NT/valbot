@@ -47,6 +47,7 @@
 	"Command.Move.CurrentlyPlaying": "The song is currently playing and can't be moved",
 	"Command.Playlist.Invalid": "Operation must be one of create, update, delete",
 	"Command.Playlist.Load": "Loaded playlist successfully",
+	"Command.Playlist.Append": "Appended playlist successfully",
 	"Command.Playlist.Create": "Created playlist successfully",
 	"Command.Playlist.Delete": "Deleted playlist successfully",
 	"Command.Playlist.Update": "Updated playlist successfully",
