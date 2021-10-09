@@ -23,13 +23,6 @@ import { createEmbed } from "./embed";
 
 const { ROLE_DEVELOPER, MODE } = process.env;
 
-export function createAlertMessage(message: string, alertLevel: AlertLevel) {
-	const notification = `[${alertLevel}] ${message}`;
-
-	if (alertLevel === "info") return notification;
-	else return `${notification} <@&${ROLE_DEVELOPER}>`;
-}
-
 /**
  * Logs events to client and console
  */
@@ -52,7 +45,7 @@ export async function log(
 
 	try {
 		const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
-		const message = createAlertMessage(String(notification), alertLevel);
+		const message = `[${alertLevel}] ${notification}`;
 
 		if (notification instanceof Error)
 			await channel.send(
