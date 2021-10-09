@@ -466,15 +466,31 @@ export default class MusicController extends Controller implements Destroyable {
 	 *
 	 * @throws
 	 */
+	getPlaylist = async (name: string) => {
+		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
+
+		const id = name.toLowerCase();
+
+		return this.mongo.db.collection<Playlist>("playlists").findOne({
+			$or: [
+				{
+					id,
+				},
+				{
+					name,
+				},
+			],
+		});
+	};
+
+	/**
+	 *
+	 * @throws
+	 */
 	loadPlaylist = async (name: string, userId: Snowflake) => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
-		const playlists = await this.getUserPlaylists(userId);
-
-		if (playlists.length === 0)
-			throw new UserError("There are no playlists associated with this user");
-
-		const playlist = playlists.find(pl => pl.name === name);
+		const playlist = await this.getPlaylist(name);
 		if (!playlist) throw new UserError("No playlist with this name exists");
 
 		this.setState({
@@ -494,10 +510,7 @@ export default class MusicController extends Controller implements Destroyable {
 	appendPlaylist = async (name: string, userId: Snowflake) => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
-		const playlist = await this.mongo.db.collection("playlists").findOne({
-			name,
-		});
-
+		const playlist = await this.getPlaylist(name);
 		if (!playlist) throw new UserError("No playlist with this name exists");
 
 		const newQueue = playlist.queue.map(song => ({
@@ -517,18 +530,18 @@ export default class MusicController extends Controller implements Destroyable {
 	createPlaylist = async (name: string, userId: Snowflake) => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
-		const found = await this.mongo.db
-			.collection<Playlist>("playlists")
-			.findOne({ name });
+		const id = name.toLowerCase();
+		const found = await this.getPlaylist(name);
 
-		if (found && found.userId !== userId)
+		if (found)
 			throw new UserError(
-				`A playlist with this name already exists by user ${found.userId}`,
+				`A playlist with this name already exists by user <@!${found.userId}>`,
 			);
 
 		const result = await this.mongo.db
 			.collection<Playlist>("playlists")
 			.insertOne({
+				id,
 				name,
 				queue: this.state.queue,
 				userId,
@@ -544,10 +557,7 @@ export default class MusicController extends Controller implements Destroyable {
 	deletePlaylist = async (name: string, userId: Snowflake) => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
-		const found = await this.mongo.db
-			.collection<Playlist>("playlists")
-			.findOne({ name });
-
+		const found = await this.getPlaylist(name);
 		if (!found) throw new UserError("No playlist with this name exists");
 
 		if (found && found.userId !== userId)
@@ -567,10 +577,7 @@ export default class MusicController extends Controller implements Destroyable {
 	updatePlaylist = async (name: string, userId: Snowflake) => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
-		const found = await this.mongo.db
-			.collection<Playlist>("playlists")
-			.findOne({ name });
-
+		const found = await this.getPlaylist(name);
 		if (!found) throw new UserError("No playlist with this name exists");
 
 		if (found && found.userId !== userId)

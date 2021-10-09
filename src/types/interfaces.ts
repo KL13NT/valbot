@@ -20,7 +20,12 @@ export interface Destroyable {
 }
 
 export interface Playlist {
+	/** Name of the playlist as entered by the user */
 	name: string;
+
+	/** Lowercase copy of name */
+	id: string;
+
 	userId: Snowflake;
 	queue: Song[];
 	_id: ObjectId;
