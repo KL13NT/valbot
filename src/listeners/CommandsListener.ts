@@ -2,7 +2,6 @@ import Listener from "../structures/Listener";
 import ValClient from "../ValClient";
 import { Message } from "discord.js";
 
-import { GENERIC_COMMAND_NOT_UNDERSTOOD } from "../config/events.json";
 import { log } from "../utils/general";
 
 export default class CommandsListener extends Listener {
@@ -17,10 +16,7 @@ export default class CommandsListener extends Listener {
 			const commandRegex = RegExp(`${this.client.prefix}([a-zA-Z؀-ۿ]+)(\\s+)?`);
 			const matchGroup = content.replace(/\s+/gi, " ").match(commandRegex);
 
-			if (matchGroup === null) {
-				await message.reply(GENERIC_COMMAND_NOT_UNDERSTOOD);
-				return;
-			}
+			if (matchGroup === null) return;
 
 			const [, commandName] = matchGroup; // [fullMatch, commandName]
 			const command = this.client.commands.get(commandName.toLowerCase());
