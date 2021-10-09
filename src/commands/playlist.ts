@@ -6,7 +6,7 @@ import { MusicController } from "../controllers";
 import UserError from "../structures/UserError";
 import { TextChannel } from "discord.js";
 
-type Operation = "delete" | "create" | "update" | "load" | "list";
+type Operation = "delete" | "create" | "update" | "load" | "append" | "list";
 
 export default class Playlist extends Command {
 	constructor(client: ValClient) {
@@ -39,7 +39,7 @@ export default class Playlist extends Command {
 			) as MusicController;
 
 			if (
-				/^(create)|(update)|(delete)|(load)$/i.test(operation) &&
+				/^(create)|(update)|(delete)|(append)|(load)$/i.test(operation) &&
 				params.length < 2
 			) {
 				await reply("Command.Playlist.Invalid", channel);
@@ -96,6 +96,22 @@ export default class Playlist extends Command {
 					await controller.play(true);
 					break;
 				}
+
+				case "append":
+					if (!voiceChannel) {
+						await reply("User.VoiceNotConnected", message.channel);
+						return;
+					}
+
+					if (!controller.canUserPlay(voiceChannel)) {
+						await reply("Command.Play.NotAllowed", message.channel);
+						return;
+					}
+					await controller.connect(voiceChannel, textChannel);
+					await controller.appendPlaylist(name, member.id);
+					await controller.play(false);
+
+					break;
 			}
 
 			await reply(`Command.Playlist.${capitalise(operation)}`, channel);
