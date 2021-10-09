@@ -21,7 +21,7 @@ import prettyMilliseconds from "pretty-ms";
 import messages from "../messages.json";
 import { createEmbed } from "./embed";
 
-const { ROLE_DEVELOPER, MODE } = process.env;
+const { MODE } = process.env;
 
 /**
  * Logs events to client and console
