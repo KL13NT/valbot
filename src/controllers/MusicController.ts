@@ -482,6 +482,30 @@ export default class MusicController extends Controller {
 	 *
 	 * @throws
 	 */
+
+	appendPlaylist = async (name: string, userId: Snowflake) => {
+		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
+
+		const playlist = await this.mongo.db.collection("playlists").findOne({
+			name,
+		});
+
+		if (!playlist) throw new UserError("No playlist with this name exists");
+
+		const newQueue = playlist.queue.map(song => ({
+			...song,
+			requestingUserId: userId,
+		}));
+
+		this.setState({
+			queue: this.queue.concat(newQueue),
+		});
+	};
+	/**
+	 *
+	 * @throws
+	 */
+
 	createPlaylist = async (name: string, userId: Snowflake) => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
