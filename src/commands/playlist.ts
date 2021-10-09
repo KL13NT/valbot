@@ -39,7 +39,7 @@ export default class Playlist extends Command {
 			) as MusicController;
 
 			if (
-				/^(create)|(update)|(delete)|(load)$/i.test(operation) &&
+				/^(create)|(update)|(delete)|(append)|(load)$/i.test(operation) &&
 				params.length < 2
 			) {
 				await reply("Command.Playlist.Invalid", channel);
