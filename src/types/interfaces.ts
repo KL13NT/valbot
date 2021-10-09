@@ -15,6 +15,10 @@ export type Template = string;
 
 export type AlertLevel = "info" | "warn" | "error";
 
+export interface Destroyable {
+	destroy: () => Promise<void> | void;
+}
+
 export interface Playlist {
 	name: string;
 	userId: Snowflake;

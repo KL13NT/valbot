@@ -17,7 +17,7 @@ import { Controller } from "../structures";
 import { createEmbed } from "../utils/embed";
 import { log } from "../utils/general";
 import { PresenceController } from "./index";
-import { Playlist, Song } from "../types/interfaces";
+import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
 import { YoutubeTrack } from "../entities/music/YouTubeBehavior";
 
@@ -72,7 +72,7 @@ const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 const DC_STATUS = 4;
 
-export default class MusicController extends Controller {
+export default class MusicController extends Controller implements Destroyable {
 	private presence: PresenceController;
 	private mongo: MongoController;
 	private resolver: YoutubeTrack;
@@ -107,6 +107,14 @@ export default class MusicController extends Controller {
 		this.client.on("voiceStateUpdate", this.handleStateUpdate);
 
 		this.play(true);
+	};
+
+	destroy = async () => {
+		this.client.removeListener("voiceStateUpdate", this.handleStateUpdate);
+		this.state.connection?.disconnect?.();
+		this.state.stream?.destroy?.();
+		this.state.dispatcher?.destroy?.();
+		await this.clearPresence();
 	};
 
 	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {

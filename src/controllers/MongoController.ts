@@ -2,7 +2,13 @@ import ValClient from "../ValClient";
 import Controller from "../structures/Controller";
 
 import { MongoClient, Db } from "mongodb";
-import { Level, Milestone, Response, ClientConfig } from "../types/interfaces";
+import {
+	Level,
+	Milestone,
+	Response,
+	ClientConfig,
+	Destroyable,
+} from "../types/interfaces";
 import { Snowflake } from "discord.js";
 
 import { log } from "../utils/general";
@@ -10,7 +16,7 @@ import { RedisController, QueueController } from ".";
 
 const { DB_HOST, DB_NAME } = process.env;
 
-export default class MongoController extends Controller {
+export default class MongoController extends Controller implements Destroyable {
 	ready = false;
 	mongo: MongoClient;
 	db: Db;
@@ -38,6 +44,10 @@ export default class MongoController extends Controller {
 		} catch (err) {
 			log(this.client, err, "error");
 		}
+	};
+
+	destroy = () => {
+		this.mongo.close(true);
 	};
 
 	syncLevels = async (id: Snowflake, levelToSync: Level) => {

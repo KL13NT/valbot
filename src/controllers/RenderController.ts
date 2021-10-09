@@ -1,11 +1,15 @@
+import puppeteer from "puppeteer";
+import { Cluster } from "puppeteer-cluster";
+
 import ValClient from "../ValClient";
 import Controller from "../structures/Controller";
 
 import { compileTemplate, log } from "../utils/general";
-import { Cluster } from "puppeteer-cluster";
-import puppeteer from "puppeteer";
+import { Destroyable } from "../types/interfaces";
 
-export default class RenderController extends Controller {
+export default class RenderController
+	extends Controller
+	implements Destroyable {
 	private cluster: Cluster;
 
 	constructor(client: ValClient) {
@@ -37,6 +41,8 @@ export default class RenderController extends Controller {
 			log(this.client, err, "error");
 		}
 	};
+
+	destroy = () => this.cluster.close();
 
 	render = async (data: { content: Record<string, unknown>; html: string }) => {
 		return this.cluster.execute(data);

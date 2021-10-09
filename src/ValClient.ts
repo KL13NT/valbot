@@ -39,24 +39,17 @@ export default class ValClient extends Client {
 	};
 
 	init = async (token = AUTH_TOKEN) => {
-		try {
-			this.once("ready", this.onReady);
+		this.once("ready", this.onReady);
 
-			await this.login(token);
+		await this.login(token);
 
-			log(this, "Logged in", "info");
+		log(this, "Logged in", "info");
 
-			console.log(
-				fs
-					.readFileSync(
-						path.resolve(__dirname, "../media/bigtitle.txt"),
-						"utf8",
-					)
-					.toString(),
-			);
-		} catch (err) {
-			log(this, err, "error");
-		}
+		console.log(
+			fs
+				.readFileSync(path.resolve(__dirname, "../media/bigtitle.txt"), "utf8")
+				.toString(),
+		);
 	};
 
 	onReady = async (): Promise<void> => {
