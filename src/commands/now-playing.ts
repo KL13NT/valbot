@@ -53,6 +53,7 @@ export default class NowPlaying extends Command {
 				title: song.title,
 				url: song.url,
 				member: song.requestingUserId,
+				id: controller.currentSongIndex+1,
 			});
 
 			return;
@@ -79,6 +80,7 @@ export default class NowPlaying extends Command {
 			seekbar,
 			current: formatDuration(current),
 			total: formatDuration(total),
+			id: controller.currentSongIndex+1 ,
 		});
 	};
 }
