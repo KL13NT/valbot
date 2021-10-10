@@ -148,9 +148,10 @@ export default class MusicController extends Controller implements Destroyable {
 	/**
 	 *
 	 * @param force a boolean to force a play, used when internal skipping
+	 * @param position a number indicating position to seek to
 	 * @returns
 	 */
-	play = async (force = false) => {
+	play = async (force = false, position = 0) => {
 		if (
 			this.state.queue.length === 0 ||
 			(this.state.state === "playing" && !force)
@@ -165,7 +166,7 @@ export default class MusicController extends Controller implements Destroyable {
 
 		log(
 			this.client,
-			`Starting to play ${song.title} with \`lowest\` format`,
+			`Starting to play ${song.title} with \`lowest\` format at position ${position}`,
 			"info",
 		);
 
@@ -186,11 +187,13 @@ export default class MusicController extends Controller implements Destroyable {
 
 		this.setState({
 			stream,
+			position,
 			state: "playing",
 		});
 
 		const dispatcher = this.state.connection.play(stream, {
 			highWaterMark: 512,
+			seek: position,
 		});
 		dispatcher.on("finish", () => this.skip());
 	};
@@ -233,20 +236,7 @@ export default class MusicController extends Controller implements Destroyable {
 	 */
 	seek = (timestamp: number) => {
 		this.destroyStreams();
-
-		const song = this.state.queue[this.state.index];
-		const stream = ytdl(song.url, { quality: "lowest" });
-
-		const dispatcher = this.state.connection.play(stream, {
-			highWaterMark: 512,
-			seek: timestamp,
-		});
-
-		dispatcher.on("finish", () => this.skip());
-
-		this.setState({
-			position: timestamp,
-		});
+		this.play(true, timestamp);
 	};
 
 	/**
@@ -681,6 +671,7 @@ export default class MusicController extends Controller implements Destroyable {
 		}
 
 		if (this.state.connection?.dispatcher) {
+			this.state.connection.dispatcher.removeAllListeners();
 			this.state.connection.dispatcher.destroy();
 		}
 	};
