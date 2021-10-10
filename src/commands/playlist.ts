@@ -97,7 +97,7 @@ export default class Playlist extends Command {
 					break;
 				}
 
-				case "append":
+				case "append": {
 					if (!voiceChannel) {
 						await reply("User.VoiceNotConnected", message.channel);
 						return;
@@ -112,6 +112,12 @@ export default class Playlist extends Command {
 					await controller.play(false);
 
 					break;
+				}
+
+				default: {
+					await reply("Command.Playlist.Invalid", message.channel);
+					return;
+				}
 			}
 
 			await reply(`Command.Playlist.${capitalise(operation)}`, channel);
