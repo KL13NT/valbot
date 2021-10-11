@@ -118,6 +118,11 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
+		if (newState.channel?.id && newState.member.id === this.client.user.id)
+			this.setState({
+				vc: newState.channel,
+			});
+
 		if (
 			oldState.channel?.id === this.state.vc?.id ||
 			newState.channel?.id === this.state.vc?.id
