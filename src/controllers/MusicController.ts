@@ -582,12 +582,12 @@ export default class MusicController extends Controller implements Destroyable {
 			{ _id: found._id },
 			{
 				$set: {
-					queue: this.state.queue,
+					queue: found.queue.concat(this.state.queue),
 				},
 			},
 		);
 
-		if (!results.result.ok) throw new UserError("Failed to delete playlist");
+		if (!results.result.ok) throw new UserError("Failed to update playlist");
 	};
 
 	get queue() {
