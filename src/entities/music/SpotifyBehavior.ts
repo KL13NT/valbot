@@ -56,9 +56,7 @@ interface SpotifyAuthResponse {
 }
 
 const parseTrack = (response: SpotifyTrackResponse): Track => {
-	if (response.error) 
-		throw new UserError(`${response.error.message}`);
-	
+	if (response.error) throw new UserError(`${response.error.message}`);
 
 	const artists = response.artists.map(artist => artist.name);
 
@@ -81,23 +79,14 @@ export class SpotifyAuth {
 	private auth: SpotifyAuthResponse;
 	private timestamp: number;
 
-	setAuth = (auth: SpotifyAuthResponse) => {
-		this.auth = auth;
-	};
-
-	setTimestamp = (timestamp: number) => {
-		this.timestamp = timestamp;
-	};
-
 	public getAuth = async (): Promise<SpotifyAuthResponse> => {
-		const currentTimestamp: number = new Date().getTime();
+		const timestamp: number = new Date().getTime();
 
-		if (
-			!this.auth ||
-			currentTimestamp - this.timestamp > this.auth.expires_in
-		) {
-			const auth = await this.generateAuth();
-			this.setAuth(auth);
+		if (!this.auth || timestamp - this.timestamp > this.auth.expires_in) {
+			const auth = await this.fetchAuth();
+
+			this.auth = auth;
+			this.timestamp = timestamp;
 		}
 
 		return this.auth;
@@ -107,7 +96,7 @@ export class SpotifyAuth {
 	 *
 	 * @throws
 	 */
-	private generateAuth = async (): Promise<SpotifyAuthResponse> => {
+	private fetchAuth = async (): Promise<SpotifyAuthResponse> => {
 		const response = await fetch(SPOTIFY_AUTH_URL, {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
