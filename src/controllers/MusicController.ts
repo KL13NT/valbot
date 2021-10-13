@@ -175,7 +175,25 @@ export default class MusicController extends Controller implements Destroyable {
 			"info",
 		);
 
-		const stream = ytdl(song.url, { quality: "lowest" });
+		const info = await ytdl.getInfo(song.url, {
+			requestOptions: {
+				headers: {
+					cookie: process.env.COOKIE,
+				},
+			},
+		});
+
+		const hasAudio = info.formats
+			.filter(format => format.hasAudio)
+			.sort((a, b) => a.bitrate - b.bitrate);
+
+		if (hasAudio.length === 0)
+			throw new UserError("This video doesn't have audio");
+
+		const stream = ytdl.downloadFromInfo(info, {
+			format: hasAudio[0],
+		});
+
 		stream.on("error", async error => {
 			log(this.client, error, "error");
 
