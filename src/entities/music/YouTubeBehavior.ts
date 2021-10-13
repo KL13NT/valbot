@@ -97,7 +97,14 @@ export class YoutubeTrack implements TrackRetriever {
 
 	private getSongDetailsByUrl = async (url: string): Promise<Track> => {
 		try {
-			const info = await ytdl.getBasicInfo(url);
+			const info = await ytdl.getBasicInfo(url, {
+				requestOptions: {
+					headers: {
+						cookie: process.env.COOKIE,
+					},
+				},
+			});
+
 			if (!info) return null;
 
 			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
