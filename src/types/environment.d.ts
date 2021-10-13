@@ -15,6 +15,7 @@ declare global {
 			REDIS_URL?: string;
 			SPOTIFY_ID: string;
 			SPOTIFY_SECRET: string;
+			COOKIE: string;
 		}
 	}
 }
