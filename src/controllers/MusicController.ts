@@ -434,8 +434,10 @@ export default class MusicController extends Controller implements Destroyable {
 		try {
 			log(this.client, "Disconnected from vc", "info");
 
-			if (this.state.connection && this.state.connection.status !== DC_STATUS)
+			if (this.state.connection && this.state.connection.status !== DC_STATUS) {
+				this.state.connection.removeAllListeners();
 				this.state.connection.disconnect();
+			}
 
 			this.destroyStreams();
 			this.clearPresence();
