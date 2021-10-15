@@ -524,6 +524,7 @@ export default class MusicController extends Controller implements Destroyable {
 				requestingUserId: userId,
 			})),
 			index: 0,
+			shuffle: false,
 		});
 	};
 
