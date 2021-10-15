@@ -4,11 +4,18 @@ import { Command, CommandContext } from "../structures";
 import { capitalise, log, reply } from "../utils/general";
 import { MusicController } from "../controllers";
 import UserError from "../structures/UserError";
-import { TextChannel } from "discord.js";
+import { Snowflake, TextChannel } from "discord.js";
 
-type Operation = "delete" | "create" | "update" | "load" | "append" | "list";
+type Operation =
+	| "delete"
+	| "create"
+	| "update"
+	| "load"
+	| "append"
+	| "list"
+	| "lists";
 
-export default class Playlist extends Command {
+export default class PlaylistCommand extends Command {
 	constructor(client: ValClient) {
 		super(client, {
 			name: "playlist",
@@ -18,7 +25,7 @@ export default class Playlist extends Command {
 			nOfParams: 2,
 			description:
 				"Create, update, delete, or load a playlist using the current queue. Playlist names cannot contain spaces. Use - instead.",
-			exampleUsage: "<create|update|delete|load|list> <?playlist-name>",
+			exampleUsage: "<create|update|delete|load|list|lists> <?playlist-name>",
 			extraParams: false,
 			optionalParams: 1,
 			auth: {
@@ -75,6 +82,35 @@ export default class Playlist extends Command {
 									} tracks`,
 							)
 							.join("\n"),
+					});
+
+					return;
+				}
+
+				case "lists": {
+					const playlists = await controller.getAllUserPlaylists();
+					if (playlists.length === 0)
+						throw new UserError("This user has no playlists");
+
+					const map = new Map<Snowflake, string[]>();
+
+					playlists.forEach(playlist => {
+						const exists = map.has(playlist.userId);
+
+						if (!exists) map.set(playlist.userId, []);
+
+						map.get(playlist.userId).push(playlist.name);
+					});
+
+					let message = "";
+
+					for (const userId of map.keys()) {
+						message += `<@${userId}>'s playlists:\n`;
+						message += `${map.get(userId).join("\n")}\n\n`;
+					}
+
+					await reply("Command.Playlist.Lists", textChannel, {
+						songs: message,
 					});
 
 					return;

@@ -52,6 +52,7 @@
 	"Command.Playlist.Delete": "Deleted playlist successfully",
 	"Command.Playlist.Update": "Updated playlist successfully",
 	"Command.Playlist.List": "**user's Playlists**\n\nsongs",
+	"Command.Playlist.Lists": "**All Playlists**\n\nsongs",
 	"Command.Shuffle.Shuffled": "Shuffled",
 	"Command.Shuffle.Unshuffled": "Unshuffled",
 	"Command.Refresh.Paused": "Can't refresh while paused",
