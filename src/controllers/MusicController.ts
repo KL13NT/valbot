@@ -296,6 +296,18 @@ export default class MusicController extends Controller implements Destroyable {
 		if (["playing", "paused"].includes(this.state.state)) this.play(true);
 	};
 
+	refresh = async () => {
+		const time = this.state.connection.dispatcher.streamTime / 1000;
+
+		this.destroyStreams();
+
+		this.setState({
+			position: this.state.position + time,
+		});
+
+		this.seek(this.state.position);
+	};
+
 	/**
 	 *
 	 * @param songIndex is the index of the song in the queue.
