@@ -14,7 +14,7 @@ export default class Queue extends Command {
 		super(client, {
 			name: `queue`,
 			category: "Music",
-			cooldown: 10 * 1000,
+			cooldown: 5 * 1000,
 			nOfParams: 0,
 			description: `Lists songs in the queue`,
 			exampleUsage: ``,

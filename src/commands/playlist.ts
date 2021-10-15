@@ -14,7 +14,7 @@ export default class Playlist extends Command {
 			name: "playlist",
 			aliases: ["pl"],
 			category: "Music",
-			cooldown: 1000,
+			cooldown: 5 * 1000,
 			nOfParams: 2,
 			description:
 				"Create, update, delete, or load a playlist using the current queue. Playlist names cannot contain spaces. Use - instead.",

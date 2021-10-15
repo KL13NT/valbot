@@ -10,7 +10,7 @@ export default class Lyrics extends Command {
 		super(client, {
 			name: "lyrics",
 			category: "Music",
-			cooldown: 10 * 1000,
+			cooldown: 5 * 1000,
 			nOfParams: 0,
 			description: "Show song lyrics",
 			exampleUsage: "",
