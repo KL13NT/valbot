@@ -9,7 +9,7 @@ export default class Shuffle extends Command {
 		super(client, {
 			name: "shuffle",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 2 * 1000,
 			nOfParams: 0,
 			description: "Shuffles the queue and restores original order",
 			exampleUsage: "",

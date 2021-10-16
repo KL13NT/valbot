@@ -9,7 +9,7 @@ export default class Remove extends Command {
 		super(client, {
 			name: "remove",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 2 * 1000,
 			nOfParams: 1,
 			description: "Removes a track from the queue",
 			exampleUsage: "4",

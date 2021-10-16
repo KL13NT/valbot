@@ -17,7 +17,7 @@ export default class Loop extends Command {
 		super(client, {
 			name: "loop",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 2 * 1000,
 			nOfParams: 1,
 			description:
 				"Changes loop state to one of 'off', 'single', 'queue'. Toggles between these states if not provided an option.",
