@@ -71,6 +71,7 @@ export default class Play extends Command {
 			else {
 				const { title, url } = resolved;
 				await reply("Command.Play.Single", message.channel, {
+					id: controller.queue.length,
 					title,
 					url,
 					member,
