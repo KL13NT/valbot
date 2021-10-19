@@ -10,7 +10,7 @@
 	"Command.Play.NotFound": "Video doesn't exist",
 	"Command.Play.GenericError": "Could't find a video matching this query. It might be restricted or private. If you're sure this video exists try using a different link.",
 	"Command.Play.Playlist": "Queued number tracks. Use `queue` command to view the full list",
-	"Command.Play.Single": "Queued [title](url) [member]",
+	"Command.Play.Single": "Queued id) [title](url) [member]",
 	"Command.Play.NotPaused": "The bot is not paused.",
 	"Command.Play.AlreadyPlaying": "The bot is not paused",
 	"Command.Play.Resumed": "Resumed ️▶️",
