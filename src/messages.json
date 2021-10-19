@@ -30,7 +30,7 @@
 	"Command.Lyrics.NotFound": "No lyrics found (⊃◜⌓◝⊂)",
 	"Command.Lyrics.Paused": "Bot is paused ⏸️",
 	"Command.Seek.TimeExceeded": "The position you input exceeds the track's duration",
-	"Command.Seek.Seeked": "Seeked [title](url) to timestamp",
+	"Command.Seek.Seeked": "Seeking [title](url) to timestamp. This might take long depending on the length of the current track.",
 	"Command.Seek.Invalid": "Seek accepts numbers only or HH:MM:SS notation",
 	"Command.Jump.Invalid": "Jump accepts numbers only",
 	"Command.Jump": "Jumped to id) [title](url)",

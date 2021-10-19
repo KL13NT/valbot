@@ -9,7 +9,7 @@ export default class Seek extends Command {
 		super(client, {
 			name: "seek",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 10 * 1000,
 			nOfParams: 1,
 			description: "Seek to position in seconds.",
 			exampleUsage: "05:05",
