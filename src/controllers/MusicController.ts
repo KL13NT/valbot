@@ -494,7 +494,7 @@ export default class MusicController extends Controller implements Destroyable {
 	 * @throws
 	 */
 
-	getAllUserPlaylists = async () => {
+	getAllPlaylists = async () => {
 		if (!this.mongo.ready) throw new UserError("The database is not ready yet");
 
 		const found = await this.mongo.db

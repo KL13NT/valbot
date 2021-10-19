@@ -88,9 +88,9 @@ export default class PlaylistCommand extends Command {
 				}
 
 				case "lists": {
-					const playlists = await controller.getAllUserPlaylists();
+					const playlists = await controller.getAllPlaylists();
 					if (playlists.length === 0)
-						throw new UserError("This user has no playlists");
+						throw new UserError("There is not playlists");
 
 					const map = new Map<Snowflake, string[]>();
 
