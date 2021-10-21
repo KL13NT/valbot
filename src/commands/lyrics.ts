@@ -1,9 +1,12 @@
 import ValClient from "../ValClient";
 import lyricsFinder from "lyrics-finder";
 import { MusicController } from "../controllers";
-import { Command, CommandContext } from "../structures";
+import { Command, CommandContext, PaginatedEmbed } from "../structures";
 import { createEmbed } from "../utils/embed";
 import { log, reply } from "../utils/general";
+import { MessageEmbed, TextChannel } from "discord.js";
+
+const MAX_EMBED_LENGTH = 4096;
 
 export default class Lyrics extends Command {
 	constructor(client: ValClient) {
@@ -23,7 +26,7 @@ export default class Lyrics extends Command {
 		});
 	}
 
-	_run = async ({ member, message, channel }: CommandContext) => {
+	_run = async ({ member, channel }: CommandContext) => {
 		try {
 			const controller = this.client.controllers.get(
 				"music",
@@ -67,12 +70,37 @@ export default class Lyrics extends Command {
 				return;
 			}
 
-			await message.reply(
-				createEmbed({
-					title: name,
-					description: lyrics,
-				}),
-			);
+			const pages: MessageEmbed[] = [];
+			let current = "";
+
+			lyrics.split(/\n/).forEach(line => {
+				const result = `${current}\n${line}`;
+
+				if (result.length <= MAX_EMBED_LENGTH) {
+					current = result;
+					return;
+				}
+
+				pages.push(
+					createEmbed({
+						title: name,
+						description: current,
+					}),
+				);
+
+				current = "";
+			});
+
+			if (current.length > 0)
+				pages.push(
+					createEmbed({
+						title: name,
+						description: current,
+					}),
+				);
+
+			const embed = new PaginatedEmbed(channel as TextChannel, member, pages);
+			await embed.init();
 		} catch (err) {
 			log(this.client, err, "error");
 		}
