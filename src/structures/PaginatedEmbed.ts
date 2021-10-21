@@ -20,16 +20,19 @@ export default class PaginationEmbed {
 
 	current: Message;
 	page: number;
+	timeout: number;
 
 	constructor(
 		channel: TextChannel,
 		member: GuildMember,
 		pages: MessageEmbed[],
+		timeout = 60 * 1000,
 	) {
 		this.channel = channel;
 		this.member = member;
 		this.pages = pages;
 		this.page = 0;
+		this.timeout = timeout;
 	}
 
 	init = async () => {
@@ -47,7 +50,7 @@ export default class PaginationEmbed {
 			user.id === this.member.id;
 
 		const collector = this.current.createReactionCollector(filter, {
-			time: 60 * 1000,
+			time: this.timeout,
 			dispose: true,
 		});
 
