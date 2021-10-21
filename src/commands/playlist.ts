@@ -38,7 +38,7 @@ export default class PlaylistCommand extends Command {
 	_run = async ({ member, params, message, channel }: CommandContext) => {
 		try {
 			const operation = params[0] as Operation;
-			const [, name] = params;
+			const name = params[1] || member.user.id;
 			const voiceChannel = member.voice.channel;
 			const textChannel = message.channel as TextChannel;
 			const controller = this.client.controllers.get(
@@ -47,7 +47,7 @@ export default class PlaylistCommand extends Command {
 
 			if (
 				/^(create)|(update)|(delete)|(append)|(load)$/i.test(operation) &&
-				params.length < 2
+				params.length < 1
 			) {
 				await reply("Command.Playlist.Invalid", channel);
 				return;
@@ -72,16 +72,21 @@ export default class PlaylistCommand extends Command {
 					if (playlists.length === 0)
 						throw new UserError("This user has no playlists");
 
+					const songs = playlists
+						.map((playlist, index) => {
+							const playlistName =
+								playlist.name === member.user.id
+									? member.user.username
+									: playlist.name;
+							return `**${index + 1})** ${playlistName} has ${
+								playlist.queue.length
+							} tracks`;
+						})
+						.join("\n");
+
 					await reply("Command.Playlist.List", channel, {
 						user: member.user.username,
-						songs: playlists
-							.map(
-								(playlist, index) =>
-									`**${index + 1})** ${playlist.name} has ${
-										playlist.queue.length
-									} tracks`,
-							)
-							.join("\n"),
+						songs,
 					});
 
 					return;
@@ -105,8 +110,14 @@ export default class PlaylistCommand extends Command {
 					let message = "";
 
 					for (const userId of map.keys()) {
+						const userPlaylists = map
+							.get(userId)
+							.filter(playlist => playlist !== userId);
+
+						if (userPlaylists.length === 0) break;
+
 						message += `<@${userId}>'s playlists:\n`;
-						message += `${map.get(userId).join("\n")}\n\n`;
+						message += `${userPlaylists.join("\n")}\n\n`;
 					}
 
 					await reply("Command.Playlist.Lists", textChannel, {
