@@ -7,13 +7,14 @@ import { log, reply } from "../utils/general";
 import { MessageEmbed, TextChannel } from "discord.js";
 
 const MAX_EMBED_LENGTH = 4096;
+const LYRICS_EMBED_TIME = 4 * 60 * 1000; // 4 minutes
 
 export default class Lyrics extends Command {
 	constructor(client: ValClient) {
 		super(client, {
 			name: "lyrics",
 			category: "Music",
-			cooldown: 5 * 1000,
+			cooldown: 10 * 1000,
 			nOfParams: 0,
 			description: "Show song lyrics",
 			exampleUsage: "",
@@ -99,7 +100,12 @@ export default class Lyrics extends Command {
 					}),
 				);
 
-			const embed = new PaginatedEmbed(channel as TextChannel, member, pages);
+			const embed = new PaginatedEmbed(
+				channel as TextChannel,
+				member,
+				pages,
+				LYRICS_EMBED_TIME,
+			);
 			await embed.init();
 		} catch (err) {
 			log(this.client, err, "error");
