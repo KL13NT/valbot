@@ -2,6 +2,8 @@ import CacheBehavior from "./CacheBehavior";
 import { SpotifyStrategySelector } from "./SpotifyBehavior";
 import { YoutubeStrategySelector } from "./YouTubeBehavior";
 
+import UserError from "../../structures/UserError";
+
 export default class ResolveBehavior {
 	private cache = new CacheBehavior();
 	private selectors = [
@@ -13,19 +15,36 @@ export default class ResolveBehavior {
 	 *
 	 * @throws
 	 */
-	public fetch = async (url: string) => {
+	public fetch = async (url: string, retry = true) => {
 		const strategy = this.determineStrategy(url);
 		const key = strategy.generateKey(url);
 
 		const result = this.cache.resolve(strategy, key);
 		if (result) return result;
 
-		const response = await strategy.fetch(url);
+		try {
+			const response = await strategy.fetch(url);
 
-		if (Array.isArray(response)) this.cache.addPlaylist(key, response);
-		else this.cache.addTrack(response.key, response);
+			if (Array.isArray(response)) this.cache.addPlaylist(key, response);
+			else this.cache.addTrack(response.key, response);
 
-		return response;
+			return response;
+		} catch (error) {
+			if (error instanceof Error && error.message.includes("Video unavailable"))
+				throw new UserError(
+					"Video unavailable. Couldn't determine the reason.",
+				);
+
+			if (error instanceof Error && error.message.includes("410"))
+				throw new UserError(
+					"Video is unavailable. It's either private or has been deleted.",
+				);
+
+			if (error instanceof Error && error.message.includes("403") && retry)
+				return this.fetch(url, false);
+
+			throw error;
+		}
 	};
 
 	private determineStrategy = (url: string) => {

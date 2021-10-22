@@ -4,9 +4,9 @@ import ValClient from "../ValClient";
 import ResolveBehavior from "../entities/music/ResolveBehavior";
 
 import { Command, CommandContext } from "../structures";
-import { log, reply } from "../utils/general";
+import { reply } from "../utils/general";
 import { MusicController } from "../controllers";
-import UserError from "../structures/UserError";
+import { handleUserError } from "../utils/apis";
 
 export default class Play extends Command {
 	playBehavior: ResolveBehavior;
@@ -82,8 +82,7 @@ export default class Play extends Command {
 
 			if (controller.playState !== "paused") await controller.play();
 		} catch (error) {
-			if (error instanceof UserError) await reply(error.message, channel);
-			else await log(this.client, error, "error");
+			handleUserError(error, channel as TextChannel);
 		}
 	};
 

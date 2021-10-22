@@ -15,11 +15,12 @@ import MongoController from "./MongoController";
 import UserError from "../structures/UserError";
 import { Controller } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { log } from "../utils/general";
+import { log, reply } from "../utils/general";
 import { PresenceController } from "./index";
 import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
 import { YoutubeTrack } from "../entities/music/YouTubeBehavior";
+import { handleUserError, retryRequest } from "../utils/apis";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
@@ -157,68 +158,72 @@ export default class MusicController extends Controller implements Destroyable {
 	 * @returns
 	 */
 	play = async (force = false, position = 0) => {
-		if (
-			this.state.queue.length === 0 ||
-			(this.state.state === "playing" && !force)
-		) {
-			return;
-		}
+		try {
+			if (
+				this.state.queue.length === 0 ||
+				(this.state.state === "playing" && !force)
+			) {
+				return;
+			}
 
-		const current = this.state.queue[this.state.index];
-		const song = current.spotify
-			? await this.resolver.fetch(current.title)
-			: current;
+			const current = this.state.queue[this.state.index];
+			const song = current.spotify
+				? await retryRequest(() => this.resolver.fetch(current.title))
+				: current;
 
-		log(
-			this.client,
-			`Starting to play ${song.title} with \`lowest\` format at position ${position}`,
-			"info",
-		);
-
-		const info = await ytdl.getInfo(song.url, {
-			requestOptions: {
-				headers: {
-					cookie: process.env.COOKIE,
-				},
-			},
-		});
-
-		const hasAudio = info.formats
-			.filter(format => format.hasAudio)
-			.sort((a, b) => a.bitrate - b.bitrate);
-
-		if (hasAudio.length === 0)
-			throw new UserError("This video doesn't have audio");
-
-		const stream = ytdl.downloadFromInfo(info, {
-			format: hasAudio[0],
-		});
-
-		stream.on("error", async error => {
-			log(this.client, error, "error");
-
-			await this.state.text.send(
-				createEmbed({
-					description: `Couldn't play [${song.title}](${song.url})`,
-				}),
+			log(
+				this.client,
+				`Starting to play ${song.title} with \`lowest\` format at position ${position}`,
+				"info",
 			);
 
-			this.skip();
-		});
+			const info = await ytdl.getInfo(song.url, {
+				requestOptions: {
+					headers: {
+						cookie: process.env.COOKIE,
+					},
+				},
+			});
 
-		await this.updatePresence();
+			const hasAudio = info.formats
+				.filter(format => format.hasAudio)
+				.sort((a, b) => a.bitrate - b.bitrate);
 
-		this.setState({
-			stream,
-			position,
-			state: "playing",
-		});
+			if (hasAudio.length === 0)
+				throw new UserError("This video doesn't have audio");
 
-		const dispatcher = this.state.connection.play(stream, {
-			highWaterMark: 512,
-			seek: position,
-		});
-		dispatcher.on("finish", () => this.skip());
+			const stream = ytdl.downloadFromInfo(info, {
+				format: hasAudio[0],
+			});
+
+			stream.on("error", async error => {
+				log(this.client, error, "error");
+
+				await this.state.text.send(
+					createEmbed({
+						description: `Couldn't play [${song.title}](${song.url})`,
+					}),
+				);
+
+				this.skip();
+			});
+
+			await this.updatePresence();
+
+			this.setState({
+				stream,
+				position,
+				state: "playing",
+			});
+
+			const dispatcher = this.state.connection.play(stream, {
+				highWaterMark: 512,
+				seek: position,
+			});
+			dispatcher.on("finish", () => this.skip());
+		} catch (error) {
+			handleUserError(error, this.state.text);
+		}
 	};
 
 	resume = () => {
