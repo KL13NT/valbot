@@ -31,35 +31,31 @@ export default class Delete extends Command {
 		const count = parseInt(params[0]);
 		const errors = this.validateInput(count);
 
-		try {
-			if (errors) {
-				await message.reply(errors);
-				return;
-			}
-
-			const embed = createClearEmbed({
-				moderator: member.id,
-				channel: channel.id,
-				count,
-			});
-
-			await channel.bulkDelete(count + 1);
-
-			const sent = await message.reply(`مسحت ${count} يرايق.`);
-
-			setTimeout(() => {
-				sent.delete().catch(err => log(this.client, err, "error"));
-			}, 3 * 1000);
-
-			await notify({
-				client: this.client,
-				notification: "",
-				embed,
-				channel: CHANNEL_MOD_LOGS,
-			});
-		} catch (err) {
-			log(this.client, err, "error");
+		if (errors) {
+			await message.reply(errors);
+			return;
 		}
+
+		const embed = createClearEmbed({
+			moderator: member.id,
+			channel: channel.id,
+			count,
+		});
+
+		await channel.bulkDelete(count + 1);
+
+		const sent = await message.reply(`مسحت ${count} يرايق.`);
+
+		setTimeout(() => {
+			sent.delete().catch(err => log(this.client, err, "error"));
+		}, 3 * 1000);
+
+		await notify({
+			client: this.client,
+			notification: "",
+			embed,
+			channel: CHANNEL_MOD_LOGS,
+		});
 	};
 
 	validateInput = (count: number) => {

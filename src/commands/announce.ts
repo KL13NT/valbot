@@ -3,7 +3,7 @@ import ValClient from "../ValClient";
 import { TextChannel } from "discord.js";
 
 import { Command, CommandContext } from "../structures";
-import { log, awaitMessages } from "../utils/general";
+import { awaitMessages } from "../utils/general";
 import {
 	getChannelObject,
 	getChannelFromMention,
@@ -37,27 +37,23 @@ export default class Announce extends Command {
 			getChannelFromMention(params[0]),
 		);
 
-		try {
-			if (!target) {
-				await message.reply("التشانل دي مش موجودة او مش فويس");
-				return;
-			}
-
-			await message.reply("ابعت بقى الـ announcement");
-
-			const announcement = await awaitMessages(channel, member);
-
-			const hooks = await channel.fetchWebhooks();
-			const hook =
-				hooks.find(hook => hook.name === "Announcements") ||
-				(await target.createWebhook("Announcements", {
-					avatar: localToBuffer("../../media/valariumlogo.png"),
-					reason: "Announcing",
-				}));
-
-			await hook.send(announcement);
-		} catch (err) {
-			log(this.client, err, "error");
+		if (!target) {
+			await message.reply("التشانل دي مش موجودة او مش فويس");
+			return;
 		}
+
+		await message.reply("ابعت بقى الـ announcement");
+
+		const announcement = await awaitMessages(channel, member);
+
+		const hooks = await channel.fetchWebhooks();
+		const hook =
+			hooks.find(hook => hook.name === "Announcements") ||
+			(await target.createWebhook("Announcements", {
+				avatar: localToBuffer("../../media/valariumlogo.png"),
+				reason: "Announcing",
+			}));
+
+		await hook.send(announcement);
 	};
 }

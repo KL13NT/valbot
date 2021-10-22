@@ -1,5 +1,4 @@
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
 import ValClient from "../ValClient";
 
 import { Presence } from "../types/interfaces";
@@ -26,43 +25,39 @@ export default class PresenceSet extends Command {
 	}
 
 	_run = async ({ params, message }: CommandContext) => {
-		try {
-			const [type, priority, ...name] = params;
-			const activityType = <ActivityType>type;
-			const controller = this.client.controllers.get(
-				"presence",
-			) as PresenceController;
+		const [type, priority, ...name] = params;
+		const activityType = <ActivityType>type;
+		const controller = this.client.controllers.get(
+			"presence",
+		) as PresenceController;
 
-			if (
-				!/^(PLAYING|STREAMING|LISTENING|WATCHING)$/i.test(
-					activityType.toLowerCase(),
-				)
-			) {
-				await message.reply("حدد Type معروفة");
-				return;
-			}
-
-			if (priority && !/^(true|false)$/i.test(priority.toLowerCase())) {
-				await message.reply("لازم تحدد priority يا اما TRUE يا اما FALSE");
-				return;
-			}
-
-			const isPriority = !!(priority && priority.toLowerCase() === "true");
-
-			const presence: Presence = {
-				status: "dnd",
-				activity: {
-					name: name.join(" "),
-					type: activityType,
-				},
-				priority: isPriority,
-			};
-
-			await controller.addPresence(presence);
-
-			await message.reply("تم");
-		} catch (err) {
-			log(this.client, err, "error");
+		if (
+			!/^(PLAYING|STREAMING|LISTENING|WATCHING)$/i.test(
+				activityType.toLowerCase(),
+			)
+		) {
+			await message.reply("حدد Type معروفة");
+			return;
 		}
+
+		if (priority && !/^(true|false)$/i.test(priority.toLowerCase())) {
+			await message.reply("لازم تحدد priority يا اما TRUE يا اما FALSE");
+			return;
+		}
+
+		const isPriority = !!(priority && priority.toLowerCase() === "true");
+
+		const presence: Presence = {
+			status: "dnd",
+			activity: {
+				name: name.join(" "),
+				type: activityType,
+			},
+			priority: isPriority,
+		};
+
+		await controller.addPresence(presence);
+
+		await message.reply("تم");
 	};
 }

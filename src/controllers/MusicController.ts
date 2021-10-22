@@ -15,7 +15,7 @@ import MongoController from "./MongoController";
 import UserError from "../structures/UserError";
 import { Controller } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { log, reply } from "../utils/general";
+import { log } from "../utils/general";
 import { PresenceController } from "./index";
 import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
@@ -160,6 +160,8 @@ export default class MusicController extends Controller implements Destroyable {
 	play = async (force = false, position = 0) => {
 		try {
 			if (
+				!this.state.connection ||
+				this.state.connection.status !== 0 ||
 				this.state.queue.length === 0 ||
 				(this.state.state === "playing" && !force)
 			) {
@@ -222,7 +224,7 @@ export default class MusicController extends Controller implements Destroyable {
 			});
 			dispatcher.on("finish", () => this.skip());
 		} catch (error) {
-			handleUserError(error, this.state.text);
+			handleUserError(error, this.state.text, this.client);
 		}
 	};
 

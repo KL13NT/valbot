@@ -1,5 +1,5 @@
 import { Command, CommandContext } from "../structures";
-import { log, capitalise, awaitMessages } from "../utils/general";
+import { capitalise, awaitMessages } from "../utils/general";
 import { getMemberObject } from "../utils/object";
 import ValClient from "../ValClient";
 
@@ -25,39 +25,35 @@ export default class Notify extends Command {
 	}
 
 	_run = async ({ guild, message, member }: CommandContext) => {
-		try {
-			const channel = <TextChannel>message.channel;
-			await message.reply("ابعتلهم ايه؟");
-			const collected = await awaitMessages(channel, member);
+		const channel = <TextChannel>message.channel;
+		await message.reply("ابعتلهم ايه؟");
+		const collected = await awaitMessages(channel, member);
 
-			await message.reply("ابعت بجد ولا تيستنج؟ [testing|prod]");
-			const mode = await awaitMessages(channel, member);
+		await message.reply("ابعت بجد ولا تيستنج؟ [testing|prod]");
+		const mode = await awaitMessages(channel, member);
 
-			await message.reply("متأكد؟ [y|n]");
-			const prompt = await awaitMessages(channel, member);
+		await message.reply("متأكد؟ [y|n]");
+		const prompt = await awaitMessages(channel, member);
 
-			if (prompt.toLowerCase() === "y") {
-				const members =
-					mode === "testing"
-						? [message.member]
-						: Array.from((await guild.members.fetch()).values());
+		if (prompt.toLowerCase() === "y") {
+			const members =
+				mode === "testing"
+					? [message.member]
+					: Array.from((await guild.members.fetch()).values());
 
-				await message.reply("ببعت ناو");
+			await message.reply("ببعت ناو");
 
-				for (const member of members) {
-					if (!member.user.bot)
-						member
-							.createDM()
-							.then(dm => {
-								return dm.send(collected);
-							})
-							.catch(() => console.log(`معرفتش ابعت لـ ${member.displayName}`));
-				}
-			} else {
-				await message.reply("لغيت خلاص");
+			for (const member of members) {
+				if (!member.user.bot)
+					member
+						.createDM()
+						.then(dm => {
+							return dm.send(collected);
+						})
+						.catch(() => console.log(`معرفتش ابعت لـ ${member.displayName}`));
 			}
-		} catch (err) {
-			log(this.client, err, "error");
+		} else {
+			await message.reply("لغيت خلاص");
 		}
 	};
 

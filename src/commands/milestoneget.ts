@@ -1,7 +1,6 @@
 import ValClient from "../ValClient";
 
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
 import { getRoleObject } from "../utils/object";
 import { LevelsController } from "../controllers";
 
@@ -28,23 +27,19 @@ export default class MilestoneGet extends Command {
 
 		const levelRegex = /^(\d+)$/i;
 
-		try {
-			if (params.length === 0) {
-				await message.reply(this.getAllMilestones());
-				return;
-			}
-
-			const levelMatch = params[0].match(levelRegex);
-
-			if (!levelMatch) {
-				await message.reply("تاني باراميتير لازم يكون رقم الـ level");
-				return;
-			}
-
-			await message.reply(this.getLevelMilestones(Number(levelMatch[0])));
-		} catch (err) {
-			log(this.client, err, "error");
+		if (params.length === 0) {
+			await message.reply(this.getAllMilestones());
+			return;
 		}
+
+		const levelMatch = params[0].match(levelRegex);
+
+		if (!levelMatch) {
+			await message.reply("تاني باراميتير لازم يكون رقم الـ level");
+			return;
+		}
+
+		await message.reply(this.getLevelMilestones(Number(levelMatch[0])));
 	};
 
 	getLevelMilestones = (level: number) => {

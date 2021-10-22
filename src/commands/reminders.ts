@@ -1,7 +1,6 @@
 import ValClient from "../ValClient";
 
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
 import { RemindersController } from "../controllers";
 
 export default class Reminders extends Command {
@@ -29,23 +28,19 @@ export default class Reminders extends Command {
 
 		const { message, member } = context;
 
-		try {
-			const active = await reminders.getMemberReminders(member.id);
-			if (active.length === 0) {
-				await message.reply("معندكش اي reminders.");
-				return;
-			}
-
-			const all = active.reduce((all, curr) => {
-				const { description } = curr.subs.find(sub => sub.member === member.id);
-				const date = new Date(curr.time).toString();
-
-				return `${all}\n\n${description}\n${date}`;
-			}, "");
-
-			await message.reply(`الـ reminders بتوعك:\n${all}`);
-		} catch (err) {
-			log(this.client, err, "error");
+		const active = await reminders.getMemberReminders(member.id);
+		if (active.length === 0) {
+			await message.reply("معندكش اي reminders.");
+			return;
 		}
+
+		const all = active.reduce((all, curr) => {
+			const { description } = curr.subs.find(sub => sub.member === member.id);
+			const date = new Date(curr.time).toString();
+
+			return `${all}\n\n${description}\n${date}`;
+		}, "");
+
+		await message.reply(`الـ reminders بتوعك:\n${all}`);
 	};
 }

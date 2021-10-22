@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 
 import ValClient from "../ValClient";
 import { Command, CommandContext } from "../structures";
-import { log, capitalise, levelToExp } from "../utils/general";
+import { capitalise, levelToExp } from "../utils/general";
 import { getMemberObject } from "../utils/object";
 
 import { RedisController, RenderController } from "../controllers";
@@ -40,28 +40,24 @@ export default class Rank extends Command {
 			? userMention.replace(/<|>|!|@/g, "")
 			: member.user.id;
 
-		try {
-			if (id === this.client.user.id) {
-				await message.reply("متكترش هزار عشان ميتعملش عليك صريخ ضحك :\"D");
-				return;
-			}
-
-			const levelInfo = await this.getLevels(id);
-			const userInfo = this.getUserInfo(id);
-			const content = await getContentObject({ userInfo, levelInfo });
-
-			const card = await renderer.render({ html: TEMPLATE, content });
-
-			await message.reply("Here's the requested rank", {
-				files: [
-					{
-						attachment: card,
-					},
-				],
-			});
-		} catch (err) {
-			log(this.client, err, "error");
+		if (id === this.client.user.id) {
+			await message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
+			return;
 		}
+
+		const levelInfo = await this.getLevels(id);
+		const userInfo = this.getUserInfo(id);
+		const content = await getContentObject({ userInfo, levelInfo });
+
+		const card = await renderer.render({ html: TEMPLATE, content });
+
+		await message.reply("Here's the requested rank", {
+			files: [
+				{
+					attachment: card,
+				},
+			],
+		});
 	};
 
 	getUserInfo = (id: Snowflake) => {

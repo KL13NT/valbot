@@ -6,7 +6,6 @@ import ResolveBehavior from "../entities/music/ResolveBehavior";
 import { Command, CommandContext } from "../structures";
 import { reply } from "../utils/general";
 import { MusicController } from "../controllers";
-import { handleUserError } from "../utils/apis";
 
 export default class Play extends Command {
 	playBehavior: ResolveBehavior;
@@ -32,58 +31,52 @@ export default class Play extends Command {
 		this.playBehavior = new ResolveBehavior();
 	}
 
-	_run = async ({ member, message, params, channel }: CommandContext) => {
-		try {
-			const voiceChannel = member.voice.channel;
-			const textChannel = message.channel as TextChannel;
-			const controller = this.client.controllers.get(
-				"music",
-			) as MusicController;
+	_run = async ({ member, message, params }: CommandContext) => {
+		const voiceChannel = member.voice.channel;
+		const textChannel = message.channel as TextChannel;
+		const controller = this.client.controllers.get("music") as MusicController;
 
-			if (!voiceChannel) {
-				await reply("User.VoiceNotConnected", message.channel);
-				return;
-			}
-
-			if (!controller.canUserPlay(voiceChannel)) {
-				await reply("Command.Play.NotAllowed", message.channel);
-				return;
-			}
-
-			if (params.length === 0) {
-				await this.resume(controller, textChannel);
-				return;
-			}
-
-			const resolved = await this.resolve(params);
-
-			if (!resolved) {
-				await reply("Command.Play.GenericError", message.channel);
-				return;
-			}
-
-			controller.enqueue(resolved, member.id);
-
-			if (Array.isArray(resolved))
-				await reply("Command.Play.Playlist", message.channel, {
-					number: resolved.length,
-				});
-			else {
-				const { title, url } = resolved;
-				await reply("Command.Play.Single", message.channel, {
-					id: controller.queue.length,
-					title,
-					url,
-					member,
-				});
-			}
-
-			await controller.connect(voiceChannel, textChannel);
-
-			if (controller.playState !== "paused") await controller.play();
-		} catch (error) {
-			handleUserError(error, channel as TextChannel);
+		if (!voiceChannel) {
+			await reply("User.VoiceNotConnected", message.channel);
+			return;
 		}
+
+		if (!controller.canUserPlay(voiceChannel)) {
+			await reply("Command.Play.NotAllowed", message.channel);
+			return;
+		}
+
+		if (params.length === 0) {
+			await this.resume(controller, textChannel);
+			return;
+		}
+
+		const resolved = await this.resolve(params);
+
+		if (!resolved) {
+			await reply("Command.Play.GenericError", message.channel);
+			return;
+		}
+
+		controller.enqueue(resolved, member.id);
+
+		if (Array.isArray(resolved))
+			await reply("Command.Play.Playlist", message.channel, {
+				number: resolved.length,
+			});
+		else {
+			const { title, url } = resolved;
+			await reply("Command.Play.Single", message.channel, {
+				id: controller.queue.length,
+				title,
+				url,
+				member,
+			});
+		}
+
+		await controller.connect(voiceChannel, textChannel);
+
+		if (controller.playState !== "paused") await controller.play();
 	};
 
 	resume = async (controller: MusicController, channel: TextChannel) => {

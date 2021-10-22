@@ -27,18 +27,14 @@ export default class Help extends Command {
 		const commands = this.commandsAsFields();
 		const embed = this.createHelpEmbed(commands);
 
-		try {
-			const dm = await member.createDM();
-			await dm.send(embed);
+		const dm = await member.createDM();
+		await dm.send(embed);
 
-			const sent = await message.reply("بعتلك رسالة جادة جداً");
+		const sent = await message.reply("بعتلك رسالة جادة جداً");
 
-			setTimeout(() => {
-				sent.delete().catch(err => log(this.client, err, "error"));
-			}, 5 * 1000);
-		} catch (err) {
-			log(this.client, err, "error");
-		}
+		setTimeout(() => {
+			sent.delete().catch(err => log(this.client, err, "error"));
+		}, 5 * 1000);
 	};
 
 	commandsAsFields = () => {

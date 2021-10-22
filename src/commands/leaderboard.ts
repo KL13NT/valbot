@@ -1,5 +1,4 @@
-import { Command , CommandContext } from "../structures";
-import { log } from "../utils/general";
+import { Command, CommandContext } from "../structures";
 import ValClient from "../ValClient";
 
 import { MongoController } from "../controllers";
@@ -34,35 +33,29 @@ export default class Leaderboard extends Command {
 		const { message, member } = ctx;
 		const mongo = <MongoController>this.client.controllers.get("mongo");
 
-		try {
-			const levels: Level[] = await mongo.db
-				.collection("levels")
-				.find({})
-				.limit(20)
-				.sort({ level: -1 })
-				.toArray();
+		const levels: Level[] = await mongo.db
+			.collection("levels")
+			.find({})
+			.limit(20)
+			.sort({ level: -1 })
+			.toArray();
 
-			const yours = await mongo.db
-				.collection("levels")
-				.findOne({ id: member.id });
+		const yours = await mongo.db
+			.collection("levels")
+			.findOne({ id: member.id });
 
-			const descriptions = levels.map(lvl =>
-				this.generateLevelString(lvl, ctx),
-			);
+		const descriptions = levels.map(lvl => this.generateLevelString(lvl, ctx));
 
-			if (!levels.some(l => l.id === member.id)) {
-				descriptions.push(`\n${this.generateLevelString(yours, ctx)}`);
-			}
-
-			const msg = createEmbed({
-				title: "Top 20 Active Members",
-				description: descriptions.join("\n"),
-				footer: { text: "For full rank details use `v! rank`" },
-			});
-
-			await message.reply(msg);
-		} catch (err) {
-			log(this.client, err, "error");
+		if (!levels.some(l => l.id === member.id)) {
+			descriptions.push(`\n${this.generateLevelString(yours, ctx)}`);
 		}
+
+		const msg = createEmbed({
+			title: "Top 20 Active Members",
+			description: descriptions.join("\n"),
+			footer: { text: "For full rank details use `v! rank`" },
+		});
+
+		await message.reply(msg);
 	};
 }

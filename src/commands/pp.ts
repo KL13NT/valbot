@@ -1,7 +1,6 @@
 import ValClient from "../ValClient";
 
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
 
 export default class PP extends Command {
 	constructor(client: ValClient) {
@@ -22,17 +21,13 @@ export default class PP extends Command {
 	}
 
 	_run = async ({ member, message }: CommandContext) => {
-		try {
-			const target =
-				message.mentions.users.size === 0
-					? member.user
-					: message.mentions.users.first();
+		const target =
+			message.mentions.users.size === 0
+				? member.user
+				: message.mentions.users.first();
 
-			const avatarUrl = target.displayAvatarURL({ dynamic: true, size: 4096 });
+		const avatarUrl = target.displayAvatarURL({ dynamic: true, size: 4096 });
 
-			await message.reply(avatarUrl);
-		} catch (err) {
-			log(this.client, err, "error");
-		}
+		await message.reply(avatarUrl);
 	};
 }

@@ -26,21 +26,17 @@ export default class Debug extends Command {
 	_run = async (context: CommandContext) => {
 		const { message, params } = context;
 
-		try {
-			if (params[0] !== "on" && params[0] !== "off") {
-				await message.reply("اول باراميتر المفروض يبقى on او off");
-				return;
-			}
-
-			if (params[0] === "on") {
-				await this.start(context);
-				return;
-			}
-
-			await this.stop(context);
-		} catch (err) {
-			log(this.client, err, "error");
+		if (params[0] !== "on" && params[0] !== "off") {
+			await message.reply("اول باراميتر المفروض يبقى on او off");
+			return;
 		}
+
+		if (params[0] === "on") {
+			await this.start(context);
+			return;
+		}
+
+		await this.stop(context);
 	};
 
 	start = async ({ message }: CommandContext) => {

@@ -1,6 +1,5 @@
 import { PresenceController } from "../controllers";
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
 import ValClient from "../ValClient";
 
 export default class PresenceClear extends Command {
@@ -22,16 +21,12 @@ export default class PresenceClear extends Command {
 	}
 
 	_run = async ({ message }: CommandContext) => {
-		try {
-			const controller = this.client.controllers.get(
-				"presence",
-			) as PresenceController;
+		const controller = this.client.controllers.get(
+			"presence",
+		) as PresenceController;
 
-			await controller.clearPriority();
+		await controller.clearPriority();
 
-			await message.reply("تم");
-		} catch (err) {
-			log(this.client, err, "error");
-		}
+		await message.reply("تم");
 	};
 }

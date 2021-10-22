@@ -1,7 +1,8 @@
 import { TextChannel } from "discord.js";
 
-import { reply } from "./general";
+import { log, reply } from "./general";
 import UserError from "../structures/UserError";
+import ValClient from "../ValClient";
 
 export const retryRequest = async <T extends unknown>(
 	func: () => Promise<T>,
@@ -17,14 +18,18 @@ export const retryRequest = async <T extends unknown>(
 	}
 };
 
-export const handleUserError = async (error: unknown, channel: TextChannel) => {
+export const handleUserError = async (
+	error: unknown,
+	channel: TextChannel,
+	client: ValClient,
+) => {
 	try {
 		if (error instanceof UserError) {
 			await reply(error.message, channel);
 			return;
 		}
 
-		throw error;
+		await log(client, error, "error");
 	} catch (error) {
 		console.error(error);
 	}

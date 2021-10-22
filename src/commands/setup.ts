@@ -36,35 +36,31 @@ export default class Setup extends Command {
 		const variable = params[1];
 		const target = params[1].toLowerCase();
 
-		try {
-			if (op !== "get" && op !== "set") {
-				await message.reply("لازم تحدد `set` ولا `get`");
+		if (op !== "get" && op !== "set") {
+			await message.reply("لازم تحدد `set` ولا `get`");
+			return;
+		}
+
+		if (op === "get") {
+			if (target === "all") {
+				const values = Object.keys(config).map(key => {
+					return `\`${key}\` = \`${config[key]}\``;
+				});
+
+				await message.reply(values.join("\n"));
+				return;
+			} else if (target === "json") {
+				await this.getJSON(context);
+			} else {
+				await message.reply(`\`${variable}\` = \`${config[variable]}\``);
 				return;
 			}
+		}
 
-			if (op === "get") {
-				if (target === "all") {
-					const values = Object.keys(config).map(key => {
-						return `\`${key}\` = \`${config[key]}\``;
-					});
-
-					await message.reply(values.join("\n"));
-					return;
-				} else if (target === "json") {
-					await this.getJSON(context);
-				} else {
-					await message.reply(`\`${variable}\` = \`${config[variable]}\``);
-					return;
-				}
-			}
-
-			if (op === "set") {
-				if (target === "json") await this.setJSON(context);
-				else if (target === "all") await this.setAll(context);
-				else await this.setGeneral(context, variable);
-			}
-		} catch (err) {
-			log(this.client, err, "error");
+		if (op === "set") {
+			if (target === "json") await this.setJSON(context);
+			else if (target === "all") await this.setAll(context);
+			else await this.setGeneral(context, variable);
 		}
 	};
 

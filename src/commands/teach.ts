@@ -4,7 +4,7 @@ import { TextChannel } from "discord.js";
 import { Command, CommandContext } from "../structures";
 import { ConversationController } from "../controllers";
 
-import { log, awaitMessages } from "../utils/general";
+import { awaitMessages } from "../utils/general";
 
 export default class Teach extends Command {
 	constructor(client: ValClient) {
@@ -29,24 +29,20 @@ export default class Teach extends Command {
 		const channel = <TextChannel>context.channel;
 		const invoker = params.join(" ").replace(/"/g, "").replace(/\s+/, " ");
 
-		try {
-			if (params.length === 0) {
-				await message.reply(`\n${this.getResponses().join("\n")}`);
-				return;
-			}
-
-			if (invoker.length < 2) {
-				await message.reply(`لازم يكون الرسالة الاولية طويلة كفاية`);
-				return;
-			}
-
-			await message.reply("المفروض ارد ازاي بقى؟");
-
-			const collected = await awaitMessages(channel, member);
-			await this.collectionSuccess(context, invoker, collected);
-		} catch (err) {
-			log(this.client, err, "error");
+		if (params.length === 0) {
+			await message.reply(`\n${this.getResponses().join("\n")}`);
+			return;
 		}
+
+		if (invoker.length < 2) {
+			await message.reply(`لازم يكون الرسالة الاولية طويلة كفاية`);
+			return;
+		}
+
+		await message.reply("المفروض ارد ازاي بقى؟");
+
+		const collected = await awaitMessages(channel, member);
+		await this.collectionSuccess(context, invoker, collected);
 	};
 
 	getResponses = () => {

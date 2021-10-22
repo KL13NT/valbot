@@ -15,8 +15,9 @@ import {
 	help,
 } from "../utils/commands";
 import { CommandOptions } from "../types/interfaces";
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { isDev } from "../utils/general";
+import { handleUserError } from "../utils/apis";
 
 export default abstract class Command {
 	client: ValClient;
@@ -31,31 +32,35 @@ export default abstract class Command {
 	}
 
 	run = async (message: Message): Promise<void> => {
-		if (!this.client.ready && this.options.name !== "setup") {
-			await message.reply(
-				`مش جاهز لسه او البوت مش معمله setup. شغلوا \`${this.client.prefix} setup\``,
-			);
-			return;
+		try {
+			if (!this.client.ready && this.options.name !== "setup") {
+				await message.reply(
+					`مش جاهز لسه او البوت مش معمله setup. شغلوا \`${this.client.prefix} setup\``,
+				);
+				return;
+			}
+
+			const context = new CommandContext(this.client, message);
+
+			if (context.params[0] === "help") {
+				await help(this.client, this.options, context);
+				return;
+			}
+
+			if (!isAllowed(this.client, this.options, context)) {
+				await message.reply(ERROR_COMMAND_NOT_ALLOWED);
+				return;
+			}
+
+			if (!isEachParamValid(this.options, context.params)) {
+				await message.reply(generateParamError(this.client, this.options));
+				return;
+			}
+
+			await this.enforceCooldown(context);
+		} catch (error) {
+			handleUserError(error, message.channel as TextChannel, this.client);
 		}
-
-		const context = new CommandContext(this.client, message);
-
-		if (context.params[0] === "help") {
-			await help(this.client, this.options, context);
-			return;
-		}
-
-		if (!isAllowed(this.client, this.options, context)) {
-			await message.reply(ERROR_COMMAND_NOT_ALLOWED);
-			return;
-		}
-
-		if (!isEachParamValid(this.options, context.params)) {
-			await message.reply(generateParamError(this.client, this.options));
-			return;
-		}
-
-		this.enforceCooldown(context);
 	};
 
 	private enforceCooldown = async (context: CommandContext): Promise<void> => {
