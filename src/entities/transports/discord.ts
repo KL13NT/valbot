@@ -2,6 +2,8 @@ import Transport from "winston-transport";
 import fetch from "node-fetch";
 import { createEmbed } from "../../utils/embed";
 
+const MAX_BODY_LENGTH = 4096;
+
 class DiscordWebhook extends Transport {
 	constructor() {
 		super({
@@ -14,7 +16,7 @@ class DiscordWebhook extends Transport {
 		const payload = {
 			embeds: [
 				createEmbed({
-					description: `${content.slice(0, 4096)}`,
+					description: `${content.slice(0, MAX_BODY_LENGTH)}`,
 				}),
 			],
 		};
@@ -38,6 +40,4 @@ class DiscordWebhook extends Transport {
 	}
 }
 
-const discordTransport = new DiscordWebhook();
-
-export default discordTransport;
+export default new DiscordWebhook();
