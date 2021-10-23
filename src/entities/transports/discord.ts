@@ -3,17 +3,29 @@ import fetch from "node-fetch";
 import { createEmbed } from "../../utils/embed";
 
 class DiscordWebhook extends Transport {
+	constructor() {
+		super({
+			level: "error",
+		});
+	}
+
 	log(info, callback) {
-		const content = String(info);
+		const content = info.message;
 		const payload = {
-			content: createEmbed({
-				title: "Error",
-				description: `${content.slice(0, 4096)}`,
-			}),
+			embeds: [
+				createEmbed({
+					description: `${content.slice(0, 4096)}`,
+				}),
+			],
 		};
 
 		fetch(process.env.DISCORD_HOOK_URL, {
 			body: JSON.stringify(payload),
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
 		})
 			.then(() => {
 				this.emit("logged", info);
