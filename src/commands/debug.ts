@@ -1,7 +1,7 @@
 import ValClient from "../ValClient";
 
+import logger from "../utils/logging";
 import { Command, CommandContext } from "../structures";
-import { log } from "../utils/general";
 import { IntervalsController } from "../controllers";
 
 export default class Debug extends Command {
@@ -55,12 +55,12 @@ export default class Debug extends Command {
 			`I'll report on the dev channel <#${CHANNEL_BOT_STATUS}>`,
 		);
 
-		await log(this.client, "Logging every 2000ms", "warn");
+		logger.info("Logging every 2000ms");
 		intervals.set({
 			time: 2000,
 			name: "debug",
 			callback: () => {
-				log(this.client, this.usageToString(), "info");
+				logger.info(this.usageToString());
 			},
 		});
 	};
@@ -77,7 +77,7 @@ export default class Debug extends Command {
 
 		await message.reply(`قفلت الـ debugger خلاص`);
 
-		await log(this.client, "Logger disabled", "warn");
+		logger.info("Logger disabled");
 		intervals.clear("debug");
 	};
 

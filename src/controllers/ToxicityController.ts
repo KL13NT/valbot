@@ -12,7 +12,8 @@ import { ToxicityClassifier, load } from "@tensorflow-models/toxicity";
 import Controller from "../structures/Controller";
 import ValClient from "../ValClient";
 
-import { isDev, log } from "../utils/general";
+import logger from "../utils/logging";
+import { isDev } from "../utils/general";
 import {
 	createEmbed,
 	createUserModerationEmbed,
@@ -61,7 +62,7 @@ export default class ToxicityController extends Controller {
 			this.classifier = model;
 			this.ready = true;
 
-			log(this.client, "ToxicityController loaded successfully", "info");
+			logger.info("ToxicityController loaded successfully");
 		});
 	};
 

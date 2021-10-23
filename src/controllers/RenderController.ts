@@ -4,7 +4,8 @@ import { Cluster } from "puppeteer-cluster";
 import ValClient from "../ValClient";
 import Controller from "../structures/Controller";
 
-import { compileTemplate, log } from "../utils/general";
+import logger from "../utils/logging";
+import { compileTemplate } from "../utils/general";
 import { Destroyable } from "../types/interfaces";
 
 export default class RenderController
@@ -38,7 +39,7 @@ export default class RenderController
 				});
 			}
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 

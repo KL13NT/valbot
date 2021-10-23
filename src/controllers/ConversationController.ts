@@ -5,7 +5,7 @@ import Controller from "../structures/Controller";
 import { Response } from "../types/interfaces";
 import { Message } from "discord.js";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 
 export default class ConversationController extends Controller {
 	public ready = false;
@@ -39,7 +39,7 @@ export default class ConversationController extends Controller {
 				queue.enqueue({ func: this.init, args: [] });
 			}
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 

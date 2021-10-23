@@ -13,9 +13,9 @@ import { ObjectId } from "bson";
 import ValClient from "../ValClient";
 import MongoController from "./MongoController";
 import UserError from "../structures/UserError";
+import logger from "../utils/logging";
 import { Controller } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { log } from "../utils/general";
 import { PresenceController } from "./index";
 import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
@@ -173,11 +173,7 @@ export default class MusicController extends Controller implements Destroyable {
 				? await retryRequest(() => this.resolver.fetch(current.title))
 				: current;
 
-			log(
-				this.client,
-				`Starting to play ${song.title} with \`lowest\` format at position ${position}`,
-				"info",
-			);
+			logger.info(`Starting to play ${song.title} at position ${position}`);
 
 			const info = await ytdl.getInfo(song.url, {
 				requestOptions: {
@@ -194,12 +190,14 @@ export default class MusicController extends Controller implements Destroyable {
 			if (hasAudio.length === 0)
 				throw new UserError("This video doesn't have audio");
 
+			logger.info(`Selected ${hasAudio[0].audioQuality}-${hasAudio[0].codecs}`);
+
 			const stream = ytdl.downloadFromInfo(info, {
 				format: hasAudio[0],
 			});
 
 			stream.on("error", async error => {
-				log(this.client, error, "error");
+				logger.error(error);
 
 				await this.state.text.send(
 					createEmbed({
@@ -224,7 +222,7 @@ export default class MusicController extends Controller implements Destroyable {
 			});
 			dispatcher.on("finish", () => this.skip());
 		} catch (error) {
-			handleUserError(error, this.state.text, this.client);
+			handleUserError(error, this.state.text);
 		}
 	};
 
@@ -416,11 +414,7 @@ export default class MusicController extends Controller implements Destroyable {
 
 	connect = async (vc: VoiceChannel, text: TextChannel) => {
 		if (!this.state.vc) {
-			log(
-				this.client,
-				`Connecting to vc: ${vc.name}, text: ${text.name}`,
-				"info",
-			);
+			logger.info(`Connecting to vc: ${vc.name}, text: ${text.name}`);
 
 			const connection = this.state.connection || (await vc.join());
 
@@ -439,7 +433,7 @@ export default class MusicController extends Controller implements Destroyable {
 
 	disconnect = async () => {
 		try {
-			log(this.client, "Disconnected from vc", "info");
+			logger.info("Disconnected from vc");
 
 			if (this.state.connection && this.state.connection.status !== DC_STATUS) {
 				this.state.connection.removeAllListeners();
@@ -458,7 +452,7 @@ export default class MusicController extends Controller implements Destroyable {
 					}),
 				);
 		} catch (error) {
-			log(this.client, "Disconnected from vc", "info");
+			logger.info("Disconnected from vc");
 		} finally {
 			this.state = {
 				stream: null,

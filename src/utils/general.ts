@@ -1,11 +1,6 @@
 /* eslint-disable prefer-rest-params */
-import {
-	AlertLevel,
-	NotificationOptions,
-	ReminderSubscription,
-} from "../types/interfaces";
+import { NotificationOptions, ReminderSubscription } from "../types/interfaces";
 import { QueueController } from "../controllers";
-import ValClient from "../ValClient";
 
 import { getChannelObject } from "./object";
 import {
@@ -20,42 +15,6 @@ import { ParsedResult } from "chrono-node";
 import prettyMilliseconds from "pretty-ms";
 import messages from "../messages.json";
 import { createEmbed } from "./embed";
-
-const { MODE } = process.env;
-
-/**
- * Logs events to client and console
- */
-export async function log(
-	client: ValClient,
-	notification: unknown,
-	alertLevel: AlertLevel,
-) {
-	const queue = <QueueController>client.controllers.get("queue");
-	console.log(`[${alertLevel}]`, notification); // need console regardless
-
-	if (MODE !== "PRODUCTION" || alertLevel === "info") return;
-
-	if (!client.ready) {
-		if (queue) queue.enqueue({ func: log, args: [...arguments] });
-		return;
-	}
-
-	const { CHANNEL_BOT_STATUS } = client.config;
-
-	try {
-		const channel = <TextChannel>getChannelObject(client, CHANNEL_BOT_STATUS);
-		const message = `[${alertLevel}] ${notification}`;
-
-		if (notification instanceof Error)
-			await channel.send(
-				`${message}\n\n**Stack trace**\n${notification.stack}`,
-			);
-		else await channel.send(`${message}`);
-	} catch (error) {
-		console.log(error);
-	}
-}
 
 /**
  * Sends notification to specified channel or to notifications channel

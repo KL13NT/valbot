@@ -5,7 +5,7 @@ import { promisify } from "util";
 
 import redis, { RedisClient } from "redis";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 import { Destroyable } from "../types/interfaces";
 
 export default class RedisController extends Controller implements Destroyable {
@@ -48,14 +48,14 @@ export default class RedisController extends Controller implements Destroyable {
 	};
 
 	errorListener = (err: Error) => {
-		log(this.client, err, "error");
+		logger.error(err);
 
 		this.redis.removeAllListeners();
 		this.ready = false;
 	};
 
 	readyListener = () => {
-		log(this.client, "Redis ready", "info");
+		logger.info("Redis ready");
 		this.client.emit("queueExecute", "Redis controller ready");
 
 		this.ready = true;

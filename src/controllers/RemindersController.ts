@@ -1,9 +1,10 @@
 import ValClient from "../ValClient";
+import logger from "../utils/logging";
 
 import { Controller } from "../structures";
 import { Reminder, ReminderSubscription } from "../types/interfaces";
 import { MongoController, QueueController, IntervalsController } from ".";
-import { log, reminderSubsToString } from "../utils/general";
+import { reminderSubsToString } from "../utils/general";
 import { getChannelObject } from "../utils/object";
 import { Snowflake } from "discord.js";
 
@@ -64,7 +65,7 @@ export default class RemindersController extends Controller {
 				this.reminders.set(String(reminder.time), reminder.subs);
 			});
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 
@@ -111,7 +112,7 @@ export default class RemindersController extends Controller {
 				},
 			});
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 
@@ -154,7 +155,7 @@ export default class RemindersController extends Controller {
 				await this.fetchNextHour();
 			}
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 

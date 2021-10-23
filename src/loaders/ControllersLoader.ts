@@ -1,7 +1,7 @@
 import Loader from "../structures/Loader";
 import * as Controllers from "../controllers";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 
 /**
  * Loads Controllers based on Controllers/index
@@ -16,12 +16,12 @@ export default class ControllersLoader extends Loader {
 				controllerInstance,
 			);
 
-			log(this.client, `${controllerInstance.options.name} loaded`, "info");
+			logger.info(`${controllerInstance.options.name} controller loaded`);
 		}
 
 		for (const controller of this.client.controllers.values()) {
 			await controller.init();
-			log(this.client, `${controller.options.name} initialized`, "info");
+			logger.info(`${controller.options.name} controller initialized`);
 		}
 	};
 }

@@ -1,11 +1,12 @@
 import ValClient from "./ValClient";
+import logger from "./utils/logging";
 
 // failsafe
 if (!process.env.MODE) {
 	process.env.MODE = "DEVELOPMENT";
 }
 
-console.log(`[info] starting in ${process.env.MODE} mode`);
+logger.info(`starting in ${process.env.MODE} mode`);
 
 const client: ValClient = new ValClient({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
@@ -13,18 +14,18 @@ const client: ValClient = new ValClient({
 
 const kill = async () => {
 	try {
-		console.log("[kill] destroying client");
+		logger.warn("[kill] destroying client");
 		client.destroy();
 
-		console.log("[kill] destroying controllers");
+		logger.warn("[kill] destroying controllers");
 		for (const controller of client.controllers.values()) {
 			if (controller.destroy) await controller.destroy();
 		}
 
-		console.log("[kill] shutting down gracefully");
+		logger.warn("[kill] shutting down gracefully");
 		process.exit(0);
 	} catch (error) {
-		console.log("[error] cleanup failed, exiting with status 1", error);
+		logger.warn("[error] cleanup failed, exiting with status 1", error);
 		process.exit(1);
 	}
 };
@@ -34,7 +35,7 @@ const kill = async () => {
 );
 
 client.on("error", (err: Error) => {
-	console.log("An error occured with ValClient", err);
+	logger.warn("An error occured with ValClient", err);
 	kill();
 });
 
@@ -42,7 +43,7 @@ client.on("error", (err: Error) => {
 	try {
 		client.init(process.env.AUTH_TOKEN);
 	} catch (error) {
-		console.log("An error occured with ValClient", error);
+		logger.warn("An error occured with ValClient", error);
 		kill();
 	}
 })();

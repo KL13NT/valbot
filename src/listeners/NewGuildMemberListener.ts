@@ -2,7 +2,7 @@ import Listener from "../structures/Listener";
 import ValClient from "../ValClient";
 import { GuildMember } from "discord.js";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 
 export default class NewGuildMemberListener extends Listener {
 	constructor(client: ValClient) {
@@ -20,10 +20,8 @@ export default class NewGuildMemberListener extends Listener {
 			اهلاً بيكم مره تانية, و لو في اي حاجة نقدر نساعدكوا فيها متترددوش! اعتبرونا بيتكم التاني :star_struck:
 			`);
 		} catch (err) {
-			log(
-				this.client,
+			logger.error(
 				"Something went wrong while greeting the new member, could yall do it for me?",
-				"error",
 			);
 		}
 	};

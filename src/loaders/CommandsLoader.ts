@@ -1,7 +1,7 @@
 import Loader from "../structures/Loader";
 import * as commands from "../commands";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 
 /**
  * Loads commands based on commands/index
@@ -16,7 +16,7 @@ export default class CommandsLoader extends Loader {
 			 * import commmands
 			 * iterate over each command, if has aliases -> iterate over them
 			 * client.commands.set(alias/name, commandObject) previousNow
-			 * 
+			 *
 			 * get(previousnow) X
 			 */
 			if (newCommand.options.aliases) {
@@ -28,9 +28,12 @@ export default class CommandsLoader extends Loader {
 				});
 			}
 
-			this.client.commands.set(newCommand.options.name.toLowerCase(), newCommand);
+			this.client.commands.set(
+				newCommand.options.name.toLowerCase(),
+				newCommand,
+			);
 		});
 
-		log(this.client, "Commands loaded successfully", "info");
+		logger.info("Commands loaded successfully");
 	};
 }

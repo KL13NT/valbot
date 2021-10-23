@@ -2,12 +2,11 @@
 import { Client, Guild } from "discord.js";
 import { ClientConfigValidator } from "./types/validators.joi";
 
-import * as fs from "fs";
-import * as path from "path";
 import * as loaders from "./loaders";
 import * as listeners from "./listeners";
 
-import { log, transformObject } from "./utils/general";
+import logger from "./utils/logging";
+import { transformObject } from "./utils/general";
 import { ClientConfig } from "./types/interfaces";
 import Command from "./structures/Command";
 import { MongoController, QueueController } from "./controllers";
@@ -41,20 +40,14 @@ export default class ValClient extends Client {
 	init = async (token = AUTH_TOKEN) => {
 		this.once("ready", this.onReady);
 
+		logger.info("Logging in");
+
 		await this.login(token);
-
-		log(this, "Logged in", "info");
-
-		console.log(
-			fs
-				.readFileSync(path.resolve(__dirname, "../media/bigtitle.txt"), "utf8")
-				.toString(),
-		);
 	};
 
 	onReady = async (): Promise<void> => {
 		try {
-			log(this, "Ready status received. Bot initialising.", "info");
+			logger.info("Ready status received. Bot initialising.");
 
 			this.ValGuild = this.guilds.cache.first();
 
@@ -64,9 +57,9 @@ export default class ValClient extends Client {
 
 			this.emit("queueExecute", "Client ready");
 
-			log(this, "Client ready", "info");
+			logger.info("Client ready");
 		} catch (error) {
-			log(this, error, "error");
+			logger.error(error);
 		}
 	};
 
@@ -78,7 +71,7 @@ export default class ValClient extends Client {
 			await new loader(this).load();
 		}
 
-		log(this, "All loaders loaded successfully", "info");
+		logger.info("All loaders loaded successfully");
 	};
 
 	/**
@@ -86,13 +79,13 @@ export default class ValClient extends Client {
 	 * If it throws it means something is wrong with code, not behaviour.
 	 */
 	initListeners = () => {
-		log(this, "Listeners loading", "info");
+		logger.info("Listeners loading");
 
 		Object.values(listeners).forEach(listener => {
 			new listener(this).init();
 		});
 
-		log(this, "All listeners loaded successfully", "info");
+		logger.info("All listeners loaded successfully");
 	};
 
 	initConfig = async () => {
@@ -112,12 +105,9 @@ export default class ValClient extends Client {
 			if (!response || ClientConfigValidator.validate(response).error) {
 				this.config = transformObject<ClientConfig>(response, this.config);
 				await mongo.setConfig(this.config);
-				console.log(ClientConfigValidator.validate(response).error);
 
-				return log(
-					this,
+				return logger.warn(
 					`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
-					"warn",
 				);
 			}
 

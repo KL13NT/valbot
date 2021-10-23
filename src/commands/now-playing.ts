@@ -1,8 +1,10 @@
 import progressbar from "string-progressbar";
 import ValClient from "../ValClient";
+import logger from "../utils/logging";
+
 import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
-import { formatDuration, log, reply } from "../utils/general";
+import { formatDuration, reply } from "../utils/general";
 
 export default class NowPlaying extends Command {
 	constructor(client: ValClient) {
@@ -68,7 +70,7 @@ export default class NowPlaying extends Command {
 			controller.getCurrentStreamTime() +
 			controller.getCurrentPosition() * 1000;
 
-		log(this.client, "Now Playing", "info");
+		logger.debug("Now Playing");
 
 		const total = song.duration;
 		const seekbar = progressbar.splitBar(total, current, 15, "▬", "🔘")[0];
@@ -80,7 +82,7 @@ export default class NowPlaying extends Command {
 			seekbar,
 			current: formatDuration(current),
 			total: formatDuration(total),
-			id: controller.currentSongIndex + 1 ,
+			id: controller.currentSongIndex + 1,
 		});
 	};
 }

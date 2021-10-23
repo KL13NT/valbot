@@ -8,7 +8,7 @@ import { createEmbed } from "./embed";
 import { createEventMessage } from "./event";
 
 import { ERROR_INSUFFICIENT_PARAMS_PASSED } from "../config/events.json";
-import { log } from "./general";
+import logger from "../utils/logging";
 
 const { ROLE_DEVELOPER } = process.env;
 
@@ -128,7 +128,7 @@ export async function help(
 				sent.delete();
 			}, 5 * 1000);
 		})
-		.catch(err => log(client, err, "error"));
+		.catch(err => logger.error(err));
 }
 
 export function generateParamError(client: ValClient, options: CommandOptions) {
