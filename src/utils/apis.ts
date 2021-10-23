@@ -27,6 +27,6 @@ export const handleUserError = async (error: unknown, channel: TextChannel) => {
 
 		logger.error(error);
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 	}
 };

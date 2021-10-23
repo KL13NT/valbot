@@ -197,13 +197,7 @@ export default class MusicController extends Controller implements Destroyable {
 			});
 
 			stream.on("error", async error => {
-				logger.error(error);
-
-				await this.state.text.send(
-					createEmbed({
-						description: `Couldn't play [${song.title}](${song.url})`,
-					}),
-				);
+				handleUserError(error, this.state.text);
 
 				this.skip();
 			});
