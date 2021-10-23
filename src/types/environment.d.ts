@@ -16,6 +16,8 @@ declare global {
 			SPOTIFY_ID: string;
 			SPOTIFY_SECRET: string;
 			COOKIE: string;
+			SENTRY_DSN: string;
+			DISCORD_HOOK_URL: string;
 		}
 	}
 }
