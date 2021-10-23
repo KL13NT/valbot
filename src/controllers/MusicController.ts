@@ -69,7 +69,7 @@ export interface MusicControllerState {
 	// interval: NodeJS.Timeout;
 }
 
-const DISCONNECT_AFTER = 5 * 60 * 1000; // 5 minutes
+const DISCONNECT_AFTER = 15 * 60 * 1000; // 15 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 const DC_STATUS = 4;
 
@@ -711,7 +711,7 @@ export default class MusicController extends Controller implements Destroyable {
 		if (this.shouldTimeout() && !this.state.timeout) {
 			this.state.timeout = setTimeout(
 				() => this.disconnect(),
-				DISCONNECT_AFTER,
+				this.state?.vc?.guild?.afkTimeout || DISCONNECT_AFTER,
 			);
 		}
 	};
