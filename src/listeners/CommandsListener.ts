@@ -2,7 +2,7 @@ import Listener from "../structures/Listener";
 import ValClient from "../ValClient";
 import { Message } from "discord.js";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 
 export default class CommandsListener extends Listener {
 	constructor(client: ValClient) {
@@ -24,7 +24,7 @@ export default class CommandsListener extends Listener {
 			if (command === undefined) return;
 			else command.run(message);
 		} catch (error) {
-			log(this.client, error, "error");
+			logger.error(error);
 		}
 	};
 }

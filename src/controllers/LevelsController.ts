@@ -10,7 +10,6 @@ import {
 } from ".";
 
 import {
-	log,
 	calculateUniqueWords,
 	notify,
 	calculateNextLevel,
@@ -18,6 +17,7 @@ import {
 } from "../utils/general";
 import { getRoleObject, getMemberObject } from "../utils/object";
 import { createLevelupEmbed } from "../utils/embed";
+import logger from "../utils/logging";
 
 const XP_PER_MINUTE = 4;
 
@@ -139,7 +139,7 @@ export default class LevelsController extends Controller {
 				}
 			} else this.initUser(id);
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 
@@ -184,7 +184,7 @@ export default class LevelsController extends Controller {
 					}
 				} else this.initUser(id);
 			} catch (err) {
-				log(this.client, err, "error");
+				logger.error(err);
 			}
 		});
 	};
@@ -270,7 +270,7 @@ export default class LevelsController extends Controller {
 						embed,
 					});
 				} catch (err) {
-					log(this.client, err, "error");
+					logger.error(err);
 				}
 			});
 		}

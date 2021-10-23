@@ -1,11 +1,12 @@
 import ValClient from "../ValClient";
 
+import logger from "../utils/logging";
 import { ClientConfig } from "../types/interfaces";
 import { Command, CommandContext } from "../structures";
 import { Message, TextChannel, GuildMember } from "discord.js";
 import { MongoController, QueueController } from "../controllers";
 
-import { log, awaitMessages } from "../utils/general";
+import { awaitMessages } from "../utils/general";
 import { ClientConfigValidator } from "../types/validators.joi";
 
 export default class Setup extends Command {
@@ -124,7 +125,7 @@ export default class Setup extends Command {
 			}
 		} catch (err) {
 			await message.reply("في حاجة غلط ف ال JSON اللي انت كتبته. جرب تاني.");
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 
@@ -139,7 +140,7 @@ export default class Setup extends Command {
 			await this.client.onReady();
 			this.client.ready = true;
 
-			log(this.client, "Client configured successfully.", "info");
+			logger.info("Client configured successfully.");
 		} else
 			queue.enqueue({
 				func: this.updateConfig,

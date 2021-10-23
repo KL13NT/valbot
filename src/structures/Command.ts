@@ -59,7 +59,7 @@ export default abstract class Command {
 
 			await this.enforceCooldown(context);
 		} catch (error) {
-			handleUserError(error, message.channel as TextChannel, this.client);
+			handleUserError(error, message.channel as TextChannel);
 		}
 	};
 

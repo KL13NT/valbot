@@ -1,10 +1,9 @@
 import Listener from "../structures/Listener";
 import ValClient from "../ValClient";
 
-// import { log } from "../utils/general";
 import { MessageReaction, User } from "discord.js";
 import { ToxicityController } from "../controllers";
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 
 export default class ReactionsListener extends Listener {
 	constructor(client: ValClient) {
@@ -21,7 +20,7 @@ export default class ReactionsListener extends Listener {
 				user,
 			);
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 }

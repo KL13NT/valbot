@@ -5,6 +5,7 @@ import ValClient from "../ValClient";
 
 import { MongoController, RedisController } from "../controllers";
 import { Snowflake, TextChannel } from "discord.js";
+import logger from "../utils/logging";
 
 export default class Notify extends Command {
 	constructor(client: ValClient) {
@@ -50,7 +51,11 @@ export default class Notify extends Command {
 						.then(dm => {
 							return dm.send(collected);
 						})
-						.catch(() => console.log(`معرفتش ابعت لـ ${member.displayName}`));
+						.catch(() =>
+							logger.error(
+								`Couldn't send notification to ${member.displayName}`,
+							),
+						);
 			}
 		} else {
 			await message.reply("لغيت خلاص");

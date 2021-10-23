@@ -1,9 +1,9 @@
 import ValClient from "../ValClient";
 
+import logger from "../utils/logging";
 import { EmbedField } from "discord.js";
 import { Command, CommandContext } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { log } from "../utils/general";
 
 export default class Help extends Command {
 	constructor(client: ValClient) {
@@ -33,7 +33,7 @@ export default class Help extends Command {
 		const sent = await message.reply("بعتلك رسالة جادة جداً");
 
 		setTimeout(() => {
-			sent.delete().catch(err => log(this.client, err, "error"));
+			sent.delete().catch(err => logger.error(err));
 		}, 5 * 1000);
 	};
 

@@ -1,7 +1,8 @@
 import ValClient from "../ValClient";
 
 import { Command, CommandContext } from "../structures";
-import { log, notify } from "../utils/general";
+import logger from "../utils/logging";
+import { notify } from "../utils/general";
 import { createClearEmbed } from "../utils/embed";
 import { TextChannel } from "discord.js";
 
@@ -47,7 +48,7 @@ export default class Delete extends Command {
 		const sent = await message.reply(`مسحت ${count} يرايق.`);
 
 		setTimeout(() => {
-			sent.delete().catch(err => log(this.client, err, "error"));
+			sent.delete().catch(err => logger.error(err));
 		}, 3 * 1000);
 
 		await notify({

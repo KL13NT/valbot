@@ -19,6 +19,7 @@ import {
 	LIST_SYMBOL,
 	YOUTUBE_SEARCH_SINGLE_MATCHER,
 } from "./constants";
+import { retryRequest } from "../../utils/apis";
 
 interface YoutubeTrackResponse {
 	playlistPanelVideoRenderer: {
@@ -61,7 +62,7 @@ export class YoutubeTrack implements TrackRetriever {
 
 	public fetch = async (query: string) => {
 		const url = ytdl.validateURL(query) ? query : await this.getUrl(query);
-		return this.getSongDetailsByUrl(url);
+		return retryRequest(() => this.getSongDetailsByUrl(url));
 	};
 
 	public generateKey = (query: string) => {
@@ -96,35 +97,29 @@ export class YoutubeTrack implements TrackRetriever {
 	};
 
 	private getSongDetailsByUrl = async (url: string): Promise<Track> => {
-		try {
-			const info = await ytdl.getBasicInfo(url, {
-				requestOptions: {
-					headers: {
-						cookie: process.env.COOKIE,
-					},
+		const info = await ytdl.getBasicInfo(url, {
+			requestOptions: {
+				headers: {
+					cookie: process.env.COOKIE,
 				},
-			});
+			},
+		});
 
-			if (!info) return null;
+		if (!info) return null;
 
-			const { title, isLiveContent, lengthSeconds } = info.videoDetails;
-			const { artist, song: name } = info?.videoDetails?.media;
+		const { title, isLiveContent, lengthSeconds } = info.videoDetails;
+		const { artist, song: name } = info?.videoDetails?.media;
 
-			return {
-				url,
-				title,
-				live: isLiveContent,
-				duration: Number(lengthSeconds) * 1000,
-				artist,
-				name,
-				key: info.videoDetails.videoId,
-				spotify: false,
-			};
-		} catch (error) {
-			if (error instanceof Error && error.message.includes("Video unavailable"))
-				throw new UserError("Video unavailable");
-			else throw error;
-		}
+		return {
+			url,
+			title,
+			live: isLiveContent,
+			duration: Number(lengthSeconds) * 1000,
+			artist,
+			name,
+			key: info.videoDetails.videoId,
+			spotify: false,
+		};
 	};
 }
 

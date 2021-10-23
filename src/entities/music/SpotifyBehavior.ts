@@ -1,6 +1,7 @@
 import btoa from "btoa";
 import fetch from "node-fetch";
 
+import logger from "../../utils/logging";
 import UserError from "../../structures/UserError";
 
 import {
@@ -223,7 +224,7 @@ export class SpotifyAlbum implements PlaylistRetriever {
 				.then(response => response.json())
 				.then(this.parseResponse);
 		} catch (error) {
-			console.log(error);
+			logger.error(error);
 			throw error;
 		}
 	};

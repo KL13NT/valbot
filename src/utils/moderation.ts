@@ -3,7 +3,8 @@ import { Snowflake } from "discord.js";
 
 import { UserModerationOptions } from "../types/interfaces";
 
-import { log, notify } from "./general";
+import logger from "./logging";
+import { notify } from "./general";
 import { getMemberObject } from "./object";
 import { createUserModerationEmbed } from "./embed";
 
@@ -22,7 +23,7 @@ export async function mute(client: ValClient, options: UserModerationOptions) {
 			moderator,
 			channel,
 			reason: "Mute time expired",
-		}).catch(err => log(client, err, "error"));
+		}).catch(err => logger.error(err));
 	}, 5 * 60 * 1000);
 }
 
@@ -51,7 +52,7 @@ export async function ban(client: ValClient, options: UserModerationOptions) {
 			}),
 		]);
 	} catch (err) {
-		log(client, err, "error");
+		logger.error(err);
 	}
 }
 
@@ -81,7 +82,7 @@ export async function warn(client: ValClient, options: UserModerationOptions) {
 			}),
 		]);
 	} catch (err) {
-		log(client, err, "error");
+		logger.error(err);
 	}
 }
 
@@ -114,7 +115,7 @@ export async function unwarn(
 			}),
 		]);
 	} catch (err) {
-		log(client, err, "error");
+		logger.error(err);
 	}
 }
 
@@ -149,7 +150,7 @@ export async function unmute(
 			}),
 		]);
 	} catch (err) {
-		log(client, err, "error");
+		logger.error(err);
 	}
 }
 

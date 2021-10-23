@@ -1,7 +1,7 @@
 import { QueueController } from ".";
 import { Controller } from "../structures";
 import { Presence } from "../types/interfaces";
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 import ValClient from "../ValClient";
 
 export default class PresenceController extends Controller {
@@ -58,7 +58,7 @@ export default class PresenceController extends Controller {
 		if (this.client.user) {
 			this.client.user
 				.setPresence(current)
-				.catch((err: Error) => log(this.client, err, "error"));
+				.catch((err: Error) => logger.error(err));
 
 			return;
 		}

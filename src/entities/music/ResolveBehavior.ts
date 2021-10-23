@@ -32,12 +32,12 @@ export default class ResolveBehavior {
 		} catch (error) {
 			if (error instanceof Error && error.message.includes("Video unavailable"))
 				throw new UserError(
-					"Video unavailable. Couldn't determine the reason.",
+					"Video unavailable. It might be private or not available in the bot's region. If it doesn't render a preview on discord verify the link is valid.",
 				);
 
 			if (error instanceof Error && error.message.includes("410"))
 				throw new UserError(
-					"Video is unavailable. It's either private or has been deleted.",
+					"Couldn't find video. It probably has been deleted.",
 				);
 
 			if (error instanceof Error && error.message.includes("403") && retry)

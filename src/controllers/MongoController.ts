@@ -11,7 +11,7 @@ import {
 } from "../types/interfaces";
 import { Snowflake } from "discord.js";
 
-import { log } from "../utils/general";
+import logger from "../utils/logging";
 import { RedisController, QueueController } from ".";
 
 const { DB_HOST, DB_NAME } = process.env;
@@ -42,7 +42,7 @@ export default class MongoController extends Controller implements Destroyable {
 				this.client.emit("queueExecute", "Mongo controller ready");
 			}
 		} catch (err) {
-			log(this.client, err, "error");
+			logger.error(err);
 		}
 	};
 

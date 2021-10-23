@@ -6,7 +6,8 @@ import {
 	LevelsController,
 	ConversationController,
 } from "../controllers";
-import { isAdmin, isDev, log } from "../utils/general";
+import { isAdmin, isDev } from "../utils/general";
+import logger from "../utils/logging";
 
 export default class MessageListener extends Listener {
 	constructor(client: ValClient) {
@@ -41,7 +42,7 @@ export default class MessageListener extends Listener {
 
 			levels.message(message);
 		} catch (error) {
-			log(this.client, error, "error");
+			logger.error(error);
 		}
 	};
 
