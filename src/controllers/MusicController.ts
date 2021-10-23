@@ -709,9 +709,11 @@ export default class MusicController extends Controller implements Destroyable {
 		}
 
 		if (this.shouldTimeout() && !this.state.timeout) {
+			const timeout = this.state?.vc?.guild?.afkTimeout;
+
 			this.state.timeout = setTimeout(
 				() => this.disconnect(),
-				this.state?.vc?.guild?.afkTimeout || DISCONNECT_AFTER,
+				timeout ? timeout * 1000 : DISCONNECT_AFTER,
 			);
 		}
 	};
