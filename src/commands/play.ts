@@ -21,7 +21,7 @@ export default class Play extends Command {
 			exampleUsage: "?<youtube_link|spotify_link|query>",
 			extraParams: true,
 			optionalParams: 1,
-			aliases: ["p"],
+			aliases: ["p", "resume"],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
