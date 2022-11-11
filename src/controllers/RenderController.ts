@@ -25,10 +25,10 @@ export default class RenderController
 				this.cluster = await Cluster.launch({
 					concurrency: Cluster.CONCURRENCY_CONTEXT,
 					maxConcurrency: 2,
-					puppeteerOptions: {
+					perBrowserOptions: new Array(2).fill({
 						args: ["--no-sandbox", "--disable-setuid-sandbox"],
 						headless: true,
-					},
+					}),
 				});
 
 				await this.cluster.task(async ({ page, data: { html, content } }) => {
