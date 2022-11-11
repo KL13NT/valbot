@@ -3,6 +3,7 @@ import logger from "./utils/logging";
 
 // failsafe
 if (!process.env.MODE) {
+	logger.warn("No env mode found, setting to default");
 	process.env.MODE = "DEVELOPMENT";
 }
 
@@ -35,7 +36,7 @@ const kill = async () => {
 );
 
 client.on("error", (err: Error) => {
-	logger.warn("An error occured with ValClient", err);
+	logger.warn("An error occurred with ValClient", err);
 	kill();
 });
 
@@ -43,7 +44,7 @@ client.on("error", (err: Error) => {
 	try {
 		client.init(process.env.AUTH_TOKEN);
 	} catch (error) {
-		logger.warn("An error occured with ValClient", error);
+		logger.warn("An error occurred with ValClient", error);
 		kill();
 	}
 })();

@@ -10,6 +10,6 @@ export default abstract class Controller implements Destroyable {
 		this.options = options;
 	}
 
-	abstract init(): Promise<void>;
+	abstract init(): Promise<void> | never;
 	destroy = (): Promise<void> | void => undefined;
 }
