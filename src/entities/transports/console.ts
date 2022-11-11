@@ -1,4 +1,5 @@
-import winston, { format } from "winston";
+import winston from "winston";
+import { format } from "logform";
 
 const logFormat = format.printf(
 	info =>
@@ -12,7 +13,6 @@ const consoleTransport = new winston.transports.Console({
 	stderrLevels: ["error"],
 	consoleWarnLevels: ["warn"],
 	format: format.combine(
-		format.errors({ stack: true }),
 		format.timestamp(),
 		format.prettyPrint(),
 		format.colorize(),

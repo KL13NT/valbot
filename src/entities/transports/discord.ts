@@ -12,6 +12,8 @@ class DiscordWebhook extends Transport {
 	}
 
 	log(info, callback) {
+		if (process.env.MODE === "DEVELOPMENT") return;
+
 		const content = info.message;
 		const payload = {
 			embeds: [
