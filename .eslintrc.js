@@ -6,6 +6,7 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"prettier",
 	],
+	ignorePatterns: ["**/*.js"],
 	env: {
 		"jest/globals": true,
 	},

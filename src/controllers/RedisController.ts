@@ -1,25 +1,21 @@
 import Controller from "../structures/Controller";
 import ValClient from "../ValClient";
 
-import { promisify } from "util";
-
-import redis, { RedisClient } from "redis";
+import { createClient } from "redis";
 
 import logger from "../utils/logging";
 import { Destroyable } from "../types/interfaces";
+
+type RedisClient = ReturnType<typeof createClient>;
 
 export default class RedisController extends Controller implements Destroyable {
 	ready = false;
 	redis: RedisClient;
 
-	getAsync: (key: string) => Promise<string>;
-	setAsync: (key: string, value: string) => Promise<unknown>;
-	incrAsync: (key: string) => Promise<number>;
-	incrbyAsync: (key: string, increment: number) => Promise<number>;
-	/** @returns {number} number of deleted keys */
-	del: (key: string) => Promise<number>;
-	/** @returns {number} number of deleted keys */
-	expire: (key: string, seconds: number) => Promise<number>;
+	get: RedisClient["get"];
+	set: RedisClient["set"];
+	del: RedisClient["del"];
+	expire: RedisClient["expire"];
 
 	constructor(client: ValClient) {
 		super(client, {
@@ -27,28 +23,31 @@ export default class RedisController extends Controller implements Destroyable {
 		});
 		this.ready = false;
 
-		this.redis = redis.createClient(process.env.REDIS_URL);
+		this.redis = createClient({
+			url: process.env.REDIS_URL,
+		});
 
-		this.getAsync = promisify(this.redis.get).bind(this.redis);
-		this.setAsync = promisify(this.redis.set).bind(this.redis);
-		this.incrAsync = promisify(this.redis.incr).bind(this.redis);
-		this.incrbyAsync = promisify(this.redis.incrby).bind(this.redis);
-		this.del = promisify(this.redis.del).bind(this.redis);
-		this.expire = promisify(this.redis.expire).bind(this.redis);
+		this.get = this.redis.get.bind(this.redis);
+		this.set = this.redis.set.bind(this.redis);
+		this.del = this.redis.del.bind(this.redis);
+		this.expire = this.redis.expire.bind(this.redis);
 	}
 
 	init = async () => {
+		await this.redis.connect();
+		this.ready = true;
+
 		this.redis.on("ready", this.readyListener);
 		this.redis.on("error", this.errorListener);
 	};
 
-	destroy = () => {
+	destroy = async () => {
 		this.redis.removeAllListeners();
-		this.redis.end(false);
+		await this.redis.disconnect();
 	};
 
 	errorListener = (err: Error) => {
-		logger.error(err);
+		logger.error(err.message);
 
 		this.redis.removeAllListeners();
 		this.ready = false;
@@ -63,21 +62,13 @@ export default class RedisController extends Controller implements Destroyable {
 		this.redis.removeListener("ready", this.readyListener);
 	};
 
-	set = (key: string, value: string) => {
-		return this.setAsync(key, value);
-	};
-
-	get = (key: string) => {
-		return this.getAsync(key);
-	};
-
-	incr = (key: string) => {
-		if (this.redis.exists(key)) return this.incrAsync(key);
+	incr = async (key: string) => {
+		if (this.redis.exists(key)) return this.redis.incr(key);
 		else throw Error("Key not found");
 	};
 
-	incrby = (key: string, by: number) => {
-		if (this.redis.exists(key)) return this.incrbyAsync(key, by);
+	incrby = async (key: string, by: number) => {
+		if (this.redis.exists(key)) return this.redis.incrBy(key, by);
 		else throw Error("Key not found");
 	};
 }
