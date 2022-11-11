@@ -1,6 +1,5 @@
 import ValClient from "../ValClient";
 import MongoController from "./MongoController";
-import { QueueController } from ".";
 import Controller from "../structures/Controller";
 import { Response } from "../types/interfaces";
 import { Message } from "discord.js";
@@ -22,22 +21,17 @@ export default class ConversationController extends Controller {
 	init = async () => {
 		try {
 			const mongo = <MongoController>this.client.controllers.get("mongo");
-			const queue = <QueueController>this.client.controllers.get("queue");
 
-			if (mongo.ready) {
-				const responses = await mongo.getResponses();
+			const responses = await mongo.getResponses();
 
-				responses.forEach(({ invoker, reply }) => {
-					this.responses[invoker] = {
-						invoker,
-						reply,
-					};
-				});
+			responses.forEach(({ invoker, reply }) => {
+				this.responses[invoker] = {
+					invoker,
+					reply,
+				};
+			});
 
-				this.ready = true;
-			} else {
-				queue.enqueue({ func: this.init, args: [] });
-			}
+			this.ready = true;
 		} catch (err) {
 			logger.error(err);
 		}
@@ -59,12 +53,10 @@ export default class ConversationController extends Controller {
 
 	async teach(response: Response) {
 		const mongo = <MongoController>this.client.controllers.get("mongo");
-		const queue = <QueueController>this.client.controllers.get("queue");
 
 		this.responses[response.invoker] = response;
 
-		if (mongo.ready) mongo.saveResponse(response);
-		else queue.enqueue({ func: this.teach, args: [response] });
+		mongo.saveResponse(response);
 	}
 
 	getAllResponses() {

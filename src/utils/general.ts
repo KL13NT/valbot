@@ -1,6 +1,5 @@
 /* eslint-disable prefer-rest-params */
 import { NotificationOptions, ReminderSubscription } from "../types/interfaces";
-import { QueueController } from "../controllers";
 
 import { getChannelObject } from "./object";
 import {
@@ -21,11 +20,6 @@ import { createEmbed } from "./embed";
  */
 export async function notify(options: NotificationOptions) {
 	const { client, notification, embed, channel } = options;
-	const queue = <QueueController>client.controllers.get("queue");
-
-	if (!client.ready)
-		return queue.enqueue({ func: notify, args: [...arguments] });
-
 	const { CHANNEL_NOTIFICATIONS } = client.config;
 
 	const target = getChannelObject(client, channel || CHANNEL_NOTIFICATIONS);

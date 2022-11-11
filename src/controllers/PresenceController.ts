@@ -1,4 +1,3 @@
-import { QueueController } from ".";
 import { Controller } from "../structures";
 import { Presence } from "../types/interfaces";
 import logger from "../utils/logging";
@@ -51,22 +50,11 @@ export default class PresenceController extends Controller {
 		const presenceWithPriority = this.presences.find(p => p.priority);
 		const current = presenceWithPriority || presence;
 
-		const queue = this.client.controllers.get(
-			"QueueController",
-		) as QueueController;
+		if (!this.client.user) return;
 
-		if (this.client.user) {
-			this.client.user
-				.setPresence(current)
-				.catch((err: Error) => logger.error(err));
-
-			return;
-		}
-
-		queue.enqueue({
-			args: [],
-			func: this.updatePresence,
-		});
+		this.client.user
+			.setPresence(current)
+			.catch((err: Error) => logger.error(err));
 	};
 
 	private getRandomPresence = () =>

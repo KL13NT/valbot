@@ -3,7 +3,7 @@ import logger from "../utils/logging";
 
 import { Controller } from "../structures";
 import { Reminder, ReminderSubscription } from "../types/interfaces";
-import { MongoController, QueueController, IntervalsController } from ".";
+import { MongoController, IntervalsController } from ".";
 import { reminderSubsToString } from "../utils/general";
 import { getChannelObject } from "../utils/object";
 import { Snowflake } from "discord.js";
@@ -19,16 +19,9 @@ export default class RemindersController extends Controller {
 	}
 
 	init = async () => {
-		const mongo = <MongoController>this.client.controllers.get("mongo");
-		const queue = <QueueController>this.client.controllers.get("queue");
 		const intervals = <IntervalsController>(
 			this.client.controllers.get("intervals")
 		);
-
-		if (!mongo.ready || !this.client.ready) {
-			queue.enqueue({ func: this.init, args: [] });
-			return;
-		}
 
 		await this.handleStale();
 		await this.fetchNextHour();
@@ -174,15 +167,8 @@ export default class RemindersController extends Controller {
 
 	addReminder = async (time: number, sub: ReminderSubscription) => {
 		const mongo = <MongoController>this.client.controllers.get("mongo");
-		const queue = <QueueController>this.client.controllers.get("queue");
 
 		const reminder = this.reminders.get(String(time));
-
-		if (!mongo.ready) {
-			queue.enqueue({ func: this.addReminder, args: [time, sub] });
-			return;
-		}
-
 		if (!reminder) this.reminders.set(String(time), []);
 
 		this.reminders.get(String(time)).push(sub);

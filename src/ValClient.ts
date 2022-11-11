@@ -9,7 +9,7 @@ import logger from "./utils/logging";
 import { transformObject } from "./utils/general";
 import { ClientConfig } from "./types/interfaces";
 import Command from "./structures/Command";
-import { MongoController, QueueController } from "./controllers";
+import { MongoController } from "./controllers";
 import { Controller } from "./structures";
 
 const { AUTH_TOKEN, MODE } = process.env;
@@ -55,8 +55,6 @@ export default class ValClient extends Client {
 			this.initListeners();
 			await this.initConfig();
 
-			this.emit("queueExecute", "Client ready");
-
 			logger.info("Client ready");
 		} catch (error) {
 			logger.error(error);
@@ -90,39 +88,30 @@ export default class ValClient extends Client {
 
 	initConfig = async () => {
 		const mongo = <MongoController>this.controllers.get("mongo");
-		const queue = <QueueController>this.controllers.get("queue");
 
-		if (mongo.ready) {
-			const response: ClientConfig = await mongo.db
-				.collection("config")
-				.findOne(
-					{
-						GUILD_ID: process.env.GUILD_ID,
-					},
-					{ projection: { _id: 0, GUILD_ID: 0 } },
-				);
+		const response: ClientConfig = await mongo.db.collection("config").findOne(
+			{
+				GUILD_ID: process.env.GUILD_ID,
+			},
+			{ projection: { _id: 0, GUILD_ID: 0 } },
+		);
 
-			if (!response || ClientConfigValidator.validate(response).error) {
-				this.config = transformObject<ClientConfig>(response, this.config);
-				await mongo.setConfig(this.config);
+		if (!response || ClientConfigValidator.validate(response).error) {
+			this.config = transformObject<ClientConfig>(response, this.config);
+			await mongo.setConfig(this.config);
 
-				return logger.warn(
-					`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
-				);
-			}
-
-			const channelResolvers = Object.keys(response)
-				.filter(key => key.includes("CHANNEL_"))
-				.map(key => this.channels.fetch(response[key], true));
-
-			await Promise.all(channelResolvers);
-
-			this.ready = true;
-			this.config = response;
-
-			this.emit("queueExecute", "Config ready");
-		} else {
-			queue.enqueue({ func: this.initConfig, args: [] });
+			return logger.warn(
+				`The bot is not setup. Commands won't work. Call ${this.prefix} setup`,
+			);
 		}
+
+		const channelResolvers = Object.keys(response)
+			.filter(key => key.includes("CHANNEL_"))
+			.map(key => this.channels.fetch(response[key], true));
+
+		await Promise.all(channelResolvers);
+
+		this.ready = true;
+		this.config = response;
 	};
 }

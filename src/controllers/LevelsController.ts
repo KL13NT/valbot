@@ -2,12 +2,7 @@ import Controller from "../structures/Controller";
 import ValClient from "../ValClient";
 import { Snowflake, Message, GuildMember, Role } from "discord.js";
 import { MilestoneAchievement } from "../types/interfaces";
-import {
-	QueueController,
-	RedisController,
-	MongoController,
-	IntervalsController,
-} from ".";
+import { RedisController, MongoController, IntervalsController } from ".";
 
 import {
 	calculateUniqueWords,
@@ -36,15 +31,12 @@ export default class LevelsController extends Controller {
 	}
 
 	init = async () => {
-		const { controllers, ValGuild } = this.client;
+		const { controllers } = this.client;
 		const redis = <RedisController>controllers.get("redis");
 		const mongo = <MongoController>controllers.get("mongo");
 		const intervals = <IntervalsController>controllers.get("intervals");
-		const queue = <QueueController>controllers.get("queue");
 
 		//REFACTORME: SPLIT THIS MESS INTO SINGLE-PURPOSE FUNCTIONS YA BELLEND
-		if (!mongo.ready || !redis.ready || !ValGuild.available)
-			return queue.enqueue({ func: this.init, args: [] });
 
 		const voiceStates = Array.from(
 			this.client.ValGuild.voiceStates.cache.values(),

@@ -157,7 +157,7 @@ export default class ToxicityController extends Controller {
 		const sent = await modLogsChannel.send(report);
 
 		await Promise.all([
-			redis.setAsync(`PENDING_REPORT:SPECTRE:${sent.id}`, "0"), // 0 has smaller memory footprint than empty string or other status strings
+			redis.set(`PENDING_REPORT:SPECTRE:${sent.id}`, "0"), // 0 has smaller memory footprint than empty string or other status strings
 			sent.react(REACT_APPROVE_MUTE),
 		]);
 
@@ -201,7 +201,7 @@ export default class ToxicityController extends Controller {
 
 		const redis = <RedisController>this.client.controllers.get("redis");
 
-		const reportStatus = await redis.getAsync(
+		const reportStatus = await redis.get(
 			`PENDING_REPORT:SPECTRE:${reaction.message.id}`,
 		);
 

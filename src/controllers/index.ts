@@ -1,5 +1,4 @@
 export { default as PresenceController } from "./PresenceController";
-export { default as QueueController } from "./QueueController";
 export { default as IntervalsController } from "./IntervalsController";
 export { default as RedisController } from "./RedisController";
 export { default as MongoController } from "./MongoController";

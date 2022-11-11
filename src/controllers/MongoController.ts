@@ -11,8 +11,7 @@ import {
 } from "../types/interfaces";
 import { Snowflake } from "discord.js";
 
-import logger from "../utils/logging";
-import { RedisController, QueueController } from ".";
+import { RedisController } from ".";
 
 const { DB_HOST, DB_NAME } = process.env;
 
@@ -33,16 +32,12 @@ export default class MongoController extends Controller implements Destroyable {
 	}
 
 	init = async () => {
-		try {
-			await this.mongo.connect();
-			this.db = this.mongo.db(DB_NAME);
+		await this.mongo.connect();
+		this.db = this.mongo.db(DB_NAME);
 
-			if (typeof this.db !== "undefined") {
-				this.ready = true;
-				this.client.emit("queueExecute", "Mongo controller ready");
-			}
-		} catch (err) {
-			logger.error(err);
+		if (typeof this.db !== "undefined") {
+			this.ready = true;
+			this.client.emit("queueExecute", "Mongo controller ready");
 		}
 	};
 
@@ -101,26 +96,19 @@ export default class MongoController extends Controller implements Destroyable {
 	};
 
 	setConfig = async (config: ClientConfig) => {
-		const redis = <RedisController>this.client.controllers.get("redis");
-		const queue = <QueueController>this.client.controllers.get("queue");
+		this.client.config = config;
 
-		if (this.ready && redis.ready) {
-			this.client.config = config;
+		await this.db
+			.collection("config")
+			.findOneAndDelete({ GUILD_ID: process.env.GUILD_ID });
 
-			await this.db
-				.collection("config")
-				.findOneAndDelete({ GUILD_ID: process.env.GUIILD_ID });
-
-			await this.db.collection("config").findOneAndReplace(
-				{ GUILD_ID: process.env.GUILD_ID },
-				{
-					...config,
-					GUILD_ID: String(process.env.GUILD_ID),
-				},
-				{ upsert: true },
-			);
-		} else {
-			queue.enqueue({ func: this.setConfig, args: [config] });
-		}
+		await this.db.collection("config").findOneAndReplace(
+			{ GUILD_ID: process.env.GUILD_ID },
+			{
+				...config,
+				GUILD_ID: String(process.env.GUILD_ID),
+			},
+			{ upsert: true },
+		);
 	};
 }
