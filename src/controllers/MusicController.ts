@@ -1,13 +1,18 @@
 import ytdl from "ytdl-core";
+import ffmpeg from "fluent-ffmpeg";
+import { Snowflake, TextChannel, VoiceBasedChannel, VoiceChannel, VoiceState } from "discord.js";
 import {
-	Snowflake,
-	StreamDispatcher,
-	TextChannel,
-	VoiceChannel,
+	joinVoiceChannel,
 	VoiceConnection,
-	VoiceState,
-} from "discord.js";
-import { Readable } from "stream";
+	AudioPlayer,
+	NoSubscriberBehavior,
+	createAudioResource,
+	getVoiceConnection,
+	VoiceConnectionStatus,
+	createAudioPlayer,
+	entersState,
+	AudioResource,
+} from "@discordjs/voice";
 import { ObjectId } from "bson";
 
 import ValClient from "../ValClient";
@@ -24,7 +29,7 @@ import { handleUserError, retryRequest } from "../utils/apis";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
-export type PlayState = "stopped" | "paused" | "playing" | "fetching";
+export type PlayState = "stopped" | "paused" | "playing" | "fetching"; //TODO: change to enum
 
 export interface MusicControllerState {
 	/** An array of the songs in the current queue */
@@ -43,10 +48,10 @@ export interface MusicControllerState {
 	text: TextChannel;
 
 	/** Voice channel the bot is connected to */
-	vc: VoiceChannel;
+	vc: VoiceBasedChannel;
 
 	/** ytdl play stream */
-	stream: Readable;
+	resource: AudioResource | null;
 
 	/** Voice connection for current instance */
 	connection: VoiceConnection;
@@ -55,7 +60,7 @@ export interface MusicControllerState {
 	timeout: NodeJS.Timeout;
 
 	/** The connection.play dispatcher, used for seeking and other ops */
-	dispatcher: StreamDispatcher;
+	player: AudioPlayer | null;
 
 	/** Looping mode
 	 * @default 'disabled'
@@ -71,7 +76,6 @@ export interface MusicControllerState {
 
 const DISCONNECT_AFTER = 15 * 60 * 1000; // 15 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
-const DC_STATUS = 4;
 
 export default class MusicController extends Controller implements Destroyable {
 	private presence: PresenceController;
@@ -84,10 +88,10 @@ export default class MusicController extends Controller implements Destroyable {
 		queue: [],
 		text: null,
 		vc: null,
-		connection: null,
-		stream: null,
 		timeout: null,
-		dispatcher: null,
+		player: null,
+		resource: null,
+		connection: null,
 		loop: "disabled",
 		shuffle: false,
 	};
@@ -106,22 +110,18 @@ export default class MusicController extends Controller implements Destroyable {
 		) as PresenceController;
 
 		this.client.on("voiceStateUpdate", this.handleStateUpdate);
-
-		this.play(true);
 	};
 
 	destroy = async () => {
-		this.client.removeListener("voiceStateUpdate", this.handleStateUpdate);
-		this.state.connection?.disconnect?.();
-		this.state.stream?.destroy?.();
-		this.state.dispatcher?.destroy?.();
+		this.client.off("voiceStateUpdate", this.handleStateUpdate);
+		this.state.player?.stop?.();
 		await this.clearPresence();
 	};
 
 	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
 		if (newState.channel?.id && newState.member.id === this.client.user.id)
 			this.setState({
-				vc: newState.channel,
+				vc: newState.channel as VoiceChannel,
 			});
 
 		if (
@@ -159,9 +159,10 @@ export default class MusicController extends Controller implements Destroyable {
 	 */
 	play = async (force = false, position = 0) => {
 		try {
+			const connection = this.state.connection;
+
 			if (
-				!this.state.connection ||
-				this.state.connection.status !== 0 ||
+				!connection ||
 				this.state.queue.length === 0 ||
 				(this.state.state === "playing" && !force)
 			) {
@@ -192,9 +193,14 @@ export default class MusicController extends Controller implements Destroyable {
 
 			logger.info(`Selected ${hasAudio[0].audioQuality}-${hasAudio[0].codecs}`);
 
-			const stream = ytdl.downloadFromInfo(info, {
-				format: hasAudio[0],
-			});
+			const stream = ffmpeg({
+				logger,
+				source: ytdl.downloadFromInfo(info, {
+					format: hasAudio[0],
+				}),
+			})
+				.toFormat("mp3")
+				.seekInput(position);
 
 			stream.on("error", async error => {
 				handleUserError(error, this.state.text);
@@ -202,39 +208,51 @@ export default class MusicController extends Controller implements Destroyable {
 				this.skip();
 			});
 
+			const player = createAudioPlayer({
+				debug: process.env.MODE === "DEVELOPMENT",
+				behaviors: {
+					noSubscriber: NoSubscriberBehavior.Play,
+				},
+			});
+
+			const audioPlayerResource = createAudioResource(stream, {
+				silencePaddingFrames: 0,
+				inlineVolume: true,
+			});
+
+			player.play(audioPlayerResource);
+			connection.subscribe(player);
+
+			audioPlayerResource.playStream.on("end", () => this.skip());
+
 			await this.updatePresence();
 
 			this.setState({
-				stream,
 				position,
+				player,
+				connection,
+				resource: audioPlayerResource,
 				state: "playing",
 			});
-
-			const dispatcher = this.state.connection.play(stream, {
-				highWaterMark: 512,
-				seek: position,
-			});
-			dispatcher.on("finish", () => this.skip());
 		} catch (error) {
+			logger.error(error);
 			handleUserError(error, this.state.text);
 		}
 	};
 
 	resume = () => {
-		this.seek(this.state.position);
+		this.state.player.unpause();
+		// this.seek(guildId, this.state.position);
 		this.setState({
 			state: "playing",
 		});
 	};
 
 	pause = async () => {
-		const time = this.state.connection.dispatcher.streamTime / 1000;
-
-		this.destroyStreams();
+		this.state.player.pause(true);
 
 		this.setState({
 			state: "paused",
-			position: this.state.position + time,
 		});
 	};
 
@@ -296,7 +314,7 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	refresh = async () => {
-		const time = this.state.connection.dispatcher.streamTime / 1000;
+		const time = this.state.resource.playbackDuration / 1000;
 
 		this.destroyStreams();
 
@@ -368,7 +386,7 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	getCurrentStreamTime = () => {
-		return this.state?.connection?.dispatcher?.streamTime;
+		return this.state?.resource?.playbackDuration;
 	};
 
 	getCurrentPosition = () => {
@@ -400,39 +418,54 @@ export default class MusicController extends Controller implements Destroyable {
 			state: "stopped",
 			index: 0,
 			position: 0,
-			stream: null,
 			queue: [],
-			dispatcher: null,
+			player: null,
 		});
 	};
 
-	connect = async (vc: VoiceChannel, text: TextChannel) => {
-		if (!this.state.vc) {
-			logger.info(`Connecting to vc: ${vc.name}, text: ${text.name}`);
+	connect = async (vc: VoiceBasedChannel, text: TextChannel) => {
+		const connection = getVoiceConnection(vc.guildId);
 
-			const connection = this.state.connection || (await vc.join());
-
-			connection.removeAllListeners();
-			connection.on("disconnect", () => {
-				this.disconnect();
-			});
-
-			this.setState({
-				vc,
-				text,
-				connection: this.state.connection || (await vc.join()),
-			});
+		if (connection) {
+			logger.info(`Already connected to vc: ${vc.name}, text: ${text.name}`);
+			return connection;
 		}
+
+		logger.info(`Connecting to vc: ${vc.name}, text: ${text.name}`);
+
+		const newConnection = joinVoiceChannel({
+			channelId: vc.id,
+			adapterCreator: vc.guild.voiceAdapterCreator,
+			guildId: vc.guildId,
+		});
+
+		newConnection.on(VoiceConnectionStatus.Destroyed, this.disconnect);
+
+		newConnection.on(VoiceConnectionStatus.Disconnected, async () => {
+			try {
+				await Promise.race([
+					entersState(newConnection, VoiceConnectionStatus.Signalling, 5_000),
+					entersState(newConnection, VoiceConnectionStatus.Connecting, 5_000),
+				]);
+				// Seems to be reconnecting to a new channel - ignore disconnect
+			} catch (error) {
+				// Seems to be a real disconnect which SHOULDN'T be recovered from
+				newConnection.destroy();
+			}
+		});
+
+		this.setState({
+			vc,
+			text,
+			connection: newConnection,
+		});
+
+		return newConnection;
 	};
 
 	disconnect = async () => {
 		try {
 			logger.info("Disconnected from vc");
-
-			if (this.state.connection && this.state.connection.status !== DC_STATUS) {
-				this.state.connection.removeAllListeners();
-				this.state.connection.disconnect();
-			}
 
 			this.destroyStreams();
 			this.clearPresence();
@@ -440,17 +473,17 @@ export default class MusicController extends Controller implements Destroyable {
 			clearTimeout(this.state.timeout);
 
 			if (this.state.text)
-				await this.state.text.send(
-					createEmbed({
-						description: "Disconnected from voice channel",
-					}),
-				);
+				await this.state.text.send({
+					embeds: [
+						createEmbed({
+							description: "Disconnected from voice channel",
+						}),
+					],
+				});
 		} catch (error) {
 			logger.info("Disconnected from vc");
 		} finally {
 			this.state = {
-				stream: null,
-				connection: null,
 				text: null,
 				vc: null,
 				queue: [],
@@ -458,14 +491,16 @@ export default class MusicController extends Controller implements Destroyable {
 				timeout: null,
 				position: 0,
 				index: 0,
-				dispatcher: null,
+				player: null,
+				connection: null,
+				resource: null,
 				loop: "disabled",
 				shuffle: false,
 			};
 		}
 	};
 
-	canUserPlay = (vc: VoiceChannel) => {
+	canUserPlay = (vc: VoiceBasedChannel) => {
 		return !this.state.vc || this.state.vc?.id === vc.id;
 	};
 
@@ -640,7 +675,7 @@ export default class MusicController extends Controller implements Destroyable {
 	}
 
 	get playState() {
-		return this.state.state;
+		return this.state.player?.state?.status || "stopped";
 	}
 
 	get currentSongIndex() {
@@ -662,11 +697,13 @@ export default class MusicController extends Controller implements Destroyable {
 
 		await this.presence.addPresence({
 			priority: true,
-			activity: {
-				name: song.title,
-				type: "LISTENING",
-				url: song.url,
-			},
+			activities: [
+				{
+					name: song.title,
+					type: "LISTENING",
+					url: song.url,
+				},
+			],
 			source: "music",
 			status: "dnd",
 		});
@@ -712,19 +749,13 @@ export default class MusicController extends Controller implements Destroyable {
 			(this.state.vc.members.size === 1 ||
 				this.state.queue.length === 0 /* empty queue */ ||
 				this.state.state === "paused" ||
-				this.state.state === "stopped" ||
-				this.state.connection?.voice?.serverMute)
+				this.state.state === "stopped")
 		);
 	};
 
 	private destroyStreams = () => {
-		if (this.state.stream) {
-			this.state.stream.destroy();
-		}
-
-		if (this.state.connection?.dispatcher) {
-			this.state.connection.dispatcher.removeAllListeners();
-			this.state.connection.dispatcher.destroy();
+		if (this.state.resource) {
+			this.state.resource.playStream.destroy();
 		}
 	};
 }

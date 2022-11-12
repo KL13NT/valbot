@@ -7,10 +7,12 @@ export default class PresenceController extends Controller {
 	private presences: Presence[] = [
 		{
 			status: "dnd",
-			activity: {
-				name: `${this.client.prefix}help`,
-				type: "LISTENING",
-			},
+			activities: [
+				{
+					name: `${this.client.prefix}help`,
+					type: "LISTENING",
+				},
+			],
 			priority: false,
 		},
 	];
@@ -52,9 +54,7 @@ export default class PresenceController extends Controller {
 
 		if (!this.client.user) return;
 
-		this.client.user
-			.setPresence(current)
-			.catch((err: Error) => logger.error(err));
+		this.client.user.setPresence(current);
 	};
 
 	private getRandomPresence = () =>

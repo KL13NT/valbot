@@ -27,7 +27,8 @@ export default class MessageListener extends Listener {
 				controllers.get("conversation")
 			);
 
-			const nsfw = message.channel.type === "text" && message.channel.nsfw;
+			const nsfw =
+				message.channel.type === "GUILD_TEXT" && message.channel.nsfw;
 			const classification = nsfw ? [] : await toxicity.classify(message);
 
 			if (classification.length > 0)
@@ -58,13 +59,13 @@ export default class MessageListener extends Listener {
 		author,
 		channel,
 		type,
-		webhookID,
+		webhookId,
 		member,
 	}: Message): boolean =>
-		!webhookID &&
+		!webhookId &&
 		this.client.ready &&
 		author.id !== this.client.user.id &&
-		channel.type === "text" &&
+		channel.type === "GUILD_TEXT" &&
 		type === "DEFAULT" &&
 		(!isDev() ||
 			isAdmin(member) ||

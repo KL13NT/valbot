@@ -23,7 +23,7 @@ export default class CommandContext {
 		this.message = message;
 		this.author = message.author;
 		this.member = message.member;
-		this.channel = message.channel;
+		this.channel = message.channel as TextChannel;
 		this.guild = message.guild;
 		this.params = message.content
 			.replace(/\s+/gi, " ")

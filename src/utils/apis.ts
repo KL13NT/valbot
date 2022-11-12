@@ -1,4 +1,4 @@
-import { TextChannel } from "discord.js";
+import { CommandInteraction, TextChannel } from "discord.js";
 
 import logger from "../utils/logging";
 import UserError from "../structures/UserError";
@@ -18,10 +18,14 @@ export const retryRequest = async <T extends unknown>(
 	}
 };
 
-export const handleUserError = async (error: unknown, channel: TextChannel) => {
+export const handleUserError = async (
+	error: unknown,
+	channel: TextChannel,
+	interaction?: CommandInteraction,
+) => {
 	try {
 		if (error instanceof UserError) {
-			await reply(error.message, channel);
+			await reply(error.message, channel, null, interaction);
 			return;
 		}
 

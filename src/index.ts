@@ -11,6 +11,13 @@ logger.info(`starting in ${process.env.MODE} mode`);
 
 const client: ValClient = new ValClient({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
+	intents: [
+		"DIRECT_MESSAGES",
+		"MESSAGE_CONTENT",
+		"GUILDS",
+		"GUILD_BANS",
+		"GUILD_VOICE_STATES",
+	],
 });
 
 const kill = async () => {

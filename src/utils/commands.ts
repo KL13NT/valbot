@@ -1,5 +1,5 @@
 import { CommandContext } from "../structures";
-import { CommandOptions } from "../types/interfaces";
+import { CommandOptions, InteractionOptions } from "../types/interfaces";
 
 import ValClient from "../ValClient";
 
@@ -9,6 +9,7 @@ import { createEventMessage } from "./event";
 
 import { ERROR_INSUFFICIENT_PARAMS_PASSED } from "../config/events.json";
 import logger from "../utils/logging";
+import InteractionContext from "../structures/InteractionContext";
 
 const { ROLE_DEVELOPER } = process.env;
 
@@ -30,15 +31,15 @@ const { ROLE_DEVELOPER } = process.env;
 
 export function isAllowed(
 	client: ValClient,
-	options: CommandOptions,
-	context: CommandContext,
+	options: CommandOptions | InteractionOptions,
+	context: CommandContext | InteractionContext,
 ) {
 	const { member } = context;
 	const { required } = options.auth;
 
 	if (!member) return false;
 
-	if (member.hasPermission("ADMINISTRATOR")) return true;
+	if (member.permissions.has("ADMINISTRATOR")) return true;
 	if (options.auth.devOnly) return member.roles.cache.has(ROLE_DEVELOPER);
 	else {
 		const allRoles = Object.values(client.config);
@@ -120,7 +121,9 @@ export async function help(
 	member
 		.createDM()
 		.then(async dm => {
-			dm.send(embed);
+			dm.send({
+				embeds: [embed],
+			});
 
 			const sent = await message.reply("بعتلك رسالة جادة جداً");
 

@@ -9,6 +9,7 @@ import {
 	Permissions,
 	DMChannel,
 	NewsChannel,
+	CommandInteraction,
 } from "discord.js";
 import { ParsedResult } from "chrono-node";
 import prettyMilliseconds from "pretty-ms";
@@ -26,7 +27,7 @@ export async function notify(options: NotificationOptions) {
 
 	if (!target) throw Error("Channel unavailable");
 
-	await target.send({ content: notification, embed });
+	await target.send({ content: notification, embeds: [embed] });
 }
 
 /**
@@ -89,13 +90,15 @@ export function transformObject<T>(
 
 export async function awaitMessages(channel: TextChannel, member: GuildMember) {
 	const filter = ({ author }: Message) => author.id === member.id;
-	const options = {
-		max: 1,
-		time: 60 * 1000,
-		errors: ["time"],
-	};
 
-	return (await channel.awaitMessages(filter, options)).first().content;
+	return (
+		await channel.awaitMessages({
+			filter,
+			max: 1,
+			time: 60 * 1000,
+			errors: ["time"],
+		})
+	).first().content;
 }
 
 export function reminderSubsToString(subs: ReminderSubscription[]) {
@@ -139,12 +142,15 @@ export const reply = async (
 	id: string,
 	channel: TextChannel | DMChannel | NewsChannel,
 	data?: Record<string, unknown>,
-) =>
-	channel.send(
-		createEmbed({
-			description: compileTemplate(data || {}, messages[id] || id),
-		}),
-	);
+	interaction?: CommandInteraction,
+) => {
+	const embed = createEmbed({
+		description: compileTemplate(data || {}, messages[id] || id),
+	});
+
+	if (interaction) return interaction.reply({ embeds: [embed] });
+	else channel.send({ embeds: [embed] });
+};
 
 /** Format MS Duration in a specific format. */
 export const formatDuration = (duration: number) =>

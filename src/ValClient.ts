@@ -11,13 +11,14 @@ import { ClientConfig } from "./types/interfaces";
 import Command from "./structures/Command";
 import { MongoController } from "./controllers";
 import { Controller } from "./structures";
+import Interaction from "./structures/Interaction";
 
 const { AUTH_TOKEN, MODE } = process.env;
 
 export default class ValClient extends Client {
 	readonly prefix = MODE === "DEVELOPMENT" ? "!" : "-";
 	ready = false;
-	commands: Map<string, Command> = new Map<string, Command>();
+	commands: Map<string, Command | Interaction> = new Map<string, Command>();
 	controllers: Map<string, Controller> = new Map<string, Controller>();
 	ValGuild: Guild;
 	config: ClientConfig = {
@@ -107,7 +108,7 @@ export default class ValClient extends Client {
 
 		const channelResolvers = Object.keys(response)
 			.filter(key => key.includes("CHANNEL_"))
-			.map(key => this.channels.fetch(response[key], true));
+			.map(key => this.channels.fetch(response[key], { cache: true }));
 
 		await Promise.all(channelResolvers);
 

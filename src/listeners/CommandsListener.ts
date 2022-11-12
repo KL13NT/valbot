@@ -3,6 +3,7 @@ import ValClient from "../ValClient";
 import { Message } from "discord.js";
 
 import logger from "../utils/logging";
+import { Command } from "../structures";
 
 export default class CommandsListener extends Listener {
 	constructor(client: ValClient) {
@@ -19,7 +20,9 @@ export default class CommandsListener extends Listener {
 			if (matchGroup === null) return;
 
 			const [, commandName] = matchGroup; // [fullMatch, commandName]
-			const command = this.client.commands.get(commandName.toLowerCase());
+			const command = this.client.commands.get(
+				commandName.toLowerCase(),
+			) as Command;
 
 			if (command === undefined) return;
 			else command.run(message);

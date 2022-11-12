@@ -1,3 +1,4 @@
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import {
 	Snowflake,
 	Role,
@@ -104,6 +105,28 @@ export interface CommandOptions {
 	exampleUsage: string;
 	extraParams: boolean;
 	optionalParams: number;
+	auth: CommandAuthOptions;
+}
+
+export interface CommandParamOptionChoice {
+	name: string;
+	value: string;
+}
+
+export interface CommandParamOption {
+	name: string;
+	description: string;
+	type: ApplicationCommandOptionType;
+	required: boolean;
+	choices?: CommandParamOptionChoice[];
+}
+
+export interface InteractionOptions {
+	name: string;
+	description: string;
+	category: string;
+	cooldown: number;
+	options: CommandParamOption[];
 	aliases?: string[];
 	auth: CommandAuthOptions;
 }
