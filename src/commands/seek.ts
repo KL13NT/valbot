@@ -1,20 +1,27 @@
 import ValClient from "../ValClient";
-import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
 import { reply, formatDuration } from "../utils/general";
 import { TextChannel } from "discord.js";
+import InteractionContext from "../structures/InteractionContext";
+import Interaction from "../structures/Interaction";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { getVoiceConnection } from "@discordjs/voice";
 
-export default class Seek extends Command {
+export default class Seek extends Interaction {
 	constructor(client: ValClient) {
 		super(client, {
 			name: "seek",
 			category: "Music",
 			cooldown: 5 * 1000,
-			nOfParams: 1,
+			options: [
+				{
+					name: "position",
+					description: "Specific time such as 02:20 or seconds",
+					required: true,
+					type: ApplicationCommandOptionType.String,
+				},
+			],
 			description: "Seek to position in seconds.",
-			exampleUsage: "05:05",
-			extraParams: false,
-			optionalParams: 0,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -22,50 +29,62 @@ export default class Seek extends Command {
 		});
 	}
 
-	_run = async ({ member, message, params }: CommandContext) => {
+	_run = async ({
+		member,
+		channel,
+		interaction,
+		params,
+		guild,
+	}: InteractionContext) => {
 		const voiceChannel = member.voice.channel;
-		const textChannel = message.channel as TextChannel;
+		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
+		const connection = getVoiceConnection(guild.id);
 
-		if (this.client.voice.connections.size === 0) {
-			await reply("Bot.VoiceNotConnected", message.channel);
+		if (!connection) {
+			await reply("Bot.VoiceNotConnected", channel, null, interaction);
 			return;
 		}
 
 		if (!voiceChannel) {
-			await reply("User.VoiceNotConnected", textChannel);
+			await reply("User.VoiceNotConnected", textChannel, null, interaction);
 			return;
 		}
 
 		if (!controller.canUserPlay(voiceChannel)) {
-			await reply("User.SameChannel", textChannel);
+			await reply("User.SameChannel", textChannel, null, interaction);
 			return;
 		}
 
 		if (controller.playState !== "playing") {
-			await reply("Music.NotPlaying", textChannel);
+			await reply("Music.NotPlaying", textChannel, null, interaction);
 			return;
 		}
 
 		const { duration, title, url } = controller.getCurrentSong();
-		const timestamp = this.stringToTimestamp(params[0]);
+		const timestamp = this.stringToTimestamp(params.getString("position"));
 
 		if (this.isInvalidTimestamp(timestamp)) {
-			await reply("Command.Seek.Invalid", textChannel);
+			await reply("Command.Seek.Invalid", textChannel, null, interaction);
 			return;
 		}
 
 		// Song duration is represented in milliseconds.
 		if (timestamp > duration / 1000) {
-			await reply("Command.Seek.TimeExceeded", textChannel);
+			await reply("Command.Seek.TimeExceeded", textChannel, null, interaction);
 			return;
 		}
 
-		await reply("Command.Seek.Seeked", textChannel, {
-			title,
-			url,
-			timestamp: formatDuration(timestamp * 1000),
-		});
+		await reply(
+			"Command.Seek.Seeked",
+			textChannel,
+			{
+				title,
+				url,
+				timestamp: formatDuration(timestamp * 1000),
+			},
+			interaction,
+		);
 
 		controller.seek(timestamp);
 	};

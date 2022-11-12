@@ -41,7 +41,7 @@ export default class Rank extends Command {
 			: member.user.id;
 
 		if (id === this.client.user.id) {
-			await message.reply('متكترش هزار عشان ميتعملش عليك صريخ ضحك :"D');
+			await message.reply("متكترش هزار عشان ميتعملش عليك صريخ ضحك :\"D");
 			return;
 		}
 

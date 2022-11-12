@@ -4,7 +4,7 @@ import logger from "../utils/logging";
 import { ClientConfig } from "../types/interfaces";
 import { Command, CommandContext } from "../structures";
 import { Message, TextChannel, GuildMember } from "discord.js";
-import { MongoController, QueueController } from "../controllers";
+import { MongoController } from "../controllers";
 
 import { awaitMessages } from "../utils/general";
 import { ClientConfigValidator } from "../types/validators.joi";
@@ -15,12 +15,8 @@ export default class Setup extends Command {
 			name: "setup",
 			category: "Development",
 			cooldown: 1000,
-			nOfParams: 2,
+			options: [],
 			description: "بتعمل setup للبوت. مينفعش تعمل cancel.",
-			exampleUsage:
-				"get all\nget AUTH_ADMIN\nset all\nset AUTH_ADMIN\nset json",
-			extraParams: false,
-			optionalParams: 0,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_DEV",
@@ -131,21 +127,14 @@ export default class Setup extends Command {
 
 	updateConfig = async (config: ClientConfig) => {
 		const mongo = <MongoController>this.client.controllers.get("mongo");
-		const queue = <QueueController>this.client.controllers.get("queue");
 
-		if (mongo.ready) {
-			this.client.config = config;
+		this.client.config = config;
 
-			await mongo.setConfig(config);
-			await this.client.onReady();
-			this.client.ready = true;
+		await mongo.setConfig(config);
+		await this.client.onReady();
+		this.client.ready = true;
 
-			logger.info("Client configured successfully.");
-		} else
-			queue.enqueue({
-				func: this.updateConfig,
-				args: [config],
-			});
+		logger.info("Client configured successfully.");
 	};
 
 	getKeyValue = async (

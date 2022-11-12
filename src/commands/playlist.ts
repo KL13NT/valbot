@@ -24,7 +24,7 @@ export default class PlaylistCommand extends Command {
 			cooldown: 5 * 1000,
 			nOfParams: 2,
 			description:
-				"Create, update, delete, or load a playlist using the current queue. Playlist names cannot contain spaces. Use - instead.",
+				"Create, update, delete, or load a playlist using the current queue.",
 			exampleUsage: "<create|update|delete|load|list|lists> <?playlist-name>",
 			extraParams: false,
 			optionalParams: 1,

@@ -1,26 +1,34 @@
-import { TextChannel } from "discord.js";
+import { CommandInteraction, TextChannel } from "discord.js";
 
 import ValClient from "../ValClient";
 import ResolveBehavior from "../entities/music/ResolveBehavior";
 
-import { Command, CommandContext } from "../structures";
 import { reply } from "../utils/general";
 import { MusicController } from "../controllers";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import Interaction from "../structures/Interaction";
+import InteractionContext from "../structures/InteractionContext";
+import { entersState, VoiceConnectionStatus } from "@discordjs/voice";
 
-export default class Play extends Command {
+export default class Play extends Interaction {
 	playBehavior: ResolveBehavior;
 
 	constructor(client: ValClient) {
 		super(client, {
 			name: "play",
 			category: "Music",
-			cooldown: 5 * 1000,
-			nOfParams: 1,
+			cooldown: 2000,
+			options: [
+				{
+					name: "query",
+					description:
+						"Track url or search query. Leave empty to continue when paused.",
+					type: ApplicationCommandOptionType.String,
+					required: false,
+				},
+			],
 			description:
-				"Start or continue playing a song. Supports YouTube singles, playlists, mixes, and Spotify tracks, playlists, and albums.",
-			exampleUsage: "?<youtube_link|spotify_link|query>",
-			extraParams: true,
-			optionalParams: 1,
+				"Start or continue playing a song. Supports YouTube and Spotify.",
 			aliases: ["p"],
 			auth: {
 				method: "ROLE",
@@ -31,77 +39,95 @@ export default class Play extends Command {
 		this.playBehavior = new ResolveBehavior();
 	}
 
-	_run = async ({ member, message, params }: CommandContext) => {
+	_run = async ({ member, interaction, params }: InteractionContext) => {
 		const voiceChannel = member.voice.channel;
-		const textChannel = message.channel as TextChannel;
+		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 
 		if (!voiceChannel) {
-			await reply("User.VoiceNotConnected", message.channel);
+			await reply("User.VoiceNotConnected", textChannel);
 			return;
 		}
 
 		if (!controller.canUserPlay(voiceChannel)) {
-			await reply("Command.Play.NotAllowed", message.channel);
+			await reply("Command.Play.NotAllowed", textChannel);
 			return;
 		}
 
-		if (params.length === 0) {
-			await this.resume(controller, textChannel);
+		const query = params.getString("query");
+
+		if (!query) {
+			await this.resume(controller, textChannel, interaction);
 			return;
 		}
 
-		const resolved = await this.resolve(params);
+		const resolved = await this.resolve(query);
 
 		if (!resolved) {
-			await reply("Command.Play.GenericError", message.channel);
+			await reply("Command.Play.GenericError", textChannel, null, interaction);
 			return;
 		}
 
 		controller.enqueue(resolved, member.id);
 
 		if (Array.isArray(resolved))
-			await reply("Command.Play.Playlist", message.channel, {
-				number: resolved.length,
-			});
+			await reply(
+				"Command.Play.Playlist",
+				textChannel,
+				{
+					number: resolved.length,
+				},
+				interaction,
+			);
 		else {
 			const { title, url } = resolved;
-			await reply("Command.Play.Single", message.channel, {
-				id: controller.queue.length,
-				title,
-				url,
-				member,
-			});
+			await reply(
+				"Command.Play.Single",
+				textChannel,
+				{
+					id: controller.queue.length,
+					title,
+					url,
+					member,
+				},
+				interaction,
+			);
 		}
 
-		await controller.connect(voiceChannel, textChannel);
+		const connection = await controller.connect(voiceChannel, textChannel);
 
-		if (controller.playState !== "paused") await controller.play();
+		if (controller.playState === "paused") return;
+
+		await entersState(connection, VoiceConnectionStatus.Ready, 5_000);
+		await controller.play();
 	};
 
-	resume = async (controller: MusicController, channel: TextChannel) => {
+	resume = async (
+		controller: MusicController,
+		channel: TextChannel,
+		interaction: CommandInteraction,
+	) => {
 		const current = controller.getCurrentSong();
 		const state = controller.playState;
 
 		if (state === "paused") {
 			controller.resume();
-			await reply("Command.Play.Resumed", channel);
+			await reply("Command.Play.Resumed", channel, null, interaction);
 			return;
 		}
 
 		if (current) {
-			await reply("Command.Play.AlreadyPlaying", channel);
+			await reply("Command.Play.AlreadyPlaying", channel, null, interaction);
 			return;
 		}
 
-		await reply("Command.Play.NotPaused", channel);
+		await reply("Command.Play.NotPaused", channel, null, interaction);
 	};
 
 	/**
 	 * @throws
 	 */
-	resolve = async (params: string[]) => {
-		const query = params.join(" ");
+	resolve = async (query: string) => {
 		return this.playBehavior.fetch(query);
 	};
 }
