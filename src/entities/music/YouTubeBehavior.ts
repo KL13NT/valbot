@@ -70,7 +70,7 @@ export class YoutubeTrack implements TrackRetriever {
 	};
 
 	private getUrl = async (query: string) => {
-		const searchUrl = this.prepareSearchQuery(`${query} lyrics`);
+		const searchUrl = this.prepareSearchQuery(query);
 		return fetch(searchUrl)
 			.then(response => response.text())
 			.then(filterResponse)
