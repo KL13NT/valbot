@@ -1,33 +1,86 @@
 import ValClient from "../ValClient";
 
-import { Command, CommandContext } from "../structures";
 import { capitalise, reply } from "../utils/general";
 import { MusicController } from "../controllers";
 import UserError from "../structures/UserError";
 import { Snowflake, TextChannel } from "discord.js";
+import {
+	APIApplicationCommandBasicOption,
+	ApplicationCommandOptionType,
+} from "discord-api-types/v10";
+import Interaction from "../structures/Interaction";
+import InteractionContext from "../structures/InteractionContext";
 
-type Operation =
-	| "delete"
-	| "create"
-	| "update"
-	| "load"
-	| "append"
-	| "list"
-	| "lists";
+enum Subcommand {
+	Delete = "delete",
+	Create = "create",
+	Update = "update",
+	Load = "load",
+	Append = "append",
+	List = "list",
+	Lists = "lists",
+}
 
-export default class PlaylistCommand extends Command {
+const ModificationsOptions: APIApplicationCommandBasicOption[] = [
+	{
+		name: "name",
+		description: "Playlist name",
+		required: true,
+		type: ApplicationCommandOptionType.String,
+	},
+];
+
+export default class PlaylistCommand extends Interaction {
 	constructor(client: ValClient) {
 		super(client, {
 			name: "playlist",
-			aliases: ["pl"],
 			category: "Music",
 			cooldown: 5 * 1000,
-			nOfParams: 2,
 			description:
 				"Create, update, delete, or load a playlist using the current queue.",
-			exampleUsage: "<create|update|delete|load|list|lists> <?playlist-name>",
-			extraParams: false,
-			optionalParams: 1,
+			options: [
+				{
+					name: Subcommand.Create,
+					description: "Create playlist",
+					type: ApplicationCommandOptionType.Subcommand,
+					options: ModificationsOptions,
+				},
+				{
+					name: Subcommand.Append,
+					description: "Append playlist to current queue",
+					type: ApplicationCommandOptionType.Subcommand,
+					options: ModificationsOptions,
+				},
+				{
+					name: Subcommand.Delete,
+					description: "Delete playlist",
+					type: ApplicationCommandOptionType.Subcommand,
+					options: ModificationsOptions,
+				},
+				{
+					name: Subcommand.List,
+					description: "List playlist content",
+					type: ApplicationCommandOptionType.Subcommand,
+					options: ModificationsOptions,
+				},
+				{
+					name: Subcommand.Load,
+					description: "Load playlist instead of current queue",
+					type: ApplicationCommandOptionType.Subcommand,
+					options: ModificationsOptions,
+				},
+				{
+					name: Subcommand.Update,
+					description: "Update playlist with current queue",
+					type: ApplicationCommandOptionType.Subcommand,
+					options: ModificationsOptions,
+				},
+				{
+					name: Subcommand.Lists,
+					description: "List all playlists",
+					type: ApplicationCommandOptionType.Subcommand,
+				},
+			],
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -35,56 +88,60 @@ export default class PlaylistCommand extends Command {
 		});
 	}
 
-	_run = async ({ member, params, message, channel }: CommandContext) => {
-		const operation = params[0] as Operation;
-		const [, name] = params;
+	_run = async ({
+		member,
+		params,
+		interaction,
+		channel,
+	}: InteractionContext) => {
+		await interaction.deferReply();
+
 		const voiceChannel = member.voice.channel;
-		const textChannel = message.channel as TextChannel;
+		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
+		const subcommand = interaction.options.getSubcommand() as Subcommand;
+		const name = params.getString("name");
 
-		if (
-			/^(create)|(update)|(delete)|(append)|(load)$/i.test(operation) &&
-			params.length < 2
-		) {
-			await reply("Command.Playlist.Invalid", channel);
-			return;
-		}
-
-		switch (operation) {
-			case "create":
+		switch (subcommand) {
+			case Subcommand.Create:
 				await controller.createPlaylist(name, member.id);
 				break;
 
-			case "delete":
+			case Subcommand.Delete:
 				await controller.deletePlaylist(name, member.id);
 				break;
 
-			case "update":
+			case Subcommand.Update:
 				await controller.updatePlaylist(name, member.id);
 				break;
 
-			case "list": {
+			case Subcommand.List: {
 				const playlists = await controller.getUserPlaylists(member.id);
 
 				if (playlists.length === 0)
 					throw new UserError("This user has no playlists");
 
-				await reply("Command.Playlist.List", channel, {
-					user: member.user.username,
-					songs: playlists
-						.map(
-							(playlist, index) =>
-								`**${index + 1})** ${playlist.name} has ${
-									playlist.queue.length
-								} tracks`,
-						)
-						.join("\n"),
-				});
+				await reply(
+					"Command.Playlist.List",
+					channel,
+					{
+						user: member.user.username,
+						songs: playlists
+							.map(
+								(playlist, index) =>
+									`**${index + 1})** ${playlist.name} has ${
+										playlist.queue.length
+									} tracks`,
+							)
+							.join("\n"),
+					},
+					interaction,
+				);
 
 				return;
 			}
 
-			case "lists": {
+			case Subcommand.Lists: {
 				const playlists = await controller.getAllPlaylists();
 				if (playlists.length === 0)
 					throw new UserError("There is not playlists");
@@ -106,21 +163,26 @@ export default class PlaylistCommand extends Command {
 					message += `${map.get(userId).join("\n")}\n\n`;
 				}
 
-				await reply("Command.Playlist.Lists", textChannel, {
-					songs: message,
-				});
+				await reply(
+					"Command.Playlist.Lists",
+					textChannel,
+					{
+						songs: message,
+					},
+					interaction,
+				);
 
 				return;
 			}
 
-			case "load": {
+			case Subcommand.Load: {
 				if (!voiceChannel) {
-					await reply("User.VoiceNotConnected", message.channel);
+					await reply("User.VoiceNotConnected", channel, null, interaction);
 					return;
 				}
 
 				if (!controller.canUserPlay(voiceChannel)) {
-					await reply("Command.Play.NotAllowed", message.channel);
+					await reply("Command.Play.NotAllowed", channel, null, interaction);
 					return;
 				}
 
@@ -130,14 +192,14 @@ export default class PlaylistCommand extends Command {
 				break;
 			}
 
-			case "append": {
+			case Subcommand.Append: {
 				if (!voiceChannel) {
-					await reply("User.VoiceNotConnected", message.channel);
+					await reply("User.VoiceNotConnected", channel, null, interaction);
 					return;
 				}
 
 				if (!controller.canUserPlay(voiceChannel)) {
-					await reply("Command.Play.NotAllowed", message.channel);
+					await reply("Command.Play.NotAllowed", channel, null, interaction);
 					return;
 				}
 				await controller.connect(voiceChannel, textChannel);
@@ -148,11 +210,16 @@ export default class PlaylistCommand extends Command {
 			}
 
 			default: {
-				await reply("Command.Playlist.Invalid", message.channel);
+				await reply("Command.Playlist.Invalid", channel, null, interaction);
 				return;
 			}
 		}
 
-		await reply(`Command.Playlist.${capitalise(operation)}`, channel);
+		await reply(
+			`Command.Playlist.${capitalise(subcommand)}`,
+			channel,
+			{ name },
+			interaction,
+		);
 	};
 }

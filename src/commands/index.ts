@@ -33,6 +33,6 @@ export { default as Jump } from "./jump";
 // export { default as Remove } from "./remove";
 export { default as PreviousNow } from "./previous-now";
 export { default as Move } from "./move";
-// export { default as Playlist } from "./playlist";
+export { default as Playlist } from "./playlist";
 export { default as Shuffle } from "./shuffle";
 // export { default as Refresh } from "./refresh";
