@@ -15,6 +15,7 @@ import { ParsedResult } from "chrono-node";
 import prettyMilliseconds from "pretty-ms";
 import messages from "../messages.json";
 import { createEmbed } from "./embed";
+import { APIMessage } from "discord-api-types/v10";
 
 /**
  * Sends notification to specified channel or to notifications channel
@@ -143,13 +144,18 @@ export const reply = async (
 	channel: TextChannel | DMChannel | NewsChannel,
 	data?: Record<string, unknown>,
 	interaction?: CommandInteraction,
-) => {
+): Promise<void | APIMessage | Message<boolean>> => {
 	const embed = createEmbed({
 		description: compileTemplate(data || {}, messages[id] || id),
 	});
 
-	if (interaction) return interaction.reply({ embeds: [embed] });
-	else channel.send({ embeds: [embed] });
+	if (interaction && interaction.deferred) {
+		await interaction.editReply({ embeds: [embed] });
+	} else if (interaction) {
+		await interaction.reply({ embeds: [embed] });
+	} else {
+		await channel.send({ embeds: [embed] });
+	}
 };
 
 /** Format MS Duration in a specific format. */
