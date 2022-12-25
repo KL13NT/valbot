@@ -7,9 +7,9 @@ import {
 	GuildMember,
 	Message,
 	Permissions,
-	DMChannel,
-	NewsChannel,
 	CommandInteraction,
+	TextBasedChannel,
+	Util,
 } from "discord.js";
 import { ParsedResult } from "chrono-node";
 import prettyMilliseconds from "pretty-ms";
@@ -141,7 +141,7 @@ export const chronoResultToObject = (result: ParsedResult) => ({
 
 export const reply = async (
 	id: string,
-	channel: TextChannel | DMChannel | NewsChannel,
+	channel: TextBasedChannel,
 	data?: Record<string, unknown>,
 	interaction?: CommandInteraction,
 ): Promise<void | APIMessage | Message<boolean>> => {
@@ -175,4 +175,32 @@ export const stringToTimestamp = (time: string) => {
 		.split(":")
 		.map(period => Number(period))
 		.reduce((accumulator, period) => 60 * accumulator + period, 0);
+};
+
+interface SplitMessageOptions {
+	maxLength: number;
+	prepend?: string;
+	append?: string;
+}
+
+export const splitMessage = (text: string, options: SplitMessageOptions) => {
+	const { maxLength, prepend = "", append = "" } = options;
+
+	text = Util.verifyString(text);
+	if (text.length <= maxLength) return [text];
+
+	const splitText = text.split("\n");
+	const messages: string[] = [];
+	let message = prepend;
+
+	for (const chunk of splitText) {
+		if ((message + chunk + append).length > maxLength) {
+			messages.push(message + append);
+			message = prepend;
+		}
+
+		message += (message !== prepend ? "\n" : "") + chunk;
+	}
+
+	return messages.concat(message).filter(item => item);
 };

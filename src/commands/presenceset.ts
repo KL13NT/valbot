@@ -2,8 +2,9 @@ import { Command, CommandContext } from "../structures";
 import ValClient from "../ValClient";
 
 import { Presence } from "../types/interfaces";
-import { ActivityType } from "discord.js";
+import { ExcludeEnum } from "discord.js";
 import { PresenceController } from "../controllers";
+import { ActivityTypes } from "discord.js/typings/enums";
 
 export default class PresenceSet extends Command {
 	constructor(client: ValClient) {
@@ -26,14 +27,14 @@ export default class PresenceSet extends Command {
 
 	_run = async ({ params, message }: CommandContext) => {
 		const [type, priority, ...name] = params;
-		const activityType = <ActivityType>type;
+		const activityType = type as ExcludeEnum<typeof ActivityTypes, "CUSTOM">;
 		const controller = this.client.controllers.get(
 			"presence",
 		) as PresenceController;
 
 		if (
 			!/^(PLAYING|STREAMING|LISTENING|WATCHING)$/i.test(
-				activityType.toLowerCase(),
+				String(activityType).toLowerCase(), // TODO: validate this works
 			)
 		) {
 			await message.reply("حدد Type معروفة");
@@ -49,10 +50,12 @@ export default class PresenceSet extends Command {
 
 		const presence: Presence = {
 			status: "dnd",
-			activity: {
-				name: name.join(" "),
-				type: activityType,
-			},
+			activities: [
+				{
+					name: name.join(" "),
+					type: activityType,
+				},
+			],
 			priority: isPriority,
 		};
 

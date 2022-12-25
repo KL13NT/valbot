@@ -13,7 +13,7 @@ const client = new ValClient({ intents: [] });
 const slashCommands = Object.values(commands)
 	// eslint-disable-next-line new-cap
 	.map(command => new command(client))
-	.filter(command => Object.hasOwn(command.options, "options"))
+	.filter(command => command.options.hasOwnProperty("options"))
 	.map(command => {
 		const { options } = command as Interaction;
 

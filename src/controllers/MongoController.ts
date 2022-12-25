@@ -11,8 +11,6 @@ import {
 } from "../types/interfaces";
 import { Snowflake } from "discord.js";
 
-import { RedisController } from ".";
-
 const { DB_HOST, DB_NAME } = process.env;
 
 export default class MongoController extends Controller implements Destroyable {

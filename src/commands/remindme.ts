@@ -123,7 +123,7 @@ export default class Remindme extends Command {
 			footer: { text: "رد في خلال دقيقة وإلا هعتبر الـ reminder لاغي" },
 		});
 
-		await message.reply(confirmationEmbed);
+		await message.reply({ embeds: [confirmationEmbed] });
 		const choice = (await awaitMessages(channel, member)).toLowerCase();
 
 		if (choice !== "no" && choice !== "yes") {

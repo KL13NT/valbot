@@ -1,6 +1,5 @@
 import { Controller } from "../structures";
 import { Presence } from "../types/interfaces";
-import logger from "../utils/logging";
 import ValClient from "../ValClient";
 
 export default class PresenceController extends Controller {

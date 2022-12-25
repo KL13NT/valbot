@@ -5,6 +5,7 @@ import { Command, CommandContext, PaginatedEmbed } from "../structures";
 import { createEmbed } from "../utils/embed";
 import { reply } from "../utils/general";
 import { MessageEmbed, TextChannel } from "discord.js";
+import { getVoiceConnections } from "@discordjs/voice";
 
 const MAX_EMBED_LENGTH = 4096;
 const LYRICS_EMBED_TIME = 4 * 60 * 1000; // 4 minutes
@@ -42,7 +43,9 @@ export default class Lyrics extends Command {
 			return;
 		}
 
-		if (this.client.voice.connections.size === 0) {
+		const connections = getVoiceConnections();
+
+		if (connections.size === 0) {
 			await reply("Bot.VoiceNotConnected", channel);
 			return;
 		}

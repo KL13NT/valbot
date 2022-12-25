@@ -1,3 +1,4 @@
+import { getVoiceConnections } from "@discordjs/voice";
 import { TextChannel } from "discord.js";
 import { MusicController } from "../controllers";
 import { Command, CommandContext } from "../structures";
@@ -27,7 +28,9 @@ export default class Refresh extends Command {
 		const textChannel = message.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 
-		if (this.client.voice.connections.size === 0) {
+		const connections = getVoiceConnections();
+
+		if (connections.size === 0) {
 			await reply("Bot.VoiceNotConnected", textChannel);
 			return;
 		}

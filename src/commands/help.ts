@@ -28,7 +28,7 @@ export default class Help extends Command {
 		const embed = this.createHelpEmbed(commands);
 
 		const dm = await member.createDM();
-		await dm.send(embed);
+		await dm.send({ embeds: [embed] });
 
 		const sent = await message.reply("بعتلك رسالة جادة جداً");
 

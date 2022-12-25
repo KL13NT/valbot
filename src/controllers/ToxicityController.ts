@@ -154,7 +154,7 @@ export default class ToxicityController extends Controller {
 		});
 
 		const redis = <RedisController>this.client.controllers.get("redis");
-		const sent = await modLogsChannel.send(report);
+		const sent = await modLogsChannel.send({ embeds: [report] });
 
 		await Promise.all([
 			redis.set(`PENDING_REPORT:SPECTRE:${sent.id}`, "0"), // 0 has smaller memory footprint than empty string or other status strings
@@ -248,9 +248,12 @@ export default class ToxicityController extends Controller {
 				reason,
 			}),
 			redis.del(`PENDING_REPORT:SPECTRE:${reaction.message.id}`),
-			violationChannel.messages.delete(violationMessage, reason),
-			modLogsChannel.send(`${member.toString()}`, muteEmbed),
-			reaction.message.edit(updatedReport),
+			violationChannel.messages.delete(violationMessage),
+			modLogsChannel.send({
+				content: `${member.toString()}`,
+				embeds: [muteEmbed],
+			}),
+			reaction.message.edit({ embeds: [updatedReport] }),
 		]);
 	};
 }

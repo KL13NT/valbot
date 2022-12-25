@@ -31,11 +31,13 @@ export default class Queue extends Command {
 		const controller = this.client.controllers.get("music") as MusicController;
 
 		if (controller.queue.length === 0) {
-			channel.send(
-				createEmbed({
-					description: "The queue is empty.",
-				}),
-			);
+			channel.send({
+				embeds: [
+					createEmbed({
+						description: "The queue is empty.",
+					}),
+				],
+			});
 
 			return;
 		}

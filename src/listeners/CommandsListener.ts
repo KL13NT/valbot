@@ -24,8 +24,15 @@ export default class CommandsListener extends Listener {
 				commandName.toLowerCase(),
 			) as Command;
 
-			if (command === undefined) return;
-			else command.run(message);
+			if (command === undefined) {
+				logger.info("command not found");
+				return;
+			} else if (command instanceof Command) {
+				logger.info("command instanceof command");
+				await command.run(message);
+			} else {
+				await message.reply("This command can only be run as a slash command");
+			}
 		} catch (error) {
 			logger.error(error);
 		}

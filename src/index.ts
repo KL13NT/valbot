@@ -14,6 +14,7 @@ const client: ValClient = new ValClient({
 	intents: [
 		"DIRECT_MESSAGES",
 		"MESSAGE_CONTENT",
+		"GUILD_MESSAGES",
 		"GUILDS",
 		"GUILD_BANS",
 		"GUILD_VOICE_STATES",

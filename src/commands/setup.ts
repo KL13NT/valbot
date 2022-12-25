@@ -15,8 +15,12 @@ export default class Setup extends Command {
 			name: "setup",
 			category: "Development",
 			cooldown: 1000,
-			options: [],
+			nOfParams: 2,
 			description: "بتعمل setup للبوت. مينفعش تعمل cancel.",
+			exampleUsage:
+				"get all\nget AUTH_ADMIN\nset all\nset AUTH_ADMIN\nset json",
+			extraParams: false,
+			optionalParams: 0,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_DEV",
@@ -152,7 +156,7 @@ export default class Setup extends Command {
 
 		channel.send(key);
 		config[key] = (
-			await channel.awaitMessages(filter, awaitOptions)
+			await channel.awaitMessages({ filter, ...awaitOptions })
 		).first().content;
 	};
 }

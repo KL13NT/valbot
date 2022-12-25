@@ -41,7 +41,7 @@ export default class Rank extends Command {
 			: member.user.id;
 
 		if (id === this.client.user.id) {
-			await message.reply("متكترش هزار عشان ميتعملش عليك صريخ ضحك :\"D");
+			await message.reply("متكترش هزار عشان ميتعملش عليك صريخ ضحك :'D");
 			return;
 		}
 
@@ -51,10 +51,12 @@ export default class Rank extends Command {
 
 		const card = await renderer.render({ html: TEMPLATE, content });
 
-		await message.reply("Here's the requested rank", {
+		await message.reply({
+			content: "Here's the requested rank",
 			files: [
 				{
-					attachment: card,
+					name: "rank",
+					file: card,
 				},
 			],
 		});

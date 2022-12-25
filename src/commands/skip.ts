@@ -1,3 +1,4 @@
+import { getVoiceConnections } from "@discordjs/voice";
 import { MusicController } from "../controllers";
 import { Command, CommandContext } from "../structures";
 import { reply } from "../utils/general";
@@ -36,7 +37,9 @@ export default class Skip extends Command {
 			return;
 		}
 
-		if (this.client.voice.connections.size === 0) {
+		const connections = getVoiceConnections();
+
+		if (connections.size === 0) {
 			await reply("Bot.VoiceNotConnected", message.channel, {});
 			return;
 		}

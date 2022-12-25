@@ -3,6 +3,7 @@ import { Command, CommandContext } from "../structures";
 import { MusicController } from "../controllers";
 import { reply } from "../utils/general";
 import { TextChannel } from "discord.js";
+import { getVoiceConnections } from "@discordjs/voice";
 
 export default class Remove extends Command {
 	constructor(client: ValClient) {
@@ -27,7 +28,9 @@ export default class Remove extends Command {
 		const textChannel = message.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 
-		if (this.client.voice.connections.size === 0) {
+		const connections = getVoiceConnections();
+
+		if (connections.size === 0) {
 			await reply("Bot.VoiceNotConnected", message.channel);
 			return;
 		}

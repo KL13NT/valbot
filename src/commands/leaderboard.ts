@@ -50,12 +50,12 @@ export default class Leaderboard extends Command {
 			descriptions.push(`\n${this.generateLevelString(yours, ctx)}`);
 		}
 
-		const msg = createEmbed({
+		const embed = createEmbed({
 			title: "Top 20 Active Members",
 			description: descriptions.join("\n"),
 			footer: { text: "For full rank details use `v! rank`" },
 		});
 
-		await message.reply(msg);
+		await message.reply({ embeds: [embed] });
 	};
 }

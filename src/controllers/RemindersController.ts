@@ -4,7 +4,7 @@ import logger from "../utils/logging";
 import { Controller } from "../structures";
 import { Reminder, ReminderSubscription } from "../types/interfaces";
 import { MongoController, IntervalsController } from ".";
-import { reminderSubsToString } from "../utils/general";
+import { reminderSubsToString, splitMessage } from "../utils/general";
 import { getChannelObject } from "../utils/object";
 import { Snowflake } from "discord.js";
 
@@ -133,11 +133,21 @@ export default class RemindersController extends Controller {
 			if (current) {
 				const channel = getChannelObject(this.client, CHANNEL_NOTIFICATIONS);
 
-				const message = reminderSubsToString(current);
+				const subscriptionsString = reminderSubsToString(current);
+				const messages = splitMessage(
+					`**Reminders** \n${subscriptionsString}`,
+					{
+						maxLength: 2000,
+					},
+				);
 
-				await channel.send(`**Reminders** \n${message}`, {
-					split: message.length > 2000,
-				});
+				for (const message of messages) {
+					await channel.send({
+						content: message,
+						options: {},
+					});
+				}
+
 				await this.clear(now);
 				this.reminders.delete(String(now));
 			}

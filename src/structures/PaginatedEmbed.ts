@@ -1,10 +1,10 @@
 import {
-	CollectorFilter,
 	GuildMember,
 	Message,
 	MessageEmbed,
 	MessageReaction,
 	TextChannel,
+	User,
 } from "discord.js";
 
 export default class PaginationEmbed {
@@ -36,20 +36,26 @@ export default class PaginationEmbed {
 	}
 
 	init = async () => {
-		this.current = await this.channel.send(
-			this.pages[this.page].setFooter(
-				`Page ${this.page + 1} / ${this.pages.length}`,
-			),
-		);
+		this.current = await this.channel.send({
+			embeds: [
+				{
+					...this.pages[this.page],
+					footer: {
+						text: `Page ${this.page + 1} / ${this.pages.length}`,
+					},
+				},
+			],
+		});
 
 		if (this.pages.length < 2) return;
 
-		const filter: CollectorFilter = (reaction, user) =>
+		const filter = (reaction: MessageReaction, user: User) =>
 			Object.keys(this.emojis).includes(reaction.emoji.name) &&
 			!user.bot &&
 			user.id === this.member.id;
 
-		const collector = this.current.createReactionCollector(filter, {
+		const collector = this.current.createReactionCollector({
+			filter,
 			time: this.timeout,
 			dispose: true,
 		});
@@ -65,10 +71,15 @@ export default class PaginationEmbed {
 		const modifier = this.emojis[reaction.emoji.name];
 		this.page = modifier();
 
-		await this.current.edit(
-			this.pages[this.page].setFooter(
-				`Page ${this.page + 1} / ${this.pages.length}`,
-			),
-		);
+		await this.current.edit({
+			embeds: [
+				{
+					...this.pages[this.page],
+					footer: {
+						text: `Page ${this.page + 1} / ${this.pages.length}`,
+					},
+				},
+			],
+		});
 	};
 }
