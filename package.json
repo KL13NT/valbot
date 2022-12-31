@@ -9,6 +9,7 @@
 	"scripts": {
 		"dev": "ts-node-dev --transpile-only -r tsconfig-paths/register -r dotenv/config src/index.ts dotenv_config_path=./.env.dev --clear --rs ",
 		"start": "ts-node-dev --transpile-only -r tsconfig-paths/register -r dotenv/config src/index.ts dotenv_config_path=./.env.prod --clear --rs ",
+		"build": "tsc",
 		"commands:dev": "ts-node --transpileOnly -r tsconfig-paths/register -r dotenv/config src/scripts/commands-deploy.ts dotenv_config_path=./.env.dev --clear --rs",
 		"deps": "run-p develop:mongo develop:redis watch inspect:node",
 		"tsc": "tsc --noEmit",

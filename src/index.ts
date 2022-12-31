@@ -44,7 +44,7 @@ const kill = async () => {
 );
 
 client.on("error", (err: Error) => {
-	logger.warn("An error occurred with ValClient", err);
+	logger.error("An error occurred with ValClient", err);
 	kill();
 });
 
@@ -52,7 +52,7 @@ client.on("error", (err: Error) => {
 	try {
 		client.init(process.env.AUTH_TOKEN);
 	} catch (error) {
-		logger.warn("An error occurred with ValClient", error);
+		logger.error("An error occurred with ValClient", error);
 		kill();
 	}
 })();
