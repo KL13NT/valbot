@@ -26,7 +26,6 @@ import UserError from "../structures/UserError";
 import logger from "../utils/logging";
 import { Controller } from "../structures";
 import { createEmbed } from "../utils/embed";
-import { PresenceController } from "./index";
 import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
 import { YoutubeTrack } from "../entities/music/YouTubeBehavior";
@@ -89,7 +88,6 @@ const DISCONNECT_AFTER = 15 * 60 * 1000; // 15 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 
 export default class MusicController extends Controller implements Destroyable {
-	private presence: PresenceController;
 	private mongo: MongoController;
 	private resolver: YoutubeTrack;
 	private state: MusicControllerState = {
@@ -118,9 +116,6 @@ export default class MusicController extends Controller implements Destroyable {
 	init = async () => {
 		this.resolver = new YoutubeTrack();
 		this.mongo = this.client.controllers.get("mongo") as MongoController;
-		this.presence = this.client.controllers.get(
-			"presence",
-		) as PresenceController;
 
 		this.client.on("voiceStateUpdate", this.handleStateUpdate);
 	};
@@ -128,7 +123,6 @@ export default class MusicController extends Controller implements Destroyable {
 	destroy = async () => {
 		this.client.off("voiceStateUpdate", this.handleStateUpdate);
 		this.state.player?.stop?.();
-		await this.clearPresence();
 	};
 
 	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
@@ -250,8 +244,6 @@ export default class MusicController extends Controller implements Destroyable {
 
 			player.play(audioPlayerResource);
 			connection.subscribe(player);
-
-			await this.updatePresence();
 
 			this.setState({
 				position,
@@ -713,29 +705,6 @@ export default class MusicController extends Controller implements Destroyable {
 	get shuffleState() {
 		return this.state.shuffle;
 	}
-
-	private updatePresence = async () => {
-		const song = this.getCurrentSong();
-
-		if (!song) return;
-
-		await this.presence.addPresence({
-			priority: true,
-			activities: [
-				{
-					name: song.title,
-					type: "LISTENING",
-					url: song.url,
-				},
-			],
-			source: "music",
-			status: "dnd",
-		});
-	};
-
-	private clearPresence = async () => {
-		await this.presence.clearSource("music");
-	};
 
 	private setState = (update: Partial<MusicControllerState>) => {
 		const indexChanged = typeof update.index !== "undefined";
