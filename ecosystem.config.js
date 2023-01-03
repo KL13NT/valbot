@@ -2,11 +2,6 @@ const dotenv = require("dotenv");
 const prodEnv = dotenv.config({ path: "./.env.prod" });
 const devEnv = dotenv.config({ path: "./.env.dev" });
 
-console.log({
-	MODE: "PRODUCTION",
-	...prodEnv.parsed,
-});
-
 module.exports = {
 	apps: [
 		{
