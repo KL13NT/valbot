@@ -11,10 +11,10 @@ import logger from "../utils/logging";
 
 export default class MessageListener extends Listener {
 	constructor(client: ValClient) {
-		super(client, ["message"]);
+		super(client, ["messageCreate"]);
 	}
 
-	onMessage = async (message: Message): Promise<void> => {
+	onMessageCreate = async (message: Message): Promise<void> => {
 		try {
 			if (!this.shouldHandle(message)) return;
 
