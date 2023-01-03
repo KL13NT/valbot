@@ -313,7 +313,7 @@ export default class MusicController extends Controller implements Destroyable {
 
 		this.stop();
 
-		if (index === queue.length - 1 && ["disabled", "single"].includes(loop)) {
+		if (index === queue.length - 1 && loop === "disabled") {
 			await this.clear();
 			return;
 		}
