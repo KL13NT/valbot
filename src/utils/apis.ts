@@ -47,11 +47,6 @@ export const awaitJoin = async (vc: VoiceBasedChannel) => {
 		guildId: vc.guildId,
 	});
 
-	try {
-		await entersState(connection, VoiceConnectionStatus.Ready, 5_000);
-		return connection;
-	} catch (error) {
-		connection.destroy();
-		throw error;
-	}
+	await entersState(connection, VoiceConnectionStatus.Ready, 5_000);
+	return connection;
 };
