@@ -1,8 +1,12 @@
 import ytdl from "ytdl-core";
-import ffmpeg from "fluent-ffmpeg";
-import { Snowflake, TextChannel, VoiceBasedChannel, VoiceChannel, VoiceState } from "discord.js";
 import {
-	joinVoiceChannel,
+	Snowflake,
+	TextChannel,
+	VoiceBasedChannel,
+	VoiceChannel,
+	VoiceState,
+} from "discord.js";
+import {
 	VoiceConnection,
 	AudioPlayer,
 	NoSubscriberBehavior,
@@ -12,6 +16,7 @@ import {
 	createAudioPlayer,
 	entersState,
 	AudioResource,
+	StreamType,
 } from "@discordjs/voice";
 import { ObjectId } from "bson";
 
@@ -25,7 +30,9 @@ import { PresenceController } from "./index";
 import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
 import { YoutubeTrack } from "../entities/music/YouTubeBehavior";
-import { handleUserError, retryRequest } from "../utils/apis";
+import { awaitJoin, handleUserError, retryRequest } from "../utils/apis";
+import { FFmpeg } from "prism-media";
+import internal from "stream";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
@@ -70,6 +77,10 @@ export interface MusicControllerState {
 	/** The shuffle state */
 	shuffle: boolean;
 
+	info: ytdl.videoInfo;
+
+	stream: internal.Readable;
+
 	/** Playing interval for calculating current position */
 	// interval: NodeJS.Timeout;
 }
@@ -94,6 +105,8 @@ export default class MusicController extends Controller implements Destroyable {
 		connection: null,
 		loop: "disabled",
 		shuffle: false,
+		info: null,
+		stream: null,
 	};
 
 	constructor(client: ValClient) {
@@ -176,13 +189,7 @@ export default class MusicController extends Controller implements Destroyable {
 
 			logger.info(`Starting to play ${song.title} at position ${position}`);
 
-			const info = await ytdl.getInfo(song.url, {
-				requestOptions: {
-					headers: {
-						cookie: process.env.COOKIE,
-					},
-				},
-			});
+			const info = await this.getTrackInfo(song.url, position);
 
 			const hasAudio = info.formats
 				.filter(format => format.hasAudio)
@@ -193,37 +200,56 @@ export default class MusicController extends Controller implements Destroyable {
 
 			logger.info(`Selected ${hasAudio[0].audioQuality}-${hasAudio[0].codecs}`);
 
-			const stream = ffmpeg({
-				logger,
-				source: ytdl.downloadFromInfo(info, {
-					format: hasAudio[0],
-				}),
-			})
-				.toFormat("mp3")
-				.seekInput(position);
+			const source = ytdl.downloadFromInfo(info, {
+				format: hasAudio[0],
+			});
 
-			stream.on("error", async error => {
-				handleUserError(error, this.state.text);
+			const transcoder = new FFmpeg({
+				shell: false,
+				args: [
+					"-ss",
+					String(position),
+					"-analyzeduration",
+					"0",
+					"-loglevel",
+					"0",
+					"-f",
+					"s16le",
+					"-ar",
+					"48000",
+					"-ac",
+					"2",
+				],
+			});
+			source.pipe(transcoder);
+
+			//TODO: fix play command race conditions
+			//TODO: add proper retry logic to ytdl-core stream
+
+			source.on("end", () => this.skip());
+			source.on("error", async error => {
+				logger.error(error);
 
 				this.skip();
 			});
 
-			const player = createAudioPlayer({
-				debug: process.env.MODE === "DEVELOPMENT",
-				behaviors: {
-					noSubscriber: NoSubscriberBehavior.Play,
-				},
-			});
+			const player =
+				this.state.player ||
+				createAudioPlayer({
+					debug: process.env.MODE === "DEVELOPMENT",
+					behaviors: {
+						noSubscriber: NoSubscriberBehavior.Play,
+					},
+				});
 
-			const audioPlayerResource = createAudioResource(stream, {
+			const audioPlayerResource = createAudioResource(transcoder, {
 				silencePaddingFrames: 0,
 				inlineVolume: true,
+				inputType: StreamType.Raw,
 			});
 
 			player.play(audioPlayerResource);
 			connection.subscribe(player);
-
-			audioPlayerResource.playStream.on("end", () => this.skip());
 
 			await this.updatePresence();
 
@@ -233,8 +259,15 @@ export default class MusicController extends Controller implements Destroyable {
 				connection,
 				resource: audioPlayerResource,
 				state: "playing",
+				info,
+				stream: source,
 			});
 		} catch (error) {
+			if (error instanceof Error && error.message.includes("Premature close")) {
+				logger.error(error);
+				return;
+			}
+
 			logger.error(error);
 			handleUserError(error, this.state.text);
 		}
@@ -261,7 +294,7 @@ export default class MusicController extends Controller implements Destroyable {
 	 * @param index number: indicates the nth song in the queue.
 	 */
 	jump = async (index: number) => {
-		this.destroyStreams();
+		this.stop();
 
 		this.setState({
 			index,
@@ -274,8 +307,8 @@ export default class MusicController extends Controller implements Destroyable {
 	 *
 	 * @param timestamp is the number of seconds to seek to.
 	 */
-	seek = (timestamp: number) => {
-		this.destroyStreams();
+	seek = async (timestamp: number) => {
+		this.stop();
 		this.play(true, timestamp);
 	};
 
@@ -288,8 +321,7 @@ export default class MusicController extends Controller implements Destroyable {
 	skip = async (command = false) => {
 		const { loop, index, queue } = this.state;
 
-		this.destroyStreams();
-		await this.clearPresence();
+		this.stop();
 
 		if (index === queue.length - 1 && ["disabled", "single"].includes(loop)) {
 			await this.clear();
@@ -316,7 +348,7 @@ export default class MusicController extends Controller implements Destroyable {
 	refresh = async () => {
 		const time = this.state.resource.playbackDuration / 1000;
 
-		this.destroyStreams();
+		this.stop();
 
 		this.setState({
 			position: this.state.position + time,
@@ -409,9 +441,7 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	clear = async () => {
-		this.destroyStreams();
-
-		await this.clearPresence();
+		this.stop();
 
 		this.setState({
 			timeout: null,
@@ -431,16 +461,9 @@ export default class MusicController extends Controller implements Destroyable {
 			return connection;
 		}
 
-		logger.info(`Connecting to vc: ${vc.name}, text: ${text.name}`);
-
-		const newConnection = joinVoiceChannel({
-			channelId: vc.id,
-			adapterCreator: vc.guild.voiceAdapterCreator,
-			guildId: vc.guildId,
-		});
+		const newConnection = connection || (await awaitJoin(vc));
 
 		newConnection.on(VoiceConnectionStatus.Destroyed, this.disconnect);
-
 		newConnection.on(VoiceConnectionStatus.Disconnected, async () => {
 			try {
 				await Promise.race([
@@ -467,8 +490,7 @@ export default class MusicController extends Controller implements Destroyable {
 		try {
 			logger.info("Disconnected from vc");
 
-			this.destroyStreams();
-			this.clearPresence();
+			this.stop();
 
 			clearTimeout(this.state.timeout);
 
@@ -496,6 +518,8 @@ export default class MusicController extends Controller implements Destroyable {
 				resource: null,
 				loop: "disabled",
 				shuffle: false,
+				info: null,
+				stream: null,
 			};
 		}
 	};
@@ -753,9 +777,26 @@ export default class MusicController extends Controller implements Destroyable {
 		);
 	};
 
-	private destroyStreams = () => {
-		if (this.state.resource) {
-			this.state.resource.playStream.destroy();
+	private stop = () => {
+		if (this.state.stream) {
+			this.state.stream.removeAllListeners();
+			this.state.stream.destroy();
 		}
+
+		if (this.state.player) this.state.player.stop(true);
+	};
+
+	private getTrackInfo = (url: string, position: number) => {
+		if (position !== 0 && this.state.info) return this.state.info;
+
+		return retryRequest<ytdl.videoInfo>(() =>
+			ytdl.getInfo(url, {
+				requestOptions: {
+					headers: {
+						cookie: process.env.COOKIE,
+					},
+				},
+			}),
+		);
 	};
 }

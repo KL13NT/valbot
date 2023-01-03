@@ -1,8 +1,13 @@
-import { CommandInteraction, TextChannel } from "discord.js";
+import { CommandInteraction, TextChannel, VoiceBasedChannel } from "discord.js";
 
 import logger from "../utils/logging";
 import UserError from "../structures/UserError";
 import { reply } from "./general";
+import {
+	entersState,
+	joinVoiceChannel,
+	VoiceConnectionStatus,
+} from "@discordjs/voice";
 
 export const retryRequest = async <T extends unknown>(
 	func: () => Promise<T>,
@@ -32,5 +37,21 @@ export const handleUserError = async (
 		logger.error(error);
 	} catch (error) {
 		logger.error(error);
+	}
+};
+
+export const awaitJoin = async (vc: VoiceBasedChannel) => {
+	const connection = joinVoiceChannel({
+		channelId: vc.id,
+		adapterCreator: vc.guild.voiceAdapterCreator,
+		guildId: vc.guildId,
+	});
+
+	try {
+		await entersState(connection, VoiceConnectionStatus.Ready, 5_000);
+		return connection;
+	} catch (error) {
+		connection.destroy();
+		throw error;
 	}
 };
