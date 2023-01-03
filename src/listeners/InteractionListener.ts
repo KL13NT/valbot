@@ -18,6 +18,8 @@ export default class InteractionListener extends Listener {
 				commandName.toLowerCase(),
 			) as Interaction;
 
+			await interaction.deferReply();
+
 			command.run(interaction);
 		} catch (error) {
 			logger.error(error);
