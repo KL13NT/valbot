@@ -166,16 +166,15 @@ export default class MusicController extends Controller implements Destroyable {
 	 */
 	play = async (force = false, position = 0) => {
 		try {
-			const connection = this.state.connection;
-
-			if (
-				!connection ||
-				this.state.queue.length === 0 ||
-				(this.state.state === "playing" && !force)
-			) {
+			if (this.state.state === "playing" && !force) {
 				return;
+			} else if (this.state.state !== "playing") {
+				this.setState({
+					state: "playing",
+				});
 			}
 
+			const connection = this.state.connection;
 			const current = this.state.queue[this.state.index];
 			const song = current.spotify
 				? await retryRequest(() => this.resolver.fetch(current.title))
@@ -217,7 +216,6 @@ export default class MusicController extends Controller implements Destroyable {
 			});
 			source.pipe(transcoder);
 
-			//TODO: fix play command race conditions
 			//TODO: add proper retry logic to ytdl-core stream
 
 			source.on("end", () => this.skip());

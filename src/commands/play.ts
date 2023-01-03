@@ -8,7 +8,6 @@ import { MusicController } from "../controllers";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import Interaction from "../structures/Interaction";
 import InteractionContext from "../structures/InteractionContext";
-import { entersState, VoiceConnectionStatus } from "@discordjs/voice";
 
 export default class Play extends Interaction {
 	playBehavior: ResolveBehavior;
@@ -94,11 +93,10 @@ export default class Play extends Interaction {
 			);
 		}
 
-		const connection = await controller.connect(voiceChannel, textChannel);
+		await controller.connect(voiceChannel, textChannel);
 
 		if (controller.playState === "paused") return;
 
-		await entersState(connection, VoiceConnectionStatus.Ready, 5_000);
 		await controller.play();
 	};
 
