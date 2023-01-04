@@ -94,8 +94,6 @@ export default class PlaylistCommand extends Interaction {
 		interaction,
 		channel,
 	}: InteractionContext) => {
-		await interaction.deferReply();
-
 		const voiceChannel = member.voice.channel;
 		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
