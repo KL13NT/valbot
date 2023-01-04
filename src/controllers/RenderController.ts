@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteer, { defaultArgs } from "puppeteer";
 import { Cluster } from "puppeteer-cluster";
 
 import ValClient from "../ValClient";
@@ -22,13 +22,14 @@ export default class RenderController
 	init = async () => {
 		try {
 			if (this.cluster == null) {
+				defaultArgs({
+					args: ["--no-sandbox", "--disable-setuid-sandbox"],
+					headless: true,
+				});
+
 				this.cluster = await Cluster.launch({
 					concurrency: Cluster.CONCURRENCY_CONTEXT,
 					maxConcurrency: 2,
-					perBrowserOptions: new Array(2).fill({
-						args: ["--no-sandbox", "--disable-setuid-sandbox"],
-						headless: true,
-					}),
 				});
 
 				await this.cluster.task(async ({ page, data: { html, content } }) => {
