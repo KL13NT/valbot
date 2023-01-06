@@ -1,24 +1,19 @@
 import ValClient from "../ValClient";
 
-import {
-	GENERIC_CONTROLLED_COMMAND_CANCEL,
-	ERROR_GENERIC_SOMETHING_WENT_WRONG,
-	ERROR_COMMAND_NOT_ALLOWED,
-	ERROR_COMMAND_NOT_READY,
-} from "../config/events.json";
+import { ERROR_COMMAND_NOT_ALLOWED } from "../config/events.json";
 
 import { isAllowed } from "../utils/commands";
 import { InteractionOptions } from "../types/interfaces";
-import { CommandInteraction, TextChannel } from "discord.js";
-import { isDev } from "../utils/general";
+import { CommandInteraction, Snowflake, TextChannel } from "discord.js";
+import { isDev, reply } from "../utils/general";
 import { handleUserError } from "../utils/apis";
 import InteractionContext from "./InteractionContext";
 
 export default abstract class Interaction {
 	client: ValClient;
 	ready: boolean;
-	cooldownTimer: NodeJS.Timeout;
 	options: InteractionOptions;
+	static cooldown: Map<Snowflake, Date> = new Map();
 
 	constructor(client: ValClient, options: InteractionOptions) {
 		this.client = client;
@@ -53,15 +48,21 @@ export default abstract class Interaction {
 	): Promise<void> => {
 		const { cooldown } = this.options;
 
-		if (this.ready) await this._run(context);
-		else await context.interaction.reply(ERROR_COMMAND_NOT_READY);
+		const lastExecuted = Interaction.cooldown.get(context.member.id);
+		const allowed = lastExecuted
+			? Date.now() - lastExecuted.getTime() >= cooldown
+			: true;
 
-		if (cooldown !== 0 && !isDev()) {
-			this.ready = false;
-
-			this.cooldownTimer = setTimeout(() => {
-				this.ready = true;
-			}, cooldown);
+		if (allowed || isDev()) {
+			Interaction.cooldown.set(context.member.id, new Date());
+			await this._run(context);
+		} else {
+			await reply(
+				"Command.Play.NotReady",
+				context.channel,
+				null,
+				context.interaction,
+			);
 		}
 	};
 
@@ -70,23 +71,4 @@ export default abstract class Interaction {
 	 * @abstract
 	 */
 	abstract _run(context: InteractionContext): Promise<void>;
-
-	/**
-	 * cancels an ongoing command
-	 */
-	stop = (
-		context: InteractionContext,
-		isGraceful: boolean,
-		error: Error,
-	): void => {
-		if (!isGraceful)
-			context.interaction.reply(
-				error.message || ERROR_GENERIC_SOMETHING_WENT_WRONG,
-			);
-		else context.interaction.reply(GENERIC_CONTROLLED_COMMAND_CANCEL);
-
-		this.ready = true;
-
-		clearTimeout(this.cooldownTimer);
-	};
 }

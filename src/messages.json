@@ -6,6 +6,7 @@
 	"Music.NotPlaying": "No song is playing",
 	"Command.Play.NotConnected": "You're not connected to a voice channel.",
 	"Command.Play.NotAllowed": "You're not allowed to use the bot. It may be because you're not in a voice channel or not in the same channel as the bot.",
+	"Command.Play.NotReady": "Yo, slow down.",
 	"Command.Play.InvalidLink": "This link is invalid. Try another one.",
 	"Command.Play.NotFound": "Video doesn't exist",
 	"Command.Play.GenericError": "Could't find a video matching this query. It might be restricted or private. If you're sure this video exists try using a different link.",
