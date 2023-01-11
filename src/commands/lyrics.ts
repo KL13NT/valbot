@@ -1,7 +1,9 @@
 import ValClient from "../ValClient";
 import lyricsFinder from "lyrics-finder";
+import Interaction from "../structures/Interaction";
+import InteractionContext from "../structures/InteractionContext";
 import { MusicController } from "../controllers";
-import { Command, CommandContext, PaginatedEmbed } from "../structures";
+import { PaginatedEmbed } from "../structures";
 import { createEmbed } from "../utils/embed";
 import { reply } from "../utils/general";
 import { MessageEmbed, TextChannel } from "discord.js";
@@ -10,17 +12,14 @@ import { getVoiceConnections } from "@discordjs/voice";
 const MAX_EMBED_LENGTH = 4096;
 const LYRICS_EMBED_TIME = 4 * 60 * 1000; // 4 minutes
 
-export default class Lyrics extends Command {
+export default class Lyrics extends Interaction {
 	constructor(client: ValClient) {
 		super(client, {
 			name: "lyrics",
 			category: "Music",
 			cooldown: 10 * 1000,
-			nOfParams: 0,
+			options: [],
 			description: "Show song lyrics",
-			exampleUsage: "",
-			extraParams: false,
-			optionalParams: 0,
 			auth: {
 				method: "ROLE",
 				required: "AUTH_EVERYONE",
@@ -28,37 +27,37 @@ export default class Lyrics extends Command {
 		});
 	}
 
-	_run = async ({ member, channel }: CommandContext) => {
+	_run = async ({ member, interaction }: InteractionContext) => {
+		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
-
 		const voiceChannel = member.voice.channel;
 
 		if (!voiceChannel) {
-			await reply("User.VoiceNotConnected", channel);
+			await reply("User.VoiceNotConnected", textChannel, null, interaction);
 			return;
 		}
 
 		if (!controller.canUserPlay(voiceChannel)) {
-			await reply("User.SameChannel", channel);
+			await reply("User.SameChannel", textChannel, null, interaction);
 			return;
 		}
 
 		const connections = getVoiceConnections();
 
 		if (connections.size === 0) {
-			await reply("Bot.VoiceNotConnected", channel);
+			await reply("Bot.VoiceNotConnected", textChannel, null, interaction);
 			return;
 		}
 
 		if (controller.playState === "paused") {
-			await reply("Command.Lyrics.Paused", channel);
+			await reply("Command.Lyrics.Paused", textChannel, null, interaction);
 			return;
 		}
 
 		const song = controller.getCurrentSong();
 
 		if (!song) {
-			await reply("Music.NotPlaying", channel);
+			await reply("Music.NotPlaying", textChannel, null, interaction);
 			return;
 		}
 
@@ -67,7 +66,7 @@ export default class Lyrics extends Command {
 
 		const lyrics = await lyricsFinder(artist, name);
 		if (!lyrics) {
-			await reply("Command.Lyrics.NotFound", channel);
+			await reply("Command.Lyrics.NotFound", textChannel, null, interaction);
 			return;
 		}
 
@@ -100,12 +99,14 @@ export default class Lyrics extends Command {
 				}),
 			);
 
-		const embed = new PaginatedEmbed(
-			channel as TextChannel,
+		const paginatedEmbed = new PaginatedEmbed(
+			interaction,
+			textChannel,
 			member,
 			pages,
 			LYRICS_EMBED_TIME,
 		);
-		await embed.init();
+
+		await paginatedEmbed.init();
 	};
 }

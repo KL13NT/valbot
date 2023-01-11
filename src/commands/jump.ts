@@ -30,24 +30,24 @@ export default class Jump extends Interaction {
 		});
 	}
 
-	_run = async ({ member, guild, channel, params }: InteractionContext) => {
+	_run = async ({ member, guild, interaction, params }: InteractionContext) => {
 		const voiceChannel = member.voice.channel;
-		const textChannel = channel as TextChannel;
+		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 		const connection = getVoiceConnection(guild.id);
 
 		if (!connection) {
-			await reply("Bot.VoiceNotConnected", channel);
+			await reply("Bot.VoiceNotConnected", textChannel, null, interaction);
 			return;
 		}
 
 		if (!voiceChannel) {
-			await reply("User.VoiceNotConnected", textChannel);
+			await reply("User.VoiceNotConnected", textChannel, null, interaction);
 			return;
 		}
 
 		if (!controller.canUserPlay(voiceChannel)) {
-			await reply("User.SameChannel", textChannel);
+			await reply("User.SameChannel", textChannel, null, interaction);
 			return;
 		}
 
@@ -55,24 +55,34 @@ export default class Jump extends Interaction {
 		const queueLength = controller.queue.length;
 
 		if (queueLength === 0) {
-			await reply("Music.EmptyQueue", textChannel);
+			await reply("Music.EmptyQueue", textChannel, null, interaction);
 			return;
 		}
 
 		if (index >= queueLength || index < 0) {
-			await reply("Command.Jump.OutOfBoundaries", textChannel, {
-				id: index + 1,
-			});
+			await reply(
+				"Command.Jump.OutOfBoundaries",
+				textChannel,
+				{
+					id: index + 1,
+				},
+				interaction,
+			);
 			return;
 		}
 
 		const { title, url } = controller.queue[index];
 
-		await reply("Command.Jump", textChannel, {
-			id: index + 1,
-			title,
-			url,
-		});
+		await reply(
+			"Command.Jump",
+			textChannel,
+			{
+				id: index + 1,
+				title,
+				url,
+			},
+			interaction,
+		);
 
 		await controller.jump(index);
 	};

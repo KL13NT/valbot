@@ -1,24 +1,23 @@
 import ValClient from "../ValClient";
 import PaginatedEmbed from "../structures/PaginatedEmbed";
 
-import { Command, CommandContext } from "../structures";
+import Interaction from "../structures/Interaction";
+import InteractionContext from "../structures/InteractionContext";
 import { createEmbed } from "../utils/embed";
 import { MusicController } from "../controllers";
 import { TextChannel } from "discord.js";
+import { reply } from "../utils/general";
 
 const SONGS_PER_PAGE = 10;
 
-export default class Queue extends Command {
+export default class Queue extends Interaction {
 	constructor(client: ValClient) {
 		super(client, {
 			name: `queue`,
 			category: "Music",
 			cooldown: 5 * 1000,
-			nOfParams: 0,
+			options: [],
 			description: `Lists songs in the queue`,
-			exampleUsage: ``,
-			extraParams: false,
-			optionalParams: 0,
 			aliases: ["q"],
 			auth: {
 				method: "ROLE",
@@ -27,17 +26,12 @@ export default class Queue extends Command {
 		});
 	}
 
-	_run = async ({ channel, member }: CommandContext) => {
+	_run = async ({ member, interaction }: InteractionContext) => {
+		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 
 		if (controller.queue.length === 0) {
-			channel.send({
-				embeds: [
-					createEmbed({
-						description: "The queue is empty.",
-					}),
-				],
-			});
+			await reply("Music.EmptyQueue", textChannel, null, interaction);
 
 			return;
 		}
@@ -76,7 +70,8 @@ export default class Queue extends Command {
 		}
 
 		const paginatedEmbed = new PaginatedEmbed(
-			channel as TextChannel,
+			interaction,
+			textChannel,
 			member,
 			pages,
 		);
