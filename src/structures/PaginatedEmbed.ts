@@ -1,16 +1,29 @@
+import { ButtonStyle } from "discord-api-types/v10";
 import {
+	CommandInteraction,
 	GuildMember,
 	Message,
+	MessageActionRow,
+	BaseMessageComponentOptions,
+	MessageActionRowOptions,
+	MessageComponentInteraction,
 	MessageEmbed,
-	MessageReaction,
 	TextChannel,
-	User,
 } from "discord.js";
+
+type Row =
+	| MessageActionRow
+	| (Required<BaseMessageComponentOptions> & MessageActionRowOptions);
 
 export default class PaginationEmbed {
 	channel: TextChannel;
 	member: GuildMember;
 	pages: MessageEmbed[];
+	interaction: CommandInteraction;
+	current: Message;
+	page: number;
+	timeout: number;
+
 	emojis = {
 		"⏪": () => 0,
 		"◀️": () => (this.page > 0 ? this.page - 1 : this.page),
@@ -18,16 +31,21 @@ export default class PaginationEmbed {
 		"⏩": () => this.pages.length - 1,
 	};
 
-	current: Message;
-	page: number;
-	timeout: number;
+	buttonDisableConditions = {
+		"⏪": () => this.page === 0,
+		"◀️": () => this.page === 0,
+		"▶️": () => this.page === this.pages.length - 1,
+		"⏩": () => this.page === this.pages.length - 1,
+	};
 
 	constructor(
+		interaction: CommandInteraction,
 		channel: TextChannel,
 		member: GuildMember,
 		pages: MessageEmbed[],
 		timeout = 60 * 1000,
 	) {
+		this.interaction = interaction;
 		this.channel = channel;
 		this.member = member;
 		this.pages = pages;
@@ -35,8 +53,27 @@ export default class PaginationEmbed {
 		this.timeout = timeout;
 	}
 
+	generateRow = (): Row => {
+		return {
+			type: "ACTION_ROW",
+			components: Object.keys(this.emojis).map(emoji => {
+				const disabled = this.buttonDisableConditions[emoji]();
+
+				return {
+					custom_id: emoji,
+					emoji: emoji,
+					style: ButtonStyle.Primary,
+					type: "BUTTON",
+					disabled,
+				};
+			}),
+		};
+	};
+
 	init = async () => {
-		this.current = await this.channel.send({
+		const buttonRow = this.generateRow();
+
+		await this.interaction.editReply({
 			embeds: [
 				{
 					...this.pages[this.page],
@@ -45,33 +82,32 @@ export default class PaginationEmbed {
 					},
 				},
 			],
+			components: [buttonRow],
 		});
 
 		if (this.pages.length < 2) return;
 
-		const filter = (reaction: MessageReaction, user: User) =>
-			Object.keys(this.emojis).includes(reaction.emoji.name) &&
-			!user.bot &&
-			user.id === this.member.id;
+		const filter = (interaction: MessageComponentInteraction) =>
+			interaction.isButton &&
+			Object.keys(this.emojis).includes(interaction.customId) &&
+			interaction.user.id === this.member.id;
 
-		const collector = this.current.createReactionCollector({
+		const collector = this.channel.createMessageComponentCollector({
 			filter,
 			time: this.timeout,
 			dispose: true,
 		});
 
-		for (const emoji of Object.keys(this.emojis))
-			await this.current.react(emoji);
-
-		collector.on("collect", this.onReaction);
-		collector.on("remove", this.onReaction);
+		collector.on("collect", this.onButtonClick);
 	};
 
-	onReaction = async (reaction: MessageReaction) => {
-		const modifier = this.emojis[reaction.emoji.name];
+	onButtonClick = async (interaction: MessageComponentInteraction) => {
+		const modifier = this.emojis[interaction.customId];
 		this.page = modifier();
 
-		await this.current.edit({
+		const buttonRow = this.generateRow();
+
+		await interaction.update({
 			embeds: [
 				{
 					...this.pages[this.page],
@@ -80,6 +116,7 @@ export default class PaginationEmbed {
 					},
 				},
 			],
+			components: [buttonRow],
 		});
 	};
 }

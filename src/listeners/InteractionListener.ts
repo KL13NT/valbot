@@ -13,6 +13,7 @@ export default class InteractionListener extends Listener {
 	onInteractionCreate = async (interaction: CommandInteraction) => {
 		try {
 			const { commandName } = interaction;
+			if (!commandName) return;
 
 			const command = this.client.commands.get(
 				commandName.toLowerCase(),

@@ -10,6 +10,13 @@ export { default as Jump } from "./jump";
 export { default as Move } from "./move";
 export { default as Playlist } from "./playlist";
 export { default as Shuffle } from "./shuffle";
+export { default as NowPlaying } from "./now-playing";
+export { default as Remove } from "./remove";
+export { default as Queue } from "./queue";
+export { default as Lyrics } from "./lyrics";
+export { default as Skip } from "./skip";
+export { default as ClearQueue } from "./clear-queue";
+export { default as Refresh } from "./refresh";
 
 // old commands
 export { default as Setup } from "./setup";
@@ -32,10 +39,3 @@ export { default as Notify } from "./notify";
 export { default as PresenceSet } from "./presenceset";
 export { default as PresenceClear } from "./presenceclear";
 export { default as Leaderboard } from "./leaderboard";
-export { default as Skip } from "./skip";
-export { default as Queue } from "./queue";
-export { default as ClearQueue } from "./clear-queue";
-export { default as NowPlaying } from "./now-playing";
-export { default as Lyrics } from "./lyrics";
-export { default as Remove } from "./remove";
-export { default as Refresh } from "./refresh";
