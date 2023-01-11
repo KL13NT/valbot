@@ -53,7 +53,7 @@ export default class PaginationEmbed {
 		this.timeout = timeout;
 	}
 
-	generateRow(): Row {
+	generateRow = (): Row => {
 		return {
 			type: "ACTION_ROW",
 			components: Object.keys(this.emojis).map(emoji => {
@@ -68,10 +68,10 @@ export default class PaginationEmbed {
 				};
 			}),
 		};
-	}
+	};
 
 	init = async () => {
-		const buttonRow: Row = this.generateRow();
+		const buttonRow = this.generateRow();
 
 		await this.interaction.editReply({
 			embeds: [
@@ -105,7 +105,7 @@ export default class PaginationEmbed {
 		const modifier = this.emojis[interaction.customId];
 		this.page = modifier();
 
-		const buttonRow: Row = this.generateRow();
+		const buttonRow = this.generateRow();
 
 		await interaction.update({
 			embeds: [
