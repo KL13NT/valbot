@@ -35,7 +35,7 @@ import internal from "stream";
 
 export type Seconds = number;
 export type LoopState = "single" | "queue" | "disabled";
-export type PlayState = "stopped" | "paused" | "playing" | "fetching"; //TODO: change to enum
+export type PlayState = "stopped" | "paused" | "playing"; //TODO: change to enum
 
 export interface MusicControllerState {
 	/** An array of the songs in the current queue */
@@ -51,19 +51,19 @@ export interface MusicControllerState {
 	position: Seconds;
 
 	/** Text channel used to report changes and replies */
-	text: TextChannel;
+	text: TextChannel | null;
 
 	/** Voice channel the bot is connected to */
-	vc: VoiceBasedChannel;
+	vc: VoiceBasedChannel | null;
 
 	/** ytdl play stream */
 	resource: AudioResource | null;
 
 	/** Voice connection for current instance */
-	connection: VoiceConnection;
+	connection: VoiceConnection | null;
 
 	/** Timeout number for disconnecting after period of time */
-	timeout: NodeJS.Timeout;
+	timeout: NodeJS.Timeout | null;
 
 	/** The connection.play dispatcher, used for seeking and other ops */
 	player: AudioPlayer | null;
@@ -76,20 +76,17 @@ export interface MusicControllerState {
 	/** The shuffle state */
 	shuffle: boolean;
 
-	info: ytdl.videoInfo;
+	info: ytdl.videoInfo | null;
 
-	stream: internal.Readable;
-
-	/** Playing interval for calculating current position */
-	// interval: NodeJS.Timeout;
+	stream: internal.Readable | null;
 }
 
 const DISCONNECT_AFTER = 15 * 60 * 1000; // 15 minutes
 const LOOP_STATES: LoopState[] = ["disabled", "queue", "single"];
 
 export default class MusicController extends Controller implements Destroyable {
-	private mongo: MongoController;
-	private resolver: YoutubeTrack;
+	private mongo!: MongoController;
+	private resolver!: YoutubeTrack;
 	private state: MusicControllerState = {
 		state: "stopped",
 		index: 0,
@@ -122,11 +119,14 @@ export default class MusicController extends Controller implements Destroyable {
 
 	destroy = async () => {
 		this.client.off("voiceStateUpdate", this.handleStateUpdate);
-		this.state.player?.stop?.();
+
+		if (this.state.player) {
+			this.state.player.stop();
+		}
 	};
 
 	handleStateUpdate = (oldState: VoiceState, newState: VoiceState) => {
-		if (newState.channel?.id && newState.member.id === this.client.user.id)
+		if (newState.channel?.id && newState.member?.id === this.client.user?.id)
 			this.setState({
 				vc: newState.channel as VoiceChannel,
 			});
@@ -174,19 +174,32 @@ export default class MusicController extends Controller implements Destroyable {
 				});
 			}
 
-			const connection = this.state.connection;
+			const connection = await this.getPlayConnection();
+
+			if (!connection) {
+				throw new UserError("Bot is not connected");
+			}
+
 			const current = this.state.queue[this.state.index];
+
+			if (!current) {
+				throw new Error("Queue is empty");
+			}
+
 			const song = current.spotify
 				? await retryRequest(() => this.resolver.fetch(current.title))
 				: current;
 
 			logger.info(`Starting to play ${song.title} at position ${position}`);
 
-			const info = await this.getTrackInfo(song.url, position);
+			const info =
+				position === this.state.position && this.state.info
+					? this.state.info
+					: await this.getTrackInfo(song.url, position);
 
 			const hasAudio = info.formats
 				.filter(format => format.hasAudio)
-				.sort((a, b) => a.bitrate - b.bitrate);
+				.sort((a, b) => Number(a.bitrate) - Number(b.bitrate));
 
 			if (hasAudio.length === 0)
 				throw new UserError("This video doesn't have audio");
@@ -222,7 +235,12 @@ export default class MusicController extends Controller implements Destroyable {
 			source.on("error", async error => {
 				logger.error(error);
 
-				this.skip();
+				try {
+					await this.refresh();
+				} catch (error) {
+					logger.error(error);
+					this.skip();
+				}
 			});
 
 			const player =
@@ -253,18 +271,16 @@ export default class MusicController extends Controller implements Destroyable {
 				stream: source,
 			});
 		} catch (error) {
-			if (error instanceof Error && error.message.includes("Premature close")) {
-				logger.error(error);
-				return;
-			}
-
 			logger.error(error);
-			handleUserError(error, this.state.text);
+
+			if (this.state.text) {
+				handleUserError(error, this.state.text);
+			}
 		}
 	};
 
 	resume = () => {
-		this.state.player.unpause();
+		this.state.player?.unpause();
 		// this.seek(guildId, this.state.position);
 		this.setState({
 			state: "playing",
@@ -272,11 +288,28 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	pause = async () => {
-		this.state.player.pause(true);
+		if (this.state.player) {
+			this.state.player.pause(true);
+		}
 
 		this.setState({
 			state: "paused",
 		});
+	};
+
+	private getPlayConnection = async () => {
+		const { connection, vc, text } = this.state;
+
+		if (!connection && vc && text) {
+			const active = getVoiceConnection(text.guildId);
+			const final = active || (await this.connect(vc, text));
+
+			return final;
+		} else if (connection && vc && text) {
+			return connection;
+		} else {
+			return null;
+		}
 	};
 
 	/**
@@ -321,22 +354,27 @@ export default class MusicController extends Controller implements Destroyable {
 		if (index === queue.length - 1 && loop === "queue") {
 			this.setState({
 				index: 0,
+				info: null,
 			});
 		} else if (loop === "single" && !command) {
 			this.setState({
 				index,
+				position: 0,
 			});
 		} else {
 			this.setState({
 				index: index + 1,
+				info: null,
 			});
 		}
 
-		if (["playing", "paused"].includes(this.state.state)) this.play(true);
+		if (["playing", "paused"].includes(this.state.state)) {
+			this.play(true);
+		}
 	};
 
 	refresh = async () => {
-		const time = this.state.resource.playbackDuration / 1000;
+		const time = Number(this.state.resource?.playbackDuration) / 1000;
 
 		this.stop();
 
@@ -435,11 +473,19 @@ export default class MusicController extends Controller implements Destroyable {
 
 		this.setState({
 			timeout: null,
-			state: "stopped",
+			connection: null,
+			text: null,
+			vc: null,
+			resource: null,
+			stream: null,
+			info: null,
 			index: 0,
 			position: 0,
 			queue: [],
 			player: null,
+			state: "stopped",
+			loop: "disabled",
+			shuffle: false,
 		});
 	};
 
@@ -448,6 +494,13 @@ export default class MusicController extends Controller implements Destroyable {
 
 		if (connection) {
 			logger.info(`Already connected to vc: ${vc.name}, text: ${text.name}`);
+
+			this.setState({
+				vc,
+				text,
+				connection,
+			});
+
 			return connection;
 		}
 
@@ -482,7 +535,7 @@ export default class MusicController extends Controller implements Destroyable {
 
 			this.stop();
 
-			clearTimeout(this.state.timeout);
+			clearTimeout(this.state.timeout as NodeJS.Timeout);
 
 			if (this.state.text)
 				await this.state.text.send({
@@ -689,7 +742,7 @@ export default class MusicController extends Controller implements Destroyable {
 	}
 
 	get playState() {
-		return this.state.player?.state?.status || "stopped";
+		return this.state.state;
 	}
 
 	get currentSongIndex() {
@@ -719,13 +772,13 @@ export default class MusicController extends Controller implements Destroyable {
 
 	private onStateChanged = async () => {
 		if (!this.shouldTimeout()) {
-			clearTimeout(this.state.timeout);
+			clearTimeout(this.state.timeout as NodeJS.Timeout);
 			this.state.timeout = null;
 			return;
 		}
 
-		if (this.shouldTimeout() && !this.state.timeout) {
-			const timeout = this.state?.vc?.guild?.afkTimeout;
+		if (this.shouldTimeout() && !this.state.timeout && this.state.vc) {
+			const timeout = this.state.vc.guild.afkTimeout;
 
 			this.state.timeout = setTimeout(
 				() => this.disconnect(),
@@ -739,8 +792,7 @@ export default class MusicController extends Controller implements Destroyable {
 			this.state.vc &&
 			(this.state.vc.members.size === 1 ||
 				this.state.queue.length === 0 /* empty queue */ ||
-				this.state.state === "paused" ||
-				this.state.state === "stopped")
+				this.state.state !== "playing")
 		);
 	};
 
