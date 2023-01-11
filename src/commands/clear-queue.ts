@@ -1,5 +1,4 @@
 import { getVoiceConnections } from "@discordjs/voice";
-import { TextChannel } from "discord.js";
 
 import ValClient from "../ValClient";
 import Interaction from "../structures/Interaction";
@@ -23,8 +22,11 @@ export default class ClearQueue extends Interaction {
 		});
 	}
 
-	_run = async ({ member, interaction }: InteractionContext) => {
-		const textChannel = interaction.channel as TextChannel;
+	_run = async ({
+		member,
+		interaction,
+		channel: textChannel,
+	}: InteractionContext) => {
 		const controller = this.client.controllers.get("music") as MusicController;
 		const voiceChannel = member.voice.channel;
 

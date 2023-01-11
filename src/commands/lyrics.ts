@@ -27,8 +27,11 @@ export default class Lyrics extends Interaction {
 		});
 	}
 
-	_run = async ({ member, interaction }: InteractionContext) => {
-		const textChannel = interaction.channel as TextChannel;
+	_run = async ({
+		member,
+		interaction,
+		channel: textChannel,
+	}: InteractionContext) => {
 		const controller = this.client.controllers.get("music") as MusicController;
 		const voiceChannel = member.voice.channel;
 
@@ -101,7 +104,7 @@ export default class Lyrics extends Interaction {
 
 		const paginatedEmbed = new PaginatedEmbed(
 			interaction,
-			textChannel,
+			textChannel as TextChannel,
 			member,
 			pages,
 			LYRICS_EMBED_TIME,

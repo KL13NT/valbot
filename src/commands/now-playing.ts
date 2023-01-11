@@ -1,4 +1,3 @@
-import { TextChannel } from "discord.js";
 import progressbar from "string-progressbar";
 
 import ValClient from "../ValClient";
@@ -26,8 +25,11 @@ export default class NowPlaying extends Interaction {
 		});
 	}
 
-	_run = async ({ member, interaction }: InteractionContext) => {
-		const textChannel = interaction.channel as TextChannel;
+	_run = async ({
+		member,
+		interaction,
+		channel: textChannel,
+	}: InteractionContext) => {
 		const controller = this.client.controllers.get("music") as MusicController;
 		const voiceChannel = member.voice.channel;
 

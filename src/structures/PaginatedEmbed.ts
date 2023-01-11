@@ -31,7 +31,7 @@ export default class PaginationEmbed {
 		"⏩": () => this.pages.length - 1,
 	};
 
-	buttonDisableCondition = {
+	buttonDisableConditions = {
 		"⏪": () => this.page === 0,
 		"◀️": () => this.page === 0,
 		"▶️": () => this.page === this.pages.length - 1,
@@ -53,19 +53,25 @@ export default class PaginationEmbed {
 		this.timeout = timeout;
 	}
 
-	init = async () => {
-		const buttonRow: Row = {
+	generateRow(): Row {
+		return {
 			type: "ACTION_ROW",
 			components: Object.keys(this.emojis).map(emoji => {
+				const disabled = this.buttonDisableConditions[emoji]();
+
 				return {
 					custom_id: emoji,
 					emoji: emoji,
 					style: ButtonStyle.Primary,
 					type: "BUTTON",
-					disabled: this.buttonDisableCondition[emoji](),
+					disabled,
 				};
 			}),
 		};
+	}
+
+	init = async () => {
+		const buttonRow: Row = this.generateRow();
 
 		await this.interaction.editReply({
 			embeds: [
@@ -86,7 +92,7 @@ export default class PaginationEmbed {
 			Object.keys(this.emojis).includes(interaction.customId) &&
 			interaction.user.id === this.member.id;
 
-		const collector = this.interaction.channel.createMessageComponentCollector({
+		const collector = this.channel.createMessageComponentCollector({
 			filter,
 			time: this.timeout,
 			dispose: true,
@@ -99,18 +105,7 @@ export default class PaginationEmbed {
 		const modifier = this.emojis[interaction.customId];
 		this.page = modifier();
 
-		const buttonRow: Row = {
-			type: "ACTION_ROW",
-			components: Object.keys(this.emojis).map(emoji => {
-				return {
-					custom_id: emoji,
-					emoji: emoji,
-					style: ButtonStyle.Primary,
-					type: "BUTTON",
-					disabled: this.buttonDisableCondition[emoji](),
-				};
-			}),
-		};
+		const buttonRow: Row = this.generateRow();
 
 		await interaction.update({
 			embeds: [

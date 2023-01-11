@@ -26,8 +26,11 @@ export default class Queue extends Interaction {
 		});
 	}
 
-	_run = async ({ member, interaction }: InteractionContext) => {
-		const textChannel = interaction.channel as TextChannel;
+	_run = async ({
+		member,
+		interaction,
+		channel: textChannel,
+	}: InteractionContext) => {
 		const controller = this.client.controllers.get("music") as MusicController;
 
 		if (controller.queue.length === 0) {
@@ -71,7 +74,7 @@ export default class Queue extends Interaction {
 
 		const paginatedEmbed = new PaginatedEmbed(
 			interaction,
-			textChannel,
+			textChannel as TextChannel,
 			member,
 			pages,
 		);

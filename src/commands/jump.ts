@@ -1,6 +1,5 @@
 import { getVoiceConnection } from "@discordjs/voice";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
-import { TextChannel } from "discord.js";
 import { MusicController } from "../controllers";
 import Interaction from "../structures/Interaction";
 import InteractionContext from "../structures/InteractionContext";
@@ -30,9 +29,14 @@ export default class Jump extends Interaction {
 		});
 	}
 
-	_run = async ({ member, guild, interaction, params }: InteractionContext) => {
+	_run = async ({
+		member,
+		guild,
+		interaction,
+		channel: textChannel,
+		params,
+	}: InteractionContext) => {
 		const voiceChannel = member.voice.channel;
-		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 		const connection = getVoiceConnection(guild.id);
 

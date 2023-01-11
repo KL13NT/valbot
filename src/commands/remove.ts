@@ -1,4 +1,3 @@
-import { TextChannel } from "discord.js";
 import { getVoiceConnections } from "@discordjs/voice";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
@@ -31,9 +30,13 @@ export default class Remove extends Interaction {
 		});
 	}
 
-	_run = async ({ member, interaction, params }: InteractionContext) => {
+	_run = async ({
+		member,
+		interaction,
+		params,
+		channel: textChannel,
+	}: InteractionContext) => {
 		const voiceChannel = member.voice.channel;
-		const textChannel = interaction.channel as TextChannel;
 		const controller = this.client.controllers.get("music") as MusicController;
 
 		const connections = getVoiceConnections();

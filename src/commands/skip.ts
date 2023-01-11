@@ -1,5 +1,4 @@
 import { getVoiceConnections } from "@discordjs/voice";
-import { TextChannel } from "discord.js";
 import { MusicController } from "../controllers";
 import Interaction from "../structures/Interaction";
 import InteractionContext from "../structures/InteractionContext";
@@ -22,8 +21,11 @@ export default class Skip extends Interaction {
 		});
 	}
 
-	_run = async ({ member, interaction }: InteractionContext) => {
-		const textChannel = interaction.channel as TextChannel;
+	_run = async ({
+		member,
+		interaction,
+		channel: textChannel,
+	}: InteractionContext) => {
 		const controller = this.client.controllers.get("music") as MusicController;
 		const voiceChannel = member.voice.channel;
 
