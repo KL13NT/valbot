@@ -332,7 +332,7 @@ export default class MusicController extends Controller implements Destroyable {
 	 */
 	seek = async (timestamp: number) => {
 		this.stop();
-		this.play(true, timestamp);
+		await this.play(true, timestamp);
 	};
 
 	/**
@@ -376,13 +376,7 @@ export default class MusicController extends Controller implements Destroyable {
 	refresh = async () => {
 		const time = Number(this.state.resource?.playbackDuration) / 1000;
 
-		this.stop();
-
-		this.setState({
-			position: this.state.position + time,
-		});
-
-		this.seek(this.state.position);
+		await this.seek(this.state.position + time);
 	};
 
 	/**
@@ -422,6 +416,7 @@ export default class MusicController extends Controller implements Destroyable {
 				? currentIndex
 				: currentIndex + targetDirection;
 
+		if (newIndex > songIndex) newIndex = newIndex - 1;
 		filtered.splice(newIndex, 0, movingSong);
 
 		this.setState({
@@ -806,7 +801,9 @@ export default class MusicController extends Controller implements Destroyable {
 	};
 
 	private getTrackInfo = (url: string, position: number) => {
-		if (position !== 0 && this.state.info) return this.state.info;
+		if (position === this.state.position && this.state.info) {
+			return this.state.info;
+		}
 
 		return retryRequest<ytdl.videoInfo>(() =>
 			ytdl.getInfo(url, {
