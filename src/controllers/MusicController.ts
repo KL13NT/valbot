@@ -416,6 +416,7 @@ export default class MusicController extends Controller implements Destroyable {
 				? currentIndex
 				: currentIndex + targetDirection;
 
+		if (newIndex > songIndex) newIndex = newIndex - 1;
 		filtered.splice(newIndex, 0, movingSong);
 
 		this.setState({
