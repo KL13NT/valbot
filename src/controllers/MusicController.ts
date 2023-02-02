@@ -1,4 +1,3 @@
-import ytdl from "ytdl-core";
 import {
 	Snowflake,
 	TextChannel,
@@ -30,7 +29,7 @@ import { Destroyable, Playlist, Song } from "../types/interfaces";
 import { Track } from "../entities/music/types";
 import { YoutubeTrack } from "../entities/music/YouTubeBehavior";
 import { awaitJoin, handleUserError, retryRequest } from "../utils/apis";
-import { FFmpeg } from "prism-media";
+import ytdl from "ytdl-core-discord";
 import internal from "stream";
 
 export type Seconds = number;
@@ -76,8 +75,6 @@ export interface MusicControllerState {
 	/** The shuffle state */
 	shuffle: boolean;
 
-	info: ytdl.videoInfo | null;
-
 	stream: internal.Readable | null;
 }
 
@@ -100,7 +97,6 @@ export default class MusicController extends Controller implements Destroyable {
 		connection: null,
 		loop: "disabled",
 		shuffle: false,
-		info: null,
 		stream: null,
 	};
 
@@ -192,51 +188,19 @@ export default class MusicController extends Controller implements Destroyable {
 
 			logger.info(`Starting to play ${song.title} at position ${position}`);
 
-			const info =
-				position === this.state.position && this.state.info
-					? this.state.info
-					: await this.getTrackInfo(song.url, position);
+			const source = await ytdl(song.url);
 
-			const hasAudio = info.formats
-				.filter(format => format.hasAudio)
-				.sort((a, b) => Number(a.bitrate) - Number(b.bitrate));
-
-			if (hasAudio.length === 0)
-				throw new UserError("This video doesn't have audio");
-
-			logger.info(`Selected ${hasAudio[0].audioQuality}-${hasAudio[0].codecs}`);
-
-			const source = ytdl.downloadFromInfo(info, {
-				format: hasAudio[0],
+			source.on("end", () => {
+				this.skip();
 			});
 
-			const transcoder = new FFmpeg({
-				shell: false,
-				args: [
-					"-ss",
-					String(position),
-					"-analyzeduration",
-					"0",
-					"-loglevel",
-					"0",
-					"-f",
-					"s16le",
-					"-ar",
-					"48000",
-					"-ac",
-					"2",
-				],
-			});
-			source.pipe(transcoder);
-
-			//TODO: add proper retry logic to ytdl-core stream
-
-			source.on("end", () => this.skip());
 			source.on("error", async error => {
 				logger.error(error);
 
 				try {
-					await this.refresh();
+					if (!this.shouldSkip()) {
+						await this.refresh();
+					}
 				} catch (error) {
 					logger.error(error);
 					this.skip();
@@ -252,10 +216,10 @@ export default class MusicController extends Controller implements Destroyable {
 					},
 				});
 
-			const audioPlayerResource = createAudioResource(transcoder, {
+			const audioPlayerResource = createAudioResource(source, {
 				silencePaddingFrames: 0,
 				inlineVolume: true,
-				inputType: StreamType.Raw,
+				inputType: StreamType.Opus,
 			});
 
 			player.play(audioPlayerResource);
@@ -267,7 +231,6 @@ export default class MusicController extends Controller implements Destroyable {
 				connection,
 				resource: audioPlayerResource,
 				state: "playing",
-				info,
 				stream: source,
 			});
 		} catch (error) {
@@ -354,7 +317,6 @@ export default class MusicController extends Controller implements Destroyable {
 		if (index === queue.length - 1 && loop === "queue") {
 			this.setState({
 				index: 0,
-				info: null,
 			});
 		} else if (loop === "single" && !command) {
 			this.setState({
@@ -364,13 +326,29 @@ export default class MusicController extends Controller implements Destroyable {
 		} else {
 			this.setState({
 				index: index + 1,
-				info: null,
 			});
 		}
 
 		if (["playing", "paused"].includes(this.state.state)) {
 			this.play(true);
 		}
+	};
+
+	shouldSkip = () => {
+		/**
+		 *
+		 *
+		 * If the current song is within 10 seconds of ending, skip to the next song.
+		 */
+		const time =
+			this.state.position + this.state.resource?.playbackDuration / 1000;
+		const current = this.getCurrentSong();
+
+		if (time + 10 >= current.duration) {
+			return true;
+		}
+
+		return false;
 	};
 
 	refresh = async () => {
@@ -472,7 +450,6 @@ export default class MusicController extends Controller implements Destroyable {
 			vc: null,
 			resource: null,
 			stream: null,
-			info: null,
 			index: 0,
 			position: 0,
 			queue: [],
@@ -555,7 +532,6 @@ export default class MusicController extends Controller implements Destroyable {
 				resource: null,
 				loop: "disabled",
 				shuffle: false,
-				info: null,
 				stream: null,
 			};
 		}
@@ -797,21 +773,5 @@ export default class MusicController extends Controller implements Destroyable {
 		}
 
 		if (this.state.player) this.state.player.stop(true);
-	};
-
-	private getTrackInfo = (url: string, position: number) => {
-		if (position === this.state.position && this.state.info) {
-			return this.state.info;
-		}
-
-		return retryRequest<ytdl.videoInfo>(() =>
-			ytdl.getInfo(url, {
-				requestOptions: {
-					headers: {
-						cookie: process.env.COOKIE,
-					},
-				},
-			}),
-		);
 	};
 }
