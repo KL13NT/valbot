@@ -189,7 +189,9 @@ export default class MusicController extends Controller implements Destroyable {
 			logger.info(`Starting to play ${song.title} at position ${position}`);
 
 			const source = await ytdl(song.url, {
-				begin: position,
+				range: {
+					start: position,
+				},
 			});
 
 			source.on("end", () => {
